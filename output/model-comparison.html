@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How embedding models relate historical figures</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --hairline: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11, 11, 11, 0.1);
+    --wash: rgba(11, 11, 11, 0.04);
+    --series-1: #2a78d6;
+    --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #0d366b;
+    --seq-ink-1: #0b0b0b; --seq-ink-2: #0b0b0b; --seq-ink-3: #ffffff; --seq-ink-4: #ffffff; --seq-ink-5: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --hairline: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255, 255, 255, 0.1);
+      --wash: rgba(255, 255, 255, 0.05);
+      --series-1: #3987e5;
+      --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+      --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --wash: rgba(255, 255, 255, 0.05);
+    --series-1: #3987e5;
+    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+    --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+  }
+  body { margin: 0; }
+  .viz-root {
+    min-height: 100vh;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 2rem 1.5rem;
+    box-sizing: border-box;
+  }
+  main { max-width: 1100px; margin: 0 auto; }
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  h1 { font-size: 1.15rem; font-weight: 600; margin: 0 0 0.3rem; }
+  h2 { font-size: 1rem; font-weight: 600; margin: 0 0 0.25rem; }
+  .subtitle, .explain { color: var(--text-secondary); font-size: 0.85rem; margin: 0; max-width: 50rem; line-height: 1.45; }
+  .explain { margin-bottom: 0.9rem; }
+  .meta { color: var(--text-muted); font-size: 0.78rem; margin: 0.6rem 0 0; }
+  .findings { margin: 0.75rem 0 0; padding-left: 1.1rem; font-size: 0.88rem; line-height: 1.5; }
+  .findings.story li, .findings.limits li { margin-bottom: 0.55rem; max-width: 52rem; }
+  .person-link {
+    font: inherit; font-weight: 600; color: var(--text-primary); background: none; border: none; padding: 0; cursor: pointer;
+    text-decoration: underline; text-decoration-color: var(--baseline); text-underline-offset: 2px;
+  }
+  .person-link:hover, .person-link:focus-visible { text-decoration-color: var(--text-primary); }
+  button.toggle, .switcher button {
+    font: inherit; font-size: 0.8rem; color: var(--text-secondary);
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.35rem 0.7rem; cursor: pointer; white-space: nowrap;
+  }
+  button.toggle:hover, .switcher button:hover { color: var(--text-primary); }
+  .controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem 1.5rem; margin-bottom: 0.25rem; }
+  .switcher { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+  .switcher-label { color: var(--text-muted); font-size: 0.78rem; margin-right: 0.15rem; }
+  .switcher button[aria-pressed="true"] { color: var(--text-primary); border-color: var(--text-secondary); font-weight: 600; }
+
+  /* Heatmap */
+  .heatmap { display: grid; gap: 2px; width: max-content; max-width: 100%; font-size: 0.8rem; }
+  .heatmap .col-label, .heatmap .row-label { color: var(--text-secondary); display: flex; align-items: center; }
+  .heatmap .col-label { justify-content: center; text-align: center; padding: 0 0.25rem 0.3rem; font-size: 0.75rem; }
+  .heatmap .row-label { justify-content: flex-end; padding-right: 0.6rem; }
+  .heatmap .cell {
+    width: 100%; min-width: 6.5rem; height: 3rem; border: none; border-radius: 4px; font: inherit;
+    font-size: 0.95rem; font-weight: 600; cursor: default; outline-offset: 2px;
+  }
+  .heatmap .cell.self { background: var(--wash); color: var(--text-muted); font-weight: 400; }
+  .heatmap .cell:not(.self):hover, .heatmap .cell:not(.self):focus { outline: 2px solid var(--text-primary); }
+  .scale { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; color: var(--text-muted); font-size: 0.75rem; }
+  .scale span.swatch { display: inline-block; width: 1.6rem; height: 0.7rem; border-radius: 2px; }
+  .readout { min-height: 1.3em; margin: 0.6rem 0 0; font-size: 0.85rem; color: var(--text-secondary); }
+
+  /* Bar rows (traits and ranking) */
+  .traits { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .bars { position: relative; font-size: 0.8rem; padding-bottom: 1.6rem; }
+  .bars h3 { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.5rem; }
+  .bar-row { display: grid; grid-template-columns: 9.5rem 1fr 3rem; align-items: center; gap: 0.5rem; height: 1.6rem; }
+  .bar-row .name { color: var(--text-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-row .track { position: relative; height: 100%; border-left: 1px solid var(--baseline); }
+  .bar-row .bar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 0.75rem; background: var(--series-1); border-radius: 0 4px 4px 0; }
+  .bar-row .value { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .chance { position: absolute; top: 1.9rem; bottom: -0.2rem; border-left: 1px solid var(--text-muted); pointer-events: none; }
+  .chance-label { position: absolute; bottom: -1.3rem; transform: translateX(-50%); color: var(--text-muted); font-size: 0.72rem; white-space: nowrap; }
+
+  /* Who changes most */
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1.5rem; align-items: start; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+  .ranking { max-height: 34rem; overflow-y: auto; padding-right: 0.5rem; scrollbar-width: thin; scrollbar-color: var(--baseline) transparent; }
+  .ranking .axis { display: grid; grid-template-columns: 9.5rem 1fr 3rem; gap: 0.5rem; color: var(--text-muted); font-size: 0.72rem; position: sticky; top: 0; background: var(--surface-1); padding-bottom: 0.25rem; z-index: 1; }
+  .ranking .axis .ticks { display: flex; justify-content: space-between; }
+  .ranking .bar-row { width: 100%; border: none; background: none; font: inherit; font-size: 0.8rem; padding: 0; cursor: pointer; border-radius: 4px; }
+  .ranking .bar-row:hover, .ranking .bar-row:focus { background: var(--wash); outline: none; }
+  .ranking .bar-row.selected { background: var(--wash); }
+  .ranking .bar-row.selected .name { color: var(--text-primary); font-weight: 600; }
+  .person { position: sticky; top: 1rem; }
+  .person h3 { font-size: 1rem; margin: 0; }
+  .person .sub { color: var(--text-muted); font-size: 0.78rem; margin: 0.15rem 0 0.8rem; }
+  .model-lists { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.9rem; }
+  .model-lists h4 { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin: 0 0 0.35rem; }
+  .model-lists ol { margin: 0; padding-left: 1.1rem; font-size: 0.82rem; line-height: 1.35; }
+  .model-lists li { margin-bottom: 0.3rem; }
+  .model-lists .same { color: var(--text-secondary); }
+  .model-lists .diff { color: var(--text-primary); font-weight: 600; }
+  .model-lists .tag { display: block; color: var(--text-muted); font-size: 0.72rem; font-weight: 400; }
+  .model-lists .sim { color: var(--text-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+  .key { color: var(--text-muted); font-size: 0.75rem; margin-top: 0.8rem; }
+
+  /* Map */
+  svg.map { display: block; width: 100%; height: auto; margin-top: 0.5rem; touch-action: none; }
+  .point { fill: var(--series-1); stroke: var(--surface-1); stroke-width: 2; outline: none; cursor: pointer; }
+  .point.active { stroke: var(--text-primary); }
+  .point.neighbor { stroke: var(--text-secondary); }
+  .link { stroke: var(--hairline); stroke-width: 1; }
+  .link.active { stroke: var(--text-secondary); stroke-width: 1.5; }
+  .label { fill: var(--text-secondary); font-size: 11px; pointer-events: none; }
+  .label.dim { opacity: 0.35; }
+  .label.callout { fill: var(--text-primary); font-weight: 600; }
+  .tooltip {
+    position: absolute; pointer-events: none; display: none;
+    background: var(--surface-1); color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    padding: 0.55rem 0.7rem; font-size: 0.8rem; min-width: 13rem; z-index: 3;
+  }
+  .tooltip strong { display: block; font-size: 0.9rem; margin-bottom: 0.3rem; }
+  .tooltip .caption { color: var(--text-muted); font-size: 0.72rem; margin: 0.4rem 0 0.15rem; }
+  .tooltip .row { display: flex; justify-content: space-between; gap: 1rem; color: var(--text-secondary); }
+  .tooltip .row span:last-child { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 1rem; }
+  th, td { text-align: left; vertical-align: top; padding: 0.35rem 0.75rem 0.35rem 0; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--text-secondary); font-weight: 600; }
+  td.num { font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<main>
+  <section class="card">
+    <div class="head">
+      <div>
+        <h1 id="title"></h1>
+        <p class="subtitle" id="subtitle"></p>
+      </div>
+      <button class="toggle" id="toggle" aria-controls="table-view" aria-expanded="false">Show data table</button>
+    </div>
+    <ul class="findings" id="findings"></ul>
+    <p class="meta" id="meta"></p>
+    <div id="table-view" hidden></div>
+  </section>
+
+  <section class="card">
+    <h2>What we found</h2>
+    <p class="explain">The numbers below come from this run. The explanations are hypotheses we haven't tested yet. Select a name to see that person's neighbours under every model.</p>
+    <ul class="findings story" id="story"></ul>
+  </section>
+
+  <section class="card">
+    <h2>Which models agree?</h2>
+    <p class="explain">Each cell is how many of a person's 3 closest neighbours two models have in common, averaged over all 68 people. 3 means identical neighbour lists for everyone; 0 means no overlap at all. The colours span the lowest to the highest value in the grid, not 0 to 3, so small differences show.</p>
+    <div class="heatmap" id="heatmap"></div>
+    <div class="scale" id="scale"></div>
+    <p class="readout" id="heatmap-readout" aria-live="polite"></p>
+  </section>
+
+  <section class="card">
+    <h2>What do the closest neighbours have in common?</h2>
+    <p class="explain">The share of each person's closest neighbours who work in the same field, or are the same gender. The grey line is what you'd get by picking neighbours at random. The further a bar is above it, the more that model groups people by that trait.</p>
+    <div class="traits" id="traits"></div>
+  </section>
+
+  <section class="card" id="changes">
+    <h2>Who changes most between models?</h2>
+    <p class="explain">People ranked by how much the models agree on their closest neighbours, least agreement first. Select a person to compare their neighbours under every model.</p>
+    <div class="split">
+      <div class="ranking" id="ranking"></div>
+      <div class="person" id="person" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="card" id="map-card">
+    <h2>Explore one model's map</h2>
+    <p class="explain">t-SNE projection of one model's embeddings. Grey lines link each person to their 3 closest neighbours. Hover over a point for details; click it to compare that person above. Each map is laid out independently, so compare who is near whom, not where.</p>
+    <p class="explain">Perplexity sets roughly how many neighbours each person's position takes into account. Low values keep small, tight groups; higher values also arrange whole groups relative to each other. Compare Marie Curie at 10 and 30.</p>
+    <div class="controls">
+      <div class="switcher" id="switcher" role="group" aria-label="Model"></div>
+      <div class="switcher" id="perplexity-switcher" role="group" aria-label="Perplexity"></div>
+    </div>
+    <svg class="map" id="map" viewBox="0 0 960 640" role="group"></svg>
+    <div class="tooltip" id="tooltip" role="status"></div>
+  </section>
+
+  <section class="card">
+    <h2>Limits</h2>
+    <ul class="findings limits">
+      <li><strong>The field and gender tags were assigned by hand</strong>, one field per person, and some are judgement calls (Leonardo is tagged as art, Franklin as science). The field scores are only as good as those choices.</li>
+      <li><strong>Results drift between runs.</strong> The embeddings API returns slightly different vectors on each call, so neighbour lists and maps can shift. We haven't measured how large this noise is, so treat small differences, such as 0.1 in the agreement grid, with caution.</li>
+      <li><strong>The sample is small.</strong> For one person and one pair of models, agreement can only be 0, 1, 2 or 3 shared neighbours, so a single person's score rests on very few comparisons.</li>
+      <li><strong>One short biography per person, all from one source.</strong> The results describe how these texts are written as much as how the models behave.</li>
+      <li><strong>Similarity scores and map positions are per model.</strong> Compare rankings and who is near whom, not raw scores or positions across models.</li>
+    </ul>
+  </section>
+</main>
+</div>
+<script id="data" type="application/json">{"title":"How embedding models relate historical figures","subtitle":"Each of the 68 biographies is embedded by every model. Two people are neighbours when their biographies are among the 3 most similar. This page compares those neighbour lists across models.","panels":[{"title":"openai/text-embedding-3-small","points":[{"name":"Aristotle","neighbors":[{"name":"Plato","similarity":0.711107999100094},{"name":"Ibn Sina (Avicenna)","similarity":0.5303389007229905},{"name":"Hypatia of Alexandria","similarity":0.4695139789675992}]},{"name":"Plato","neighbors":[{"name":"Aristotle","similarity":0.711107999100094},{"name":"Confucius","similarity":0.5390334095588601},{"name":"Immanuel Kant","similarity":0.503503802845008}]},{"name":"Confucius","neighbors":[{"name":"Plato","similarity":0.5390334095588601},{"name":"Aristotle","similarity":0.4549638022755961},{"name":"Sun Tzu","similarity":0.45013686931829233}]},{"name":"Cleopatra VII","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.4964228098551521},{"name":"Catherine the Great","similarity":0.3936336700997327},{"name":"Queen Liliuokalani","similarity":0.3561034072092664}]},{"name":"Sun Tzu","neighbors":[{"name":"Confucius","similarity":0.45013686931829233},{"name":"Aristotle","similarity":0.38282429152548797},{"name":"Plato","similarity":0.37125933143604845}]},{"name":"Hypatia of Alexandria","neighbors":[{"name":"Cleopatra VII","similarity":0.4964228098551521},{"name":"Aristotle","similarity":0.4695139789675992},{"name":"Plato","similarity":0.4254377014699136}]},{"name":"Ibn Sina (Avicenna)","neighbors":[{"name":"Aristotle","similarity":0.5303389007229905},{"name":"Ibn Khaldun","similarity":0.49206123511623234},{"name":"Ibn Battuta","similarity":0.4913836991909301}]},{"name":"Hildegard of Bingen","neighbors":[{"name":"Johann Sebastian Bach","similarity":0.4481562765524842},{"name":"Hypatia of Alexandria","similarity":0.41634664691470696},{"name":"Ibn Sina (Avicenna)","similarity":0.39817621776711765}]},{"name":"Genghis Khan","neighbors":[{"name":"Catherine the Great","similarity":0.3759959514750277},{"name":"Ibn Battuta","similarity":0.3484566305255979},{"name":"Napoleon Bonaparte","similarity":0.3479473352377059}]},{"name":"Rumi","neighbors":[{"name":"Dante Alighieri","similarity":0.40011545596881193},{"name":"Ibn Battuta","similarity":0.39130391055568814},{"name":"Ibn Sina (Avicenna)","similarity":0.3803063429125156}]},{"name":"Ibn Battuta","neighbors":[{"name":"Ibn Khaldun","similarity":0.5226766114073187},{"name":"Ibn Sina (Avicenna)","similarity":0.4913836991909301},{"name":"Rumi","similarity":0.39130391055568814}]},{"name":"Dante Alighieri","neighbors":[{"name":"Michelangelo","similarity":0.47538906567518724},{"name":"Leonardo da Vinci","similarity":0.40093871037638124},{"name":"Rumi","similarity":0.40011545596881193}]},{"name":"Leonardo da Vinci","neighbors":[{"name":"Michelangelo","similarity":0.626703315965142},{"name":"Raphael","similarity":0.6108554119873822},{"name":"Aristotle","similarity":0.4634722338640542}]},{"name":"Michelangelo","neighbors":[{"name":"Raphael","similarity":0.7241195307257347},{"name":"Leonardo da Vinci","similarity":0.626703315965142},{"name":"Dante Alighieri","similarity":0.47538906567518724}]},{"name":"Raphael","neighbors":[{"name":"Michelangelo","similarity":0.7241195307257347},{"name":"Leonardo da Vinci","similarity":0.6108554119873822},{"name":"Pablo Picasso","similarity":0.42063990392977685}]},{"name":"William Shakespeare","neighbors":[{"name":"Dante Alighieri","similarity":0.38514228528925254},{"name":"Miguel de Cervantes","similarity":0.38269151716568994},{"name":"Wolfgang Amadeus Mozart","similarity":0.3714215307036817}]},{"name":"Miguel de Cervantes","neighbors":[{"name":"Gabriel García Márquez","similarity":0.47581933874936133},{"name":"Voltaire","similarity":0.4420544239310572},{"name":"Michel de Montaigne","similarity":0.4075664561239456}]},{"name":"Nicolaus Copernicus","neighbors":[{"name":"Isaac Newton","similarity":0.5444809959342662},{"name":"Immanuel Kant","similarity":0.4363678857731059},{"name":"Albert Einstein","similarity":0.37721578777531883}]},{"name":"Michel de Montaigne","neighbors":[{"name":"Voltaire","similarity":0.47344534053633275},{"name":"Simone de Beauvoir","similarity":0.429341715087705},{"name":"Immanuel Kant","similarity":0.41470843015671394}]},{"name":"Isaac Newton","neighbors":[{"name":"Nicolaus Copernicus","similarity":0.5444809959342662},{"name":"Albert Einstein","similarity":0.5193640302263455},{"name":"Stephen Hawking","similarity":0.4929883896285281}]},{"name":"Voltaire","neighbors":[{"name":"Michel de Montaigne","similarity":0.47344534053633275},{"name":"Benjamin Franklin","similarity":0.46409374908176093},{"name":"Miguel de Cervantes","similarity":0.4420544239310572}]},{"name":"Johann Sebastian Bach","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.6037356661003496},{"name":"Ludwig van Beethoven","similarity":0.6035486152626953},{"name":"Hildegard of Bingen","similarity":0.4481562765524842}]},{"name":"Wolfgang Amadeus Mozart","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.6441036476734445},{"name":"Johann Sebastian Bach","similarity":0.6037356661003496},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.5047575337390215}]},{"name":"Ludwig van Beethoven","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.6441036476734445},{"name":"Johann Sebastian Bach","similarity":0.6035486152626953},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.5212068442689596}]},{"name":"Immanuel Kant","neighbors":[{"name":"Plato","similarity":0.503503802845008},{"name":"Karl Marx","similarity":0.4831031268400035},{"name":"Aristotle","similarity":0.46575758164959025}]},{"name":"Benjamin Franklin","neighbors":[{"name":"Isaac Newton","similarity":0.4927750822775978},{"name":"Voltaire","similarity":0.46409374908176093},{"name":"Albert Einstein","similarity":0.4147964862635328}]},{"name":"Catherine the Great","neighbors":[{"name":"Cleopatra VII","similarity":0.3936336700997327},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.3856150677737779},{"name":"Genghis Khan","similarity":0.3759959514750277}]},{"name":"Mary Wollstonecraft","neighbors":[{"name":"Simone de Beauvoir","similarity":0.4456200479444373},{"name":"Simone Weil","similarity":0.41639529829786043},{"name":"Voltaire","similarity":0.40091621139102407}]},{"name":"Napoleon Bonaparte","neighbors":[{"name":"Voltaire","similarity":0.42119078211217803},{"name":"Leonardo da Vinci","similarity":0.3851373448160941},{"name":"Abraham Lincoln","similarity":0.37763799466070236}]},{"name":"Charles Darwin","neighbors":[{"name":"Isaac Newton","similarity":0.40999751717756766},{"name":"Frederick Douglass","similarity":0.3588632178651391},{"name":"Karl Marx","similarity":0.3548615094210788}]},{"name":"Abraham Lincoln","neighbors":[{"name":"Frederick Douglass","similarity":0.5181351774150517},{"name":"Martin Luther King Jr.","similarity":0.41955731635771654},{"name":"Nelson Mandela","similarity":0.39251138647197353}]},{"name":"Harriet Tubman","neighbors":[{"name":"Frederick Douglass","similarity":0.4923198200552158},{"name":"Rosa Parks","similarity":0.3904050462617651},{"name":"Abraham Lincoln","similarity":0.3871471348740844}]},{"name":"Karl Marx","neighbors":[{"name":"Immanuel Kant","similarity":0.4831031268400035},{"name":"Plato","similarity":0.42136001825272074},{"name":"Voltaire","similarity":0.38459729621243405}]},{"name":"Florence Nightingale","neighbors":[{"name":"Mother Teresa","similarity":0.39142660648808114},{"name":"Marie Curie","similarity":0.3757895646795709},{"name":"Coco Chanel","similarity":0.34150100977004594}]},{"name":"Leo Tolstoy","neighbors":[{"name":"Fyodor Dostoevsky","similarity":0.5564077809375049},{"name":"Voltaire","similarity":0.4402303287730038},{"name":"Rabindranath Tagore","similarity":0.40269513589543904}]},{"name":"Fyodor Dostoevsky","neighbors":[{"name":"Leo Tolstoy","similarity":0.5564077809375049},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.4111326980298286},{"name":"Karl Marx","similarity":0.37715318770055045}]},{"name":"Vincent van Gogh","neighbors":[{"name":"Claude Monet","similarity":0.4777096603143525},{"name":"Pablo Picasso","similarity":0.4485758235653842},{"name":"Frida Kahlo","similarity":0.4199730014918564}]},{"name":"Claude Monet","neighbors":[{"name":"Vincent van Gogh","similarity":0.4777096603143525},{"name":"Pablo Picasso","similarity":0.4602015509900954},{"name":"Michel de Montaigne","similarity":0.38661444370640247}]},{"name":"Pyotr Ilyich Tchaikovsky","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.5212068442689596},{"name":"Wolfgang Amadeus Mozart","similarity":0.5047575337390215},{"name":"Johann Sebastian Bach","similarity":0.42619836962403485}]},{"name":"Frederick Douglass","neighbors":[{"name":"Abraham Lincoln","similarity":0.5181351774150517},{"name":"Harriet Tubman","similarity":0.4923198200552158},{"name":"Martin Luther King Jr.","similarity":0.43206845345384476}]},{"name":"Marie Curie","neighbors":[{"name":"Simone de Beauvoir","similarity":0.40418709185064106},{"name":"Coco Chanel","similarity":0.3955157765386279},{"name":"Albert Einstein","similarity":0.38481095480865013}]},{"name":"Albert Einstein","neighbors":[{"name":"Isaac Newton","similarity":0.5193640302263455},{"name":"Stephen Hawking","similarity":0.4858481240992232},{"name":"Alan Turing","similarity":0.4373514188423349}]},{"name":"Mahatma Gandhi","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.4879414333344799},{"name":"Rabindranath Tagore","similarity":0.4299679469555269},{"name":"Nelson Mandela","similarity":0.41000336598586223}]},{"name":"Nelson Mandela","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.4275749828516725},{"name":"Mahatma Gandhi","similarity":0.41000336598586223},{"name":"Abraham Lincoln","similarity":0.39251138647197353}]},{"name":"Martin Luther King Jr.","neighbors":[{"name":"Rosa Parks","similarity":0.5586385209625963},{"name":"Malcolm X","similarity":0.5329350961011757},{"name":"Mahatma Gandhi","similarity":0.4879414333344799}]},{"name":"Frida Kahlo","neighbors":[{"name":"Pablo Picasso","similarity":0.442562036682019},{"name":"Vincent van Gogh","similarity":0.4199730014918564},{"name":"Maya Angelou","similarity":0.334029873800469}]},{"name":"Pablo Picasso","neighbors":[{"name":"Leonardo da Vinci","similarity":0.46263711394895324},{"name":"Claude Monet","similarity":0.4602015509900954},{"name":"Vincent van Gogh","similarity":0.4485758235653842}]},{"name":"Amelia Earhart","neighbors":[{"name":"Mary Wollstonecraft","similarity":0.35067310768554116},{"name":"Maya Angelou","similarity":0.3329246186315352},{"name":"Marie Curie","similarity":0.3295967544118774}]},{"name":"Alan Turing","neighbors":[{"name":"Stephen Hawking","similarity":0.4544293830097778},{"name":"Srinivasa Ramanujan","similarity":0.44811391205710654},{"name":"Albert Einstein","similarity":0.4373514188423349}]},{"name":"Simone de Beauvoir","neighbors":[{"name":"Simone Weil","similarity":0.6028280466075974},{"name":"Coco Chanel","similarity":0.4765767630029856},{"name":"Mary Wollstonecraft","similarity":0.4456200479444373}]},{"name":"Stephen Hawking","neighbors":[{"name":"Isaac Newton","similarity":0.4929883896285281},{"name":"Albert Einstein","similarity":0.4858481240992232},{"name":"Alan Turing","similarity":0.4544293830097778}]},{"name":"Mother Teresa","neighbors":[{"name":"Florence Nightingale","similarity":0.39142660648808114},{"name":"Wangari Maathai","similarity":0.38004250495812925},{"name":"Mahatma Gandhi","similarity":0.3661230623887232}]},{"name":"Malcolm X","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.5329350961011757},{"name":"Mahatma Gandhi","similarity":0.40872998292588164},{"name":"Frederick Douglass","similarity":0.38913543873827233}]},{"name":"Coco Chanel","neighbors":[{"name":"Simone de Beauvoir","similarity":0.4765767630029856},{"name":"Marie Curie","similarity":0.3955157765386279},{"name":"Pablo Picasso","similarity":0.3817936685499301}]},{"name":"Wangari Maathai","neighbors":[{"name":"Rachel Carson","similarity":0.3879996222216863},{"name":"Mother Teresa","similarity":0.38004250495812925},{"name":"Rosa Parks","similarity":0.3718901057799634}]},{"name":"Rosa Parks","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.5586385209625963},{"name":"Maya Angelou","similarity":0.43545660843073547},{"name":"Harriet Tubman","similarity":0.3904050462617651}]},{"name":"Gabriel García Márquez","neighbors":[{"name":"Miguel de Cervantes","similarity":0.47581933874936133},{"name":"Leo Tolstoy","similarity":0.36741813664421646},{"name":"Chinua Achebe","similarity":0.3514270325122697}]},{"name":"Cheikh Anta Diop","neighbors":[{"name":"Ibn Khaldun","similarity":0.44359449047504135},{"name":"Chinua Achebe","similarity":0.40615924419949245},{"name":"Ibn Battuta","similarity":0.3272016286645633}]},{"name":"Rachel Carson","neighbors":[{"name":"Wangari Maathai","similarity":0.3879996222216863},{"name":"Rosa Parks","similarity":0.35178234181229673},{"name":"Amelia Earhart","similarity":0.3289570354584236}]},{"name":"Nikola Tesla","neighbors":[{"name":"Albert Einstein","similarity":0.4363989728046879},{"name":"Leonardo da Vinci","similarity":0.43228859366604244},{"name":"Alan Turing","similarity":0.4103734154813844}]},{"name":"Chinua Achebe","neighbors":[{"name":"Cheikh Anta Diop","similarity":0.40615924419949245},{"name":"Leo Tolstoy","similarity":0.39535281990819077},{"name":"Gabriel García Márquez","similarity":0.3514270325122697}]},{"name":"Ibn Khaldun","neighbors":[{"name":"Ibn Battuta","similarity":0.5226766114073187},{"name":"Ibn Sina (Avicenna)","similarity":0.49206123511623234},{"name":"Cheikh Anta Diop","similarity":0.44359449047504135}]},{"name":"Maya Angelou","neighbors":[{"name":"Rosa Parks","similarity":0.43545660843073547},{"name":"Martin Luther King Jr.","similarity":0.4212962057426791},{"name":"Frederick Douglass","similarity":0.3825153850100903}]},{"name":"Akira Kurosawa","neighbors":[{"name":"Immanuel Kant","similarity":0.31798085048347846},{"name":"William Shakespeare","similarity":0.3009800970484297},{"name":"Leo Tolstoy","similarity":0.2843008769363946}]},{"name":"Srinivasa Ramanujan","neighbors":[{"name":"Alan Turing","similarity":0.44811391205710654},{"name":"Isaac Newton","similarity":0.43166070903985426},{"name":"Rabindranath Tagore","similarity":0.39340685046367685}]},{"name":"Simone Weil","neighbors":[{"name":"Simone de Beauvoir","similarity":0.6028280466075974},{"name":"Mary Wollstonecraft","similarity":0.41639529829786043},{"name":"Hildegard of Bingen","similarity":0.37273050390659346}]},{"name":"Rabindranath Tagore","neighbors":[{"name":"Mahatma Gandhi","similarity":0.4299679469555269},{"name":"Leo Tolstoy","similarity":0.40269513589543904},{"name":"Srinivasa Ramanujan","similarity":0.39340685046367685}]},{"name":"Queen Liliuokalani","neighbors":[{"name":"Cleopatra VII","similarity":0.3561034072092664},{"name":"Amelia Earhart","similarity":0.28652452928947925},{"name":"Maya Angelou","similarity":0.2824479273211981}]}],"layouts":[{"perplexity":10,"positions":[[-11,6.22],[-13.56,6.17],[-16.36,9.06],[-1.52,18.84],[-19.27,11.2],[-4.61,18.75],[2.47,-17.92],[-9.94,25.43],[3.51,9.13],[-1.79,-21.81],[5.21,-21.03],[-7.67,-19.28],[-15.73,-21.75],[-11.78,-22.09],[-12.96,-24.52],[-8.1,-11.58],[-1.75,-7.5],[-24.64,-4.27],[-5.42,-1.37],[-25.91,-7.17],[-2.51,0.01],[-14.74,26.58],[-18.42,27.12],[-17.57,24.3],[-15.08,0.58],[-20.36,-8.92],[1.63,12.8],[16.27,17.8],[-0.64,4.34],[-30.36,-2.8],[38.23,1.75],[36.52,7.85],[-18.38,1.38],[26.57,23.85],[9.03,-4.21],[7.69,-2.11],[-17.39,-35.51],[-19.05,-32.79],[-21.61,23.47],[37.43,4.6],[21.11,22.98],[-26.34,-11.24],[22.75,-1.67],[32.82,-1.94],[27.58,0.46],[-12.69,-35.32],[-14.9,-31.8],[20.87,14.11],[-30.98,-14.5],[15.17,22.46],[-30.12,-10.03],[28.84,21.15],[27.69,-2.96],[17.09,26.19],[30.48,15.7],[28.4,3.68],[0.93,-8.49],[10.93,-15.62],[27.71,13.78],[-24.43,-16.71],[11.68,-11.35],[7.35,-18.68],[25.43,6.47],[-12.58,-4.88],[-34.09,-16.32],[12.67,21.74],[18.22,-3.13],[1.97,21.37]]},{"perplexity":15,"positions":[[8.29,11.09],[7.16,9.2],[9.12,6.63],[-0.8,-19.26],[12.16,6.3],[1.78,-19.84],[12.11,13.98],[8.82,-20.11],[0.36,-9.68],[18.18,13.13],[14.12,17.02],[20,8.18],[22.18,2.72],[23.18,5.67],[25.15,4.44],[15.35,0.83],[9.6,-0.52],[-2.06,9.03],[3.43,0.32],[-4.75,9.08],[0.51,-0.49],[13.13,-18.15],[14.69,-15.16],[12.2,-15.38],[3.36,8.12],[-3.27,3.63],[0.45,-13.18],[-11.33,-6.97],[-1.2,-4.07],[-8.06,6.3],[-28.36,3.2],[-27.25,-2.2],[2.81,5.44],[-18.03,-14.34],[5.85,-5.7],[7.38,-7.25],[27.96,-5.18],[28.18,-2.45],[11.49,-12.12],[-27.76,0.69],[-14.4,-11.94],[-4.87,12.81],[-19.9,8.02],[-24.21,6.42],[-21.18,3.35],[24.57,-6.85],[24.65,-3.19],[-16.1,-6.23],[-9.03,15.38],[-9.58,-10.46],[-7.88,11.77],[-20.66,-12.61],[-18.44,3.96],[-10.63,-13.86],[-23.35,-8.53],[-21.71,0.41],[10.75,-2.58],[8.26,20.32],[-21.06,-6.69],[-4.33,17.19],[4.92,21.05],[11.48,17.92],[-18.7,-1.42],[16.96,-4.24],[-12.31,15.23],[-7.81,-9.18],[-17.17,11.29],[-4.42,-20.31]]},{"perplexity":20,"positions":[[3.35,3.99],[3.11,3.28],[3.93,2.18],[-1.54,-8.63],[5.16,1.99],[-0.51,-8.66],[4.73,5.68],[2.54,-8.82],[0.48,-4.23],[7.37,6.29],[5.26,7.17],[8.41,4.49],[8.62,2],[9.47,2.98],[10.01,2.45],[6.27,-3.34],[5.5,-1.13],[-0.69,3.78],[1.8,-0.09],[-1.8,3.82],[0.48,-0.44],[4.7,-8.08],[5.42,-6.83],[4.56,-6.95],[1.4,2.84],[-1.47,1.4],[0.01,-5.68],[-4.28,-2.85],[-0.46,-1.86],[-3.36,2.67],[-6.45,1.37],[-7.62,-0.54],[1.01,1.88],[-6.9,-3.58],[2.86,-2.26],[3.34,-2.71],[11.89,-1.05],[11.8,0],[3.93,-5.65],[-6.99,0.58],[-6.01,-4.93],[-1.88,5.4],[-8.67,4.15],[-8.52,2.54],[-10.05,1.99],[10.66,-2.06],[10.27,-0.52],[-8.67,-5.85],[-3.55,6.73],[-3.72,-4.42],[-3.15,5.14],[-8.07,-3.14],[-10.83,2.89],[-4.51,-5.81],[-10.04,-2.76],[-10.28,0.76],[6.24,-0.69],[2.76,8.5],[-10.6,-3.97],[-1.49,7.32],[1.57,9.26],[4.15,7.31],[-10.72,-0.54],[8.32,-4.09],[-4.91,6.98],[-3.11,-4.1],[-7.24,5.61],[-3.33,-9.14]]},{"perplexity":30,"positions":[[-0.23,1.37],[-0.35,1.23],[-0.96,1.02],[-3.13,-2.86],[-1.49,1.25],[-3.22,-2.48],[1.15,2.47],[-3.97,-1.06],[-2.07,-0.45],[0.71,3.72],[1.61,2.98],[-1.14,3.77],[-2.19,2.65],[-2.39,3.07],[-2.51,3.01],[-1.15,4.54],[0.12,4.95],[1.83,0.64],[-0.07,-0.18],[2.21,0.33],[0.16,-0.38],[-4.12,0.21],[-3.87,0.67],[-3.89,0.54],[0.58,0.86],[1.33,-0.44],[-2.37,-1.32],[0,-2.37],[-1.08,-0.59],[2.3,-0.69],[2.3,-2.47],[1.63,-3.37],[0.72,0.97],[-0.13,-3.88],[-0.24,2.74],[-0.26,2.92],[-4.33,3.3],[-4.05,3.54],[-3.25,0.79],[2.14,-2.73],[-0.72,-3.51],[2.83,0.63],[3.8,-2.41],[3.61,-3.1],[3.24,-3.78],[-4.74,2.69],[-3.79,2.91],[-0.57,-5.07],[3.9,0.54],[-0.69,-2.25],[3.16,0.44],[0.4,-4.09],[3.72,-3.92],[-1.28,-2.91],[1.17,-5],[2.69,-4.37],[0.43,5.16],[2.81,3.41],[0.76,-5.39],[3.6,1.52],[2.62,4.22],[1.87,2.82],[2.13,-4.46],[-2.39,5.01],[4.31,0.09],[-0.64,-2.16],[4.17,-1.23],[-2.75,-4.06]]}]},{"title":"openai/text-embedding-3-large","points":[{"name":"Aristotle","neighbors":[{"name":"Plato","similarity":0.6527766476827856},{"name":"Confucius","similarity":0.46013251577561143},{"name":"Ibn Sina (Avicenna)","similarity":0.4437585314866118}]},{"name":"Plato","neighbors":[{"name":"Aristotle","similarity":0.6527766476827856},{"name":"Confucius","similarity":0.4987543456086004},{"name":"Immanuel Kant","similarity":0.4118107859872348}]},{"name":"Confucius","neighbors":[{"name":"Plato","similarity":0.4987543456086004},{"name":"Aristotle","similarity":0.46013251577561143},{"name":"Immanuel Kant","similarity":0.45561743846011665}]},{"name":"Cleopatra VII","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.40901092523642096},{"name":"Catherine the Great","similarity":0.39931390661545124},{"name":"Aristotle","similarity":0.35310723596272653}]},{"name":"Sun Tzu","neighbors":[{"name":"Confucius","similarity":0.4426277117497966},{"name":"Leo Tolstoy","similarity":0.3609923353501228},{"name":"Aristotle","similarity":0.34203564956278587}]},{"name":"Hypatia of Alexandria","neighbors":[{"name":"Aristotle","similarity":0.41296193384436325},{"name":"Cleopatra VII","similarity":0.40901092523642096},{"name":"Plato","similarity":0.3911155346926628}]},{"name":"Ibn Sina (Avicenna)","neighbors":[{"name":"Ibn Khaldun","similarity":0.4504956217414351},{"name":"Aristotle","similarity":0.4437585314866118},{"name":"Ibn Battuta","similarity":0.41804066925196176}]},{"name":"Hildegard of Bingen","neighbors":[{"name":"Ibn Sina (Avicenna)","similarity":0.40914074973170417},{"name":"Hypatia of Alexandria","similarity":0.38116025530599357},{"name":"Johann Sebastian Bach","similarity":0.36228325663493927}]},{"name":"Genghis Khan","neighbors":[{"name":"Ibn Khaldun","similarity":0.3458541993547579},{"name":"Napoleon Bonaparte","similarity":0.34552335491837577},{"name":"Catherine the Great","similarity":0.332609914772126}]},{"name":"Rumi","neighbors":[{"name":"Rabindranath Tagore","similarity":0.39075270594185885},{"name":"Dante Alighieri","similarity":0.38834193352000523},{"name":"Ibn Battuta","similarity":0.38605286409194994}]},{"name":"Ibn Battuta","neighbors":[{"name":"Ibn Khaldun","similarity":0.4569276326015031},{"name":"Ibn Sina (Avicenna)","similarity":0.41804066925196176},{"name":"Rumi","similarity":0.38605286409194994}]},{"name":"Dante Alighieri","neighbors":[{"name":"Michelangelo","similarity":0.4991650628344042},{"name":"Leonardo da Vinci","similarity":0.43153339796515555},{"name":"Miguel de Cervantes","similarity":0.42664328600433227}]},{"name":"Leonardo da Vinci","neighbors":[{"name":"Michelangelo","similarity":0.6456479951162618},{"name":"Raphael","similarity":0.5840472535445034},{"name":"Vincent van Gogh","similarity":0.4374269775454572}]},{"name":"Michelangelo","neighbors":[{"name":"Raphael","similarity":0.6677699344102322},{"name":"Leonardo da Vinci","similarity":0.6456479951162618},{"name":"Dante Alighieri","similarity":0.4991650628344042}]},{"name":"Raphael","neighbors":[{"name":"Michelangelo","similarity":0.6677699344102322},{"name":"Leonardo da Vinci","similarity":0.5840472535445034},{"name":"Pablo Picasso","similarity":0.4042407178078319}]},{"name":"William Shakespeare","neighbors":[{"name":"Dante Alighieri","similarity":0.41899465454477564},{"name":"Miguel de Cervantes","similarity":0.3781067632150273},{"name":"Michel de Montaigne","similarity":0.3446922154724454}]},{"name":"Miguel de Cervantes","neighbors":[{"name":"Gabriel García Márquez","similarity":0.4614881506575228},{"name":"Dante Alighieri","similarity":0.42664328600433227},{"name":"Michel de Montaigne","similarity":0.40325005832518435}]},{"name":"Nicolaus Copernicus","neighbors":[{"name":"Isaac Newton","similarity":0.5063919657896583},{"name":"Leonardo da Vinci","similarity":0.3943427019706431},{"name":"Stephen Hawking","similarity":0.37447614820644737}]},{"name":"Michel de Montaigne","neighbors":[{"name":"Voltaire","similarity":0.4828350159005085},{"name":"Miguel de Cervantes","similarity":0.40325005832518435},{"name":"Immanuel Kant","similarity":0.3987438482597758}]},{"name":"Isaac Newton","neighbors":[{"name":"Albert Einstein","similarity":0.5172888899972788},{"name":"Nicolaus Copernicus","similarity":0.5063919657896583},{"name":"Stephen Hawking","similarity":0.46053911903936384}]},{"name":"Voltaire","neighbors":[{"name":"Michel de Montaigne","similarity":0.4828350159005085},{"name":"Benjamin Franklin","similarity":0.43979442378780714},{"name":"Mary Wollstonecraft","similarity":0.4219153620778771}]},{"name":"Johann Sebastian Bach","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.5838820067711586},{"name":"Ludwig van Beethoven","similarity":0.5711886165714191},{"name":"Hildegard of Bingen","similarity":0.36228325663493927}]},{"name":"Wolfgang Amadeus Mozart","neighbors":[{"name":"Johann Sebastian Bach","similarity":0.5838820067711586},{"name":"Ludwig van Beethoven","similarity":0.5768335465443374},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.40986107744568223}]},{"name":"Ludwig van Beethoven","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.5768335465443374},{"name":"Johann Sebastian Bach","similarity":0.5711886165714191},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.4618398606660139}]},{"name":"Immanuel Kant","neighbors":[{"name":"Karl Marx","similarity":0.46618516263383697},{"name":"Confucius","similarity":0.45561743846011665},{"name":"Aristotle","similarity":0.4174668780116666}]},{"name":"Benjamin Franklin","neighbors":[{"name":"Voltaire","similarity":0.43979442378780714},{"name":"Isaac Newton","similarity":0.4192108905187891},{"name":"Leonardo da Vinci","similarity":0.3877796678045482}]},{"name":"Catherine the Great","neighbors":[{"name":"Cleopatra VII","similarity":0.39931390661545124},{"name":"Genghis Khan","similarity":0.332609914772126},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.32975033637477114}]},{"name":"Mary Wollstonecraft","neighbors":[{"name":"Voltaire","similarity":0.4219153620778771},{"name":"Simone de Beauvoir","similarity":0.4153616286278063},{"name":"Simone Weil","similarity":0.3649263813065848}]},{"name":"Napoleon Bonaparte","neighbors":[{"name":"Genghis Khan","similarity":0.34552335491837577},{"name":"Florence Nightingale","similarity":0.34171626031375363},{"name":"Coco Chanel","similarity":0.3364028273430488}]},{"name":"Charles Darwin","neighbors":[{"name":"Stephen Hawking","similarity":0.40117413837169286},{"name":"Isaac Newton","similarity":0.39911663502124367},{"name":"Karl Marx","similarity":0.3579006901052382}]},{"name":"Abraham Lincoln","neighbors":[{"name":"Frederick Douglass","similarity":0.5149364628775223},{"name":"Martin Luther King Jr.","similarity":0.39287316215098006},{"name":"Harriet Tubman","similarity":0.389424983075551}]},{"name":"Harriet Tubman","neighbors":[{"name":"Frederick Douglass","similarity":0.5395563317769894},{"name":"Rosa Parks","similarity":0.45709783442193336},{"name":"Abraham Lincoln","similarity":0.389424983075551}]},{"name":"Karl Marx","neighbors":[{"name":"Immanuel Kant","similarity":0.46618516263383697},{"name":"Ibn Khaldun","similarity":0.3694506107415737},{"name":"Confucius","similarity":0.36499945723322225}]},{"name":"Florence Nightingale","neighbors":[{"name":"Mother Teresa","similarity":0.3838248978105343},{"name":"Marie Curie","similarity":0.35889262897703367},{"name":"Mary Wollstonecraft","similarity":0.35029950713300195}]},{"name":"Leo Tolstoy","neighbors":[{"name":"Fyodor Dostoevsky","similarity":0.46403980112014787},{"name":"Voltaire","similarity":0.38371695873552547},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.3753068724207157}]},{"name":"Fyodor Dostoevsky","neighbors":[{"name":"Leo Tolstoy","similarity":0.46403980112014787},{"name":"Miguel de Cervantes","similarity":0.36881220296973105},{"name":"Dante Alighieri","similarity":0.34975491382274143}]},{"name":"Vincent van Gogh","neighbors":[{"name":"Pablo Picasso","similarity":0.47573786547645197},{"name":"Claude Monet","similarity":0.4754450238323468},{"name":"Leonardo da Vinci","similarity":0.4374269775454572}]},{"name":"Claude Monet","neighbors":[{"name":"Vincent van Gogh","similarity":0.4754450238323468},{"name":"Pablo Picasso","similarity":0.4216880649525405},{"name":"Leonardo da Vinci","similarity":0.36538696524573117}]},{"name":"Pyotr Ilyich Tchaikovsky","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.4618398606660139},{"name":"Wolfgang Amadeus Mozart","similarity":0.40986107744568223},{"name":"Leo Tolstoy","similarity":0.3753068724207157}]},{"name":"Frederick Douglass","neighbors":[{"name":"Harriet Tubman","similarity":0.5395563317769894},{"name":"Abraham Lincoln","similarity":0.5149364628775223},{"name":"Martin Luther King Jr.","similarity":0.40902450279898617}]},{"name":"Marie Curie","neighbors":[{"name":"Mother Teresa","similarity":0.37991481797056154},{"name":"Albert Einstein","similarity":0.37477954820320414},{"name":"Mary Wollstonecraft","similarity":0.3629403617789904}]},{"name":"Albert Einstein","neighbors":[{"name":"Isaac Newton","similarity":0.5172888899972788},{"name":"Stephen Hawking","similarity":0.489071125934027},{"name":"Nikola Tesla","similarity":0.4348883797019005}]},{"name":"Mahatma Gandhi","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.4680198446126791},{"name":"Nelson Mandela","similarity":0.4411470793755431},{"name":"Rabindranath Tagore","similarity":0.43454024106257233}]},{"name":"Nelson Mandela","neighbors":[{"name":"Mahatma Gandhi","similarity":0.4411470793755431},{"name":"Martin Luther King Jr.","similarity":0.4115996883886856},{"name":"Rosa Parks","similarity":0.39239413867145434}]},{"name":"Martin Luther King Jr.","neighbors":[{"name":"Rosa Parks","similarity":0.5149885194348967},{"name":"Malcolm X","similarity":0.4703317538556286},{"name":"Mahatma Gandhi","similarity":0.4680198446126791}]},{"name":"Frida Kahlo","neighbors":[{"name":"Pablo Picasso","similarity":0.47453860900626016},{"name":"Vincent van Gogh","similarity":0.4128918049886621},{"name":"Raphael","similarity":0.34157187519875976}]},{"name":"Pablo Picasso","neighbors":[{"name":"Vincent van Gogh","similarity":0.47573786547645197},{"name":"Frida Kahlo","similarity":0.47453860900626016},{"name":"Leonardo da Vinci","similarity":0.4260545000787967}]},{"name":"Amelia Earhart","neighbors":[{"name":"Maya Angelou","similarity":0.3720711543349269},{"name":"Harriet Tubman","similarity":0.3591283485635782},{"name":"Marie Curie","similarity":0.34808259490557036}]},{"name":"Alan Turing","neighbors":[{"name":"Nikola Tesla","similarity":0.36533579385108667},{"name":"Srinivasa Ramanujan","similarity":0.3645238950757323},{"name":"Stephen Hawking","similarity":0.3554158675340022}]},{"name":"Simone de Beauvoir","neighbors":[{"name":"Simone Weil","similarity":0.5378148899545065},{"name":"Mary Wollstonecraft","similarity":0.4153616286278063},{"name":"Coco Chanel","similarity":0.411970550813216}]},{"name":"Stephen Hawking","neighbors":[{"name":"Albert Einstein","similarity":0.489071125934027},{"name":"Isaac Newton","similarity":0.46053911903936384},{"name":"Charles Darwin","similarity":0.40117413837169286}]},{"name":"Mother Teresa","neighbors":[{"name":"Florence Nightingale","similarity":0.3838248978105343},{"name":"Mahatma Gandhi","similarity":0.38370439191827194},{"name":"Marie Curie","similarity":0.37991481797056154}]},{"name":"Malcolm X","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.4703317538556286},{"name":"Frederick Douglass","similarity":0.3788700469644523},{"name":"Maya Angelou","similarity":0.37379480977361007}]},{"name":"Coco Chanel","neighbors":[{"name":"Simone de Beauvoir","similarity":0.411970550813216},{"name":"Marie Curie","similarity":0.35076417922767306},{"name":"Napoleon Bonaparte","similarity":0.3364028273430488}]},{"name":"Wangari Maathai","neighbors":[{"name":"Rosa Parks","similarity":0.3807994935741896},{"name":"Nelson Mandela","similarity":0.3723275466820012},{"name":"Rachel Carson","similarity":0.36515118047975564}]},{"name":"Rosa Parks","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.5149885194348967},{"name":"Harriet Tubman","similarity":0.45709783442193336},{"name":"Maya Angelou","similarity":0.4147286913320348}]},{"name":"Gabriel García Márquez","neighbors":[{"name":"Miguel de Cervantes","similarity":0.4614881506575228},{"name":"Chinua Achebe","similarity":0.3943249097297965},{"name":"Leo Tolstoy","similarity":0.3662216034542594}]},{"name":"Cheikh Anta Diop","neighbors":[{"name":"Ibn Khaldun","similarity":0.3834070951745122},{"name":"Chinua Achebe","similarity":0.3570201643533957},{"name":"Stephen Hawking","similarity":0.30436986473420236}]},{"name":"Rachel Carson","neighbors":[{"name":"Wangari Maathai","similarity":0.36515118047975564},{"name":"Rosa Parks","similarity":0.3188441146986438},{"name":"Amelia Earhart","similarity":0.3122967126707933}]},{"name":"Nikola Tesla","neighbors":[{"name":"Albert Einstein","similarity":0.4348883797019005},{"name":"Leonardo da Vinci","similarity":0.3874324666283},{"name":"Benjamin Franklin","similarity":0.36770783410895813}]},{"name":"Chinua Achebe","neighbors":[{"name":"Gabriel García Márquez","similarity":0.3943249097297965},{"name":"Cheikh Anta Diop","similarity":0.3570201643533957},{"name":"Leo Tolstoy","similarity":0.34958100270462417}]},{"name":"Ibn Khaldun","neighbors":[{"name":"Ibn Battuta","similarity":0.4569276326015031},{"name":"Ibn Sina (Avicenna)","similarity":0.4504956217414351},{"name":"Cheikh Anta Diop","similarity":0.3834070951745122}]},{"name":"Maya Angelou","neighbors":[{"name":"Rosa Parks","similarity":0.4147286913320348},{"name":"Martin Luther King Jr.","similarity":0.4019774879928132},{"name":"Frederick Douglass","similarity":0.38562868304646775}]},{"name":"Akira Kurosawa","neighbors":[{"name":"Leo Tolstoy","similarity":0.29638927742866544},{"name":"Immanuel Kant","similarity":0.2737172431241231},{"name":"William Shakespeare","similarity":0.26291717965763883}]},{"name":"Srinivasa Ramanujan","neighbors":[{"name":"Alan Turing","similarity":0.3645238950757323},{"name":"Isaac Newton","similarity":0.3379191175649615},{"name":"Rabindranath Tagore","similarity":0.32770364941608404}]},{"name":"Simone Weil","neighbors":[{"name":"Simone de Beauvoir","similarity":0.5378148899545065},{"name":"Mary Wollstonecraft","similarity":0.3649263813065848},{"name":"Hildegard of Bingen","similarity":0.3429369042355781}]},{"name":"Rabindranath Tagore","neighbors":[{"name":"Mahatma Gandhi","similarity":0.43454024106257233},{"name":"Rumi","similarity":0.39075270594185885},{"name":"Leo Tolstoy","similarity":0.3713342000765316}]},{"name":"Queen Liliuokalani","neighbors":[{"name":"Cleopatra VII","similarity":0.3329868662057984},{"name":"Amelia Earhart","similarity":0.24992822669220274},{"name":"Ludwig van Beethoven","similarity":0.24709604089785586}]}],"layouts":[{"perplexity":10,"positions":[[3.54,19.79],[5.91,21.05],[10.76,20.89],[-4.66,28.51],[13.43,23.85],[-2.06,23.7],[-1.92,9.03],[-4.05,13.7],[-15.77,28.6],[-9.14,-2.62],[-4.95,3.93],[14.49,-13.73],[22.85,-11.38],[20.18,-13.7],[22.56,-15.85],[11.59,-16.74],[6.77,-12.03],[22.66,10.98],[10.88,-0.3],[25.75,9.38],[13.65,1.04],[13.6,-35.57],[13.66,-32.18],[10.41,-33.63],[11.5,14.88],[18.56,1.74],[-8.54,28.65],[-18.79,9.67],[-19.53,26.34],[28.98,15],[-34.7,-17.94],[-36.32,-11.55],[11.54,11.69],[-28.64,15.26],[-1.39,-19.9],[1.46,-20.36],[31.75,-18.18],[35.06,-17.7],[6.67,-31.49],[-35.09,-14.55],[-26.67,9.58],[28.73,7.01],[-19.88,-6.72],[-23.38,-4.28],[-26.43,-9.02],[29.69,-24.55],[29.31,-21.22],[-38.23,-3.14],[35.75,5.82],[-16.48,15.07],[30.65,10.42],[-30.39,11.7],[-25.55,-12.82],[-19.52,18.57],[-29.54,1.4],[-29.24,-6.68],[3.56,-11.1],[0.7,-0.32],[-33.36,2.8],[30.28,2.55],[0.24,-8.2],[-1.42,4.57],[-33.64,-5.65],[-5.47,-22.76],[39.07,7.86],[-13.73,14.45],[-14.7,-6.41],[-3.02,32.81]]},{"perplexity":15,"positions":[[2.38,16.43],[3.83,14.99],[1.67,11.84],[-4.6,21.59],[-1.29,11.34],[-1.35,19.32],[-0.95,2.33],[-3.39,5.27],[-9.72,15.84],[2.76,-5.22],[0.53,-1.53],[7.76,-8.47],[13.68,-5.72],[12.23,-8.02],[14.56,-8.96],[6.88,-11.56],[2.26,-11.93],[11.62,10.94],[6.96,0],[14.19,10.13],[8.73,1.73],[23.49,-2.48],[22.71,-5.02],[25.42,-4.59],[5.27,9.53],[12.31,3.23],[-7.29,20.04],[-12.52,2.9],[-13.23,15.36],[15.18,15.04],[-25.88,-12.57],[-24.34,-7.59],[4.98,7.04],[-19.7,8.32],[0.96,-18.09],[-0.97,-19.24],[17.9,-14.47],[20.02,-16.02],[26.94,-7.59],[-24.83,-10.14],[-18.05,4.23],[16.92,9.11],[-13.07,-11.37],[-14.92,-8.76],[-18.32,-10.64],[14.07,-18.02],[15,-15.53],[-17.85,-0.86],[22.03,9.94],[-11.11,6.98],[17.46,12.08],[-21.3,5.5],[-18.47,-13.64],[-13.49,9.74],[-22.98,-1.29],[-19.85,-8.07],[-0.47,-12.23],[-4.79,-4.21],[-25.68,0.18],[18.94,6.15],[-3.47,-10.38],[-2.12,-0.86],[-18.73,-4.83],[5.05,-19.64],[23.49,12.72],[-9,6.51],[-9.3,-11.98],[-5.13,25.17]]},{"perplexity":20,"positions":[[-0.04,-4.33],[0.53,-4.53],[1.92,-3.78],[-3.98,-7.68],[3.27,-4.27],[-3.25,-5.78],[2.57,-1.1],[-2.96,-4],[-0.14,-7.96],[5.54,-0.49],[3.87,-0.17],[7.79,-0.73],[7.28,-3.66],[8.05,-2.83],[8.77,-3.45],[8.94,0.26],[7.51,2.13],[1.33,4.28],[0.01,0.88],[0.76,5.31],[-1.17,1.24],[4.02,-8.27],[4.97,-8.76],[4.03,-9.48],[0,-1.9],[-1.42,2.96],[-2.9,-8.52],[-4.49,0.53],[-0.49,-9.44],[-1.21,5.81],[-11.21,7.21],[-10.43,5.07],[-0.97,-1.38],[-8.86,-1.78],[9.57,3.93],[9.59,4.78],[9.05,-6.54],[8.63,-7.54],[4.61,-10.94],[-10.68,6.2],[-7.66,-0.09],[1.26,6.65],[-5.54,7.35],[-6.25,6.08],[-7.85,6.74],[11.14,-5.71],[10.02,-5.63],[-7.36,2.14],[0.85,9.15],[-5,-1.59],[0.08,6.89],[-9.26,-0.41],[-8.03,8.08],[-6.23,-2.93],[-9.78,2.32],[-8.38,5.39],[7.03,3.26],[3.51,2.64],[-11.06,1.85],[2.55,7.78],[5.7,4.16],[2.86,0.46],[-7.81,3.96],[11.31,2.29],[-0.57,9.58],[-4.26,-1.58],[-3.91,7.92],[-5.76,-8.08]]},{"perplexity":30,"positions":[[-1.57,-0.63],[-1.57,-0.65],[-1.28,-1.24],[-4.23,1],[-1.39,-1.92],[-3.07,1.05],[0.17,-1.33],[-2.37,0.8],[-3.39,-0.88],[1.63,-2.16],[0.89,-1.61],[0.88,-3.25],[-0.56,-3.32],[-0.38,-3.57],[-0.57,-3.69],[1.26,-3.56],[2.36,-3.33],[2.1,0.29],[0.41,-0.07],[2.44,0.65],[0.36,0.66],[-3.29,-2.82],[-3.28,-3],[-3.56,-2.97],[-0.71,0.04],[1.05,1.23],[-4.35,0.36],[-0.68,2.3],[-3.91,-0.73],[2.37,1.55],[1.35,3.14],[0.47,3.67],[-0.65,0.54],[-2.25,3.87],[2.47,-4.5],[2.52,-4.61],[-1.68,-4.81],[-2.05,-4.71],[-4.04,-3.64],[1.04,3.35],[-1.43,3.71],[3.14,1.04],[2.68,3.86],[2.44,4.16],[1.87,4.73],[-0.89,-5.34],[-1.07,-4.96],[-0.52,4.26],[4.33,0.71],[-1.55,2.11],[3.08,1.01],[-1.76,4.34],[2.26,5.11],[-2.49,2.51],[-0.25,5.5],[1.14,4.89],[3.08,-3.23],[2.06,-0.92],[-0.68,5.69],[3.94,1.55],[3.51,-2.69],[0.84,-1.17],[0.59,4.77],[1.37,-5.41],[4.29,-0.06],[-1.49,1.98],[3.32,-1.57],[-4.75,1.89]]}]},{"title":"qwen/qwen3-embedding-8b","points":[{"name":"Aristotle","neighbors":[{"name":"Plato","similarity":0.6809423264573656},{"name":"Confucius","similarity":0.5829464330714412},{"name":"Ibn Sina (Avicenna)","similarity":0.5779243130921187}]},{"name":"Plato","neighbors":[{"name":"Aristotle","similarity":0.6809423264573656},{"name":"Confucius","similarity":0.5871097281961298},{"name":"Immanuel Kant","similarity":0.5816796006985747}]},{"name":"Confucius","neighbors":[{"name":"Sun Tzu","similarity":0.6247315535663222},{"name":"Plato","similarity":0.5871097281961298},{"name":"Aristotle","similarity":0.5829464330714412}]},{"name":"Cleopatra VII","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.6690473899543403},{"name":"Catherine the Great","similarity":0.5843519312661954},{"name":"Queen Liliuokalani","similarity":0.505161510432938}]},{"name":"Sun Tzu","neighbors":[{"name":"Confucius","similarity":0.6247315535663222},{"name":"Aristotle","similarity":0.5033329237095102},{"name":"Ibn Sina (Avicenna)","similarity":0.46655705033606676}]},{"name":"Hypatia of Alexandria","neighbors":[{"name":"Cleopatra VII","similarity":0.6690473899543403},{"name":"Hildegard of Bingen","similarity":0.6055791234044121},{"name":"Aristotle","similarity":0.5487228875572195}]},{"name":"Ibn Sina (Avicenna)","neighbors":[{"name":"Ibn Khaldun","similarity":0.6473505343037517},{"name":"Aristotle","similarity":0.5779243130921187},{"name":"Rumi","similarity":0.5605559129815992}]},{"name":"Hildegard of Bingen","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.6055791234044121},{"name":"Harriet Tubman","similarity":0.5188728192932464},{"name":"Ibn Sina (Avicenna)","similarity":0.5182375134588394}]},{"name":"Genghis Khan","neighbors":[{"name":"Napoleon Bonaparte","similarity":0.5942489983399792},{"name":"Confucius","similarity":0.5227700891414161},{"name":"Mahatma Gandhi","similarity":0.5159677952217224}]},{"name":"Rumi","neighbors":[{"name":"Dante Alighieri","similarity":0.5988832334511361},{"name":"Ibn Sina (Avicenna)","similarity":0.5605559129815992},{"name":"Rabindranath Tagore","similarity":0.5556851364426105}]},{"name":"Ibn Battuta","neighbors":[{"name":"Ibn Khaldun","similarity":0.5648008501062413},{"name":"Ibn Sina (Avicenna)","similarity":0.5526170595834449},{"name":"Rumi","similarity":0.5100172285973902}]},{"name":"Dante Alighieri","neighbors":[{"name":"Rumi","similarity":0.5988832334511361},{"name":"Michelangelo","similarity":0.5872667986315269},{"name":"Raphael","similarity":0.5581121527125837}]},{"name":"Leonardo da Vinci","neighbors":[{"name":"Michelangelo","similarity":0.647580612897371},{"name":"Raphael","similarity":0.6222797172143811},{"name":"William Shakespeare","similarity":0.5900853760694624}]},{"name":"Michelangelo","neighbors":[{"name":"Raphael","similarity":0.6917444838205217},{"name":"Leonardo da Vinci","similarity":0.647580612897371},{"name":"Dante Alighieri","similarity":0.5872667986315269}]},{"name":"Raphael","neighbors":[{"name":"Michelangelo","similarity":0.6917444838205217},{"name":"Leonardo da Vinci","similarity":0.6222797172143811},{"name":"Pablo Picasso","similarity":0.569409114434914}]},{"name":"William Shakespeare","neighbors":[{"name":"Johann Sebastian Bach","similarity":0.5971881695089647},{"name":"Leonardo da Vinci","similarity":0.5900853760694624},{"name":"Isaac Newton","similarity":0.5867960091061508}]},{"name":"Miguel de Cervantes","neighbors":[{"name":"Michel de Montaigne","similarity":0.5828887268456596},{"name":"Gabriel García Márquez","similarity":0.5652012868024183},{"name":"William Shakespeare","similarity":0.5605414772208707}]},{"name":"Nicolaus Copernicus","neighbors":[{"name":"Isaac Newton","similarity":0.5357709244785132},{"name":"Charles Darwin","similarity":0.5308386677599445},{"name":"Leonardo da Vinci","similarity":0.5015591846326548}]},{"name":"Michel de Montaigne","neighbors":[{"name":"Miguel de Cervantes","similarity":0.5828887268456596},{"name":"Voltaire","similarity":0.5743523140223574},{"name":"Michelangelo","similarity":0.5176896854278309}]},{"name":"Isaac Newton","neighbors":[{"name":"William Shakespeare","similarity":0.5867960091061508},{"name":"Charles Darwin","similarity":0.5754142602641241},{"name":"Leonardo da Vinci","similarity":0.547015086640385}]},{"name":"Voltaire","neighbors":[{"name":"Benjamin Franklin","similarity":0.5846648760502788},{"name":"Michel de Montaigne","similarity":0.5743523140223574},{"name":"Immanuel Kant","similarity":0.5689904393653733}]},{"name":"Johann Sebastian Bach","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.6968752160305715},{"name":"Wolfgang Amadeus Mozart","similarity":0.6654059831206501},{"name":"William Shakespeare","similarity":0.5971881695089647}]},{"name":"Wolfgang Amadeus Mozart","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.7196918915488281},{"name":"Johann Sebastian Bach","similarity":0.6654059831206501},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.5936823122644055}]},{"name":"Ludwig van Beethoven","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.7196918915488281},{"name":"Johann Sebastian Bach","similarity":0.6968752160305715},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.5949602359239264}]},{"name":"Immanuel Kant","neighbors":[{"name":"Karl Marx","similarity":0.5990681323937143},{"name":"Plato","similarity":0.5816796006985747},{"name":"Voltaire","similarity":0.5689904393653733}]},{"name":"Benjamin Franklin","neighbors":[{"name":"Leonardo da Vinci","similarity":0.5879406533278131},{"name":"Voltaire","similarity":0.5846648760502788},{"name":"Abraham Lincoln","similarity":0.5230310517296345}]},{"name":"Catherine the Great","neighbors":[{"name":"Cleopatra VII","similarity":0.5843519312661954},{"name":"Napoleon Bonaparte","similarity":0.5024172276099644},{"name":"Genghis Khan","similarity":0.49703810240540647}]},{"name":"Mary Wollstonecraft","neighbors":[{"name":"Simone de Beauvoir","similarity":0.5728357940257859},{"name":"Voltaire","similarity":0.5385712128203024},{"name":"Marie Curie","similarity":0.5314701394307724}]},{"name":"Napoleon Bonaparte","neighbors":[{"name":"Genghis Khan","similarity":0.5942489983399792},{"name":"Leonardo da Vinci","similarity":0.5336064849401158},{"name":"Abraham Lincoln","similarity":0.5327513715060086}]},{"name":"Charles Darwin","neighbors":[{"name":"Karl Marx","similarity":0.5925100930227546},{"name":"Isaac Newton","similarity":0.5754142602641241},{"name":"William Shakespeare","similarity":0.54691083622222}]},{"name":"Abraham Lincoln","neighbors":[{"name":"Frederick Douglass","similarity":0.5946790813709243},{"name":"Napoleon Bonaparte","similarity":0.5327513715060086},{"name":"Martin Luther King Jr.","similarity":0.5267018944493193}]},{"name":"Harriet Tubman","neighbors":[{"name":"Frederick Douglass","similarity":0.7036280397548598},{"name":"Rosa Parks","similarity":0.6512114315758673},{"name":"Florence Nightingale","similarity":0.5645731228735006}]},{"name":"Karl Marx","neighbors":[{"name":"Immanuel Kant","similarity":0.5990681323937143},{"name":"Charles Darwin","similarity":0.5925100930227546},{"name":"Confucius","similarity":0.5298223936273883}]},{"name":"Florence Nightingale","neighbors":[{"name":"Marie Curie","similarity":0.5735707183206767},{"name":"Harriet Tubman","similarity":0.5645731228735006},{"name":"Frederick Douglass","similarity":0.5252812570098259}]},{"name":"Leo Tolstoy","neighbors":[{"name":"Fyodor Dostoevsky","similarity":0.6691485942938249},{"name":"Rabindranath Tagore","similarity":0.6142752616055984},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.6138723668845956}]},{"name":"Fyodor Dostoevsky","neighbors":[{"name":"Leo Tolstoy","similarity":0.6691485942938249},{"name":"Plato","similarity":0.5366704554488896},{"name":"Charles Darwin","similarity":0.53091719712969}]},{"name":"Vincent van Gogh","neighbors":[{"name":"Pablo Picasso","similarity":0.6057608630641532},{"name":"Ludwig van Beethoven","similarity":0.539061028163503},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.5288655846714057}]},{"name":"Claude Monet","neighbors":[{"name":"Vincent van Gogh","similarity":0.5281021296116993},{"name":"Pablo Picasso","similarity":0.5160417802014503},{"name":"Michelangelo","similarity":0.483992272099359}]},{"name":"Pyotr Ilyich Tchaikovsky","neighbors":[{"name":"Leo Tolstoy","similarity":0.6138723668845956},{"name":"Ludwig van Beethoven","similarity":0.5949602359239264},{"name":"Wolfgang Amadeus Mozart","similarity":0.5936823122644055}]},{"name":"Frederick Douglass","neighbors":[{"name":"Harriet Tubman","similarity":0.7036280397548598},{"name":"Martin Luther King Jr.","similarity":0.5972083295755729},{"name":"Abraham Lincoln","similarity":0.5946790813709243}]},{"name":"Marie Curie","neighbors":[{"name":"Florence Nightingale","similarity":0.5735707183206767},{"name":"Amelia Earhart","similarity":0.5685817074839502},{"name":"Albert Einstein","similarity":0.5599931515671348}]},{"name":"Albert Einstein","neighbors":[{"name":"Alan Turing","similarity":0.5942607133034715},{"name":"Stephen Hawking","similarity":0.5675074216537854},{"name":"Marie Curie","similarity":0.5599931515671348}]},{"name":"Mahatma Gandhi","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.6712278110800483},{"name":"Nelson Mandela","similarity":0.6559558049528018},{"name":"Rabindranath Tagore","similarity":0.5411134651504369}]},{"name":"Nelson Mandela","neighbors":[{"name":"Mahatma Gandhi","similarity":0.6559558049528018},{"name":"Martin Luther King Jr.","similarity":0.6319812227260665},{"name":"Wangari Maathai","similarity":0.502082376176163}]},{"name":"Martin Luther King Jr.","neighbors":[{"name":"Mahatma Gandhi","similarity":0.6712278110800483},{"name":"Rosa Parks","similarity":0.6354336537250225},{"name":"Nelson Mandela","similarity":0.6319812227260665}]},{"name":"Frida Kahlo","neighbors":[{"name":"Pablo Picasso","similarity":0.5288976335774919},{"name":"Maya Angelou","similarity":0.48763946574091566},{"name":"Vincent van Gogh","similarity":0.4841963205887829}]},{"name":"Pablo Picasso","neighbors":[{"name":"Vincent van Gogh","similarity":0.6057608630641532},{"name":"Raphael","similarity":0.569409114434914},{"name":"Michelangelo","similarity":0.5439809204048326}]},{"name":"Amelia Earhart","neighbors":[{"name":"Marie Curie","similarity":0.5685817074839502},{"name":"Harriet Tubman","similarity":0.5557360429017258},{"name":"Maya Angelou","similarity":0.528191333298912}]},{"name":"Alan Turing","neighbors":[{"name":"Albert Einstein","similarity":0.5942607133034715},{"name":"Stephen Hawking","similarity":0.5835660189387077},{"name":"Srinivasa Ramanujan","similarity":0.5380033097521905}]},{"name":"Simone de Beauvoir","neighbors":[{"name":"Simone Weil","similarity":0.6726748099250268},{"name":"Mary Wollstonecraft","similarity":0.5728357940257859},{"name":"Maya Angelou","similarity":0.5527857249188451}]},{"name":"Stephen Hawking","neighbors":[{"name":"Alan Turing","similarity":0.5835660189387077},{"name":"Albert Einstein","similarity":0.5675074216537854},{"name":"Isaac Newton","similarity":0.5207119342017106}]},{"name":"Mother Teresa","neighbors":[{"name":"Marie Curie","similarity":0.5318077152650764},{"name":"Wangari Maathai","similarity":0.5168209389666443},{"name":"Rabindranath Tagore","similarity":0.5125806460029706}]},{"name":"Malcolm X","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.6145482764078047},{"name":"Maya Angelou","similarity":0.5255810637172186},{"name":"Mahatma Gandhi","similarity":0.5214908150872125}]},{"name":"Coco Chanel","neighbors":[{"name":"Marie Curie","similarity":0.5237628310019489},{"name":"Simone de Beauvoir","similarity":0.5171975181199531},{"name":"Florence Nightingale","similarity":0.5031538780248188}]},{"name":"Wangari Maathai","neighbors":[{"name":"Rachel Carson","similarity":0.5471042763621794},{"name":"Rosa Parks","similarity":0.5401412674643383},{"name":"Maya Angelou","similarity":0.5366666244779049}]},{"name":"Rosa Parks","neighbors":[{"name":"Harriet Tubman","similarity":0.6512114315758673},{"name":"Martin Luther King Jr.","similarity":0.6354336537250225},{"name":"Maya Angelou","similarity":0.586252856131193}]},{"name":"Gabriel García Márquez","neighbors":[{"name":"Chinua Achebe","similarity":0.5920503983054273},{"name":"Miguel de Cervantes","similarity":0.5652012868024183},{"name":"Pablo Picasso","similarity":0.52657658577361}]},{"name":"Cheikh Anta Diop","neighbors":[{"name":"Chinua Achebe","similarity":0.5460309254620812},{"name":"Ibn Khaldun","similarity":0.4943471950230571},{"name":"Hypatia of Alexandria","similarity":0.44852571460760277}]},{"name":"Rachel Carson","neighbors":[{"name":"Rosa Parks","similarity":0.572821108225395},{"name":"Wangari Maathai","similarity":0.5471042763621794},{"name":"Maya Angelou","similarity":0.5149980464605798}]},{"name":"Nikola Tesla","neighbors":[{"name":"Albert Einstein","similarity":0.5577902565874342},{"name":"Alan Turing","similarity":0.5278439787908388},{"name":"Leo Tolstoy","similarity":0.5158814168991946}]},{"name":"Chinua Achebe","neighbors":[{"name":"Gabriel García Márquez","similarity":0.5920503983054273},{"name":"Cheikh Anta Diop","similarity":0.5460309254620812},{"name":"Maya Angelou","similarity":0.5449100093566938}]},{"name":"Ibn Khaldun","neighbors":[{"name":"Ibn Sina (Avicenna)","similarity":0.6473505343037517},{"name":"Ibn Battuta","similarity":0.5648008501062413},{"name":"Karl Marx","similarity":0.5155850314576249}]},{"name":"Maya Angelou","neighbors":[{"name":"Rosa Parks","similarity":0.586252856131193},{"name":"Martin Luther King Jr.","similarity":0.5664866481318608},{"name":"Simone de Beauvoir","similarity":0.5527857249188451}]},{"name":"Akira Kurosawa","neighbors":[{"name":"William Shakespeare","similarity":0.5021205563281812},{"name":"Fyodor Dostoevsky","similarity":0.4771816077431416},{"name":"Pablo Picasso","similarity":0.46979892782424104}]},{"name":"Srinivasa Ramanujan","neighbors":[{"name":"Alan Turing","similarity":0.5380033097521905},{"name":"Rabindranath Tagore","similarity":0.5215883082412694},{"name":"Isaac Newton","similarity":0.48705908956524563}]},{"name":"Simone Weil","neighbors":[{"name":"Simone de Beauvoir","similarity":0.6726748099250268},{"name":"Mary Wollstonecraft","similarity":0.52809843555214},{"name":"Maya Angelou","similarity":0.507968595172818}]},{"name":"Rabindranath Tagore","neighbors":[{"name":"Leo Tolstoy","similarity":0.6142752616055984},{"name":"Rumi","similarity":0.5556851364426105},{"name":"Mahatma Gandhi","similarity":0.5411134651504369}]},{"name":"Queen Liliuokalani","neighbors":[{"name":"Cleopatra VII","similarity":0.505161510432938},{"name":"Harriet Tubman","similarity":0.4907945147540358},{"name":"Amelia Earhart","similarity":0.478254784220987}]}],"layouts":[{"perplexity":10,"positions":[[12.72,28.47],[14.77,27.06],[18.1,31.67],[-8.18,-20.52],[18.72,34.2],[-8.06,-23.31],[2.07,28.24],[-8.22,-26.7],[-6.39,-2.6],[1.83,21.04],[-2.76,28.41],[3.81,18.63],[10.18,11.48],[8.66,14.63],[10.88,15.96],[18.49,9.51],[-3.6,11.88],[26.16,15.16],[-0.86,9.88],[21.52,13.33],[2.78,6.9],[23.52,4.84],[22.27,0.87],[24.76,1.91],[19.1,23.28],[6.24,7.59],[-6.52,-17.19],[-18.66,-26.88],[-3.99,-3.25],[22.36,17.8],[-15.3,-6.24],[-20.83,-10.9],[21.54,21.23],[-23.82,-17.05],[11.55,-2.06],[12.13,0.5],[27.25,-8.1],[31.36,-7.16],[17.9,-3.25],[-18.83,-8.82],[-23.66,-20.44],[12.91,-16.48],[-21.19,0.99],[-21.81,3.92],[-24.13,-0.13],[27.84,-14.81],[27.47,-10.77],[-19.91,-19.69],[9.95,-15.85],[-21.43,-29.79],[9.59,-19.17],[-29.44,-18.78],[-27.64,1.26],[-26.12,-24.69],[-31.94,-9.78],[-25.58,-8.85],[-9.82,12.99],[-14.85,17.24],[-28.71,-11.72],[16.05,-14.23],[-12.4,14.67],[0.58,30.23],[-27.57,-5.61],[15.93,6.05],[7.5,-11.9],[-21.5,-32.2],[8.58,-4.66],[-13.34,-18.2]]},{"perplexity":15,"positions":[[13.99,5.49],[13.97,7.53],[18.22,7.14],[9.73,-14.5],[20.27,6.52],[8.18,-12.84],[10.01,0.49],[5.83,-11.42],[17.89,-5.3],[4.78,0.54],[8.77,-3.17],[3.49,2.71],[3.24,13.72],[0.49,13.04],[-0.73,14.74],[3.95,17.56],[0.34,6.01],[11.23,19.99],[2.89,7.54],[8.16,17.72],[6.4,8.67],[1.91,21.55],[-1.22,20.6],[-0.41,22.69],[12.31,11.29],[6.35,11.49],[12.64,-15.33],[4.06,-22.46],[18.44,-3.31],[11.64,16.19],[-3.3,-9.55],[-3.87,-15.1],[13.44,13.82],[-3.07,-19.44],[-6.98,7.61],[-5.32,9.05],[-8.68,19.44],[-9.31,22.67],[-9.78,10.83],[-3.9,-12.73],[-1.38,-21.54],[-17.02,5.95],[-10.81,-7.61],[-13.15,-6.97],[-11.49,-10.15],[-13.97,18.05],[-10.54,18.27],[0.6,-18.92],[-16.32,3.54],[3.56,-25.74],[-18.97,3.04],[-5.97,-23.31],[-14.07,-11.75],[-1.47,-25.38],[-11.55,-18.83],[-7.55,-16.36],[-3.57,1.15],[-1.33,-3.64],[-8.57,-19.53],[-15.69,8.84],[-3.16,-1.36],[11.11,-1.21],[-9.55,-14.21],[-5.65,14.64],[-12.97,2.12],[4.9,-27.17],[-8.04,4.37],[6.55,-17.75]]},{"perplexity":20,"positions":[[4.47,7.84],[3.81,8.28],[5.34,9.75],[-2.2,-12.17],[6.16,10.17],[-3.11,-11.59],[6.18,5.37],[-4.21,-10.85],[8.39,0.34],[4.49,3.35],[7.78,4.2],[3.31,3.54],[-1.74,6.5],[-2.73,5.69],[-2.92,4.93],[-3.17,8.12],[1.11,2.9],[-1.18,11.41],[0.99,4.31],[-1.6,9.48],[1.06,5.87],[-5.51,7.02],[-5.59,5.44],[-6.2,6.07],[1.86,8.65],[0.01,6.63],[-1.5,-13.42],[-3.2,-6.43],[7.58,0.12],[0.08,10.06],[4.1,-3.52],[2.48,-6.09],[1.55,9.97],[0.06,-6.85],[-1.8,1.64],[-1.73,2.54],[-7.5,2.88],[-9.04,3.85],[-4.67,2.8],[3.1,-5.1],[-1.16,-7.14],[-5.24,-1.17],[6.33,-4.89],[7.35,-4.83],[5.97,-6.07],[-9.02,0.34],[-7.95,2.01],[0.15,-8.72],[-4.6,-2.1],[-4.56,-7.3],[-5.73,-2.69],[-0.32,-5.1],[6.98,-7.21],[-2.21,-8.49],[4.28,-9.48],[3.9,-7.57],[1.56,0.26],[4.01,-0.46],[2.79,-9.75],[-4.81,0.21],[2.6,-0.31],[6.97,5.33],[2.55,-7.81],[-5.01,9.75],[-2.72,-1.88],[-5.31,-7.22],[-1.08,-0.02],[-0.01,-11.42]]},{"perplexity":30,"positions":[[1.47,-3.69],[1.35,-3.81],[2.38,-4.02],[-0.63,5.55],[2.71,-4.16],[-0.25,5.46],[1.82,-2.08],[0.21,5.17],[3.87,-2.2],[0.84,-0.97],[2.27,-1.41],[0.29,-1.09],[-1.55,-2.62],[-2.07,-2.15],[-2.21,-1.98],[-1.82,-3.47],[-0.29,-1.54],[-0.82,-5.28],[-0.05,-2.19],[-1.17,-4.32],[-0.16,-2.75],[-3.11,-3.34],[-3.33,-2.82],[-3.36,-2.96],[0.36,-3.89],[-0.61,-2.95],[-1.37,5.39],[-0.1,2.96],[3.82,-2.2],[-0.39,-4.55],[3.97,-0.25],[2.09,3.08],[0.39,-4.57],[0.48,3.88],[-1.15,-0.43],[-1.18,-0.81],[-3.6,-1.07],[-4.41,-1.55],[-2.35,-0.5],[2.49,2.27],[-0.01,3.74],[-2.77,1.02],[3.39,1.2],[3.64,1.14],[3.41,1.76],[-2.16,3.15],[-3.41,-1.12],[1.15,4.25],[-3.33,1.13],[-0.53,2.41],[-3.47,1.5],[0.98,3.18],[4.06,2.13],[-0.96,3.82],[2.8,4.01],[2.55,3.29],[0.54,0.52],[1.75,0.44],[2.29,4.26],[-2.29,0.79],[1.07,0.6],[2,-1.94],[1.57,2.32],[-2.86,-4.69],[-4.14,0.58],[-0.62,2.21],[-0.65,0.28],[1.2,5.84]]}]},{"title":"mistralai/mistral-embed-2312","points":[{"name":"Aristotle","neighbors":[{"name":"Plato","similarity":0.9106733091009488},{"name":"Hypatia of Alexandria","similarity":0.8480621125493474},{"name":"Immanuel Kant","similarity":0.8376906156555217}]},{"name":"Plato","neighbors":[{"name":"Aristotle","similarity":0.9106733091009488},{"name":"Confucius","similarity":0.8343689530475918},{"name":"Hypatia of Alexandria","similarity":0.831736413303621}]},{"name":"Confucius","neighbors":[{"name":"Sun Tzu","similarity":0.8524818342870124},{"name":"Plato","similarity":0.8343689530475918},{"name":"Aristotle","similarity":0.8340257186755047}]},{"name":"Cleopatra VII","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.8349577716302385},{"name":"Catherine the Great","similarity":0.8032605850483948},{"name":"Queen Liliuokalani","similarity":0.7858115893118546}]},{"name":"Sun Tzu","neighbors":[{"name":"Confucius","similarity":0.8524818342870124},{"name":"Aristotle","similarity":0.8053803241871716},{"name":"Napoleon Bonaparte","similarity":0.7972350674428681}]},{"name":"Hypatia of Alexandria","neighbors":[{"name":"Aristotle","similarity":0.8480621125493474},{"name":"Cleopatra VII","similarity":0.8349577716302385},{"name":"Plato","similarity":0.831736413303621}]},{"name":"Ibn Sina (Avicenna)","neighbors":[{"name":"Aristotle","similarity":0.8364012872640297},{"name":"Ibn Khaldun","similarity":0.8329495320838254},{"name":"Isaac Newton","similarity":0.8286825867661298}]},{"name":"Hildegard of Bingen","neighbors":[{"name":"Johann Sebastian Bach","similarity":0.8195648616832386},{"name":"Ludwig van Beethoven","similarity":0.8180487177341222},{"name":"Ibn Sina (Avicenna)","similarity":0.8088582507629583}]},{"name":"Genghis Khan","neighbors":[{"name":"Ibn Battuta","similarity":0.8118707384607107},{"name":"Napoleon Bonaparte","similarity":0.8102399939746648},{"name":"Confucius","similarity":0.8042892761989002}]},{"name":"Rumi","neighbors":[{"name":"Ibn Sina (Avicenna)","similarity":0.8235252212232176},{"name":"Rabindranath Tagore","similarity":0.8142074821727384},{"name":"Ibn Battuta","similarity":0.8121464908047143}]},{"name":"Ibn Battuta","neighbors":[{"name":"Ibn Khaldun","similarity":0.8288046253271242},{"name":"Ibn Sina (Avicenna)","similarity":0.8228866994021182},{"name":"Rumi","similarity":0.8121464908047143}]},{"name":"Dante Alighieri","neighbors":[{"name":"Michelangelo","similarity":0.8220638452656418},{"name":"Leonardo da Vinci","similarity":0.820394497157768},{"name":"William Shakespeare","similarity":0.8068945757771596}]},{"name":"Leonardo da Vinci","neighbors":[{"name":"Michelangelo","similarity":0.8686392537822503},{"name":"Raphael","similarity":0.8516913011711428},{"name":"Vincent van Gogh","similarity":0.8272481753498838}]},{"name":"Michelangelo","neighbors":[{"name":"Leonardo da Vinci","similarity":0.8686392537822503},{"name":"Raphael","similarity":0.8671557194076907},{"name":"Dante Alighieri","similarity":0.8220638452656418}]},{"name":"Raphael","neighbors":[{"name":"Michelangelo","similarity":0.8671557194076907},{"name":"Leonardo da Vinci","similarity":0.8516913011711428},{"name":"Pablo Picasso","similarity":0.8032113628305483}]},{"name":"William Shakespeare","neighbors":[{"name":"Miguel de Cervantes","similarity":0.8175973648396033},{"name":"Leonardo da Vinci","similarity":0.8088886913820545},{"name":"Wolfgang Amadeus Mozart","similarity":0.8075224403071279}]},{"name":"Miguel de Cervantes","neighbors":[{"name":"Michel de Montaigne","similarity":0.829725599853202},{"name":"Gabriel García Márquez","similarity":0.8278137053925374},{"name":"William Shakespeare","similarity":0.8175973648396033}]},{"name":"Nicolaus Copernicus","neighbors":[{"name":"Isaac Newton","similarity":0.8519072661125237},{"name":"Ibn Sina (Avicenna)","similarity":0.8265374779164348},{"name":"Immanuel Kant","similarity":0.815595174801881}]},{"name":"Michel de Montaigne","neighbors":[{"name":"Voltaire","similarity":0.8373349659981796},{"name":"Miguel de Cervantes","similarity":0.829725599853202},{"name":"Immanuel Kant","similarity":0.8101544705536282}]},{"name":"Isaac Newton","neighbors":[{"name":"Albert Einstein","similarity":0.8567953470743613},{"name":"Nicolaus Copernicus","similarity":0.8519072661125237},{"name":"Stephen Hawking","similarity":0.8462908263717971}]},{"name":"Voltaire","neighbors":[{"name":"Michel de Montaigne","similarity":0.8373349659981796},{"name":"Mary Wollstonecraft","similarity":0.836236927672839},{"name":"Immanuel Kant","similarity":0.8302593313523755}]},{"name":"Johann Sebastian Bach","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.8653676153234463},{"name":"Wolfgang Amadeus Mozart","similarity":0.8635431132033516},{"name":"Hildegard of Bingen","similarity":0.8195648616832386}]},{"name":"Wolfgang Amadeus Mozart","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.8810998555279783},{"name":"Johann Sebastian Bach","similarity":0.8635431132033516},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.8342915108742954}]},{"name":"Ludwig van Beethoven","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.8810998555279783},{"name":"Johann Sebastian Bach","similarity":0.8653676153234463},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.8404775097806397}]},{"name":"Immanuel Kant","neighbors":[{"name":"Karl Marx","similarity":0.8454202411730608},{"name":"Aristotle","similarity":0.8376906156555217},{"name":"Plato","similarity":0.8308399761169779}]},{"name":"Benjamin Franklin","neighbors":[{"name":"Isaac Newton","similarity":0.8434656739132131},{"name":"Voltaire","similarity":0.8283738795488544},{"name":"Abraham Lincoln","similarity":0.8188888662505531}]},{"name":"Catherine the Great","neighbors":[{"name":"Napoleon Bonaparte","similarity":0.8071998280188167},{"name":"Immanuel Kant","similarity":0.8053929647184461},{"name":"Leo Tolstoy","similarity":0.8032961894874254}]},{"name":"Mary Wollstonecraft","neighbors":[{"name":"Voltaire","similarity":0.836236927672839},{"name":"Simone de Beauvoir","similarity":0.8354879804500597},{"name":"Florence Nightingale","similarity":0.808922509515707}]},{"name":"Napoleon Bonaparte","neighbors":[{"name":"Voltaire","similarity":0.8165110115661752},{"name":"Genghis Khan","similarity":0.8102399939746648},{"name":"Catherine the Great","similarity":0.8071998280188167}]},{"name":"Charles Darwin","neighbors":[{"name":"Isaac Newton","similarity":0.8182052618608379},{"name":"Karl Marx","similarity":0.8094641691481895},{"name":"Rachel Carson","similarity":0.8043449938503411}]},{"name":"Abraham Lincoln","neighbors":[{"name":"Frederick Douglass","similarity":0.8576178303992873},{"name":"Martin Luther King Jr.","similarity":0.8288810537348056},{"name":"Benjamin Franklin","similarity":0.8188888662505531}]},{"name":"Harriet Tubman","neighbors":[{"name":"Frederick Douglass","similarity":0.8708456519059412},{"name":"Rosa Parks","similarity":0.8240040915370014},{"name":"Abraham Lincoln","similarity":0.8124360867228243}]},{"name":"Karl Marx","neighbors":[{"name":"Immanuel Kant","similarity":0.8454202411730608},{"name":"Ibn Khaldun","similarity":0.8144944338130549},{"name":"Albert Einstein","similarity":0.8106337669731303}]},{"name":"Florence Nightingale","neighbors":[{"name":"Mary Wollstonecraft","similarity":0.808922509515707},{"name":"Marie Curie","similarity":0.8007528361496442},{"name":"Harriet Tubman","similarity":0.7995578753756953}]},{"name":"Leo Tolstoy","neighbors":[{"name":"Fyodor Dostoevsky","similarity":0.8494130896562971},{"name":"Voltaire","similarity":0.822759624331392},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.820440967318118}]},{"name":"Fyodor Dostoevsky","neighbors":[{"name":"Leo Tolstoy","similarity":0.8494130896562971},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.8120409387221389},{"name":"Immanuel Kant","similarity":0.8113951468692768}]},{"name":"Vincent van Gogh","neighbors":[{"name":"Claude Monet","similarity":0.8389654376712266},{"name":"Pablo Picasso","similarity":0.8336478710581857},{"name":"Leonardo da Vinci","similarity":0.8272481753498838}]},{"name":"Claude Monet","neighbors":[{"name":"Vincent van Gogh","similarity":0.8389654376712266},{"name":"Pablo Picasso","similarity":0.8268122031387194},{"name":"Leonardo da Vinci","similarity":0.817853228771977}]},{"name":"Pyotr Ilyich Tchaikovsky","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.8404775097806397},{"name":"Wolfgang Amadeus Mozart","similarity":0.8342915108742954},{"name":"Leo Tolstoy","similarity":0.820440967318118}]},{"name":"Frederick Douglass","neighbors":[{"name":"Harriet Tubman","similarity":0.8708456519059412},{"name":"Abraham Lincoln","similarity":0.8576178303992873},{"name":"Martin Luther King Jr.","similarity":0.8317344174121136}]},{"name":"Marie Curie","neighbors":[{"name":"Albert Einstein","similarity":0.813800722099439},{"name":"Simone Weil","similarity":0.8037608423909861},{"name":"Mother Teresa","similarity":0.8012716052615739}]},{"name":"Albert Einstein","neighbors":[{"name":"Isaac Newton","similarity":0.8567953470743613},{"name":"Stephen Hawking","similarity":0.8405670676924321},{"name":"Benjamin Franklin","similarity":0.8166731611831726}]},{"name":"Mahatma Gandhi","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.8416568169630897},{"name":"Rabindranath Tagore","similarity":0.8289702668590867},{"name":"Nelson Mandela","similarity":0.8143701722120901}]},{"name":"Nelson Mandela","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.8296670184785127},{"name":"Malcolm X","similarity":0.8210664763535679},{"name":"Mahatma Gandhi","similarity":0.8143701722120901}]},{"name":"Martin Luther King Jr.","neighbors":[{"name":"Rosa Parks","similarity":0.860341252471221},{"name":"Malcolm X","similarity":0.8581205008810119},{"name":"Mahatma Gandhi","similarity":0.8416568169630897}]},{"name":"Frida Kahlo","neighbors":[{"name":"Pablo Picasso","similarity":0.8263763901915564},{"name":"Vincent van Gogh","similarity":0.8162063722191572},{"name":"Leonardo da Vinci","similarity":0.7998654088494856}]},{"name":"Pablo Picasso","neighbors":[{"name":"Vincent van Gogh","similarity":0.8336478710581857},{"name":"Leonardo da Vinci","similarity":0.8271247436673195},{"name":"Claude Monet","similarity":0.8268122031387194}]},{"name":"Amelia Earhart","neighbors":[{"name":"Harriet Tubman","similarity":0.802622006809882},{"name":"Queen Liliuokalani","similarity":0.796763705139439},{"name":"Mary Wollstonecraft","similarity":0.7967085308298083}]},{"name":"Alan Turing","neighbors":[{"name":"Srinivasa Ramanujan","similarity":0.8199436677418374},{"name":"Stephen Hawking","similarity":0.8082918833145384},{"name":"Isaac Newton","similarity":0.801793940723304}]},{"name":"Simone de Beauvoir","neighbors":[{"name":"Mary Wollstonecraft","similarity":0.8354879804500597},{"name":"Simone Weil","similarity":0.8325582454988443},{"name":"Voltaire","similarity":0.8136288879879168}]},{"name":"Stephen Hawking","neighbors":[{"name":"Isaac Newton","similarity":0.8462908263717971},{"name":"Albert Einstein","similarity":0.8405670676924321},{"name":"Srinivasa Ramanujan","similarity":0.8107547818166829}]},{"name":"Mother Teresa","neighbors":[{"name":"Marie Curie","similarity":0.8012716052615739},{"name":"Wangari Maathai","similarity":0.7972861995247625},{"name":"Rabindranath Tagore","similarity":0.7945859705051219}]},{"name":"Malcolm X","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.8581205008810119},{"name":"Frederick Douglass","similarity":0.83121779680669},{"name":"Maya Angelou","similarity":0.8278586180897872}]},{"name":"Coco Chanel","neighbors":[{"name":"Pablo Picasso","similarity":0.8066538861013871},{"name":"Voltaire","similarity":0.7906717364570922},{"name":"Napoleon Bonaparte","similarity":0.7885598994914957}]},{"name":"Wangari Maathai","neighbors":[{"name":"Nelson Mandela","similarity":0.7999585452133001},{"name":"Mother Teresa","similarity":0.7972861995247625},{"name":"Rachel Carson","similarity":0.7928289183044157}]},{"name":"Rosa Parks","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.860341252471221},{"name":"Harriet Tubman","similarity":0.8240040915370014},{"name":"Maya Angelou","similarity":0.8212230142417377}]},{"name":"Gabriel García Márquez","neighbors":[{"name":"Miguel de Cervantes","similarity":0.8278137053925374},{"name":"Chinua Achebe","similarity":0.8131030944422702},{"name":"Leo Tolstoy","similarity":0.8024853424337552}]},{"name":"Cheikh Anta Diop","neighbors":[{"name":"Ibn Khaldun","similarity":0.8322574853008056},{"name":"Chinua Achebe","similarity":0.7989042022520049},{"name":"Ibn Sina (Avicenna)","similarity":0.7919042148466876}]},{"name":"Rachel Carson","neighbors":[{"name":"Charles Darwin","similarity":0.8043449938503411},{"name":"Amelia Earhart","similarity":0.7942140733859254},{"name":"Wangari Maathai","similarity":0.7928289183044157}]},{"name":"Nikola Tesla","neighbors":[{"name":"Albert Einstein","similarity":0.8024615408197955},{"name":"Benjamin Franklin","similarity":0.798926620271557},{"name":"Leonardo da Vinci","similarity":0.7918937717073349}]},{"name":"Chinua Achebe","neighbors":[{"name":"Gabriel García Márquez","similarity":0.8131030944422702},{"name":"Miguel de Cervantes","similarity":0.8023856840520072},{"name":"Cheikh Anta Diop","similarity":0.7989042022520049}]},{"name":"Ibn Khaldun","neighbors":[{"name":"Ibn Sina (Avicenna)","similarity":0.8329495320838254},{"name":"Cheikh Anta Diop","similarity":0.8322574853008056},{"name":"Ibn Battuta","similarity":0.8288046253271242}]},{"name":"Maya Angelou","neighbors":[{"name":"Malcolm X","similarity":0.8278586180897872},{"name":"Rosa Parks","similarity":0.8212230142417377},{"name":"Martin Luther King Jr.","similarity":0.821191370328504}]},{"name":"Akira Kurosawa","neighbors":[{"name":"William Shakespeare","similarity":0.7700740383182332},{"name":"Pablo Picasso","similarity":0.7670519224221016},{"name":"Vincent van Gogh","similarity":0.7659542702638927}]},{"name":"Srinivasa Ramanujan","neighbors":[{"name":"Isaac Newton","similarity":0.8335218234475374},{"name":"Alan Turing","similarity":0.8199436677418374},{"name":"Stephen Hawking","similarity":0.8107547818166829}]},{"name":"Simone Weil","neighbors":[{"name":"Simone de Beauvoir","similarity":0.8325582454988443},{"name":"Voltaire","similarity":0.8092977825969241},{"name":"Marie Curie","similarity":0.8037608423909861}]},{"name":"Rabindranath Tagore","neighbors":[{"name":"Mahatma Gandhi","similarity":0.8289702668590867},{"name":"Rumi","similarity":0.8142074821727384},{"name":"Srinivasa Ramanujan","similarity":0.8093257842335411}]},{"name":"Queen Liliuokalani","neighbors":[{"name":"Amelia Earhart","similarity":0.796763705139439},{"name":"Cleopatra VII","similarity":0.7858115893118546},{"name":"Catherine the Great","similarity":0.7832711231424644}]}],"layouts":[{"perplexity":10,"positions":[[-0.21,15.46],[-0.68,13.23],[18.98,18.88],[-5.88,20.84],[21.29,18.08],[-3.5,18.73],[4.77,20.35],[30.7,3.15],[12.91,16.06],[7.12,17.43],[9.88,21.4],[22.78,-14.62],[23.01,-19.8],[25.48,-18.44],[27.31,-20.66],[15.17,-12.66],[9.57,-9.79],[-15.78,-9.5],[6.57,-5.34],[-16.17,-12.78],[4.2,-2.51],[30.46,-1.42],[27.52,-3.43],[27.25,-0.81],[4.41,6.08],[-10.66,-12.94],[10.32,7.61],[-0.89,-1.31],[12.88,10.82],[-22.62,-8.46],[-28.45,20.66],[-23.03,19.67],[1.82,6.08],[-7.12,1.08],[13.69,0.73],[15.48,-0.83],[18.31,-25.75],[20.69,-27.25],[23.11,-1.17],[-25.67,19.17],[-12.53,-1.76],[-15.08,-15.45],[-19.1,9.51],[-23.45,6.15],[-25.55,9.61],[15.6,-30.25],[14.97,-26.79],[-17.81,21.69],[-23.05,-20.1],[-1.85,-4.46],[-19.18,-14.86],[-16.36,1.74],[-24.63,12.41],[10.43,-26.38],[-21.24,1.24],[-28.72,8.97],[7.83,-12.43],[6.11,27.04],[-24.75,-4.63],[-10.65,-18.43],[4.83,-14.13],[7.01,24.1],[-28.76,13.72],[14.27,-18.1],[-19.74,-20.01],[-3.26,-6.9],[-15.64,9.05],[-14.71,23.41]]},{"perplexity":15,"positions":[[-0.01,12.81],[-0.03,11.11],[4.78,10.3],[-3,18],[6.43,9.26],[-1.96,15.8],[4.03,15.89],[2.64,-14.5],[8.97,13.1],[10.8,16.98],[7.5,16.7],[18.61,0.98],[20.62,-2.56],[21.81,-0.67],[23.84,-1.57],[13.95,-2.23],[10.66,0.28],[-6.64,10.5],[6.63,-0.1],[-9.2,9.29],[3.03,-1.12],[6.13,-16.04],[8.47,-14.6],[6.69,-13.61],[-0.64,6.23],[-11.13,4.8],[3.52,4.82],[-1.63,-2.81],[2.12,2.06],[-6.81,5.59],[-19.8,-14.01],[-15.37,-14.04],[-2.32,4.86],[-5.87,-2.53],[6.14,-5.21],[7.83,-5.95],[20.51,-8.11],[22.7,-7.89],[8.3,-10.91],[-17.42,-13.47],[-9.69,-0.95],[-11.47,8.25],[-20.39,-2.78],[-17.18,-5.11],[-20,-7],[21.43,-12.1],[19.25,-10.46],[-10.41,-13.02],[-12.88,15.17],[-0.82,-5.3],[-11.73,10.97],[-13.37,-1.82],[-18.09,-8.39],[16.45,-12.78],[-13.02,-5.06],[-21.81,-8.62],[11.74,2.5],[4.41,20.98],[-9.93,-8.15],[-15.05,6.76],[12.38,5.18],[5.33,18.73],[-15.4,-9.75],[15.24,-6.27],[-10.31,14.45],[-0.96,-7.52],[-19.76,-0.06],[-8.82,-15.32]]},{"perplexity":20,"positions":[[3.95,3.04],[3.72,2.79],[4.67,1.09],[3.55,6.38],[4.86,0.48],[3.99,5.23],[6.91,2.38],[7.64,-4.96],[6.55,4.7],[8.01,3.73],[8.48,2.42],[1.18,-5.77],[-0.32,-6.88],[-0.7,-6.24],[-1.54,-6.48],[3.08,-5.58],[3.35,-3.02],[-4.15,-2.7],[2.32,-1.16],[-5.09,-1.71],[0.95,-0.29],[6.64,-6.25],[5.59,-6.76],[6.2,-7.09],[1.9,1.52],[-3.53,-1.03],[1.76,5.47],[-1.12,1.55],[0.9,4.03],[-7.54,0.67],[-2.07,6.84],[-2.17,8.63],[1.2,1.93],[-2.62,2.71],[0.62,-2.55],[0.7,-3.06],[0.02,-9.93],[0.12,-9.12],[5.6,-8.36],[-2.47,7.83],[-4.52,1.75],[-5.32,-0.74],[-4.65,5.72],[-6.31,6.43],[-5.36,7.57],[-1.3,-10.84],[-1.32,-9.55],[-0.17,9.28],[-7.98,-2.82],[-1.03,0.44],[-6.41,-1.29],[-5.76,3.73],[-4.47,7.68],[-3.2,-9.09],[-7.39,4.58],[-5.93,8.63],[4.36,-2.99],[8.14,0.09],[-8.28,2.45],[-4.91,-4.68],[5.48,-2.31],[7.82,1.13],[-4.32,9.26],[2.74,-9.07],[-6.87,-2.99],[-1.2,-0.39],[-4.08,4.65],[1.11,8.88]]},{"perplexity":30,"positions":[[0.52,3.05],[0.52,3.02],[-0.54,2.63],[1.28,4.76],[-0.71,2.53],[1.06,4.21],[-1.01,3.86],[-3.8,2.46],[-1.91,2.95],[-2.42,3.84],[-1.78,4.31],[-3.94,-0.7],[-4.17,-1.53],[-4.69,-1.38],[-5,-1.5],[-2.92,-1.08],[-1.68,-1.51],[1.62,2.35],[-0.99,-0.71],[2.33,1.98],[-0.5,-0.11],[-4.34,1.54],[-4.27,1.09],[-4.21,1.22],[0.12,1.33],[3.1,0.82],[-1.77,1.62],[0.85,-0.38],[-1.07,1.18],[1.94,1.09],[3.28,-1.58],[4.05,-1.88],[0.37,1.15],[1.95,-0.96],[-1.96,0.22],[-2.09,0.19],[-3.7,-3.1],[-3.67,-2.91],[-3.45,0.84],[3.59,-1.86],[2.15,-0.37],[2.78,1.7],[1.58,-3.05],[2.43,-3.54],[3.04,-3.13],[-3.21,-3.98],[-3.07,-3.34],[5.07,-1.07],[3.41,3.36],[0.46,-0.76],[2.85,2.29],[1.47,-4.26],[2.91,-2.86],[-1.81,-3.83],[2.43,-4.61],[3.79,-3.42],[-1.32,-2.2],[-0.49,5.12],[4.2,-0.3],[4.13,1.67],[-0.76,-2.51],[-0.92,4.5],[4.06,-2.99],[-4.93,-3.73],[2.88,3.3],[0.35,-1.02],[0.79,-3.04],[5.75,-1.03]]}]},{"title":"google/gemini-embedding-2","points":[{"name":"Aristotle","neighbors":[{"name":"Plato","similarity":0.7989144139910036},{"name":"Ibn Sina (Avicenna)","similarity":0.7386011958692639},{"name":"Confucius","similarity":0.7177948589705723}]},{"name":"Plato","neighbors":[{"name":"Aristotle","similarity":0.7989144139910036},{"name":"Confucius","similarity":0.7162291303063293},{"name":"Immanuel Kant","similarity":0.711131855565471}]},{"name":"Confucius","neighbors":[{"name":"Sun Tzu","similarity":0.7538746666172323},{"name":"Aristotle","similarity":0.7177948589705723},{"name":"Plato","similarity":0.7162291303063293}]},{"name":"Cleopatra VII","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.7493485827873221},{"name":"Catherine the Great","similarity":0.7109486457903796},{"name":"Napoleon Bonaparte","similarity":0.7093095502946162}]},{"name":"Sun Tzu","neighbors":[{"name":"Confucius","similarity":0.7538746666172323},{"name":"Aristotle","similarity":0.6993110385136797},{"name":"Leonardo da Vinci","similarity":0.6981763482360347}]},{"name":"Hypatia of Alexandria","neighbors":[{"name":"Cleopatra VII","similarity":0.7493485827873221},{"name":"Hildegard of Bingen","similarity":0.7082793811856313},{"name":"Aristotle","similarity":0.7050739155047782}]},{"name":"Ibn Sina (Avicenna)","neighbors":[{"name":"Aristotle","similarity":0.7386011958692639},{"name":"Ibn Khaldun","similarity":0.7378227209801571},{"name":"Ibn Battuta","similarity":0.7312133613862143}]},{"name":"Hildegard of Bingen","neighbors":[{"name":"Hypatia of Alexandria","similarity":0.7082793811856313},{"name":"Ibn Sina (Avicenna)","similarity":0.7075339921062129},{"name":"Dante Alighieri","similarity":0.6975666526567258}]},{"name":"Genghis Khan","neighbors":[{"name":"Napoleon Bonaparte","similarity":0.7376509875614584},{"name":"Confucius","similarity":0.7056444577900955},{"name":"Ibn Battuta","similarity":0.7041053158134256}]},{"name":"Rumi","neighbors":[{"name":"Dante Alighieri","similarity":0.7188937025401186},{"name":"Ibn Sina (Avicenna)","similarity":0.7184679092211865},{"name":"Rabindranath Tagore","similarity":0.7014874679850049}]},{"name":"Ibn Battuta","neighbors":[{"name":"Ibn Khaldun","similarity":0.7548970146520823},{"name":"Ibn Sina (Avicenna)","similarity":0.7312133613862143},{"name":"Genghis Khan","similarity":0.7041053158134256}]},{"name":"Dante Alighieri","neighbors":[{"name":"Leonardo da Vinci","similarity":0.7341358757545682},{"name":"Michelangelo","similarity":0.7264299376649318},{"name":"Rumi","similarity":0.7188937025401186}]},{"name":"Leonardo da Vinci","neighbors":[{"name":"Michelangelo","similarity":0.7654954381678065},{"name":"Raphael","similarity":0.7555947400811952},{"name":"Dante Alighieri","similarity":0.7341358757545682}]},{"name":"Michelangelo","neighbors":[{"name":"Raphael","similarity":0.7674408337864322},{"name":"Leonardo da Vinci","similarity":0.7654954381678065},{"name":"Dante Alighieri","similarity":0.7264299376649318}]},{"name":"Raphael","neighbors":[{"name":"Michelangelo","similarity":0.7674408337864322},{"name":"Leonardo da Vinci","similarity":0.7555947400811952},{"name":"Plato","similarity":0.7076116352080485}]},{"name":"William Shakespeare","neighbors":[{"name":"Dante Alighieri","similarity":0.7159592538518976},{"name":"Isaac Newton","similarity":0.714422359798261},{"name":"Miguel de Cervantes","similarity":0.7086025293140235}]},{"name":"Miguel de Cervantes","neighbors":[{"name":"Fyodor Dostoevsky","similarity":0.7184744787695148},{"name":"Michel de Montaigne","similarity":0.7176488394983573},{"name":"Dante Alighieri","similarity":0.7132545931118629}]},{"name":"Nicolaus Copernicus","neighbors":[{"name":"Isaac Newton","similarity":0.7371272530141653},{"name":"Immanuel Kant","similarity":0.7327214783847421},{"name":"Leonardo da Vinci","similarity":0.7140028502164454}]},{"name":"Michel de Montaigne","neighbors":[{"name":"Voltaire","similarity":0.7272945438356103},{"name":"Miguel de Cervantes","similarity":0.7176488394983573},{"name":"Immanuel Kant","similarity":0.7153555614095493}]},{"name":"Isaac Newton","neighbors":[{"name":"Stephen Hawking","similarity":0.7570011873669991},{"name":"Nicolaus Copernicus","similarity":0.7371272530141653},{"name":"Albert Einstein","similarity":0.7298684469825117}]},{"name":"Voltaire","neighbors":[{"name":"Leo Tolstoy","similarity":0.7280623340571213},{"name":"Michel de Montaigne","similarity":0.7272945438356103},{"name":"Mary Wollstonecraft","similarity":0.7256263387330243}]},{"name":"Johann Sebastian Bach","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.7635130472176874},{"name":"Wolfgang Amadeus Mozart","similarity":0.7633292587804574},{"name":"Immanuel Kant","similarity":0.7295685154682692}]},{"name":"Wolfgang Amadeus Mozart","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.7655421516138642},{"name":"Johann Sebastian Bach","similarity":0.7633292587804574},{"name":"Napoleon Bonaparte","similarity":0.7086181374763814}]},{"name":"Ludwig van Beethoven","neighbors":[{"name":"Wolfgang Amadeus Mozart","similarity":0.7655421516138642},{"name":"Johann Sebastian Bach","similarity":0.7635130472176874},{"name":"Pyotr Ilyich Tchaikovsky","similarity":0.7263901560726309}]},{"name":"Immanuel Kant","neighbors":[{"name":"Karl Marx","similarity":0.7594417306479463},{"name":"Nicolaus Copernicus","similarity":0.7327214783847421},{"name":"Johann Sebastian Bach","similarity":0.7295685154682692}]},{"name":"Benjamin Franklin","neighbors":[{"name":"Voltaire","similarity":0.7230693116047504},{"name":"Leonardo da Vinci","similarity":0.7203375554973176},{"name":"Frederick Douglass","similarity":0.7175311828502274}]},{"name":"Catherine the Great","neighbors":[{"name":"Voltaire","similarity":0.7110565063168361},{"name":"Cleopatra VII","similarity":0.7109486457903796},{"name":"Immanuel Kant","similarity":0.704969460654605}]},{"name":"Mary Wollstonecraft","neighbors":[{"name":"Voltaire","similarity":0.7256263387330243},{"name":"Simone de Beauvoir","similarity":0.713127741479908},{"name":"Florence Nightingale","similarity":0.7128131743568645}]},{"name":"Napoleon Bonaparte","neighbors":[{"name":"Genghis Khan","similarity":0.7376509875614584},{"name":"Leonardo da Vinci","similarity":0.717693801764132},{"name":"Voltaire","similarity":0.71366750776923}]},{"name":"Charles Darwin","neighbors":[{"name":"Isaac Newton","similarity":0.7287194360402336},{"name":"Karl Marx","similarity":0.7267074568838847},{"name":"Stephen Hawking","similarity":0.7109601262687835}]},{"name":"Abraham Lincoln","neighbors":[{"name":"Frederick Douglass","similarity":0.7528221891742168},{"name":"Martin Luther King Jr.","similarity":0.7284549908832793},{"name":"Harriet Tubman","similarity":0.6997380482465732}]},{"name":"Harriet Tubman","neighbors":[{"name":"Frederick Douglass","similarity":0.7932683092861813},{"name":"Rosa Parks","similarity":0.7222072624527482},{"name":"Abraham Lincoln","similarity":0.6997380482465732}]},{"name":"Karl Marx","neighbors":[{"name":"Immanuel Kant","similarity":0.7594417306479463},{"name":"Charles Darwin","similarity":0.7267074568838847},{"name":"Confucius","similarity":0.7099704904314207}]},{"name":"Florence Nightingale","neighbors":[{"name":"Mary Wollstonecraft","similarity":0.7128131743568645},{"name":"Napoleon Bonaparte","similarity":0.7004741610139543},{"name":"Marie Curie","similarity":0.6991735156182511}]},{"name":"Leo Tolstoy","neighbors":[{"name":"Fyodor Dostoevsky","similarity":0.7688218173106542},{"name":"Voltaire","similarity":0.7280623340571213},{"name":"Immanuel Kant","similarity":0.715162250325396}]},{"name":"Fyodor Dostoevsky","neighbors":[{"name":"Leo Tolstoy","similarity":0.7688218173106542},{"name":"Miguel de Cervantes","similarity":0.7184744787695148},{"name":"Dante Alighieri","similarity":0.712522200834081}]},{"name":"Vincent van Gogh","neighbors":[{"name":"Claude Monet","similarity":0.7228238103130462},{"name":"Pablo Picasso","similarity":0.7114601683616771},{"name":"Leonardo da Vinci","similarity":0.71034780091691}]},{"name":"Claude Monet","neighbors":[{"name":"Vincent van Gogh","similarity":0.7228238103130462},{"name":"Pablo Picasso","similarity":0.7176524834491937},{"name":"Leonardo da Vinci","similarity":0.7127740208453834}]},{"name":"Pyotr Ilyich Tchaikovsky","neighbors":[{"name":"Ludwig van Beethoven","similarity":0.7263901560726309},{"name":"Leo Tolstoy","similarity":0.7065613118574381},{"name":"Fyodor Dostoevsky","similarity":0.7023902577563259}]},{"name":"Frederick Douglass","neighbors":[{"name":"Harriet Tubman","similarity":0.7932683092861813},{"name":"Abraham Lincoln","similarity":0.7528221891742168},{"name":"Malcolm X","similarity":0.731999897256615}]},{"name":"Marie Curie","neighbors":[{"name":"Mother Teresa","similarity":0.704932736420828},{"name":"Nikola Tesla","similarity":0.7016012186348909},{"name":"Florence Nightingale","similarity":0.6991735156182511}]},{"name":"Albert Einstein","neighbors":[{"name":"Stephen Hawking","similarity":0.7409179222375698},{"name":"Isaac Newton","similarity":0.7298684469825117},{"name":"Nikola Tesla","similarity":0.7219394132241036}]},{"name":"Mahatma Gandhi","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.7608357735385751},{"name":"Rabindranath Tagore","similarity":0.7361851507429747},{"name":"Leo Tolstoy","similarity":0.7117957989998697}]},{"name":"Nelson Mandela","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.7088616909659896},{"name":"Mahatma Gandhi","similarity":0.7031586009948931},{"name":"Maya Angelou","similarity":0.6905056895401943}]},{"name":"Martin Luther King Jr.","neighbors":[{"name":"Mahatma Gandhi","similarity":0.7608357735385751},{"name":"Rosa Parks","similarity":0.7580233644616663},{"name":"Malcolm X","similarity":0.7574887878580835}]},{"name":"Frida Kahlo","neighbors":[{"name":"Pablo Picasso","similarity":0.716649602417538},{"name":"Vincent van Gogh","similarity":0.7044261271270252},{"name":"Maya Angelou","similarity":0.6839118167106862}]},{"name":"Pablo Picasso","neighbors":[{"name":"Leonardo da Vinci","similarity":0.7178832799744397},{"name":"Claude Monet","similarity":0.7176524834491937},{"name":"Frida Kahlo","similarity":0.716649602417538}]},{"name":"Amelia Earhart","neighbors":[{"name":"Harriet Tubman","similarity":0.6865054689834209},{"name":"Maya Angelou","similarity":0.6834223716598877},{"name":"Mary Wollstonecraft","similarity":0.6770001635278644}]},{"name":"Alan Turing","neighbors":[{"name":"Stephen Hawking","similarity":0.7058446165414292},{"name":"Srinivasa Ramanujan","similarity":0.6994041673215438},{"name":"Albert Einstein","similarity":0.6988875090553753}]},{"name":"Simone de Beauvoir","neighbors":[{"name":"Simone Weil","similarity":0.7801536358926089},{"name":"Voltaire","similarity":0.7189698794726334},{"name":"Mary Wollstonecraft","similarity":0.713127741479908}]},{"name":"Stephen Hawking","neighbors":[{"name":"Isaac Newton","similarity":0.7570011873669991},{"name":"Albert Einstein","similarity":0.7409179222375698},{"name":"Charles Darwin","similarity":0.7109601262687835}]},{"name":"Mother Teresa","neighbors":[{"name":"Marie Curie","similarity":0.704932736420828},{"name":"Rabindranath Tagore","similarity":0.7019871520974953},{"name":"Hildegard of Bingen","similarity":0.6969993242125279}]},{"name":"Malcolm X","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.7574887878580835},{"name":"Frederick Douglass","similarity":0.731999897256615},{"name":"Maya Angelou","similarity":0.7185455570910579}]},{"name":"Coco Chanel","neighbors":[{"name":"Pablo Picasso","similarity":0.6993637352522637},{"name":"Simone de Beauvoir","similarity":0.691845913842236},{"name":"Napoleon Bonaparte","similarity":0.6856697681046743}]},{"name":"Wangari Maathai","neighbors":[{"name":"Nelson Mandela","similarity":0.6901514690807353},{"name":"Mother Teresa","similarity":0.6894233708626759},{"name":"Maya Angelou","similarity":0.6848277525216614}]},{"name":"Rosa Parks","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.7580233644616663},{"name":"Harriet Tubman","similarity":0.7222072624527482},{"name":"Maya Angelou","similarity":0.7158283938220875}]},{"name":"Gabriel García Márquez","neighbors":[{"name":"Miguel de Cervantes","similarity":0.7125791373059194},{"name":"Maya Angelou","similarity":0.6934511557438228},{"name":"Chinua Achebe","similarity":0.6920200613381804}]},{"name":"Cheikh Anta Diop","neighbors":[{"name":"Chinua Achebe","similarity":0.7168010466345567},{"name":"Ibn Khaldun","similarity":0.7040483188748304},{"name":"Simone de Beauvoir","similarity":0.6731776020456507}]},{"name":"Rachel Carson","neighbors":[{"name":"Charles Darwin","similarity":0.6856526030952377},{"name":"Rosa Parks","similarity":0.6765559523194685},{"name":"Wangari Maathai","similarity":0.6745545979011501}]},{"name":"Nikola Tesla","neighbors":[{"name":"Albert Einstein","similarity":0.7219394132241036},{"name":"Benjamin Franklin","similarity":0.7166665995216155},{"name":"Leonardo da Vinci","similarity":0.7086975744277608}]},{"name":"Chinua Achebe","neighbors":[{"name":"Cheikh Anta Diop","similarity":0.7168010466345567},{"name":"Gabriel García Márquez","similarity":0.6920200613381804},{"name":"Maya Angelou","similarity":0.6847484249813691}]},{"name":"Ibn Khaldun","neighbors":[{"name":"Ibn Battuta","similarity":0.7548970146520823},{"name":"Ibn Sina (Avicenna)","similarity":0.7378227209801571},{"name":"Karl Marx","similarity":0.707675371738626}]},{"name":"Maya Angelou","neighbors":[{"name":"Martin Luther King Jr.","similarity":0.727016980524296},{"name":"Malcolm X","similarity":0.7185455570910579},{"name":"Frederick Douglass","similarity":0.7164909319506907}]},{"name":"Akira Kurosawa","neighbors":[{"name":"William Shakespeare","similarity":0.6814616076787399},{"name":"Leo Tolstoy","similarity":0.6680543548363207},{"name":"Claude Monet","similarity":0.6669617662768432}]},{"name":"Srinivasa Ramanujan","neighbors":[{"name":"Isaac Newton","similarity":0.7045095856540118},{"name":"Alan Turing","similarity":0.6994041673215438},{"name":"Stephen Hawking","similarity":0.6991434968648258}]},{"name":"Simone Weil","neighbors":[{"name":"Simone de Beauvoir","similarity":0.7801536358926089},{"name":"Voltaire","similarity":0.6990314661266915},{"name":"Mary Wollstonecraft","similarity":0.6909423759507032}]},{"name":"Rabindranath Tagore","neighbors":[{"name":"Mahatma Gandhi","similarity":0.7361851507429747},{"name":"Albert Einstein","similarity":0.7051359069218286},{"name":"Mother Teresa","similarity":0.7019871520974953}]},{"name":"Queen Liliuokalani","neighbors":[{"name":"Cleopatra VII","similarity":0.6850313603568542},{"name":"Harriet Tubman","similarity":0.6676278437909351},{"name":"Frederick Douglass","similarity":0.6630653259363956}]}],"layouts":[{"perplexity":10,"positions":[[10.16,19.89],[12.29,20.73],[7.25,27.63],[-14.13,16.46],[7.27,30],[-12.31,14.64],[6.37,14.68],[-7.96,10.95],[-1.9,23.9],[9.52,10.91],[2.11,16.26],[14.27,7.69],[17.96,9.46],[20.62,10.57],[19.87,13.25],[17.61,2.61],[12.25,-4.26],[-0.87,-12.48],[5.52,-4.25],[-4.95,-14.52],[1.93,-1.82],[30.53,7.97],[29.89,4.95],[32.8,5.74],[4.27,-11.38],[-3.42,-5.18],[-11.35,21.28],[-1.78,1.01],[-3.91,22.42],[-1.96,-18.1],[-30.01,5.58],[-34.69,2.12],[5.04,-13.79],[-5.63,2.28],[8.1,1.53],[10.29,0.64],[28.68,-6.96],[25.54,-6.48],[36.69,5.4],[-32.42,3.02],[-11.11,-1.66],[-8.94,-11.46],[-22.69,-6.02],[-23.93,-0.88],[-26.66,-5.27],[28.34,-12.21],[25.36,-10.84],[-37.66,-2.21],[-11.2,-18.17],[15.15,-19],[-7.79,-14.79],[-14.47,0.08],[-28.86,-2.63],[21.97,-14.75],[-20.1,1.24],[-28.48,-8.33],[13.78,-7.51],[2.64,-29.9],[-25.53,-16],[-7.89,-6.93],[5.04,-29.16],[2.54,13.76],[-32.2,-5.18],[20.89,0.58],[-14.33,-15.42],[14.59,-21.19],[-19.08,-7.01],[-18.91,16.52]]},{"perplexity":15,"positions":[[3.32,16.79],[5.13,16.76],[3.49,22],[-14.89,8.97],[4.73,23.46],[-14.32,10.98],[-0.69,14.48],[-11.17,14.12],[-5.37,10.45],[1.7,11.33],[-4.26,15.85],[6.09,9.28],[9.02,10.08],[10.98,11.31],[10.15,13.33],[10.58,5.68],[11.39,-3.99],[-1.1,4.55],[7.71,-5.07],[-2.65,1.22],[4.97,-6.37],[17.57,10.68],[17.3,8.22],[19.53,9.03],[2.84,4.54],[1,-4.97],[-10.81,6.99],[3.48,-9.97],[-5.41,8.36],[0.63,0.28],[-17.01,-3.16],[-21.2,-5.26],[3.58,2.67],[0.4,-11.16],[8.28,0.16],[10.12,-0.12],[20.69,-1.16],[18.07,-1.3],[22.42,7.89],[-19.29,-4.77],[-3.68,-10.29],[-4.16,-2.87],[-12.1,-9.39],[-12.55,-13.38],[-15.18,-10.78],[21.31,-5.29],[18.75,-4.82],[-23.55,-8.82],[-8.11,-0.22],[8.79,-12.99],[-4.51,-0.18],[-6.26,-12.18],[-16.52,-8.48],[17.63,-9.62],[-11.15,-16.68],[-16.92,-13.33],[12.83,-6.51],[-0.33,-21.03],[-15.32,-19.01],[-2.44,-5.68],[1.68,-20.69],[-2.64,17.02],[-19.2,-10.8],[13.47,4.13],[-8.8,-3.29],[9.33,-14.69],[-9.43,-8.37],[-17.93,6.07]]},{"perplexity":20,"positions":[[1.35,7.8],[2.01,7.72],[1.67,10.29],[-7.28,2.9],[2.13,10.84],[-7.07,3.76],[-1.08,6.82],[-5.29,5.15],[-2.48,3.82],[-0.1,5.34],[-2.68,7.19],[1.85,4.76],[2.94,3.44],[3.6,4.3],[4.34,3.85],[5.22,6.33],[6.03,-1.62],[0.45,1.6],[4.24,-2.13],[-0.65,0.01],[3.2,-3.43],[7.32,3.75],[8.14,4.43],[8.47,3.42],[2.7,0.9],[1.12,-3.12],[-5.07,2.04],[2.38,-5.56],[-2.23,2.91],[0.85,-0.51],[-7.33,-2.27],[-9.49,-2.8],[2.61,0.13],[0.82,-6.33],[5.71,0.72],[6.32,0.46],[10.57,-2.16],[9.39,-1.85],[9.31,2.16],[-8.65,-2.73],[-1.07,-6.07],[-1.27,-2.1],[-5.13,-5.2],[-5.69,-7.17],[-6.87,-5.82],[10.08,-4.31],[9.08,-3.65],[-11.03,-4.49],[-3.29,-1.02],[4.73,-7],[-1.49,-0.76],[-2.39,-7.06],[-7.45,-4.73],[7.64,-6.03],[-5.09,-8.88],[-7.93,-7.08],[6.65,-2.86],[-5.06,9.47],[-7.16,-9.98],[-0.5,-3.55],[-5.81,9.9],[-2.42,7.95],[-8.88,-5.69],[6.49,7.59],[-3.4,-2.5],[4.65,-7.61],[-3.75,-4.87],[-9.02,1.15]]},{"perplexity":30,"positions":[[-2.46,-2.96],[-2.32,-3.09],[-3.36,-3.81],[-3.41,2.01],[-3.43,-3.94],[-3.59,1.75],[-3.07,-1.6],[-3.39,0.48],[-2.29,-0.27],[-2.28,-1.58],[-3.89,-1.39],[-1.23,-2.17],[-0.46,-2.37],[-0.49,-2.88],[-0.58,-3.01],[-0.69,-4.14],[2.43,-1.84],[-0.64,-0.74],[1.9,-1.18],[-0.31,0.15],[2.06,-0.36],[0.86,-4.04],[0.98,-4.12],[1.25,-4.26],[0.39,-1.39],[1.36,0.41],[-2.4,1.4],[2.78,0.78],[-1.81,-0.12],[0.21,-0.29],[-1.22,3.56],[-1.63,4.49],[0.48,-1.26],[2.47,1.61],[1.47,-2.42],[1.59,-2.5],[3.69,-3.42],[3.43,-3.09],[1.95,-4.69],[-1.42,4.15],[2.1,2.23],[0.35,1.08],[0.54,3.39],[1.15,4.56],[0.28,4.41],[4.46,-2.29],[4.01,-2.37],[-1.57,5.7],[-0.62,1.65],[4.19,0.68],[-0.25,0.78],[2.04,3.03],[-0.23,4.43],[4.74,-0.71],[2.05,4.68],[0.49,5.35],[3.19,-1.45],[-5.33,-0.22],[3.15,4.57],[1.11,1.06],[-5.52,-0.1],[-3.9,-1.36],[-0.22,5.17],[-0.77,-5.19],[-0.2,1.88],[4.27,0.79],[0.76,2.72],[-3.2,3.68]]}]}],"comparison":{"models":["openai/text-embedding-3-small","openai/text-embedding-3-large","qwen/qwen3-embedding-8b","mistralai/mistral-embed-2312","google/gemini-embedding-2"],"k":3,"agreement":[[3,2.3088235294117645,1.9852941176470589,2.1029411764705883,1.9411764705882353],[2.3088235294117645,3,1.9558823529411764,2.1470588235294117,2.1470588235294117],[1.9852941176470589,1.9558823529411764,3,1.8676470588235294,1.8823529411764706],[2.1029411764705883,2.1470588235294117,1.8676470588235294,3,2.0441176470588234],[1.9411764705882353,2.1470588235294117,1.8823529411764706,2.0441176470588234,3]],"stability":[{"name":"Marie Curie","agreement":0.33333333333333337},{"name":"Catherine the Great","agreement":0.4},{"name":"William Shakespeare","agreement":0.4},{"name":"Fyodor Dostoevsky","agreement":0.4333333333333333},{"name":"Napoleon Bonaparte","agreement":0.4333333333333333},{"name":"Mother Teresa","agreement":0.4666666666666666},{"name":"Akira Kurosawa","agreement":0.4999999999999999},{"name":"Karl Marx","agreement":0.4999999999999999},{"name":"Coco Chanel","agreement":0.5},{"name":"Florence Nightingale","agreement":0.5},{"name":"Immanuel Kant","agreement":0.5333333333333333},{"name":"Pablo Picasso","agreement":0.5333333333333333},{"name":"Wangari Maathai","agreement":0.5333333333333333},{"name":"Nicolaus Copernicus","agreement":0.5333333333333334},{"name":"Benjamin Franklin","agreement":0.5666666666666667},{"name":"Genghis Khan","agreement":0.5666666666666667},{"name":"Queen Liliuokalani","agreement":0.5666666666666667},{"name":"Rabindranath Tagore","agreement":0.5666666666666667},{"name":"Voltaire","agreement":0.5666666666666667},{"name":"Albert Einstein","agreement":0.5999999999999999},{"name":"Miguel de Cervantes","agreement":0.5999999999999999},{"name":"Amelia Earhart","agreement":0.6},{"name":"Isaac Newton","agreement":0.6},{"name":"Simone Weil","agreement":0.6},{"name":"Vincent van Gogh","agreement":0.6333333333333332},{"name":"Hildegard of Bingen","agreement":0.6333333333333333},{"name":"Dante Alighieri","agreement":0.6333333333333334},{"name":"Aristotle","agreement":0.6666666666666666},{"name":"Nikola Tesla","agreement":0.6666666666666666},{"name":"Cheikh Anta Diop","agreement":0.6666666666666667},{"name":"Leo Tolstoy","agreement":0.6666666666666667},{"name":"Maya Angelou","agreement":0.6666666666666667},{"name":"Nelson Mandela","agreement":0.6666666666666667},{"name":"Rachel Carson","agreement":0.6666666666666667},{"name":"Sun Tzu","agreement":0.6666666666666667},{"name":"Rumi","agreement":0.7},{"name":"Abraham Lincoln","agreement":0.7000000000000001},{"name":"Charles Darwin","agreement":0.7000000000000001},{"name":"Leonardo da Vinci","agreement":0.7000000000000001},{"name":"Chinua Achebe","agreement":0.7333333333333334},{"name":"Mary Wollstonecraft","agreement":0.7333333333333334},{"name":"Michel de Montaigne","agreement":0.7333333333333334},{"name":"Simone de Beauvoir","agreement":0.7333333333333334},{"name":"Stephen Hawking","agreement":0.7333333333333334},{"name":"Pyotr Ilyich Tchaikovsky","agreement":0.7333333333333335},{"name":"Alan Turing","agreement":0.7666666666666667},{"name":"Claude Monet","agreement":0.7666666666666667},{"name":"Cleopatra VII","agreement":0.7666666666666667},{"name":"Frida Kahlo","agreement":0.7666666666666667},{"name":"Ibn Sina (Avicenna)","agreement":0.7666666666666667},{"name":"Malcolm X","agreement":0.7666666666666667},{"name":"Gabriel García Márquez","agreement":0.7666666666666668},{"name":"Johann Sebastian Bach","agreement":0.7666666666666668},{"name":"Hypatia of Alexandria","agreement":0.8},{"name":"Ibn Khaldun","agreement":0.8},{"name":"Srinivasa Ramanujan","agreement":0.8},{"name":"Frederick Douglass","agreement":0.8666666666666666},{"name":"Ibn Battuta","agreement":0.8666666666666666},{"name":"Mahatma Gandhi","agreement":0.8666666666666666},{"name":"Plato","agreement":0.8666666666666666},{"name":"Raphael","agreement":0.8666666666666666},{"name":"Wolfgang Amadeus Mozart","agreement":0.8666666666666666},{"name":"Confucius","agreement":0.8666666666666668},{"name":"Harriet Tubman","agreement":0.8666666666666668},{"name":"Martin Luther King Jr.","agreement":0.8666666666666668},{"name":"Ludwig van Beethoven","agreement":1},{"name":"Michelangelo","agreement":1},{"name":"Rosa Parks","agreement":1}],"traits":{"field":{"chance":0.13257243195785773,"scores":[{"model":"openai/text-embedding-3-small","share":0.5980392156862745},{"model":"openai/text-embedding-3-large","share":0.6225490196078429},{"model":"qwen/qwen3-embedding-8b","share":0.5539215686274509},{"model":"mistralai/mistral-embed-2312","share":0.6274509803921569},{"model":"google/gemini-embedding-2","share":0.5490196078431373}]},"gender":{"chance":0.5913081650570671,"scores":[{"model":"openai/text-embedding-3-small","share":0.8823529411764705},{"model":"openai/text-embedding-3-large","share":0.8431372549019605},{"model":"qwen/qwen3-embedding-8b","share":0.9019607843137252},{"model":"mistralai/mistral-embed-2312","share":0.8284313725490193},{"model":"google/gemini-embedding-2","share":0.8235294117647054}]}}},"tags":{"Aristotle":{"field":"Philosophy & history","gender":"man"},"Plato":{"field":"Philosophy & history","gender":"man"},"Confucius":{"field":"Philosophy & history","gender":"man"},"Cleopatra VII":{"field":"Rulers & military leaders","gender":"woman"},"Sun Tzu":{"field":"Rulers & military leaders","gender":"man"},"Hypatia of Alexandria":{"field":"Science & invention","gender":"woman"},"Ibn Sina (Avicenna)":{"field":"Science & invention","gender":"man"},"Hildegard of Bingen":{"field":"Music","gender":"woman"},"Genghis Khan":{"field":"Rulers & military leaders","gender":"man"},"Rumi":{"field":"Literature","gender":"man"},"Ibn Battuta":{"field":"Exploration","gender":"man"},"Dante Alighieri":{"field":"Literature","gender":"man"},"Leonardo da Vinci":{"field":"Visual art, film & design","gender":"man"},"Michelangelo":{"field":"Visual art, film & design","gender":"man"},"Raphael":{"field":"Visual art, film & design","gender":"man"},"William Shakespeare":{"field":"Literature","gender":"man"},"Miguel de Cervantes":{"field":"Literature","gender":"man"},"Nicolaus Copernicus":{"field":"Science & invention","gender":"man"},"Michel de Montaigne":{"field":"Philosophy & history","gender":"man"},"Isaac Newton":{"field":"Science & invention","gender":"man"},"Voltaire":{"field":"Philosophy & history","gender":"man"},"Johann Sebastian Bach":{"field":"Music","gender":"man"},"Wolfgang Amadeus Mozart":{"field":"Music","gender":"man"},"Ludwig van Beethoven":{"field":"Music","gender":"man"},"Immanuel Kant":{"field":"Philosophy & history","gender":"man"},"Benjamin Franklin":{"field":"Science & invention","gender":"man"},"Catherine the Great":{"field":"Rulers & military leaders","gender":"woman"},"Mary Wollstonecraft":{"field":"Philosophy & history","gender":"woman"},"Napoleon Bonaparte":{"field":"Rulers & military leaders","gender":"man"},"Charles Darwin":{"field":"Science & invention","gender":"man"},"Abraham Lincoln":{"field":"Rulers & military leaders","gender":"man"},"Harriet Tubman":{"field":"Civil rights & humanitarian work","gender":"woman"},"Karl Marx":{"field":"Philosophy & history","gender":"man"},"Florence Nightingale":{"field":"Civil rights & humanitarian work","gender":"woman"},"Leo Tolstoy":{"field":"Literature","gender":"man"},"Fyodor Dostoevsky":{"field":"Literature","gender":"man"},"Vincent van Gogh":{"field":"Visual art, film & design","gender":"man"},"Claude Monet":{"field":"Visual art, film & design","gender":"man"},"Pyotr Ilyich Tchaikovsky":{"field":"Music","gender":"man"},"Frederick Douglass":{"field":"Civil rights & humanitarian work","gender":"man"},"Marie Curie":{"field":"Science & invention","gender":"woman"},"Albert Einstein":{"field":"Science & invention","gender":"man"},"Mahatma Gandhi":{"field":"Civil rights & humanitarian work","gender":"man"},"Nelson Mandela":{"field":"Civil rights & humanitarian work","gender":"man"},"Martin Luther King Jr.":{"field":"Civil rights & humanitarian work","gender":"man"},"Frida Kahlo":{"field":"Visual art, film & design","gender":"woman"},"Pablo Picasso":{"field":"Visual art, film & design","gender":"man"},"Amelia Earhart":{"field":"Exploration","gender":"woman"},"Alan Turing":{"field":"Science & invention","gender":"man"},"Simone de Beauvoir":{"field":"Philosophy & history","gender":"woman"},"Stephen Hawking":{"field":"Science & invention","gender":"man"},"Mother Teresa":{"field":"Civil rights & humanitarian work","gender":"woman"},"Malcolm X":{"field":"Civil rights & humanitarian work","gender":"man"},"Coco Chanel":{"field":"Visual art, film & design","gender":"woman"},"Wangari Maathai":{"field":"Civil rights & humanitarian work","gender":"woman"},"Rosa Parks":{"field":"Civil rights & humanitarian work","gender":"woman"},"Gabriel García Márquez":{"field":"Literature","gender":"man"},"Cheikh Anta Diop":{"field":"Philosophy & history","gender":"man"},"Rachel Carson":{"field":"Science & invention","gender":"woman"},"Nikola Tesla":{"field":"Science & invention","gender":"man"},"Chinua Achebe":{"field":"Literature","gender":"man"},"Ibn Khaldun":{"field":"Philosophy & history","gender":"man"},"Maya Angelou":{"field":"Literature","gender":"woman"},"Akira Kurosawa":{"field":"Visual art, film & design","gender":"man"},"Srinivasa Ramanujan":{"field":"Science & invention","gender":"man"},"Simone Weil":{"field":"Philosophy & history","gender":"woman"},"Rabindranath Tagore":{"field":"Literature","gender":"man"},"Queen Liliuokalani":{"field":"Rulers & military leaders","gender":"woman"}},"dims":{"openai/text-embedding-3-small":1536,"openai/text-embedding-3-large":3072,"qwen/qwen3-embedding-8b":4096,"mistralai/mistral-embed-2312":1024,"google/gemini-embedding-2":3072},"skipped":[]}</script>
+<script>
+  const page = JSON.parse(document.getElementById('data').textContent);
+  const { panels, comparison, tags } = page;
+  const models = comparison.models;
+  const k = comparison.k;
+  const short = (model) => model.split('/').pop();
+  const pct = (x) => Math.round(x * 100) + '%';
+  const html = (tag, className, text) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+  const neighbours = panels.map((panel) => new Map(panel.points.map((p) => [p.name, p.neighbors])));
+  let selected = comparison.stability[0].name;
+  const listeners = [];
+  const select = (name) => {
+    selected = name;
+    listeners.forEach((fn) => fn(name));
+  };
+
+  // ---- Header ----
+  document.getElementById('title').textContent = page.title;
+  document.getElementById('subtitle').textContent = page.subtitle;
+  const meta = models.map((m) => short(m) + ' (' + page.dims[m] + ' dimensions)').join(' · ');
+  const skipped = page.skipped.map((s) => short(s.model) + ': ' + s.reason).join('; ');
+  document.getElementById('meta').textContent = 'Models: ' + meta + (skipped ? '. Skipped: ' + skipped : '');
+
+  const findings = document.getElementById('findings');
+  if (models.length >= 2) {
+    const pairs = [];
+    models.forEach((a, i) => models.forEach((b, j) => { if (i < j) pairs.push({ a, b, v: comparison.agreement[i][j] }); }));
+    pairs.sort((x, y) => y.v - x.v);
+    const most = pairs[0], least = pairs[pairs.length - 1];
+    findings.append(html('li', '', 'Most alike: ' + short(most.a) + ' and ' + short(most.b) + ' share ' + most.v.toFixed(1) + ' of ' + k + ' neighbours on average.'));
+    if (pairs.length > 1) {
+      findings.append(html('li', '', 'Least alike: ' + short(least.a) + ' and ' + short(least.b) + ' share ' + least.v.toFixed(1) + ' of ' + k + '.'));
+    }
+    const unstable = comparison.stability.filter((s) => s.agreement < 0.5).length;
+    findings.append(html('li', '', unstable + ' of ' + comparison.stability.length + ' people have less than half their neighbours in common across models; ' +
+      comparison.stability.filter((s) => s.agreement === 1).length + ' have identical neighbours in every model.'));
+  }
+
+  // ---- What we found ----
+  // Built from the data so the numbers stay right after a rerun. Each finding is
+  // skipped if the people it is about aren't in the data.
+  const story = document.getElementById('story');
+  const changes = document.getElementById('changes');
+  const personLink = (name) => {
+    const b = html('button', 'person-link', name);
+    b.addEventListener('click', () => {
+      select(name);
+      changes.scrollIntoView({ behavior: 'smooth' });
+    });
+    return b;
+  };
+  const addFinding = (title, parts) => {
+    const li = html('li');
+    li.append(html('strong', '', title + ' '));
+    parts.forEach((part) => li.append(typeof part === 'string' ? document.createTextNode(part) : part));
+    story.append(li);
+  };
+  const pctRange = (xs) => {
+    const lo = pct(Math.min(...xs)), hi = pct(Math.max(...xs));
+    return lo === hi ? lo : lo.replace('%', '') + '–' + hi;
+  };
+  const listNames = (names) => (names.length < 2 ? names.join('') : names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1]);
+  const closest = (i, name) => neighbours[i].get(name).map((n) => n.name);
+
+  // 1. Gender
+  const { gender, field } = comparison.traits;
+  addFinding('Every model groups people by gender.', [
+    pctRange(gender.scores.map((s) => s.share)) + ' of closest neighbours share a person\'s gender, against ' + pct(gender.chance) +
+      ' if neighbours were picked at random. (Same field: ' + pctRange(field.scores.map((s) => s.share)) + ' against ' + pct(field.chance) + '.) ' +
+      'A likely cause, not yet tested: many women\'s biographies are framed around being “the first woman to…”, ' +
+      'so the models may be matching that wording rather than what the person did.',
+  ]);
+
+  // 2. Marie Curie across models
+  const curie = 'Marie Curie', einstein = 'Albert Einstein';
+  if (tags[curie] && tags[einstein]) {
+    const rank = comparison.stability.findIndex((s) => s.name === curie);
+    const withEinstein = models.filter((_, i) => closest(i, curie).includes(einstein));
+    const others = [...new Set(models.flatMap((_, i) => closest(i, curie)))].filter((n) => n !== einstein);
+    const women = others.filter((n) => tags[n].gender === tags[curie].gender);
+    const oneSided = models.filter((_, i) => closest(i, curie).includes(einstein) && !closest(i, einstein).includes(curie));
+    const parts = [
+      personLink(curie),
+      (rank === 0 ? ' is the person the models agree on least' : ' ranks #' + (rank + 1) + ' for disagreement between models') +
+        ' (' + pct(comparison.stability[rank].agreement) + '). ' +
+        'Einstein is among her 3 closest in ' + withEinstein.length + ' of ' + models.length + ' models. ' +
+        'Her other neighbours across all models are ' + listNames(others) + ': ' + women.length + ' of ' + others.length + ' are women.',
+    ];
+    if (oneSided.length) {
+      parts.push(' The link is one-sided: in ' + listNames(oneSided.map(short)) + ', she is not among Einstein\'s 3 closest.');
+    }
+    addFinding('Marie Curie sits between women and scientists.', parts);
+
+    // 3. Marie Curie on the first model's map, at the lowest and highest perplexity
+    const layouts = panels[0].layouts;
+    if (layouts.length > 1) {
+      const names = panels[0].points.map((p) => p.name);
+      const onMap = (layout) => {
+        const at = (name) => layout.positions[names.indexOf(name)];
+        const [cx, cy] = at(curie);
+        const byDistance = names.filter((n) => n !== curie)
+          .sort((a, b) => Math.hypot(at(a)[0] - cx, at(a)[1] - cy) - Math.hypot(at(b)[0] - cx, at(b)[1] - cy));
+        return { perplexity: layout.perplexity, einsteinRank: byDistance.indexOf(einstein) + 1, nearest: byDistance.slice(0, 3) };
+      };
+      const first = onMap(layouts[0]), last = onMap(layouts[layouts.length - 1]);
+      const allWomen = layouts.every((layout) => onMap(layout).nearest.every((n) => tags[n].gender === tags[curie].gender));
+      addFinding('On the map, perplexity moves groups more than it moves her.', [
+        'On the ' + short(models[0]) + ' map, Einstein is her #' + first.einsteinRank + ' nearest person at perplexity ' + first.perplexity +
+          ' and #' + last.einsteinRank + ' at ' + last.perplexity + ' (of ' + (names.length - 1) + '). ' +
+          (allWomen
+            ? 'Her 3 nearest on the map are women at every perplexity, so she gets closer to Einstein because the groups move, not because she leaves hers.'
+            : 'Her 3 nearest on the map: ' + listNames(first.nearest) + ' at ' + first.perplexity + '; ' + listNames(last.nearest) + ' at ' + last.perplexity + '.'),
+      ]);
+    }
+  }
+
+  // 4. Shakespeare: writer or "famous genius"?
+  const bard = 'William Shakespeare';
+  if (tags[bard]) {
+    const sameField = models.map((_, i) => closest(i, bard).filter((n) => tags[n].field === tags[bard].field).length);
+    const odd = models.map((m, i) => ({ m, i })).filter(({ i }) => sameField[i] <= 1);
+    const mostly = sameField.filter((c) => c >= 2).length;
+    if (odd.length && mostly) {
+      addFinding('Models disagree on what kind of person someone is.', [
+        personLink(bard),
+        ' has at least 2 writers among his 3 closest in ' + mostly + ' of ' + models.length + ' models. ' +
+          odd.map(({ m, i }) => 'In ' + short(m) + ' they are ' + listNames(closest(i, bard)) +
+            ' (' + (sameField[i] === 0 ? 'no writers' : '1 writer') + ').').join(' '),
+      ]);
+    }
+  }
+
+  // ---- Heatmap ----
+  const heatmap = document.getElementById('heatmap');
+  heatmap.style.gridTemplateColumns = 'auto repeat(' + models.length + ', auto)';
+  // Spread the 5 colour steps over the observed range: all values sit close together
+  // (around 2 of 3), so a 0..k scale would give every cell the same colour
+  const offDiagonal = models.flatMap((_, i) => models.map((_, j) => comparison.agreement[i][j]).filter((_, j) => j !== i));
+  const lo = Math.min(...offDiagonal), hi = Math.max(...offDiagonal);
+  const bin = (v) => (hi > lo ? 1 + Math.min(4, Math.floor(((v - lo) / (hi - lo)) * 5)) : 3); // lo..hi -> 1..5
+  const readout = document.getElementById('heatmap-readout');
+  heatmap.append(html('div'));
+  models.forEach((m) => heatmap.append(html('div', 'col-label', short(m))));
+  models.forEach((a, i) => {
+    heatmap.append(html('div', 'row-label', short(a)));
+    models.forEach((b, j) => {
+      const cell = html('button', 'cell');
+      if (i === j) {
+        cell.classList.add('self');
+        cell.textContent = '—';
+        cell.setAttribute('aria-label', short(a) + ' compared with itself');
+        cell.tabIndex = -1;
+      } else {
+        const v = comparison.agreement[i][j];
+        const b5 = bin(v);
+        cell.style.background = 'var(--seq-' + b5 + ')';
+        cell.style.color = 'var(--seq-ink-' + b5 + ')';
+        cell.textContent = v.toFixed(2);
+        const text = short(a) + ' and ' + short(b) + ': on average ' + v.toFixed(2) + ' of ' + k + ' closest neighbours are the same.';
+        cell.setAttribute('aria-label', text);
+        const show = () => (readout.textContent = text);
+        cell.addEventListener('pointerenter', show);
+        cell.addEventListener('focus', show);
+      }
+      heatmap.append(cell);
+    });
+  });
+  heatmap.addEventListener('pointerleave', () => (readout.textContent = ''));
+  const scale = document.getElementById('scale');
+  scale.append(html('span', '', lo.toFixed(2)));
+  [1, 2, 3, 4, 5].forEach((b) => {
+    const s = html('span', 'swatch');
+    s.style.background = 'var(--seq-' + b + ')';
+    scale.append(s);
+  });
+  scale.append(html('span', '', hi.toFixed(2) + ' shared neighbours (of ' + k + ')'));
+
+  // ---- Traits ----
+  const traitNames = { field: 'Same field', gender: 'Same gender' };
+  const traitsEl = document.getElementById('traits');
+  Object.entries(comparison.traits).forEach(([trait, { chance, scores }]) => {
+    const box = html('div', 'bars');
+    box.append(html('h3', '', traitNames[trait]));
+    scores.forEach((s) => {
+      const row = html('div', 'bar-row');
+      const bar = html('div', 'bar');
+      bar.style.width = s.share * 100 + '%';
+      const track = html('div', 'track');
+      track.append(bar);
+      row.append(html('span', 'name', short(s.model)), track, html('span', 'value', pct(s.share)));
+      box.append(row);
+    });
+    traitsEl.append(box);
+    // Chance marker, positioned inside the track column once laid out
+    requestAnimationFrame(() => {
+      const track = box.querySelector('.track');
+      const left = track.offsetLeft + track.offsetWidth * chance;
+      const line = html('div', 'chance');
+      line.style.left = left + 'px';
+      line.style.height = box.querySelectorAll('.bar-row').length * track.parentElement.offsetHeight + 'px';
+      const label = html('span', 'chance-label', 'random: ' + pct(chance));
+      line.append(label);
+      box.append(line);
+    });
+  });
+
+  // ---- Who changes most ----
+  const ranking = document.getElementById('ranking');
+  const axis = html('div', 'axis');
+  const ticks = html('div', 'ticks');
+  ['0%', '50%', '100%'].forEach((t) => ticks.append(html('span', '', t)));
+  axis.append(html('span', '', 'Agreement across models'), ticks, html('span'));
+  ranking.append(axis);
+  const rows = new Map();
+  comparison.stability.forEach(({ name, agreement }) => {
+    const row = html('button', 'bar-row');
+    const track = html('div', 'track');
+    const bar = html('div', 'bar');
+    bar.style.width = agreement * 100 + '%';
+    track.append(bar);
+    row.append(html('span', 'name', name), track, html('span', 'value', pct(agreement)));
+    row.setAttribute('aria-label', name + ': ' + pct(agreement) + ' agreement');
+    row.addEventListener('click', () => select(name));
+    row.addEventListener('focus', () => select(name));
+    ranking.append(row);
+    rows.set(name, row);
+  });
+
+  const person = document.getElementById('person');
+  function renderPerson(name) {
+    rows.forEach((row, n) => row.classList.toggle('selected', n === name));
+    person.replaceChildren();
+    const t = tags[name];
+    const stability = comparison.stability.find((s) => s.name === name);
+    person.append(html('h3', '', name), html('p', 'sub', t.field + ' · ' + t.gender + ' · ' + pct(stability.agreement) + ' agreement across models'));
+    const lists = html('div', 'model-lists');
+    const inAll = (other) => neighbours.every((map) => map.get(name).some((n) => n.name === other));
+    models.forEach((m, i) => {
+      const col = html('div');
+      col.append(html('h4', '', short(m)));
+      const ol = html('ol');
+      neighbours[i].get(name).forEach((n) => {
+        const li = html('li', inAll(n.name) ? 'same' : 'diff');
+        li.append(document.createTextNode(n.name + ' '), html('span', 'sim', n.similarity.toFixed(2)));
+        const nt = tags[n.name];
+        const shared = [nt.field === t.field ? 'same field' : nt.field, nt.gender === t.gender ? 'same gender' : nt.gender];
+        li.append(html('span', 'tag', shared.join(' · ')));
+        ol.append(li);
+      });
+      col.append(ol);
+      lists.append(col);
+    });
+    person.append(lists, html('p', 'key', 'Bold names are not in every model\'s list. Numbers are similarity scores, comparable only within one model.'));
+  }
+  listeners.push(renderPerson);
+
+  // ---- Map ----
+  const W = 960, H = 640, PAD = 28, R = 5, HIT = 24;
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('map');
+  const tooltip = document.getElementById('tooltip');
+  const mapCard = document.getElementById('map-card');
+  let mapIndex = 0;
+  let layoutIndex = 0;
+  let map = null;
+
+  const el = (tag, attrs, parent) => {
+    const node = document.createElementNS(SVG_NS, tag);
+    for (const [key, v] of Object.entries(attrs)) node.setAttribute(key, v);
+    parent.appendChild(node);
+    return node;
+  };
+
+  // A row of toggle buttons; pick(i) runs when button i is pressed
+  function makeSwitcher(id, label, options, pick) {
+    const container = document.getElementById(id);
+    if (label) container.append(html('span', 'switcher-label', label));
+    options.forEach((text, i) => {
+      const b = html('button', '', text);
+      b.setAttribute('aria-pressed', String(i === 0));
+      b.addEventListener('click', () => {
+        pick(i);
+        container.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', String(j === i)));
+        buildMap();
+      });
+      container.append(b);
+    });
+  }
+  makeSwitcher('switcher', '', models.map(short), (i) => (mapIndex = i));
+  makeSwitcher('perplexity-switcher', 'Perplexity', panels[0].layouts.map((l) => String(l.perplexity)), (i) => (layoutIndex = i));
+
+  function buildMap() {
+    svg.replaceChildren();
+    tooltip.style.display = 'none';
+    const panel = panels[mapIndex];
+    const layout = panel.layouts[layoutIndex];
+    svg.setAttribute('aria-label', 'Map for ' + panel.title + ' at perplexity ' + layout.perplexity);
+    const points = panel.points.map((p, i) => ({ ...p, x: layout.positions[i][0], y: layout.positions[i][1], edges: [] }));
+    const xs = points.map((p) => p.x), ys = points.map((p) => p.y);
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+    const scaleXY = Math.min((W - 2 * PAD) / (maxX - minX || 1), (H - 2 * PAD) / (maxY - minY || 1));
+    const offX = (W - (maxX - minX) * scaleXY) / 2, offY = (H - (maxY - minY) * scaleXY) / 2;
+    points.forEach((p) => {
+      p.cx = offX + (p.x - minX) * scaleXY;
+      p.cy = offY + (p.y - minY) * scaleXY;
+    });
+    const byName = new Map(points.map((p) => [p.name, p]));
+    const links = el('g', {}, svg), labels = el('g', {}, svg), dots = el('g', {}, svg);
+
+    // Link every point to its closest neighbours, drawing each pair once
+    const seen = new Set();
+    points.forEach((p) => p.neighbors.forEach((n) => {
+      const q = byName.get(n.name);
+      const key = [p.name, q.name].sort().join('|');
+      if (seen.has(key)) return;
+      seen.add(key);
+      const edge = { line: el('line', { class: 'link', x1: p.cx, y1: p.cy, x2: q.cx, y2: q.cy }, links), a: p, b: q };
+      p.edges.push(edge);
+      q.edges.push(edge);
+    }));
+    const other = (edge, p) => (edge.a === p ? edge.b : edge.a);
+
+    points.forEach((p) => {
+      p.dot = el('circle', { class: 'point', cx: p.cx, cy: p.cy, r: R, tabindex: 0 }, dots);
+      p.dot.setAttribute('aria-label', p.name + '. Closest: ' + p.neighbors.map((n) => n.name).join(', '));
+      p.dot.addEventListener('focus', () => hover(p));
+      p.dot.addEventListener('blur', () => hover(null));
+      p.dot.addEventListener('click', () => select(p.name));
+    });
+
+    // Place each name beside its point where it fits without overlapping anything
+    const placed = points.map((p) => ({ x0: p.cx - R - 2, y0: p.cy - R - 2, x1: p.cx + R + 2, y1: p.cy + R + 2, owner: p }));
+    const overlaps = (a, b) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+    points.forEach((p) => {
+      const text = el('text', { class: 'label' }, labels);
+      text.textContent = p.name;
+      const { width, height } = text.getBBox();
+      const gap = R + 4;
+      const options = [
+        [p.cx + gap, p.cy + height / 3],
+        [p.cx - gap - width, p.cy + height / 3],
+        [p.cx - width / 2, p.cy - gap],
+        [p.cx - width / 2, p.cy + gap + height * 0.75],
+      ];
+      const spot = options.find(([x, y]) => {
+        const box = { x0: x - 1, y0: y - height * 0.8, x1: x + width + 1, y1: y + height * 0.25 };
+        if (box.x0 < 0 || box.x1 > W || box.y0 < 0 || box.y1 > H) return false;
+        if (placed.some((b) => b.owner !== p && overlaps(box, b))) return false;
+        placed.push({ ...box, owner: p });
+        return true;
+      });
+      if (spot) {
+        text.setAttribute('x', spot[0]);
+        text.setAttribute('y', spot[1]);
+        p.label = text;
+      } else {
+        text.remove();
+      }
+    });
+
+    let callout = null;
+    function highlight(p) {
+      links.querySelectorAll('.link.active').forEach((line) => line.classList.remove('active'));
+      points.forEach((q) => {
+        q.dot.classList.remove('active', 'neighbor');
+        q.dot.setAttribute('r', R);
+        if (q.label) q.label.classList.remove('dim');
+      });
+      if (callout) { callout.remove(); callout = null; }
+      if (!p) return;
+      p.dot.classList.add('active');
+      p.dot.setAttribute('r', R + 2);
+      dots.appendChild(p.dot);
+      p.edges.forEach((edge) => {
+        edge.line.classList.add('active');
+        links.appendChild(edge.line);
+        other(edge, p).dot.classList.add('neighbor');
+      });
+      const connected = new Set(p.edges.map((edge) => other(edge, p)));
+      points.forEach((q) => q.label && q.label.classList.toggle('dim', q !== p && !connected.has(q)));
+      if (!p.label) {
+        callout = el('text', { class: 'label callout', x: p.cx + R + 6, y: p.cy - R - 4 }, svg);
+        callout.textContent = p.name;
+      }
+    }
+
+    // Hovering shows a point temporarily; otherwise the selected person stays highlighted
+    function hover(p) {
+      highlight(p || byName.get(selected));
+      if (!p) { tooltip.style.display = 'none'; return; }
+      tooltip.replaceChildren(html('strong', '', p.name), html('div', 'caption', 'Closest in ' + short(panel.title)));
+      p.neighbors.forEach((n) => {
+        const row = html('div', 'row');
+        row.append(html('span', '', n.name), html('span', '', n.similarity.toFixed(2)));
+        tooltip.append(row);
+      });
+      tooltip.append(html('div', 'caption', 'Click to compare across models'));
+      const svgBox = svg.getBoundingClientRect(), cardBox = mapCard.getBoundingClientRect();
+      const s = svgBox.width / W;
+      tooltip.style.display = 'block';
+      let left = svgBox.left - cardBox.left + p.cx * s + 14;
+      const top = svgBox.top - cardBox.top + p.cy * s - 10;
+      if (left + tooltip.offsetWidth > cardBox.width - 8) left -= tooltip.offsetWidth + 28;
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    }
+
+    let current = null;
+    svg.onpointermove = (event) => {
+      const box = svg.getBoundingClientRect();
+      const s = box.width / W;
+      const mx = (event.clientX - box.left) / s, my = (event.clientY - box.top) / s;
+      let best = null, bestDist = Infinity;
+      points.forEach((p) => {
+        const d = Math.hypot(p.cx - mx, p.cy - my);
+        if (d < bestDist) { best = p; bestDist = d; }
+      });
+      const next = bestDist * s <= HIT ? best : null;
+      if (next === current) return;
+      current = next;
+      hover(next);
+    };
+    svg.onpointerleave = () => { current = null; hover(null); };
+    svg.onclick = () => { if (current) select(current.name); };
+
+    map = { highlight: (name) => highlight(byName.get(name)) };
+    map.highlight(selected);
+  }
+  listeners.push((name) => map && map.highlight(name));
+  buildMap();
+
+  // ---- Data table ----
+  const toggle = document.getElementById('toggle');
+  const tableView = document.getElementById('table-view');
+  const table = document.createElement('table');
+  const headRow = table.createTHead().insertRow();
+  ['Name', 'Field', 'Agreement', ...models.map(short)].forEach((h) => headRow.appendChild(html('th', '', h)));
+  const body = table.createTBody();
+  [...comparison.stability].sort((a, b) => a.name.localeCompare(b.name)).forEach(({ name, agreement }) => {
+    const row = body.insertRow();
+    row.insertCell().textContent = name;
+    row.insertCell().textContent = tags[name].field;
+    const c = row.insertCell();
+    c.className = 'num';
+    c.textContent = pct(agreement);
+    neighbours.forEach((map) => {
+      row.insertCell().textContent = map.get(name).map((n) => n.name + ' (' + n.similarity.toFixed(2) + ')').join(', ');
+    });
+  });
+  tableView.appendChild(table);
+  toggle.addEventListener('click', () => {
+    const open = tableView.hidden;
+    tableView.hidden = !open;
+    toggle.textContent = open ? 'Hide data table' : 'Show data table';
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  select(selected);
+</script>
+</body>
+</html>

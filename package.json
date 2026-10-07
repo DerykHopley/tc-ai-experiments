@@ -1,0 +1,22 @@
+{
+  "name": "embedding-model-comparison",
+  "version": "1.0.0",
+  "description": "Compare how embedding models relate the same historical figures",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --env-file=.env --no-deprecation src/compare-models.ts",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@thi.ng/tsne": "0.1.75",
+    "openai": "4.77.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "prettier": "^3.4.2",
+    "tsx": "4.19.2",
+    "typescript": "^5.9.3"
+  }
+}

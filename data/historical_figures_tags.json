@@ -1,0 +1,274 @@
+{
+  "aristotle": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "plato": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "confucius": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "cleopatra": {
+    "field": "Rulers & military leaders",
+    "gender": "woman"
+  },
+  "sun_tzu": {
+    "field": "Rulers & military leaders",
+    "gender": "man"
+  },
+  "hypatia": {
+    "field": "Science & invention",
+    "gender": "woman"
+  },
+  "ibn_sina": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "hildegard": {
+    "field": "Music",
+    "gender": "woman"
+  },
+  "genghis_khan": {
+    "field": "Rulers & military leaders",
+    "gender": "man"
+  },
+  "rumi": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "ibn_battuta": {
+    "field": "Exploration",
+    "gender": "man"
+  },
+  "dante": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "leonardo": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "michelangelo": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "raphael": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "shakespeare": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "cervantes": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "copernicus": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "montaigne": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "newton": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "voltaire": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "bach": {
+    "field": "Music",
+    "gender": "man"
+  },
+  "mozart": {
+    "field": "Music",
+    "gender": "man"
+  },
+  "beethoven": {
+    "field": "Music",
+    "gender": "man"
+  },
+  "kant": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "benjamin_franklin": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "catherine_great": {
+    "field": "Rulers & military leaders",
+    "gender": "woman"
+  },
+  "mary_wollstonecraft": {
+    "field": "Philosophy & history",
+    "gender": "woman"
+  },
+  "napoleon": {
+    "field": "Rulers & military leaders",
+    "gender": "man"
+  },
+  "darwin": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "lincoln": {
+    "field": "Rulers & military leaders",
+    "gender": "man"
+  },
+  "harriet_tubman": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "woman"
+  },
+  "marx": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "florence_nightingale": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "woman"
+  },
+  "tolstoy": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "dostoevsky": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "van_gogh": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "monet": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "tchaikovsky": {
+    "field": "Music",
+    "gender": "man"
+  },
+  "frederick_douglass": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "man"
+  },
+  "marie_curie": {
+    "field": "Science & invention",
+    "gender": "woman"
+  },
+  "einstein": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "gandhi": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "man"
+  },
+  "mandela": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "man"
+  },
+  "mlk": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "man"
+  },
+  "frida_kahlo": {
+    "field": "Visual art, film & design",
+    "gender": "woman"
+  },
+  "picasso": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "amelia_earhart": {
+    "field": "Exploration",
+    "gender": "woman"
+  },
+  "alan_turing": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "simone_de_beauvoir": {
+    "field": "Philosophy & history",
+    "gender": "woman"
+  },
+  "hawking": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "mother_teresa": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "woman"
+  },
+  "malcolm_x": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "man"
+  },
+  "coco_chanel": {
+    "field": "Visual art, film & design",
+    "gender": "woman"
+  },
+  "wangari_maathai": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "woman"
+  },
+  "rosa_parks": {
+    "field": "Civil rights & humanitarian work",
+    "gender": "woman"
+  },
+  "gabriel_garcia_marquez": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "cheikh_anta_diop": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "rachel_carson": {
+    "field": "Science & invention",
+    "gender": "woman"
+  },
+  "nikola_tesla": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "chinua_achebe": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "ibn_khaldun": {
+    "field": "Philosophy & history",
+    "gender": "man"
+  },
+  "maya_angelou": {
+    "field": "Literature",
+    "gender": "woman"
+  },
+  "akira_kurosawa": {
+    "field": "Visual art, film & design",
+    "gender": "man"
+  },
+  "srinivasa_ramanujan": {
+    "field": "Science & invention",
+    "gender": "man"
+  },
+  "simone_weil": {
+    "field": "Philosophy & history",
+    "gender": "woman"
+  },
+  "rabindranath_tagore": {
+    "field": "Literature",
+    "gender": "man"
+  },
+  "queen_liliuokalani": {
+    "field": "Rulers & military leaders",
+    "gender": "woman"
+  }
+}

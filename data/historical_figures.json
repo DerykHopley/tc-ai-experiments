@@ -1,0 +1,342 @@
+[
+  {
+    "id": "aristotle",
+    "name": "Aristotle",
+    "text": "Aristotle (384-322 BCE) was an ancient Greek philosopher and polymath born in Stagira, in northern Greece. He studied at Plato's Academy in Athens for twenty years and later became the tutor of Alexander the Great. Aristotle founded the Lyceum in Athens, where he taught and conducted research. His contributions span virtually every field of knowledge known to the ancient world, including logic, metaphysics, ethics, politics, biology, and physics. He developed formal logic and the syllogism, established the foundations of Western scientific inquiry, and wrote extensively on natural philosophy. Aristotle's works profoundly influenced medieval Islamic and European thought. His emphasis on empirical observation and systematic classification laid the groundwork for the scientific method. He remains one of the most influential thinkers in Western intellectual history."
+  },
+  {
+    "id": "plato",
+    "name": "Plato",
+    "text": "Plato (428-348 BCE) was an ancient Greek philosopher born in Athens to an aristocratic family. A student of Socrates and teacher of Aristotle, he founded the Academy in Athens, one of the first institutions of higher learning in the Western world. Plato's philosophical works, written as dialogues, explore fundamental questions about reality, knowledge, justice, beauty, and the nature of the soul. His Theory of Forms proposed that abstract ideals represent the most fundamental reality. Works like The Republic, The Symposium, and Phaedo remain central to philosophical study. His influence on Western philosophy is immeasurable. Plato shaped subsequent thought on metaphysics, epistemology, ethics, and political theory. The philosopher Alfred North Whitehead famously remarked that all of Western philosophy consists of footnotes to Plato."
+  },
+  {
+    "id": "confucius",
+    "name": "Confucius",
+    "text": "Confucius (551-479 BCE) was a Chinese philosopher and politician born in the state of Lu during the Spring and Autumn period. His teachings emphasized personal and governmental morality, correctness of social relationships, justice, kindness, and sincerity. He spent much of his life as a wandering teacher, gathering disciples and attempting to influence political leaders. His philosophy centered on the cultivation of virtue through ritual, filial piety, and the pursuit of moral excellence. The Analects, compiled by his followers, records his sayings and conversations. Confucianism became the official state philosophy of China and profoundly shaped East Asian culture for over two millennia. His emphasis on education, ethical governance, and social harmony continues to influence Chinese society and philosophy worldwide."
+  },
+  {
+    "id": "cleopatra",
+    "name": "Cleopatra VII",
+    "text": "Cleopatra VII (69-30 BCE) was the last active ruler of the Ptolemaic Kingdom of Egypt. Born in Alexandria, she was a member of the Macedonian Greek dynasty that had ruled Egypt since Alexander the Great's conquest. She was highly educated, speaking multiple languages and studying philosophy, mathematics, and oratory. Cleopatra formed political and romantic alliances with Julius Caesar and Mark Antony, using these relationships to preserve Egyptian independence against Rome's expanding power. She was a skilled diplomat and administrator who worked to strengthen Egypt's economy and military. Her death marked the end of both the Ptolemaic dynasty and ancient Egypt as an independent nation, as it became a Roman province. Cleopatra's life has inspired countless works of art, literature, and drama throughout history."
+  },
+  {
+    "id": "sun_tzu",
+    "name": "Sun Tzu",
+    "text": "Sun Tzu (544-496 BCE) was an ancient Chinese military strategist, philosopher, and general traditionally credited as the author of The Art of War. He lived during the Eastern Zhou period and served as a general for King Helü of Wu. The Art of War is one of the oldest and most influential treatises on military strategy. It addresses warfare tactics, espionage, the use of terrain, and the importance of adaptability. Sun Tzu emphasized winning without fighting when possible and understanding both oneself and one's enemy. His work has transcended military applications to influence business strategy, legal negotiations, sports coaching, and leadership training worldwide. The Art of War remains required reading in military academies and business schools across the globe."
+  },
+  {
+    "id": "hypatia",
+    "name": "Hypatia of Alexandria",
+    "text": "Hypatia (c. 355-415 CE) was a Greek mathematician, astronomer, and philosopher who lived in Alexandria, Egypt, then part of the Eastern Roman Empire. She was the daughter of Theon of Alexandria, also a mathematician and astronomer. Hypatia taught philosophy and astronomy at the Neoplatonic school in Alexandria, attracting students from throughout the Mediterranean world. She wrote commentaries on mathematical texts and constructed astrolabes and hydrometers. She was renowned for her wisdom and eloquence. She was murdered by a Christian mob in 415 CE, an event often seen as marking the decline of classical learning. Hypatia has become a symbol of intellectual freedom and the persecution of science by religious fanaticism. She was one of the few prominent female scholars of the ancient world."
+  },
+  {
+    "id": "ibn_sina",
+    "name": "Ibn Sina (Avicenna)",
+    "text": "Ibn Sina (980-1037 CE), known in the West as Avicenna, was a Persian polymath born near Bukhara in present-day Uzbekistan. He made significant contributions to medicine, philosophy, astronomy, and mathematics during the Islamic Golden Age. His medical encyclopedia, The Canon of Medicine, systematized Greek, Roman, and Islamic medical knowledge and remained a standard medical text in European universities until the 17th century. In philosophy, he developed a comprehensive system combining Aristotelian thought with Neoplatonism and Islamic theology. Ibn Sina wrote over 450 works on a wide range of subjects. His influence extended throughout the medieval Islamic world and into European scholasticism. He is considered one of the most significant physicians and thinkers in history."
+  },
+  {
+    "id": "hildegard",
+    "name": "Hildegard of Bingen",
+    "text": "Hildegard of Bingen (1098-1179) was a German Benedictine abbess, writer, composer, philosopher, and mystic. Born in the Rhineland, she entered religious life at a young age and eventually founded monasteries at Rupertsberg and Eibingen. She was a remarkable polymath who wrote theological, botanical, and medicinal texts, as well as letters, songs, poems, and the first known morality play. Her visionary works, including Scivias, described mystical experiences and theological insights. She composed over 70 musical works. Hildegard corresponded with popes, emperors, and other religious and political leaders. She is recognized as a Doctor of the Church by the Catholic Church. Her contributions to medieval music, medicine, and theology make her one of the most accomplished women of the Middle Ages."
+  },
+  {
+    "id": "genghis_khan",
+    "name": "Genghis Khan",
+    "text": "Genghis Khan (c. 1162-1227) was the founder and first Great Khan of the Mongol Empire, which became the largest contiguous land empire in history. Born as Temüjin in the steppes of Mongolia, he united the nomadic Mongol tribes through a combination of military prowess and political skill. His military campaigns conquered vast territories across Asia and into Eastern Europe, bringing diverse peoples under Mongol rule. Despite the violent conquests, his empire facilitated trade along the Silk Road, promoted religious tolerance, and established the Yam postal system. Genghis Khan's legal code, the Yasa, governed the empire and influenced subsequent Mongol rulers. His descendants continued expanding the empire after his death. His legacy remains complex: he is revered in Mongolia as a founding father but remembered elsewhere for the devastation of his conquests."
+  },
+  {
+    "id": "rumi",
+    "name": "Rumi",
+    "text": "Jalal ad-Din Muhammad Rumi (1207-1273) was a Persian poet, Islamic scholar, theologian, and Sufi mystic. Born in Balkh (present-day Afghanistan), his family fled the Mongol invasion, eventually settling in Konya in the Seljuk Sultanate of Rum (modern Turkey). Rumi's poetry explores themes of divine love, spiritual transformation, and the relationship between the human soul and God. His major works include the Masnavi, a six-volume poem considered one of the greatest works of Sufi literature, and the Divan-e Shams-e Tabrizi. He founded the Mevlevi Order, known for its whirling dervishes. Rumi's poetry has been translated into numerous languages and has gained worldwide popularity. He is one of the best-selling poets in the United States and his work continues to inspire people of all backgrounds."
+  },
+  {
+    "id": "ibn_battuta",
+    "name": "Ibn Battuta",
+    "text": "Ibn Battuta (1304-1369) was a Moroccan scholar and explorer born in Tangier. Over a period of thirty years, he traveled approximately 75,000 miles across the Islamic world and beyond, from West Africa to China, making him one of the greatest travelers of the pre-modern era. His journeys took him through North Africa, the Middle East, Central Asia, India, Southeast Asia, and China. He served as a judge in Delhi and the Maldives and visited the Mali Empire during the reign of Mansa Musa's successor. His travel account, the Rihla, dictated upon his return to Morocco, provides invaluable information about the cultures, societies, and trade networks of the medieval Islamic world. Ibn Battuta's travels exceeded those of Marco Polo in both distance and scope."
+  },
+  {
+    "id": "dante",
+    "name": "Dante Alighieri",
+    "text": "Dante Alighieri (1265-1321) was an Italian poet born in Florence. He is considered one of the greatest poets in the Italian language and his Divine Comedy is regarded as one of the most important works of world literature. The Divine Comedy, an epic poem describing Dante's journey through Hell, Purgatory, and Paradise, offers a comprehensive vision of medieval Christian theology and philosophy. Written in the Tuscan dialect, it helped establish Italian as a literary language. Exiled from Florence due to political conflicts, Dante spent the rest of his life in various Italian cities. Beyond the Divine Comedy, he wrote significant works on language, politics, and philosophy. He is often called the father of the Italian language."
+  },
+  {
+    "id": "leonardo",
+    "name": "Leonardo da Vinci",
+    "text": "Leonardo da Vinci (1452-1519) was an Italian polymath of the Renaissance, born in Vinci near Florence. He is widely considered one of the most diversely talented individuals to have ever lived, excelling as a painter, sculptor, architect, musician, mathematician, engineer, inventor, anatomist, and writer. His paintings, including the Mona Lisa and The Last Supper, are among the most recognizable artworks in history. His notebooks, filled with scientific diagrams, anatomical studies, and inventions, reveal a mind centuries ahead of its time. He designed flying machines, armored vehicles, and concentrated solar power. Leonardo epitomizes the Renaissance ideal of the \"universal genius.\" His combination of artistic mastery and scientific curiosity made him a model for interdisciplinary thinking. His influence extends across art, science, and technology."
+  },
+  {
+    "id": "michelangelo",
+    "name": "Michelangelo",
+    "text": "Michelangelo di Lodovico Buonarroti Simoni (1475-1564) was an Italian sculptor, painter, architect, and poet of the High Renaissance, born in Caprese near Florence. He is considered one of the greatest artists of all time. His works include the marble sculpture David, the ceiling of the Sistine Chapel, and the design of St. Peter's Basilica in Rome. The Sistine Chapel ceiling, painted over four years, depicts scenes from Genesis and remains one of the most celebrated achievements in Western art. Michelangelo's works demonstrate unparalleled mastery of human anatomy and emotional expression. His influence on the development of Western art is immeasurable. Unlike many artists of his time, he achieved recognition during his lifetime and is often called Il Divino (the divine one)."
+  },
+  {
+    "id": "raphael",
+    "name": "Raphael",
+    "text": "Raffaello Sanzio da Urbino (1483-1520), known as Raphael, was an Italian painter and architect of the High Renaissance, born in Urbino. Along with Leonardo and Michelangelo, he forms the traditional trinity of great Renaissance masters. His works are admired for their clarity of form, ease of composition, and visual achievement of the Neoplatonic ideal of human grandeur. Famous works include The School of Athens, the Sistine Madonna, and The Transfiguration. He also worked as an architect and designed several buildings. Despite dying at only 37, Raphael's influence on Western painting was enormous. His works became the standard for academic art training for centuries. The Vatican rooms he decorated, known as the Raphael Rooms, remain pilgrimage sites for art lovers."
+  },
+  {
+    "id": "shakespeare",
+    "name": "William Shakespeare",
+    "text": "William Shakespeare (1564-1616) was an English playwright and poet born in Stratford-upon-Avon. He is widely regarded as the greatest writer in the English language and the world's greatest dramatist. His surviving works include approximately 39 plays, 154 sonnets, and several longer poems. His plays, including Hamlet, Macbeth, Othello, King Lear, Romeo and Juliet, and A Midsummer Night's Dream, have been translated into every major language and performed more often than those of any other playwright. Shakespeare's influence on literature, theater, and the English language itself is incalculable. He invented countless words and phrases still in common use. His exploration of human nature, psychology, and moral complexity continues to resonate with audiences worldwide."
+  },
+  {
+    "id": "cervantes",
+    "name": "Miguel de Cervantes",
+    "text": "Miguel de Cervantes Saavedra (1547-1616) was a Spanish writer born in Alcalá de Henares. He is best known for his novel Don Quixote, considered the first modern novel and one of the greatest works of fiction ever written. Cervantes led an adventurous life, serving as a soldier, being captured by pirates and held as a slave in Algiers for five years, and struggling financially throughout much of his life. These experiences informed his writing with realism and humanity. Don Quixote, published in two parts (1605 and 1615), tells the story of an elderly gentleman who becomes obsessed with chivalric romances and embarks on a delusional quest. The novel's influence on the development of prose fiction cannot be overstated. Cervantes is considered the greatest writer in the Spanish language."
+  },
+  {
+    "id": "copernicus",
+    "name": "Nicolaus Copernicus",
+    "text": "Nicolaus Copernicus (1473-1543) was a Renaissance-era mathematician and astronomer born in Royal Prussia, part of the Kingdom of Poland. He formulated a model of the universe that placed the Sun rather than Earth at its center. His book De revolutionibus orbium coelestium (On the Revolutions of the Celestial Spheres), published shortly before his death, proposed the heliocentric model and is considered a foundational work of modern astronomy. This challenged the prevailing geocentric model that had dominated Western thought for centuries. The Copernican Revolution, the paradigm shift from Earth-centered to Sun-centered cosmology, fundamentally transformed humanity's understanding of its place in the universe. Copernicus's work paved the way for Kepler, Galileo, and Newton."
+  },
+  {
+    "id": "montaigne",
+    "name": "Michel de Montaigne",
+    "text": "Michel Eyquem de Montaigne (1533-1592) was a French Renaissance philosopher and writer born in Aquitaine. He is considered the father of the modern essay, having popularized the form through his collection of short prose pieces exploring his thoughts on various subjects. His Essays, published between 1580 and 1588, cover topics ranging from education and friendship to cannibalism and experience. Written in a personal, conversational style, they pioneered the examination of the self as a subject of philosophical inquiry. Montaigne's skepticism, humanism, and tolerance influenced subsequent thinkers from Descartes to Nietzsche. His famous motto, \"Que sçay-je?\" (What do I know?), encapsulates his philosophical approach of questioning assumptions and embracing uncertainty."
+  },
+  {
+    "id": "newton",
+    "name": "Isaac Newton",
+    "text": "Sir Isaac Newton (1642-1727) was an English mathematician, physicist, astronomer, and author born in Lincolnshire. He is widely recognized as one of the most influential scientists of all time and a key figure in the Scientific Revolution. His Principia Mathematica, published in 1687, laid the foundations for classical mechanics through his laws of motion and universal gravitation. He also made groundbreaking contributions to optics, demonstrating that white light is composed of a spectrum of colors, and developed calculus independently of Leibniz. Newton's work unified terrestrial and celestial mechanics, showing that the same physical laws govern motion on Earth and in the heavens. His influence on physics and mathematics shaped scientific inquiry for over two centuries."
+  },
+  {
+    "id": "voltaire",
+    "name": "Voltaire",
+    "text": "Voltaire (1694-1778), born François-Marie Arouet, was a French Enlightenment writer, historian, and philosopher. Born in Paris, he became one of the most influential advocates for civil liberties, including freedom of religion and freedom of speech. His prolific output included plays, poems, novels, essays, and historical works. Candide, a satirical novella, is his best-known work. He was a vocal critic of the Catholic Church and absolute monarchy, often using wit and irony to attack intolerance and injustice. Voltaire's influence on the French Revolution and liberal thought in Europe and America was profound. His advocacy for religious tolerance and rational thinking helped shape modern secularism and democratic values."
+  },
+  {
+    "id": "bach",
+    "name": "Johann Sebastian Bach",
+    "text": "Johann Sebastian Bach (1685-1750) was a German composer and musician of the Baroque period, born in Eisenach. He is considered one of the greatest composers in the history of Western music. His compositions include the Brandenburg Concertos, the Mass in B minor, The Well-Tempered Clavier, and numerous cantatas, chorales, and organ works. His music is renowned for its technical command, artistic beauty, and intellectual depth. Bach's influence on subsequent composers, from Mozart to Brahms to modern musicians, is immeasurable. His mastery of counterpoint and fugue set standards for musical composition. After a period of relative obscurity, his music was revived in the 19th century and has remained central to the classical repertoire."
+  },
+  {
+    "id": "mozart",
+    "name": "Wolfgang Amadeus Mozart",
+    "text": "Wolfgang Amadeus Mozart (1756-1791) was an Austrian composer born in Salzburg. A child prodigy who began composing at age five, he created more than 600 works in his short life, including symphonies, operas, concertos, and chamber music. His operas, including The Marriage of Figaro, Don Giovanni, and The Magic Flute, represent peaks of operatic achievement. His piano concertos, symphonies (especially the final three), and chamber works demonstrate unprecedented musical sophistication and emotional depth. Mozart's music is celebrated for its melodic beauty, formal elegance, and profound emotional expression. Despite financial struggles and an early death at 35, his influence on Western music is incalculable. He remains one of the most beloved composers in history."
+  },
+  {
+    "id": "beethoven",
+    "name": "Ludwig van Beethoven",
+    "text": "Ludwig van Beethoven (1770-1827) was a German composer and pianist born in Bonn. He is one of the most celebrated composers in history and a crucial figure in the transition between the Classical and Romantic eras of Western music. His works include nine symphonies, five piano concertos, one violin concerto, thirty-two piano sonatas, and sixteen string quartets. The Ninth Symphony, with its choral finale setting Schiller's \"Ode to Joy,\" is among the most performed and recognized works in the classical repertoire. Beethoven continued composing despite progressive hearing loss that began in his twenties and left him almost totally deaf by his final years. His music expanded the scope and emotional range of classical composition, inspiring generations of Romantic composers."
+  },
+  {
+    "id": "kant",
+    "name": "Immanuel Kant",
+    "text": "Immanuel Kant (1724-1804) was a German philosopher born in Königsberg, Prussia (now Kaliningrad, Russia). He is considered one of the most influential philosophers in the history of Western philosophy and a central figure of modern philosophy. His Critique of Pure Reason, Critique of Practical Reason, and Critique of Judgment systematically examined the limits and possibilities of human knowledge, ethics, and aesthetic judgment. His moral philosophy, centered on the categorical imperative, remains foundational to ethical theory. Kant's \"Copernican revolution\" in philosophy proposed that our minds actively structure our experience of reality. His influence extends across epistemology, ethics, aesthetics, and political philosophy. He never traveled more than forty miles from his hometown."
+  },
+  {
+    "id": "benjamin_franklin",
+    "name": "Benjamin Franklin",
+    "text": "Benjamin Franklin (1706-1790) was an American polymath, writer, scientist, inventor, statesman, and diplomat born in Boston. He was one of the Founding Fathers of the United States and helped draft the Declaration of Independence and the U.S. Constitution. As a scientist, he conducted groundbreaking experiments with electricity, inventing the lightning rod, bifocal glasses, and the Franklin stove. As a writer, his Poor Richard's Almanack and autobiography remain influential. As a diplomat, he secured crucial French support during the American Revolution. Franklin exemplified Enlightenment ideals of reason, self-improvement, and civic virtue. His life demonstrated that intellectual achievement and practical accomplishment could coexist. He remains one of the most celebrated Americans in history."
+  },
+  {
+    "id": "catherine_great",
+    "name": "Catherine the Great",
+    "text": "Catherine II (1729-1796), known as Catherine the Great, was Empress of Russia from 1762 until her death. Born a German princess as Sophie of Anhalt-Zerbst, she came to power through a coup against her husband, Peter III. Under her rule, Russia expanded significantly, annexing Crimea and partitioning Poland. She corresponded with Enlightenment philosophers like Voltaire and Diderot, and initiated educational and legal reforms. She founded the Hermitage Museum and promoted arts and sciences. Catherine's reign is considered Russia's Golden Age. She was one of the longest-ruling and most powerful female monarchs in history. Her efforts to modernize Russia along Western lines, while maintaining autocratic rule, left a complex legacy."
+  },
+  {
+    "id": "mary_wollstonecraft",
+    "name": "Mary Wollstonecraft",
+    "text": "Mary Wollstonecraft (1759-1797) was an English writer, philosopher, and advocate of women's rights born in London. She is best known for A Vindication of the Rights of Woman (1792), one of the earliest works of feminist philosophy. Wollstonecraft argued that women are not naturally inferior to men but only appear so because of limited access to education. She advocated for educational equality and the treatment of women as rational beings capable of the same moral and intellectual development as men. She lived an unconventional life, bearing a daughter out of wedlock and marrying philosopher William Godwin. She died shortly after giving birth to Mary Shelley, the future author of Frankenstein. Her ideas laid groundwork for the women's rights movements that followed."
+  },
+  {
+    "id": "napoleon",
+    "name": "Napoleon Bonaparte",
+    "text": "Napoleon Bonaparte (1769-1821) was a French military commander and political leader born in Corsica. Rising to prominence during the French Revolution, he became Emperor of France and conquered much of Europe before his final defeat. His military campaigns revolutionized warfare through innovative tactics and the organization of mass armies. As a ruler, he implemented the Napoleonic Code, which influenced legal systems worldwide. He established the Bank of France, reformed education, and promoted meritocracy. Napoleon's impact on European history was enormous, redrawing the political map and spreading revolutionary ideals. His legacy remains controversial: admired for his military genius and administrative reforms, criticized for the wars that caused millions of deaths."
+  },
+  {
+    "id": "darwin",
+    "name": "Charles Darwin",
+    "text": "Charles Robert Darwin (1809-1882) was an English naturalist and biologist born in Shrewsbury. He is best known for his contributions to evolutionary biology, establishing that all species of life have descended from common ancestors through the process of natural selection. His voyage on HMS Beagle (1831-1836) provided observations that informed his theory. On the Origin of Species, published in 1859, presented evidence for evolution and sparked intense debate. The Descent of Man applied evolutionary theory to human origins. Darwin's theory of evolution by natural selection fundamentally transformed biology and our understanding of life on Earth. Despite initial controversy, his ideas became the foundation of modern evolutionary biology. He is considered one of the most influential scientists in history."
+  },
+  {
+    "id": "lincoln",
+    "name": "Abraham Lincoln",
+    "text": "Abraham Lincoln (1809-1865) was the 16th President of the United States, serving from 1861 until his assassination. Born in a log cabin in Kentucky, he rose from poverty through self-education to become a lawyer and politician. Lincoln led the nation through the Civil War, preserving the Union and abolishing slavery through the Emancipation Proclamation and the Thirteenth Amendment. His Gettysburg Address is one of the most quoted speeches in American history, redefining the war as a struggle for human equality. Lincoln is consistently ranked as one of the greatest American presidents. His leadership during the nation's greatest crisis, his moral clarity on slavery, and his eloquent defense of democracy have made him an enduring symbol of American values."
+  },
+  {
+    "id": "harriet_tubman",
+    "name": "Harriet Tubman",
+    "text": "Harriet Tubman (c. 1822-1913) was an American abolitionist and political activist born into slavery in Maryland. She escaped to freedom and subsequently made some thirteen missions to rescue approximately seventy enslaved people using the network of antislavery activists known as the Underground Railroad. During the Civil War, she served as an armed scout and spy for the Union Army, becoming the first woman to lead an armed expedition in the war. After the war, she became active in the women's suffrage movement. Tubman's courage and determination made her a symbol of the fight against slavery. Known as \"Moses\" to those she helped free, she risked her life repeatedly to liberate others. Her legacy as a freedom fighter and humanitarian continues to inspire."
+  },
+  {
+    "id": "marx",
+    "name": "Karl Marx",
+    "text": "Karl Marx (1818-1883) was a German philosopher, economist, historian, and political theorist born in Trier, Prussia. Along with Friedrich Engels, he developed the theory of Marxism, which became one of the most influential social and economic theories in history. His major works include The Communist Manifesto (1848) and Das Kapital (1867-1894). Marx analyzed capitalism's internal contradictions, theorized class struggle as the driving force of historical change, and predicted capitalism's eventual replacement by socialism and communism. Marx's ideas profoundly influenced 20th-century politics, inspiring socialist and communist movements worldwide. His analysis of capitalism, alienation, and class relations continues to inform social theory and political debate."
+  },
+  {
+    "id": "florence_nightingale",
+    "name": "Florence Nightingale",
+    "text": "Florence Nightingale (1820-1910) was an English social reformer, statistician, and the founder of modern nursing, born into a wealthy British family. She came to prominence during the Crimean War, where she organized care for wounded soldiers. Nightingale established nursing as a respectable profession for women, founding the first secular nursing school at St Thomas' Hospital in London. She pioneered the use of statistics in healthcare, using data visualization to advocate for sanitary reforms. Her work dramatically reduced death rates and transformed hospital practices. Beyond nursing, she contributed to public health policy and hospital design. Florence Nightingale is remembered as \"The Lady with the Lamp\" for her nighttime rounds caring for soldiers."
+  },
+  {
+    "id": "tolstoy",
+    "name": "Leo Tolstoy",
+    "text": "Count Lev Nikolayevich Tolstoy (1828-1910) was a Russian writer born to an aristocratic family at Yasnaya Polyana. He is regarded as one of the greatest novelists of all time, best known for War and Peace and Anna Karenina. War and Peace, an epic chronicle of Russian society during the Napoleonic era, and Anna Karenina, a tragedy of love and society, are considered pinnacles of literary realism. His later works explored spiritual and moral themes as he underwent a profound religious conversion. Tolstoy's ideas on nonviolent resistance influenced Gandhi and Martin Luther King Jr. He rejected his aristocratic lifestyle, advocated for peasant education, and developed a form of Christian anarchism. His literary and philosophical influence extends worldwide."
+  },
+  {
+    "id": "dostoevsky",
+    "name": "Fyodor Dostoevsky",
+    "text": "Fyodor Mikhailovich Dostoevsky (1821-1881) was a Russian novelist, philosopher, and journalist born in Moscow. His works explore human psychology in the troubled political, social, and spiritual atmospheres of 19th-century Russia. Major novels include Crime and Punishment, The Idiot, Demons, and The Brothers Karamazov. These works examine guilt, redemption, free will, and the existence of God with unprecedented psychological depth. His characters struggle with moral and existential questions. Dostoevsky profoundly influenced 20th-century philosophy and literature, particularly existentialism and psychoanalysis. His exploration of the darker aspects of human consciousness anticipated modern psychology. He is considered one of the greatest novelists in world literature."
+  },
+  {
+    "id": "van_gogh",
+    "name": "Vincent van Gogh",
+    "text": "Vincent Willem van Gogh (1853-1890) was a Dutch Post-Impressionist painter born in Zundert, Netherlands. He created about 2,100 artworks, including around 860 oil paintings, most of them in the last two years of his life. His works, including The Starry Night, Sunflowers, and many self-portraits, are characterized by bold colors, dramatic brushwork, and emotional intensity. He struggled with mental illness throughout his life and famously cut off part of his ear during a breakdown. Van Gogh sold only one painting during his lifetime and died by suicide at age 37. Today, he is among the most famous and influential figures in Western art history. His posthumous fame grew rapidly, and his works are among the most valuable paintings ever sold."
+  },
+  {
+    "id": "monet",
+    "name": "Claude Monet",
+    "text": "Oscar-Claude Monet (1840-1926) was a French painter and founder of Impressionism, born in Paris. His painting Impression, Sunrise gave the movement its name when a critic used the term derisively. Monet's innovative approach emphasized capturing light and atmosphere through visible brushstrokes and pure color. His series paintings, depicting subjects like haystacks, Rouen Cathedral, and water lilies at different times and seasons, explored the transient effects of light. The water lily paintings created in his garden at Giverny became his most celebrated works. Monet's commitment to painting outdoors and capturing immediate visual impressions revolutionized art. He is considered one of the most influential artists in history."
+  },
+  {
+    "id": "tchaikovsky",
+    "name": "Pyotr Ilyich Tchaikovsky",
+    "text": "Pyotr Ilyich Tchaikovsky (1840-1893) was a Russian composer of the Romantic period, born in Votkinsk. He was the first Russian composer whose music made a lasting impression internationally. His compositions include symphonies (especially the Fourth, Fifth, and Sixth), the 1812 Overture, piano concertos, and the ballets Swan Lake, The Nutcracker, and Sleeping Beauty. His music combines Russian folk elements with Western orchestral traditions. Tchaikovsky struggled with his homosexuality in a society that criminalized it, contributing to periods of depression. His death, possibly from cholera or suicide, remains debated. His emotionally expressive music continues to be among the most popular in the classical repertoire."
+  },
+  {
+    "id": "frederick_douglass",
+    "name": "Frederick Douglass",
+    "text": "Frederick Douglass (c. 1817-1895) was an American social reformer, abolitionist, orator, writer, and statesman. Born into slavery in Maryland, he escaped to freedom and became one of the most prominent voices against slavery. His autobiographies, including Narrative of the Life of Frederick Douglass, an American Slave, became influential works in the abolitionist movement. His powerful oratory exposed the brutality of slavery and advocated for civil rights and women's suffrage. Douglass advised President Lincoln during the Civil War and helped recruit African American soldiers. After the war, he held several government positions. He remains one of the most celebrated African American leaders in history."
+  },
+  {
+    "id": "marie_curie",
+    "name": "Marie Curie",
+    "text": "Marie Skłodowska Curie (1867-1934) was a Polish-French physicist and chemist born in Warsaw. She was the first woman to win a Nobel Prize, the first person to win Nobel Prizes in two different sciences, and the first woman professor at the University of Paris. Her research on radioactivity, a term she coined, led to the discovery of polonium and radium. During World War I, she developed mobile X-ray units to help surgeons on the battlefield. She founded the Curie Institutes in Paris and Warsaw. Marie Curie's pioneering work laid the foundation for nuclear physics and cancer treatment. She died from aplastic anemia, likely caused by radiation exposure from her research. Her legacy includes breaking barriers for women in science."
+  },
+  {
+    "id": "einstein",
+    "name": "Albert Einstein",
+    "text": "Albert Einstein (1879-1955) was a German-born theoretical physicist who developed the theory of relativity. Born in Ulm, Germany, he became one of the most influential scientists of the 20th century. His 1905 papers on the photoelectric effect, Brownian motion, and special relativity revolutionized physics. The general theory of relativity (1915) redefined gravity as the curvature of spacetime. His mass-energy equivalence formula E=mc² became the most famous equation in physics. Einstein received the Nobel Prize in Physics in 1921. A Jewish refugee from Nazi Germany, he emigrated to the United States in 1933. He advocated for civil rights, pacifism, and nuclear disarmament. His name has become synonymous with genius."
+  },
+  {
+    "id": "gandhi",
+    "name": "Mahatma Gandhi",
+    "text": "Mohandas Karamchand Gandhi (1869-1948), known as Mahatma (great soul), was an Indian lawyer and anti-colonial nationalist who led India to independence from British rule. Born in Porbandar, Gujarat, he developed the philosophy of nonviolent resistance called satyagraha. Gandhi's campaigns of civil disobedience, including the Salt March and Quit India Movement, mobilized millions of Indians against British rule. He advocated for religious tolerance, the upliftment of the untouchables (whom he called Harijans), and simple living. Gandhi's methods of nonviolent protest influenced civil rights movements worldwide, including Martin Luther King Jr.'s campaign for racial equality. He was assassinated in 1948 by a Hindu nationalist. He is honored in India as the Father of the Nation."
+  },
+  {
+    "id": "mandela",
+    "name": "Nelson Mandela",
+    "text": "Nelson Rolihlahla Mandela (1918-2013) was a South African anti-apartheid revolutionary and political leader who served as President of South Africa from 1994 to 1999. Born in Mvezo, he became the country's first Black head of state. Mandela spent 27 years in prison for his opposition to apartheid, much of it on Robben Island. After his release in 1990, he led negotiations that dismantled apartheid and established multiracial democracy. He received the Nobel Peace Prize in 1993 jointly with F.W. de Klerk. As president, Mandela focused on reconciliation between South Africa's racial groups. His leadership during the transition from apartheid made him an international symbol of peace, forgiveness, and the struggle against racial oppression."
+  },
+  {
+    "id": "mlk",
+    "name": "Martin Luther King Jr.",
+    "text": "Martin Luther King Jr. (1929-1968) was an American Baptist minister and activist who became the most visible spokesperson and leader in the American civil rights movement. Born in Atlanta, Georgia, he advocated for nonviolent resistance to achieve civil rights reforms. King led the Montgomery Bus Boycott, helped organize the March on Washington where he delivered his \"I Have a Dream\" speech, and played key roles in the passage of the Civil Rights Act of 1964 and Voting Rights Act of 1965. He received the Nobel Peace Prize in 1964. King was assassinated in Memphis, Tennessee, in 1968. His birthday is observed as a federal holiday in the United States. His philosophy of nonviolent protest and his vision of racial equality continue to inspire social justice movements worldwide."
+  },
+  {
+    "id": "frida_kahlo",
+    "name": "Frida Kahlo",
+    "text": "Frida Kahlo (1907-1954) was a Mexican painter known for her many portraits, self-portraits, and works inspired by nature and Mexican folk culture. Born in Coyoacán, Mexico City, she began painting after being severely injured in a bus accident at age eighteen. Her works explore identity, the human body, and death, often incorporating symbolic elements from Mexican culture. She married muralist Diego Rivera twice and was associated with the Surrealist movement, though she rejected the label. Many of her paintings address her chronic pain and tumultuous life. Kahlo has become an icon of feminism and Mexican culture. Her work gained wider recognition after her death, especially from the 1970s onward. She is celebrated for her unflinching self-examination and bold artistic vision."
+  },
+  {
+    "id": "picasso",
+    "name": "Pablo Picasso",
+    "text": "Pablo Ruiz Picasso (1881-1973) was a Spanish painter, sculptor, printmaker, and ceramicist who spent most of his adult life in France. He is regarded as one of the most influential artists of the 20th century. Picasso co-founded Cubism, invented constructed sculpture, and contributed to Surrealism. His vast output includes paintings like Guernica, a powerful anti-war statement, and Les Demoiselles d'Avignon, which revolutionized modern art. He worked in numerous styles and media throughout his career. Picasso's creative drive never diminished; he remained prolific until his death at 91. His influence on modern art is immeasurable, and he is among the most recognized figures in 20th-century art history."
+  },
+  {
+    "id": "amelia_earhart",
+    "name": "Amelia Earhart",
+    "text": "Amelia Mary Earhart (1897-1937) was an American aviation pioneer and author born in Atchison, Kansas. She was the first female aviator to fly solo across the Atlantic Ocean in 1932. Earhart set many aviation records and wrote best-selling books about her flying experiences. She was instrumental in the formation of The Ninety-Nines, an organization for female pilots. She advocated for commercial aviation and women's equality. In 1937, Earhart disappeared over the central Pacific Ocean during an attempt to circumnavigate the globe. Her disappearance remains one of aviation's greatest unsolved mysteries. She continues to inspire women in aviation and adventure."
+  },
+  {
+    "id": "alan_turing",
+    "name": "Alan Turing",
+    "text": "Alan Mathison Turing (1912-1954) was an English mathematician, computer scientist, logician, and cryptanalyst born in London. He is widely considered the father of theoretical computer science and artificial intelligence. Turing's work at Bletchley Park during World War II, breaking German Enigma codes, helped shorten the war and save countless lives. His 1936 paper introduced the concept of the Turing machine, a foundational model of computation. The \"Turing test\" remains a benchmark for machine intelligence. Turing was prosecuted for homosexuality in 1952 and chose chemical castration over imprisonment. He died of cyanide poisoning in 1954, ruled a suicide. He received a posthumous royal pardon in 2013 and is now celebrated as a national hero."
+  },
+  {
+    "id": "simone_de_beauvoir",
+    "name": "Simone de Beauvoir",
+    "text": "Simone Lucie Ernestine Marie Bertrand de Beauvoir (1908-1986) was a French existentialist philosopher, writer, and social theorist born in Paris. Her 1949 treatise The Second Sex is a foundational text of contemporary feminism. The Second Sex analyzed the treatment of women throughout history and argued that women have been defined as \"Other\" in relation to men. Her philosophical works explored ethics, existentialism, and political commitment. She also wrote novels, including The Mandarins, which won the Prix Goncourt. Beauvoir's lifelong partnership with Jean-Paul Sartre was unconventional for its time. Her work influenced second-wave feminism and continues to shape feminist thought. She is considered one of the most important intellectuals of the 20th century."
+  },
+  {
+    "id": "hawking",
+    "name": "Stephen Hawking",
+    "text": "Stephen William Hawking (1942-2018) was an English theoretical physicist and cosmologist born in Oxford. He made groundbreaking contributions to the fields of cosmology, general relativity, and quantum mechanics. Hawking's work on black holes, including the theoretical prediction of Hawking radiation, established him as one of the leading physicists of his generation. His book A Brief History of Time became an international bestseller, making complex science accessible to general audiences. Diagnosed with motor neurone disease at 21, Hawking defied predictions that he had only a few years to live, surviving for over fifty years. He became an iconic figure, demonstrating that physical limitations need not constrain intellectual achievement."
+  },
+  {
+    "id": "mother_teresa",
+    "name": "Mother Teresa",
+    "text": "Mother Teresa (1910-1997), born Anjezë Gonxhe Bojaxhiu in Skopje (now North Macedonia), was an Albanian-Indian Catholic nun and missionary. She founded the Missionaries of Charity in Kolkata, India. For over 45 years, she ministered to the poor, sick, orphaned, and dying in India and around the world. The Missionaries of Charity grew to operate hospices, soup kitchens, and schools in more than 130 countries. Mother Teresa received the Nobel Peace Prize in 1979. She was canonized as a saint by the Catholic Church in 2016. While celebrated for her humanitarian work, she also faced criticism for her views on suffering and the conditions in her facilities. Her legacy remains complex and debated."
+  },
+  {
+    "id": "malcolm_x",
+    "name": "Malcolm X",
+    "text": "Malcolm X (1925-1965), born Malcolm Little in Omaha, Nebraska, was an American Muslim minister and human rights activist. He was a prominent figure in the Nation of Islam and later founded Muslim Mosque, Inc. and the Organization of Afro-American Unity. Malcolm X articulated concepts of Black pride, self-defense, and Black nationalism. His autobiography, written with Alex Haley, became a classic of American literature. Unlike Martin Luther King Jr., he initially advocated for Black separatism and self-defense rather than nonviolence and integration. After a pilgrimage to Mecca, he embraced Sunni Islam and moved toward a more inclusive vision. He was assassinated in 1965 by members of the Nation of Islam. His ideas continue to influence discussions of race, identity, and justice."
+  },
+  {
+    "id": "coco_chanel",
+    "name": "Coco Chanel",
+    "text": "Gabrielle Bonheur \"Coco\" Chanel (1883-1971) was a French fashion designer and businesswoman born in Saumur. She founded the Chanel brand, which became one of the most influential fashion houses in history. Chanel revolutionized women's fashion by replacing corseted silhouettes with comfortable, elegant designs. She popularized the little black dress, Chanel No. 5 perfume, and the Chanel suit. Her designs liberated women from constraining fashions of the early 20th century. Chanel's wartime activities, including a relationship with a Nazi officer, remain controversial. Despite this, her influence on fashion is undeniable. She is the only fashion designer listed on Time magazine's 100 most influential people of the 20th century."
+  },
+  {
+    "id": "wangari_maathai",
+    "name": "Wangari Maathai",
+    "text": "Wangari Muta Maathai (1940-2011) was a Kenyan environmental and political activist born in Nyeri. She founded the Green Belt Movement, an environmental organization focused on tree planting, environmental conservation, and women's rights. Maathai was the first African woman to receive the Nobel Peace Prize (2004) for her contribution to sustainable development, democracy, and peace. The Green Belt Movement has planted over 51 million trees in Kenya. She served in the Kenyan parliament and as Assistant Minister for Environment. Maathai advocated for linking environmental conservation with democracy and human rights. Her work demonstrated the connections between environmental degradation, poverty, and political instability."
+  },
+  {
+    "id": "rosa_parks",
+    "name": "Rosa Parks",
+    "text": "Rosa Louise McCauley Parks (1913-2005) was an American activist in the civil rights movement born in Tuskegee, Alabama. She is best known for her pivotal role in the Montgomery bus boycott. On December 1, 1955, Parks refused to give up her seat to a white passenger on a Montgomery, Alabama bus. Her arrest sparked the Montgomery bus boycott, a 381-day protest that helped launch the civil rights movement and brought Martin Luther King Jr. to national prominence. Parks continued her activism throughout her life, working on civil rights issues and establishing the Rosa and Raymond Parks Institute for Self Development. The U.S. Congress called her 'the first lady of civil rights' and 'the mother of the freedom movement.'"
+  },
+  {
+    "id": "gabriel_garcia_marquez",
+    "name": "Gabriel García Márquez",
+    "text": "Gabriel José de la Concordia García Márquez (1927-2014) was a Colombian novelist, short-story writer, and journalist born in Aracataca. He received the Nobel Prize in Literature in 1982, primarily for his masterpiece One Hundred Years of Solitude. His works, including Love in the Time of Cholera and Chronicle of a Death Foretold, are associated with magical realism, blending realistic narrative with fantastical elements. One Hundred Years of Solitude has sold over 50 million copies and been translated into 46 languages. García Márquez was a prominent journalist and political activist, supporting leftist causes throughout his life. He is considered one of the most significant authors of the 20th century and a giant of Latin American literature."
+  },
+  {
+    "id": "cheikh_anta_diop",
+    "name": "Cheikh Anta Diop",
+    "text": "Cheikh Anta Diop (1923-1986) was a Senegalese historian, anthropologist, physicist, and politician born in Thieytou, Senegal. He is considered one of the most important African historians of the 20th century. Diop's work focused on the African origins of ancient Egyptian civilization and the cultural unity of Africa. His books, including Nations nègres et culture and The African Origin of Civilization, challenged Eurocentric views of African history. He established a radiocarbon dating laboratory at IFAN in Dakar and made contributions to linguistics and physics. The university in Dakar was renamed Cheikh Anta Diop University in his honor. His work remains influential in African historiography and Afrocentric thought."
+  },
+  {
+    "id": "rachel_carson",
+    "name": "Rachel Carson",
+    "text": "Rachel Louise Carson (1907-1964) was an American marine biologist, author, and conservationist born in Springdale, Pennsylvania. Her book Silent Spring (1962) is credited with launching the modern environmental movement. Silent Spring documented the environmental damage caused by pesticides, particularly DDT. The book led to a nationwide ban on DDT and other pesticides and inspired the creation of the U.S. Environmental Protection Agency. Carson's earlier books, including The Sea Around Us, brought public attention to marine biology. Despite facing intense opposition from chemical companies, she testified before Congress on the dangers of pesticides. She is considered one of the most influential figures in environmental science."
+  },
+  {
+    "id": "nikola_tesla",
+    "name": "Nikola Tesla",
+    "text": "Nikola Tesla (1856-1943) was a Serbian-American inventor, electrical engineer, and futurist born in Smiljan, Austrian Empire (modern-day Croatia). He is best known for his contributions to the design of the modern alternating current (AC) electrical supply system. Tesla's patents and theoretical work formed the basis of AC power systems, including the polyphase system of electrical distribution and the AC motor. He also contributed to the development of radio, X-ray technology, and wireless communication. Despite his contributions, Tesla died in poverty in New York City. His rivalry with Thomas Edison over AC versus DC power is legendary. Tesla has experienced a revival in popular culture, celebrated as a visionary inventor who was ahead of his time."
+  },
+  {
+    "id": "chinua_achebe",
+    "name": "Chinua Achebe",
+    "text": "Chinua Achebe (1930-2013) was a Nigerian novelist, poet, and critic born in Ogidi. He is considered the father of modern African literature, best known for his novel Things Fall Apart. Things Fall Apart, published in 1958, tells the story of pre-colonial Nigerian society and its destruction by colonialism. It has sold over 20 million copies and been translated into more than 50 languages. Other major works include No Longer at Ease and Arrow of God. Achebe's writing countered European stereotypes of Africa and gave voice to African perspectives on colonialism. His essay \"An Image of Africa\" criticized Joseph Conrad's Heart of Darkness. He received numerous awards and taught at universities in Nigeria and the United States."
+  },
+  {
+    "id": "ibn_khaldun",
+    "name": "Ibn Khaldun",
+    "text": "Ibn Khaldun (1332-1406) was an Arab historian, historiographer, and social scientist born in Tunis. He is considered a founding father of sociology, historiography, demography, and economics. His major work, the Muqaddimah, introduced a scientific approach to history, analyzing the rise and fall of civilizations through social and economic factors. He developed theories on social cohesion (asabiyyah), urban development, and cyclical patterns of state formation. Ibn Khaldun served as a diplomat and judge in North Africa and Egypt. His analytical methods anticipated modern social science by centuries. Historians and sociologists continue to study and apply his insights to understanding historical change and social dynamics."
+  },
+  {
+    "id": "maya_angelou",
+    "name": "Maya Angelou",
+    "text": "Maya Angelou (1928-2014), born Marguerite Annie Johnson in St. Louis, Missouri, was an American poet, memoirist, and civil rights activist. Her autobiographical work I Know Why the Caged Bird Sings made her one of the first Black women to write a bestselling nonfiction book. Angelou published seven autobiographies, numerous poetry collections, and worked in theater, film, and television. She recited her poem \"On the Pulse of Morning\" at President Bill Clinton's 1993 inauguration. Beyond her literary achievements, Angelou was active in the civil rights movement, working with both Malcolm X and Martin Luther King Jr. She received dozens of awards and honorary degrees. Her work explores themes of identity, family, and racism in America."
+  },
+  {
+    "id": "akira_kurosawa",
+    "name": "Akira Kurosawa",
+    "text": "Akira Kurosawa (1910-1998) was a Japanese filmmaker born in Tokyo. He is regarded as one of the most important and influential filmmakers in the history of cinema, directing 30 films over a career spanning more than 50 years. His films include Rashomon, Seven Samurai, Ikiru, Throne of Blood, and Ran. Rashomon introduced Japanese cinema to international audiences and influenced narrative techniques in film. Seven Samurai has been called the greatest Japanese film ever made. Kurosawa's work bridged Eastern and Western cultures, adapting Shakespeare and Dostoevsky while deeply influencing Hollywood filmmakers like George Lucas and Steven Spielberg. He received an Academy Award for Lifetime Achievement in 1990."
+  },
+  {
+    "id": "srinivasa_ramanujan",
+    "name": "Srinivasa Ramanujan",
+    "text": "Srinivasa Ramanujan (1887-1920) was an Indian mathematician born in Erode, Tamil Nadu. Despite having almost no formal training in pure mathematics, he made substantial contributions to mathematical analysis, number theory, and infinite series. Ramanujan independently compiled nearly 3,900 results, many of which were completely novel. His work on partition functions and modular forms proved decades ahead of its time. Brought to Cambridge by G.H. Hardy, he became one of the youngest Fellows of the Royal Society. Ramanujan died at 32 from illness, but his notebooks continue to inspire research. His intuitive approach to mathematics and ability to discover deep results without formal proof remain remarkable. He is celebrated as one of history's most brilliant mathematicians."
+  },
+  {
+    "id": "simone_weil",
+    "name": "Simone Weil",
+    "text": "Simone Weil (1909-1943) was a French philosopher, mystic, and political activist born in Paris. Her writings blend philosophy, spirituality, and social commentary in a distinctive and influential way. Weil worked in factories to understand working-class conditions and briefly fought in the Spanish Civil War. Her spiritual writings explore affliction, grace, and attention. Major works include Gravity and Grace and The Need for Roots. Weil died at 34 from cardiac failure while refusing to eat more than the rations available to occupied France. Her writings were largely published posthumously. She has influenced thinkers across the political and religious spectrum, from T.S. Eliot to liberation theologians."
+  },
+  {
+    "id": "rabindranath_tagore",
+    "name": "Rabindranath Tagore",
+    "text": "Rabindranath Tagore (1861-1941) was an Indian poet, writer, composer, philosopher, and artist born in Calcutta. In 1913, he became the first non-European to win the Nobel Prize in Literature for his collection of poems Gitanjali. Tagore wrote prolifically in multiple genres, reshaping Bengali literature and music. He composed the national anthems of both India and Bangladesh. His educational philosophy led him to found Visva-Bharati University at Shantiniketan. A close friend of Gandhi, Tagore renounced his British knighthood in protest of the Jallianwala Bagh massacre. His work explores themes of spirituality, nature, and human emotion. He remains the most celebrated cultural figure in Bengal."
+  },
+  {
+    "id": "queen_liliuokalani",
+    "name": "Queen Liliuokalani",
+    "text": "Liliuokalani (1838-1917) was the only queen regnant and the last sovereign monarch of the Hawaiian Kingdom. Born in Honolulu to high chief and chiefess parents, she became heir apparent when her brother David Kalakaua was elected king. She ascended to the throne in 1891 and attempted to restore power to the monarchy and native Hawaiians. American businessmen, backed by U.S. Marines, overthrew her government in 1893. Despite her efforts to restore the monarchy, Hawaii was annexed by the United States in 1898. Liliuokalani was also a talented composer, writing songs including \"Aloha ʻOe,\" which became symbolic of Hawaiian culture. She spent her later years advocating for her people and their rights. She remains a symbol of Hawaiian sovereignty and resistance."
+  }
+]
