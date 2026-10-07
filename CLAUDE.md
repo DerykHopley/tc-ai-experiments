@@ -10,7 +10,7 @@ Compares how embedding models relate 68 historical figures by their biographies.
 
 ## Gotchas
 
-- **`@thi.ng/tsne` keeps the input's dimensions in its output**, so 3072-D embeddings come out 3072-D. `tsne2d` in `src/lib/tsne-scatter.ts` keeps the neighbour probabilities computed from the full vectors, then overwrites internal fields (`dim`, `points`, `steps`, `gains`, `gradient`, `ymean`, `opDist`, `opDivN`, `opSub`) to lay out in 2D. The package is alpha and pinned at 0.1.75; after any upgrade, check this function first.
+- **`@thi.ng/tsne` keeps the input's dimensions in its output**, so 3072-D embeddings come out 3072-D. `tsneLayout` in `src/lib/tsne-scatter.ts` keeps the neighbour probabilities computed from the full vectors, then overwrites internal fields (`dim`, `points`, `steps`, `gains`, `gradient`, `ymean`, `opDist`, `opDivN`, `opSub`) to lay out in 2D or 3D (`dims`). The package is alpha and pinned at 0.1.75; after any upgrade, check this function first.
 - **Vectors are scaled to length 1 in `getEmbeddings`**, so the dot product is cosine similarity for every model.
 - **OpenRouter guardrails can block a model** (404 mentioning "guardrail"). `Promise.allSettled` skips it with a warning and the page lists it; the user configures guardrails at https://openrouter.ai/workspaces/default/guardrails.
 - **Embeddings vary slightly between API calls**, so neighbour lists can drift between runs even with the fixed t-SNE seed.
@@ -32,7 +32,9 @@ EOF
 npx tsx src/.rerender.ts; rm src/.rerender.ts
 ```
 
-This only works when the data shape is unchanged; after changing `compareModels` or the panel data, run `npm start`.
+This only works when the data shape is unchanged; after changing `compareModels` or the panel data, run `npm start`. The 3D experiment page (`output/map-3d.html`, from `npm run map3d`) rebuilds the same way with `renderMap3dHtml` from `./lib/map-3d-page.ts`.
+
+**Page scripts are classic scripts, so top-level names share the global scope with `window`.** A top-level `const top` (likewise `window`, `document`, `location`) throws and blanks the whole page. If a page renders without its data-driven parts, extract the last `<script>` and run `node --check` on it, then look for such a clash.
 
 **Look at every visual change before reporting it done.** Firefox is installed as a flatpak and can screenshot headless (the viewport only, so use a tall window and crop with Python's PIL):
 

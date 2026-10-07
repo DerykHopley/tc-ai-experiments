@@ -12,10 +12,11 @@ Results so far, how we got here, and open ideas. Numbers are from the run on 202
 6. Added a perplexity switcher to the map (results under Marie Curie below).
 7. Every heatmap cell had the same colour: all pairs share 1.9–2.3 of 3 neighbours, which fell into one step of a 0–3 scale. The colour scale now spans the observed range instead, and cells show two decimals so cells with the same rounded value don't get different shades.
 8. Added a "What we found" card (findings computed from the data, interpretations marked as untested) and a "Limits" card to the page, for presenting to the class.
+9. Asked whether a 3D map would help. Measured it first, then built a separate experiment page (`npm run map3d`, `output/map-3d.html`). Results under "2D or 3D maps" below.
 
 ## Method choices
 
-- **Neighbours:** 3 closest by cosine similarity (`findNearestNeighbors(..., 3)` in `src/compare-models.ts`).
+- **Neighbours:** 3 closest by cosine similarity (`findNearestNeighbors(..., 3)` in `src/lib/embeddings.ts`).
 - **Agreement between two models:** how many of a person's 3 neighbours both models share, averaged over all people (0–3).
 - **Per-person agreement:** the same overlap averaged over every pair of models, as a fraction (0–100%).
 - **Field / gender score:** share of a person's 3 neighbours with the same tag, averaged over people, shown against the chance of a random other person sharing it.
@@ -45,11 +46,28 @@ People the models disagree on most: Marie Curie (33%), William Shakespeare (40%)
 - Einstein is her 3rd closest (small model), but she is only his 7th: the link is one-sided.
 - t-SNE puts 73% of her neighbour weight on a group of women and 14% on scientists, so the map places her with the women, far from Einstein.
 - Across models, Einstein is in her top 3 for four of five models; the other places go mostly to women (Mother Teresa, Nightingale, Simone Weil, Beauvoir, Chanel). Gemini alone gives her Tesla instead of Einstein.
-- **Perplexity (small model, seed 42):** raising it shifts her t-SNE weight from women to scientists (women 83% → 78% → 73% → 66%, scientists 17% → 20% → 22% → 24% at perplexity 10/15/20/30; here "women" is every woman in the tags file and "scientists" the Science & invention field, so the baseline differs from the 73%/14% above). She does not move towards the middle: her nearest people on the map stay Chanel, Nightingale and Beauvoir. Instead the whole scientist group moves next to the women's group, so Einstein goes from her 58th nearest on the map (of 67) at perplexity 10 to 38th–43rd at 15–30.
+- **Perplexity (small model, seed 42):** raising it shifts her t-SNE weight from women to scientists (women 83% → 78% → 73% → 66%, scientists 17% → 20% → 22% → 24% at perplexity 10/15/20/30; here "women" is every woman in the tags file and "scientists" the Science & invention field, so the baseline differs from the 73%/14% above). She does not move towards the middle: her nearest people on the map stay Chanel, Nightingale and Beauvoir. Instead the whole scientist group moves next to the women's group, so Einstein goes from her 58th nearest on the map (of 67) at perplexity 10 to 38th–43rd at 15–30. These ranks are for seed 42 only; see "2D or 3D maps" for how much they change with the seed.
 
 ### Shakespeare
 
 The OpenAI models and Gemini group him mostly with writers (Dante, Cervantes). Qwen pairs him with Bach, Leonardo and Newton, closer to "famous genius" than "writer". Mistral mixes the two.
+
+## 2D or 3D maps
+
+Measure: the share of each person's 3 true closest people (cosine similarity on the full embeddings) who are also among their 3 nearest points on the t-SNE map, averaged over everyone. Placing people at random would keep about 4%.
+
+| Model | 2D p10 | 3D p10 | 2D p30 | 3D p30 |
+|---|---|---|---|---|
+| text-embedding-3-small | 70% | 69% | 66% | 73% |
+| text-embedding-3-large | 65% | 68% | 62% | 71% |
+| qwen3-embedding-8b | 68% | 68% | 58% | 65% |
+| mistral-embed-2312 | 68% | 70% | 62% | 67% |
+| gemini-embedding-2 | 64% | 65% | 63% | 68% |
+
+- **The 2D map is already fairly faithful:** it keeps about two thirds of everyone's 3 closest neighbours.
+- **3D only helps at higher perplexity:** about the same as 2D at perplexity 10 (−1 to +3 points), 5–9 points better at 30. One seed per cell; with text-embedding-3-small, seeds 42, 7 and 1234 moved these by 1–3 points.
+- **3D doesn't fix Marie Curie.** Einstein is her 3rd closest in the embeddings, but in all 12 small-model layouts tried (2D/3D × perplexity 10/30 × 3 seeds) her 3 nearest points on the map are women.
+- **The main page's "Einstein is her #59 nearest at perplexity 10" depends on the seed:** across seeds 42, 7 and 1234 it was 58th, 33rd and 42nd. That her map neighbours are women holds for every seed, and raising perplexity doesn't reliably bring Einstein closer (seed 7: 33rd at perplexity 10, 43rd at 30). The page's findings card now states only the seed-independent part.
 
 ## Limits
 

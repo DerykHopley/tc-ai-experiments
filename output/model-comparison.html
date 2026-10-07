@@ -341,26 +341,33 @@
     }
     addFinding('Marie Curie sits between women and scientists.', parts);
 
-    // 3. Marie Curie on the first model's map, at the lowest and highest perplexity
+    // 3. Marie Curie on the first model's map. Exact distances on a t-SNE map change with the
+    // random start (seed), so only state what held for every seed we tried: who her nearest points are.
     const layouts = panels[0].layouts;
-    if (layouts.length > 1) {
+    if (layouts.length) {
       const names = panels[0].points.map((p) => p.name);
-      const onMap = (layout) => {
+      const nearestOnMap = (layout) => {
         const at = (name) => layout.positions[names.indexOf(name)];
         const [cx, cy] = at(curie);
-        const byDistance = names.filter((n) => n !== curie)
-          .sort((a, b) => Math.hypot(at(a)[0] - cx, at(a)[1] - cy) - Math.hypot(at(b)[0] - cx, at(b)[1] - cy));
-        return { perplexity: layout.perplexity, einsteinRank: byDistance.indexOf(einstein) + 1, nearest: byDistance.slice(0, 3) };
+        return names.filter((n) => n !== curie)
+          .sort((a, b) => Math.hypot(at(a)[0] - cx, at(a)[1] - cy) - Math.hypot(at(b)[0] - cx, at(b)[1] - cy))
+          .slice(0, 3);
       };
-      const first = onMap(layouts[0]), last = onMap(layouts[layouts.length - 1]);
-      const allWomen = layouts.every((layout) => onMap(layout).nearest.every((n) => tags[n].gender === tags[curie].gender));
-      addFinding('On the map, perplexity moves groups more than it moves her.', [
-        'On the ' + short(models[0]) + ' map, Einstein is her #' + first.einsteinRank + ' nearest person at perplexity ' + first.perplexity +
-          ' and #' + last.einsteinRank + ' at ' + last.perplexity + ' (of ' + (names.length - 1) + '). ' +
-          (allWomen
-            ? 'Her 3 nearest on the map are women at every perplexity, so she gets closer to Einstein because the groups move, not because she leaves hers.'
-            : 'Her 3 nearest on the map: ' + listNames(first.nearest) + ' at ' + first.perplexity + '; ' + listNames(last.nearest) + ' at ' + last.perplexity + '.'),
-      ]);
+      const nearest = layouts.map(nearestOnMap);
+      const allWomen = nearest.every((names3) => names3.every((n) => tags[n].gender === tags[curie].gender));
+      const einsteinRank = closest(0, curie).indexOf(einstein) + 1;
+      const perplexities = listNames(layouts.map((l) => String(l.perplexity)));
+      if (allWomen && einsteinRank && !nearest.some((names3) => names3.includes(einstein))) {
+        addFinding('The map hides her link to Einstein.', [
+          'On the ' + short(models[0]) + ' map, her 3 nearest points are women at every perplexity (' + perplexities + '), ' +
+            'although Einstein is her ' + ['', '1st', '2nd', '3rd'][einsteinRank] + ' closest in the full embeddings. ' +
+            'How far away he lands changes with the random start of the layout, so read the map for groups, not exact distances.',
+        ]);
+      } else {
+        addFinding('Her nearest points on the map:', [
+          layouts.map((l, i) => listNames(nearest[i]) + ' at perplexity ' + l.perplexity).join('; ') + ' (' + short(models[0]) + ').',
+        ]);
+      }
     }
   }
 

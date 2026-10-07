@@ -1,5 +1,6 @@
 import type { Comparison, Tags } from './model-comparison.ts';
 import type { ScatterPanel } from './tsne-scatter.ts';
+import { THEME_CSS } from './page-theme.ts';
 
 export type ComparisonPageData = {
   title: string;
@@ -25,54 +26,7 @@ export function renderComparisonHtml(page: ComparisonPageData): string {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${escape(page.title)}</title>
 <style>
-  .viz-root {
-    color-scheme: light;
-    --page: #f9f9f7;
-    --surface-1: #fcfcfb;
-    --text-primary: #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted: #898781;
-    --hairline: #e1e0d9;
-    --baseline: #c3c2b7;
-    --border: rgba(11, 11, 11, 0.1);
-    --wash: rgba(11, 11, 11, 0.04);
-    --series-1: #2a78d6;
-    --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #0d366b;
-    --seq-ink-1: #0b0b0b; --seq-ink-2: #0b0b0b; --seq-ink-3: #ffffff; --seq-ink-4: #ffffff; --seq-ink-5: #ffffff;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:where(:not([data-theme="light"])) .viz-root {
-      color-scheme: dark;
-      --page: #0d0d0d;
-      --surface-1: #1a1a19;
-      --text-primary: #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted: #898781;
-      --hairline: #2c2c2a;
-      --baseline: #383835;
-      --border: rgba(255, 255, 255, 0.1);
-      --wash: rgba(255, 255, 255, 0.05);
-      --series-1: #3987e5;
-      --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
-      --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
-    }
-  }
-  :root[data-theme="dark"] .viz-root {
-    color-scheme: dark;
-    --page: #0d0d0d;
-    --surface-1: #1a1a19;
-    --text-primary: #ffffff;
-    --text-secondary: #c3c2b7;
-    --text-muted: #898781;
-    --hairline: #2c2c2a;
-    --baseline: #383835;
-    --border: rgba(255, 255, 255, 0.1);
-    --wash: rgba(255, 255, 255, 0.05);
-    --series-1: #3987e5;
-    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
-    --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
-  }
-  body { margin: 0; }
+${THEME_CSS}  body { margin: 0; }
   .viz-root {
     min-height: 100vh;
     background: var(--page);
@@ -361,26 +315,33 @@ export function renderComparisonHtml(page: ComparisonPageData): string {
     }
     addFinding('Marie Curie sits between women and scientists.', parts);
 
-    // 3. Marie Curie on the first model's map, at the lowest and highest perplexity
+    // 3. Marie Curie on the first model's map. Exact distances on a t-SNE map change with the
+    // random start (seed), so only state what held for every seed we tried: who her nearest points are.
     const layouts = panels[0].layouts;
-    if (layouts.length > 1) {
+    if (layouts.length) {
       const names = panels[0].points.map((p) => p.name);
-      const onMap = (layout) => {
+      const nearestOnMap = (layout) => {
         const at = (name) => layout.positions[names.indexOf(name)];
         const [cx, cy] = at(curie);
-        const byDistance = names.filter((n) => n !== curie)
-          .sort((a, b) => Math.hypot(at(a)[0] - cx, at(a)[1] - cy) - Math.hypot(at(b)[0] - cx, at(b)[1] - cy));
-        return { perplexity: layout.perplexity, einsteinRank: byDistance.indexOf(einstein) + 1, nearest: byDistance.slice(0, 3) };
+        return names.filter((n) => n !== curie)
+          .sort((a, b) => Math.hypot(at(a)[0] - cx, at(a)[1] - cy) - Math.hypot(at(b)[0] - cx, at(b)[1] - cy))
+          .slice(0, 3);
       };
-      const first = onMap(layouts[0]), last = onMap(layouts[layouts.length - 1]);
-      const allWomen = layouts.every((layout) => onMap(layout).nearest.every((n) => tags[n].gender === tags[curie].gender));
-      addFinding('On the map, perplexity moves groups more than it moves her.', [
-        'On the ' + short(models[0]) + ' map, Einstein is her #' + first.einsteinRank + ' nearest person at perplexity ' + first.perplexity +
-          ' and #' + last.einsteinRank + ' at ' + last.perplexity + ' (of ' + (names.length - 1) + '). ' +
-          (allWomen
-            ? 'Her 3 nearest on the map are women at every perplexity, so she gets closer to Einstein because the groups move, not because she leaves hers.'
-            : 'Her 3 nearest on the map: ' + listNames(first.nearest) + ' at ' + first.perplexity + '; ' + listNames(last.nearest) + ' at ' + last.perplexity + '.'),
-      ]);
+      const nearest = layouts.map(nearestOnMap);
+      const allWomen = nearest.every((names3) => names3.every((n) => tags[n].gender === tags[curie].gender));
+      const einsteinRank = closest(0, curie).indexOf(einstein) + 1;
+      const perplexities = listNames(layouts.map((l) => String(l.perplexity)));
+      if (allWomen && einsteinRank && !nearest.some((names3) => names3.includes(einstein))) {
+        addFinding('The map hides her link to Einstein.', [
+          'On the ' + short(models[0]) + ' map, her 3 nearest points are women at every perplexity (' + perplexities + '), ' +
+            'although Einstein is her ' + ['', '1st', '2nd', '3rd'][einsteinRank] + ' closest in the full embeddings. ' +
+            'How far away he lands changes with the random start of the layout, so read the map for groups, not exact distances.',
+        ]);
+      } else {
+        addFinding('Her nearest points on the map:', [
+          layouts.map((l, i) => listNames(nearest[i]) + ' at perplexity ' + l.perplexity).join('; ') + ' (' + short(models[0]) + ').',
+        ]);
+      }
     }
   }
 

@@ -3,3 +3,4 @@ node_modules/
 # Keep the generated page so it can be viewed without an API key
 output/*
 !output/model-comparison.html
+!output/map-3d.html

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "tsx --env-file=.env --no-deprecation src/compare-models.ts",
+    "map3d": "tsx --env-file=.env --no-deprecation src/map-3d.ts",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\""
   },

@@ -1,29 +1,16 @@
-import { OpenAI } from 'openai';
 import fs from 'fs';
 import figures from '../data/historical_figures.json' with { type: 'json' };
 import figureTags from '../data/historical_figures_tags.json' with { type: 'json' };
-import { tsne2d, type ScatterPanel } from './lib/tsne-scatter.ts';
+import {
+  models,
+  getEmbeddings,
+  findNearestNeighbors,
+  type TextEmbedding,
+} from './lib/embeddings.ts';
+import { tsneLayout, type ScatterPanel } from './lib/tsne-scatter.ts';
 import { compareModels, type Tags } from './lib/model-comparison.ts';
 import { renderComparisonHtml } from './lib/model-comparison-page.ts';
 
-const client = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY!,
-});
-
-type Embedding = number[];
-type TextEmbedding = {
-  text: string;
-  embedding: Embedding;
-};
-
-const models = [
-  'openai/text-embedding-3-small',
-  'openai/text-embedding-3-large',
-  'qwen/qwen3-embedding-8b',
-  'mistralai/mistral-embed-2312',
-  'google/gemini-embedding-2',
-];
 // t-SNE perplexity: roughly how many neighbours each point's position takes into
 // account. The page has a switcher; the first value is shown by default.
 const perplexities = [10, 15, 20, 30];
@@ -55,7 +42,7 @@ const results = await Promise.allSettled(
     const round = (value: number) => Math.round(value * 100) / 100; // keeps the page small
     const layouts = perplexities.map((perplexity) => ({
       perplexity,
-      positions: tsne2d(vectors, { perplexity }).map((point) =>
+      positions: tsneLayout(vectors, { perplexity }).map((point) =>
         point.map(round)
       ),
     }));
@@ -168,43 +155,3 @@ fs.writeFileSync(
   })
 );
 console.log(`Wrote ${outputFile}`);
-
-async function getEmbeddings(
-  strings: string[],
-  model: string = 'openai/text-embedding-3-small'
-): Promise<TextEmbedding[]> {
-  const response = await client.embeddings.create({
-    model: model,
-    input: strings,
-  });
-
-  // Scale every vector to length 1 so the dot product below is cosine similarity
-  // for any model, not just those that already return unit vectors
-  return response.data.map(({ embedding, index }) => {
-    const length = Math.hypot(...embedding);
-    return {
-      embedding: embedding.map((value) => value / length),
-      text: strings[index],
-    };
-  });
-}
-
-function findNearestNeighbors(
-  query: Embedding,
-  allEmbeddings: TextEmbedding[],
-  k: number = 5
-): { text: string; distance: number }[] {
-  return allEmbeddings
-    .map((item) => ({
-      text: item.text,
-      distance: dotProductSimilarity(query, item.embedding),
-    }))
-    .sort((a, b) => b.distance - a.distance) // higher dot product = more similar
-    .slice(0, k);
-}
-
-// dot product similarity, which is the same as cosine similarity
-// for normalized vectors, which is the case for OpenAI embeddings.
-function dotProductSimilarity(a: Embedding, b: Embedding): number {
-  return a.reduce((acc, val, i) => acc + val * b[i], 0);
-}
