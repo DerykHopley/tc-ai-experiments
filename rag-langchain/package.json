@@ -6,13 +6,15 @@
   "scripts": {
     "format": "prettier --write 'src/**/*.ts'",
     "chroma": "chroma run --path ./chroma-data --port 8001",
-    "reindex": "npm run file src/reindex.ts",
-    "1-load": "npm run file src/1-load.ts",
-    "2-split": "npm run file src/2-split.ts",
-    "3-search": "npm run file src/3-search.ts",
-    "4-rag": "npm run file src/4-rag.ts",
-    "5-visualize": "npm run file src/5-visualize.ts",
-    "6-walkthrough": "npm run file src/6-walkthrough.ts",
+    "reindex": "tsx --env-file-if-exists=.env --no-deprecation src/reindex.ts",
+    "1-load": "tsx --env-file-if-exists=.env --no-deprecation src/1-load.ts",
+    "2-split": "tsx --env-file-if-exists=.env --no-deprecation src/2-split.ts",
+    "3-search": "tsx --env-file-if-exists=.env --no-deprecation src/3-search.ts",
+    "4-rag": "tsx --env-file-if-exists=.env --no-deprecation src/4-rag.ts",
+    "5-visualize": "tsx --env-file-if-exists=.env --no-deprecation src/5-visualize.ts",
+    "6-walkthrough": "tsx --env-file-if-exists=.env --no-deprecation src/6-walkthrough.ts",
+    "7-evaluate": "tsx --env-file-if-exists=.env --no-deprecation src/7-evaluate.ts",
+    "8-compare": "tsx --env-file-if-exists=.env --no-deprecation src/8-compare.ts",
     "file": "tsx --env-file-if-exists=.env --no-deprecation"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "@thi.ng/tsne": "^0.1.75",
     "chromadb": "^3.5.0",
     "d3-dsv": "^3.0.1",
-    "langchain": "^1.5.15"
+    "langchain": "^1.5.15",
+    "zod": "^4.6.5"
   }
 }

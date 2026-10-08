@@ -8,6 +8,7 @@ These pages come from the latest run. They're committed in `output/` and publish
 
 - **[Walkthrough](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/walkthrough.html)**: one question followed through all 12 steps, from CSV row to answer, with the real data at each step.
 - **[Embedding map](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/embedding-map.html)**: every chunk on a 2D t-SNE map, with genre and artist highlights and what each query retrieves.
+- **[Evaluation](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/comparison.html)**: 13 test questions scored with an LLM as judge, comparing three retrieval strategies. It links to each run's page, where every claim and the judge's verdict on it are listed.
 
 ## Setup
 
@@ -28,6 +29,8 @@ Run the stages in order. Each one reuses the earlier stages from `src/lib/pipeli
 | `npm run 4-rag -- "question"` | RAG | Retrieve 6 chunks, fill a `ChatPromptTemplate`, then `gpt-5-mini` answers using only that context. |
 | `npm run 5-visualize` | Looking at embeddings | Writes `output/embedding-map.html`: every chunk on a 2D t-SNE map, with genre or artist highlights, each query's top 6 retrieved chunks, and a nearest-neighbour check on the full vectors. |
 | `npm run 6-walkthrough -- "question"` | The whole pipeline, one question | Writes `output/walkthrough.html`. It follows one real question through all 12 steps, with the data each step produced: CSV row, Document, chunks (overlap marked), the vector as a colour strip, the search with the cut-off, how the #1 score adds up, the filled prompt, token counts and the answer. |
+| `npm run 7-evaluate` | Evaluating the pipeline | Runs the 13 questions in `data/eval_questions.json` through the pipeline and scores retrieval (context recall and precision, no LLM) and answers (faithfulness, answer relevancy, correctness, refusal) with `gemini-2.5-flash` as judge. Choose how chunks are picked with `-- --strategy top-k`, `two-per-artist` or `one-per-artist`, and name the run with `-- --name`. Each run is saved as `output/eval-runs/<name>.json` with its own page. `-- --render` rebuilds the pages without API calls. |
+| `npm run 8-compare` | Comparing runs | Writes `output/eval-runs/comparison.html` from every saved run: average scores as a dot plot with a noise band, a question-by-question grid, and which artists each strategy retrieved. No API calls. |
 | `npm run reindex` | Rebuild the index | Drops the collection and embeds everything again. |
 
 ## How it flows
@@ -112,3 +115,37 @@ Models: `openai/text-embedding-3-small` and `openai/gpt-5-mini`, both through Op
 - **Queries sit at the edge of the map.** A short question is about 0.5–0.6 cosine distance from even its best match, which is further than chunks of the same artist are from each other. That's normal for question-to-document search, and it's why scores are only meaningful compared with each other.
 
 The genre families on the map are regex matches on MusicBrainz tags (`GENRES` in `src/5-visualize.ts`), so they're approximate. An artist can be in several families, and the tags are crowd-sourced.
+
+## What the first evaluation showed
+
+From the run on 2026-10-08 (13 questions; answers by `gpt-5-mini`, judged by `gemini-2.5-flash`): context recall 0.90, context precision 1.00, faithfulness 0.97, answer relevancy 0.63, correctness 0.83. It refused exactly when it should on 13 of 13.
+
+- **Every retrieval miss was crowding.** Shakira, Stevie Wonder, Kishore Kumar and Diljit Dosanjh were all missing because other artists took several of the 6 slots: J Balvin took 4, and Marvin Gaye and Aretha Franklin 3 each. Per-artist dedupe or MMR is the obvious next experiment.
+- **Faithful but incomplete.** Those answers stuck to what was retrieved (faithfulness 1.0), so correctness came out as "partial". The answer can't be better than retrieval.
+- **Answer relevancy measured the metric more than the answers.**
+  - The Afrobeat answer is complete and correct, but it ends with "I don't know … about any other artists". The judge called it noncommittal, and the Ragas rule turns that into 0.
+  - Short correct answers ("Stromae — Country: BE (Belgium).") score low, because the judge can't reconstruct the question from them.
+- **The judge is strict, and arguable.** It marked "Marvin Gaye is a classic soul / Motown singer" as not backed, although his tags include "motown" and "soul". Read the claim tables before trusting a faithfulness score.
+- **Context precision told us nothing here.** The relevant chunks were always at the top, so it was 1.00 everywhere. It would only become informative with noisier retrieval.
+- **The trap worked.** For "How many Grammys has Beyoncé won?", the data only has a "grammy winner" tag, and the model correctly declined to give a number.
+
+The judge would ideally be Claude, a different model family from the answering model. This OpenRouter workspace's guardrails block Anthropic models, so the judge is Gemini (`JUDGE_MODEL` in `src/lib/evaluate.ts`).
+
+## Capping chunks per artist
+
+The first evaluation showed that every retrieval miss came from one artist filling several of the 6 slots. Stage 7 can now cap that: fetch 30 candidates, then keep the nearest ones while allowing at most 2 (`two-per-artist`) or 1 (`one-per-artist`) chunks per artist. All four runs below were made on 2026-10-08 with the same 13 questions and the same judge. top-k was run twice to see how much the scores move with nothing changed.
+
+| Run | Recall | Faithfulness | Relevancy | Correctness | Refusal right |
+| --- | --- | --- | --- | --- | --- |
+| top-k (a) | 0.90 | 0.97 | 0.63 | 0.83 | 13/13 |
+| top-k (b) | 0.90 | 1.00 | 0.66 | 0.83 | 13/13 |
+| two-per-artist | 0.96 | 1.00 | 0.69 | **0.89** | 12/13 |
+| one-per-artist | **1.00** | 0.90 | 0.66 | 0.83 | 12/13 |
+
+- **The noise is real but small.** The two top-k runs retrieved exactly the same chunks, yet the judge scored the soul answer's faithfulness 0.75 once and 1.00 the other time.
+- **Two per artist was the best balance.** Shakira came back and the Latin answer became correct, while every artist still had room for a second chunk.
+- **One per artist found every expected artist, but the answers didn't get better.** It's a trade of depth for breadth:
+  - **Soul:** each artist's single chunk was a release list without genre tags. The model named the right artists anyway, so faithfulness was 0: nothing in the context said they were soul singers. Recall 1.00, faithfulness 0.
+  - **Afrobeat:** the extra variety brought in Prince (tagged "afro house; african"). The model included him, and the judge marked the answer incorrect against our narrower reference.
+- **Breadth cost the open question.** With either cap, JAŸ-Z's album chunks were dropped. The hip hop + R&B answer then named only Beyoncé and said it didn't know her albums, which the refusal check flags.
+- **What the numbers point to next:** the cap decides how many chunks an artist gets, but not which ones. Always pairing the artist's profile chunk (the one with the tags) with the best-matching detail chunk, a form of parent-document retrieval, might keep both breadth and grounding.

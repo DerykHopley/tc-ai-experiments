@@ -1,0 +1,91 @@
+[
+  {
+    "id": "afrobeat",
+    "group": "genre",
+    "question": "Which artists in the data make Afrobeat or other African music?",
+    "expected_artists": ["Fela Kuti", "Burna Boy", "Wizkid"],
+    "reference": "Fela Kuti, Burna Boy and Wizkid, all from Nigeria."
+  },
+  {
+    "id": "kpop",
+    "group": "genre",
+    "question": "Which K-pop groups are in the data?",
+    "expected_artists": ["BTS", "BLACKPINK"],
+    "reference": "BTS and BLACKPINK."
+  },
+  {
+    "id": "latin",
+    "group": "genre",
+    "question": "Which Latin music artists are in the data?",
+    "expected_artists": ["Bad Bunny", "J Balvin", "Shakira", "Daddy Yankee"],
+    "reference": "Bad Bunny, J Balvin, Shakira and Daddy Yankee."
+  },
+  {
+    "id": "bollywood",
+    "group": "genre",
+    "question": "Which artists are known for Indian film music or Bollywood?",
+    "expected_artists": ["A. R. Rahman", "Arijit Singh", "Lata Mangeshkar", "Kishore Kumar", "Diljit Dosanjh"],
+    "reference": "A. R. Rahman, Arijit Singh, Lata Mangeshkar and Kishore Kumar. Diljit Dosanjh is a Punjabi singer who also works in film."
+  },
+  {
+    "id": "soul",
+    "group": "genre",
+    "question": "Which classic soul or Motown singers are in the data?",
+    "expected_artists": ["Stevie Wonder", "Marvin Gaye", "Aretha Franklin"],
+    "reference": "Stevie Wonder, Marvin Gaye and Aretha Franklin."
+  },
+  {
+    "id": "hiphop-rnb",
+    "group": "open",
+    "question": "Which artists blend hip hop with R&B, and what are some of their albums?",
+    "note": "Open question with no single right list, so only the judge-based metrics apply."
+  },
+  {
+    "id": "zombie",
+    "group": "fact",
+    "question": "In what year did Fela Kuti release Zombie?",
+    "expected_artists": ["Fela Kuti"],
+    "reference": "1976."
+  },
+  {
+    "id": "stromae",
+    "group": "fact",
+    "question": "Which country is Stromae from?",
+    "expected_artists": ["Stromae"],
+    "reference": "Belgium."
+  },
+  {
+    "id": "adele-21",
+    "group": "fact",
+    "question": "When did Adele release 21?",
+    "expected_artists": ["Adele"],
+    "reference": "2011."
+  },
+  {
+    "id": "daft-punk",
+    "group": "fact",
+    "question": "Where are Daft Punk from, and since when have they been active?",
+    "expected_artists": ["Daft Punk"],
+    "reference": "France, active since 1993."
+  },
+  {
+    "id": "grammys",
+    "group": "trap",
+    "question": "How many Grammy awards has Beyoncé won?",
+    "expected_artists": ["Beyoncé"],
+    "should_refuse": true,
+    "note": "The data tags Beyoncé as a 'grammy winner' but has no count, so a faithful answer says it doesn't know the number."
+  },
+  {
+    "id": "australia",
+    "group": "out-of-scope",
+    "question": "What is the capital of Australia?",
+    "should_refuse": true
+  },
+  {
+    "id": "world-cup",
+    "group": "out-of-scope",
+    "question": "Who won the 2018 FIFA World Cup?",
+    "should_refuse": true
+  }
+]

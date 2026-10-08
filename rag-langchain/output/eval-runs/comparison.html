@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Retrieval Strategy Comparison</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --hairline: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.1);
+    --wash: rgba(11, 11, 11, 0.06);
+    --muted-mark: #c3c2b7;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --div-neg: #2a78d6;
+    --div-pos: #e34948;
+    --div-mid: #f0efec;
+    --code-bg: rgba(11, 11, 11, 0.04);
+    --mark-bg: rgba(42, 120, 214, 0.16);
+    --mark-alt-bg: rgba(235, 104, 52, 0.16);
+    --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #0d366b;
+    --seq-ink-1: #0b0b0b; --seq-ink-2: #0b0b0b; --seq-ink-3: #ffffff; --seq-ink-4: #ffffff; --seq-ink-5: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --hairline: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.1);
+      --wash: rgba(255, 255, 255, 0.08);
+      --muted-mark: #4a4a46;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --div-neg: #3987e5;
+      --div-pos: #e66767;
+      --div-mid: #383835;
+      --code-bg: rgba(255, 255, 255, 0.05);
+      --mark-bg: rgba(57, 135, 229, 0.28);
+      --mark-alt-bg: rgba(217, 89, 38, 0.3);
+      --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+      --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --border: rgba(255, 255, 255, 0.1);
+    --wash: rgba(255, 255, 255, 0.08);
+    --muted-mark: #4a4a46;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --div-neg: #3987e5;
+    --div-pos: #e66767;
+    --div-mid: #383835;
+    --code-bg: rgba(255, 255, 255, 0.05);
+    --mark-bg: rgba(57, 135, 229, 0.28);
+    --mark-alt-bg: rgba(217, 89, 38, 0.3);
+    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+    --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+  }
+  body { margin: 0; background: #f9f9f7; }
+  @media (prefers-color-scheme: dark) { body { background: #0d0d0d; } }
+  .viz-root { min-height: 100vh; background: var(--page); color: var(--text-primary); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; padding: 2rem 16px; box-sizing: border-box; }
+  main { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.1rem; margin: 0 0 0.5rem; }
+  p { color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.6rem; }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-size: 0.85rem; color: var(--text-secondary); margin: 0.5rem 0; }
+  .key { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .strategies { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; }
+  svg#dots { display: block; width: 100%; height: auto; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  thead th { color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; }
+  .tnum { font-variant-numeric: tabular-nums; }
+  details summary { cursor: pointer; color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; }
+  .matrix { border-collapse: separate; border-spacing: 2px; }
+  .matrix td, .matrix th { border-bottom: none; }
+  .matrix .cell { text-align: center; vertical-align: middle; font-variant-numeric: tabular-nums; border-radius: 4px; min-width: 90px; font-size: 0.8rem; }
+  .matrix .na { color: var(--text-muted); background: var(--wash); }
+  .matrix th.q, th.q { font-weight: 400; max-width: 320px; }
+  .group-row th { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding-top: 0.8rem; }
+  .colhead { display: inline-flex; align-items: center; gap: 0.35rem; }
+  select { font: inherit; font-size: 0.9rem; color: var(--text-primary); background: var(--page); border: 1px solid var(--border); border-radius: 8px; padding: 0.35rem 0.5rem; }
+  label { font-size: 0.85rem; color: var(--text-secondary); display: inline-flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+  .ramp { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.6rem; flex-wrap: wrap; }
+  .ramp span.sw { width: 26px; height: 12px; border-radius: 3px; display: inline-block; }
+  .achip { display: inline-block; font-size: 0.78rem; border: 1px solid var(--hairline); border-radius: 999px; padding: 0.05rem 0.45rem; margin: 0.1rem 0.15rem 0.1rem 0; color: var(--text-secondary); }
+  .achip.exp { color: var(--text-primary); border-color: var(--text-secondary); }
+  .missing { font-size: 0.78rem; color: var(--text-primary); margin-top: 0.25rem; font-weight: 600; }
+  .verdict { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+  .tooltip { position: fixed; pointer-events: none; display: none; white-space: nowrap; padding: 0.35rem 0.55rem; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 6px; font-size: 0.8rem; box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-variant-numeric: tabular-nums; }
+  .notes li { color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<main>
+  <h1>Comparing retrieval strategies</h1>
+  <p>The same 13 test questions, run through the pipeline with different ways of picking the top 6 chunks, and scored by the same judge (<code>google/gemini-2.5-flash</code>).</p>
+  <ul class="strategies">
+    <li><b>top-k</b>: the 6 nearest chunks. One artist can fill several slots.</li>
+    <li><b>two-per-artist</b>: the nearest chunks, at most 2 from any artist.</li>
+    <li><b>one-per-artist</b>: the nearest chunk from each of 6 different artists.</li>
+  </ul>
+  <div class="legend" aria-label="Runs"><span class="key"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="var(--series-1)" stroke="var(--series-1)" stroke-width="2"/></svg>top-k-a</span><span class="key"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="var(--surface-1)" stroke="var(--series-1)" stroke-width="2"/></svg>top-k-b</span><span class="key"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="var(--series-2)" stroke="var(--series-2)" stroke-width="2"/></svg>two-per-artist</span><span class="key"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="var(--series-3)" stroke="var(--series-3)" stroke-width="2"/></svg>one-per-artist</span></div>
+
+  <section class="card">
+    <h2>Average scores</h2>
+    <p>One row per metric, one dot per run (nudged up or down so equal scores stay visible). The grey band spans the runs that used the same strategy: how much the scores move when nothing changes. Differences inside that band are noise.</p>
+    <svg id="dots" role="img" aria-label="Average score per metric for each run"></svg>
+    <details><summary>Show as a table</summary>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Metric</th><th class="tnum">top-k-a</th><th class="tnum">top-k-b</th><th class="tnum">two-per-artist</th><th class="tnum">one-per-artist</th></tr></thead>
+        <tbody><tr><th>Context recall</th><td class="tnum">0.90</td><td class="tnum">0.90</td><td class="tnum">0.96</td><td class="tnum">1.00</td></tr><tr><th>Context precision</th><td class="tnum">1.00</td><td class="tnum">1.00</td><td class="tnum">1.00</td><td class="tnum">0.99</td></tr><tr><th>Faithfulness</th><td class="tnum">0.97</td><td class="tnum">1.00</td><td class="tnum">1.00</td><td class="tnum">0.90</td></tr><tr><th>Answer relevancy</th><td class="tnum">0.63</td><td class="tnum">0.66</td><td class="tnum">0.69</td><td class="tnum">0.66</td></tr><tr><th>Correctness</th><td class="tnum">0.83</td><td class="tnum">0.83</td><td class="tnum">0.89</td><td class="tnum">0.83</td></tr><tr><th>Refusal right</th><td class="tnum">1.00</td><td class="tnum">1.00</td><td class="tnum">0.92</td><td class="tnum">0.92</td></tr></tbody>
+      </table></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Question by question</h2>
+    <label>Metric <select id="metric"></select></label>
+    <div class="table-wrap"><table class="matrix" id="grid"></table></div>
+    <div class="ramp">score <span class="sw" style="background:var(--seq-1)"></span>0–0.2 <span class="sw" style="background:var(--seq-2)"></span>0.2–0.4 <span class="sw" style="background:var(--seq-3)"></span>0.4–0.6 <span class="sw" style="background:var(--seq-4)"></span>0.6–0.8 <span class="sw" style="background:var(--seq-5)"></span>0.8–1 <span>· “–” doesn’t apply</span></div>
+  </section>
+
+  <section class="card">
+    <h2>What each strategy retrieved</h2>
+    <p>The artists behind the 6 retrieved chunks. <b>×n</b> means n chunks from the same artist, ✓ marks an expected artist, and the line below names expected artists that didn’t come back.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Question</th><th><span class="colhead"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="var(--series-1)" stroke="var(--series-1)" stroke-width="2"/></svg>top-k-a</span></th><th><span class="colhead"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="var(--surface-1)" stroke="var(--series-1)" stroke-width="2"/></svg>top-k-b</span></th><th><span class="colhead"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="var(--series-2)" stroke="var(--series-2)" stroke-width="2"/></svg>two-per-artist</span></th><th><span class="colhead"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="var(--series-3)" stroke="var(--series-3)" stroke-width="2"/></svg>one-per-artist</span></th></tr></thead>
+      <tbody><tr><th class="q">Which artists in the data make Afrobeat or other African music?</th><td><span class="achip exp">✓ Fela Kuti <b>×3</b></span><span class="achip exp">✓ Burna Boy <b>×2</b></span><span class="achip exp">✓ Wizkid</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Fela Kuti <b>×3</b></span><span class="achip exp">✓ Burna Boy <b>×2</b></span><span class="achip exp">✓ Wizkid</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Fela Kuti <b>×2</b></span><span class="achip exp">✓ Burna Boy <b>×2</b></span><span class="achip exp">✓ Wizkid <b>×2</b></span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Fela Kuti</span><span class="achip exp">✓ Burna Boy</span><span class="achip exp">✓ Wizkid</span><span class="achip">Beyoncé</span><span class="achip">Aretha Franklin</span><span class="achip">Prince</span><div class="verdict">answer: incorrect</div></td></tr><tr><th class="q">Which K-pop groups are in the data?</th><td><span class="achip exp">✓ BLACKPINK <b>×2</b></span><span class="achip exp">✓ BTS <b>×3</b></span><span class="achip">Kanye West Tribute Band</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ BLACKPINK <b>×2</b></span><span class="achip exp">✓ BTS <b>×3</b></span><span class="achip">Kanye West Tribute Band</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ BLACKPINK <b>×2</b></span><span class="achip exp">✓ BTS <b>×2</b></span><span class="achip">Kanye West Tribute Band</span><span class="achip">Kendrick Lamar</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ BLACKPINK</span><span class="achip exp">✓ BTS</span><span class="achip">Kanye West Tribute Band</span><span class="achip">Kendrick Lamar</span><span class="achip">Beyoncé</span><span class="achip">Kishore Kumar</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">Which Latin music artists are in the data?</th><td><span class="achip exp">✓ J Balvin <b>×4</b></span><span class="achip exp">✓ Bad Bunny</span><span class="achip exp">✓ Daddy Yankee</span><div class="missing">missing: Shakira</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ J Balvin <b>×4</b></span><span class="achip exp">✓ Bad Bunny</span><span class="achip exp">✓ Daddy Yankee</span><div class="missing">missing: Shakira</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ J Balvin <b>×2</b></span><span class="achip exp">✓ Bad Bunny</span><span class="achip exp">✓ Daddy Yankee <b>×2</b></span><span class="achip exp">✓ Shakira</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ J Balvin</span><span class="achip exp">✓ Bad Bunny</span><span class="achip exp">✓ Daddy Yankee</span><span class="achip exp">✓ Shakira</span><span class="achip">Cardi B</span><span class="achip">Bruno Mars</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">Which artists are known for Indian film music or Bollywood?</th><td><span class="achip exp">✓ A. R. Rahman <b>×2</b></span><span class="achip exp">✓ Arijit Singh <b>×3</b></span><span class="achip exp">✓ Lata Mangeshkar</span><div class="missing">missing: Kishore Kumar, Diljit Dosanjh</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ A. R. Rahman <b>×2</b></span><span class="achip exp">✓ Arijit Singh <b>×3</b></span><span class="achip exp">✓ Lata Mangeshkar</span><div class="missing">missing: Kishore Kumar, Diljit Dosanjh</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ A. R. Rahman <b>×2</b></span><span class="achip exp">✓ Arijit Singh <b>×2</b></span><span class="achip exp">✓ Lata Mangeshkar <b>×2</b></span><div class="missing">missing: Kishore Kumar, Diljit Dosanjh</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ A. R. Rahman</span><span class="achip exp">✓ Arijit Singh</span><span class="achip exp">✓ Lata Mangeshkar</span><span class="achip exp">✓ Kishore Kumar</span><span class="achip exp">✓ Diljit Dosanjh</span><span class="achip">Prince</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">Which classic soul or Motown singers are in the data?</th><td><span class="achip exp">✓ Marvin Gaye <b>×3</b></span><span class="achip exp">✓ Aretha Franklin <b>×3</b></span><div class="missing">missing: Stevie Wonder</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ Marvin Gaye <b>×3</b></span><span class="achip exp">✓ Aretha Franklin <b>×3</b></span><div class="missing">missing: Stevie Wonder</div><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ Marvin Gaye <b>×2</b></span><span class="achip exp">✓ Aretha Franklin <b>×2</b></span><span class="achip">Frank Sinatra</span><span class="achip exp">✓ Stevie Wonder</span><div class="verdict">answer: partial</div></td><td><span class="achip exp">✓ Marvin Gaye</span><span class="achip exp">✓ Aretha Franklin</span><span class="achip">Frank Sinatra</span><span class="achip exp">✓ Stevie Wonder</span><span class="achip">Elvis Presley</span><span class="achip">Michael Jackson</span><div class="verdict">answer: partial</div></td></tr><tr><th class="q">Which artists blend hip hop with R&amp;B, and what are some of their albums?</th><td><span class="achip">JAŸ-Z <b>×3</b></span><span class="achip">Kendrick Lamar</span><span class="achip">Rihanna</span><span class="achip">Beyoncé</span></td><td><span class="achip">JAŸ-Z <b>×3</b></span><span class="achip">Kendrick Lamar</span><span class="achip">Rihanna</span><span class="achip">Beyoncé</span></td><td><span class="achip">JAŸ-Z <b>×2</b></span><span class="achip">Kendrick Lamar</span><span class="achip">Rihanna</span><span class="achip">Beyoncé</span><span class="achip">Drake</span></td><td><span class="achip">JAŸ-Z</span><span class="achip">Kendrick Lamar</span><span class="achip">Rihanna</span><span class="achip">Beyoncé</span><span class="achip">Drake</span><span class="achip">Burna Boy</span></td></tr><tr><th class="q">In what year did Fela Kuti release Zombie?</th><td><span class="achip exp">✓ Fela Kuti <b>×3</b></span><span class="achip">Burna Boy <b>×2</b></span><span class="achip">Wizkid</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Fela Kuti <b>×3</b></span><span class="achip">Burna Boy <b>×2</b></span><span class="achip">Wizkid</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Fela Kuti <b>×2</b></span><span class="achip">Burna Boy <b>×2</b></span><span class="achip">Wizkid <b>×2</b></span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Fela Kuti</span><span class="achip">Burna Boy</span><span class="achip">Wizkid</span><span class="achip">JAŸ-Z</span><span class="achip">Daft Punk</span><span class="achip">Eminem</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">Which country is Stromae from?</th><td><span class="achip exp">✓ Stromae <b>×2</b></span><span class="achip">Bruno Mars</span><span class="achip">Daft Punk</span><span class="achip">Stevie Wonder</span><span class="achip">The Weeknd</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Stromae <b>×2</b></span><span class="achip">Bruno Mars</span><span class="achip">Daft Punk</span><span class="achip">Stevie Wonder</span><span class="achip">The Weeknd</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Stromae <b>×2</b></span><span class="achip">Bruno Mars</span><span class="achip">Daft Punk</span><span class="achip">Stevie Wonder</span><span class="achip">The Weeknd</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Stromae</span><span class="achip">Bruno Mars</span><span class="achip">Daft Punk</span><span class="achip">Stevie Wonder</span><span class="achip">The Weeknd</span><span class="achip">Burna Boy</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">When did Adele release 21?</th><td><span class="achip exp">✓ Adele <b>×3</b></span><span class="achip">Ed Sheeran</span><span class="achip">Billie Eilish</span><span class="achip">Olivia Rodrigo</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Adele <b>×3</b></span><span class="achip">Ed Sheeran</span><span class="achip">Billie Eilish</span><span class="achip">Olivia Rodrigo</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Adele <b>×2</b></span><span class="achip">Ed Sheeran</span><span class="achip">Billie Eilish</span><span class="achip">Olivia Rodrigo</span><span class="achip">Sia</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Adele</span><span class="achip">Ed Sheeran</span><span class="achip">Billie Eilish</span><span class="achip">Olivia Rodrigo</span><span class="achip">Sia</span><span class="achip">Ariana Grande</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">Where are Daft Punk from, and since when have they been active?</th><td><span class="achip exp">✓ Daft Punk <b>×3</b></span><span class="achip">Stromae</span><span class="achip">Prince</span><span class="achip">Kendrick Lamar</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Daft Punk <b>×3</b></span><span class="achip">Stromae</span><span class="achip">Prince</span><span class="achip">Kendrick Lamar</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Daft Punk <b>×2</b></span><span class="achip">Stromae</span><span class="achip">Prince</span><span class="achip">Kendrick Lamar</span><span class="achip">BTS</span><div class="verdict">answer: correct</div></td><td><span class="achip exp">✓ Daft Punk</span><span class="achip">Stromae</span><span class="achip">Prince</span><span class="achip">Kendrick Lamar</span><span class="achip">BTS</span><span class="achip">Beyoncé</span><div class="verdict">answer: correct</div></td></tr><tr><th class="q">How many Grammy awards has Beyoncé won?</th><td><span class="achip exp">✓ Beyoncé <b>×4</b></span><span class="achip">Cardi B</span><span class="achip">Nicki Minaj</span></td><td><span class="achip exp">✓ Beyoncé <b>×4</b></span><span class="achip">Cardi B</span><span class="achip">Nicki Minaj</span></td><td><span class="achip exp">✓ Beyoncé <b>×2</b></span><span class="achip">Cardi B <b>×2</b></span><span class="achip">Nicki Minaj</span><span class="achip">Rihanna</span></td><td><span class="achip exp">✓ Beyoncé</span><span class="achip">Cardi B</span><span class="achip">Nicki Minaj</span><span class="achip">Rihanna</span><span class="achip">Ariana Grande</span><span class="achip">Wizkid</span></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>Reading this</h2>
+    <ul class="notes">
+      <li><b>Compare against the noise band first.</b> Two runs with identical settings already differ, because answers and the judge’s verdicts vary.</li>
+      <li><b>Retrieval scores don’t use an LLM,</b> so they only change when the retrieved chunks change. Generation scores can change on any run.</li>
+      <li><b>Each run’s full details</b> (every claim and verdict) are on its own page: <a href="top-k-a.html">top-k-a</a>, <a href="top-k-b.html">top-k-b</a>, <a href="two-per-artist.html">two-per-artist</a>, <a href="one-per-artist.html">one-per-artist</a>.</li>
+    </ul>
+  </section>
+</main>
+<div class="tooltip" id="tooltip"></div>
+</div>
+<script id="data" type="application/json">{"meta":[{"name":"top-k-a","strategy":"top-k","colour":"var(--series-1)","hollow":false},{"name":"top-k-b","strategy":"top-k","colour":"var(--series-1)","hollow":true},{"name":"two-per-artist","strategy":"two-per-artist","colour":"var(--series-2)","hollow":false},{"name":"one-per-artist","strategy":"one-per-artist","colour":"var(--series-3)","hollow":false}],"averages":[{"key":"recall","label":"Context recall","values":[0.9016666666666666,0.9016666666666666,0.96,1]},{"key":"precision","label":"Context precision","values":[1,1,0.9966666666666667,0.9916666666666668]},{"key":"faithfulness","label":"Faithfulness","values":[0.975,1,1,0.9]},{"key":"relevancy","label":"Answer relevancy","values":[0.628108474715957,0.6611073379325655,0.6882732208147261,0.6620306934392787]},{"key":"correctness","label":"Correctness","values":[0.8333333333333334,0.8333333333333334,0.8888888888888888,0.8333333333333334]},{"key":"refusal","label":"Refusal right","values":[1,1,0.9230769230769231,0.9230769230769231]}],"grid":[{"id":"afrobeat","group":"genre","question":"Which artists in the data make Afrobeat or other African music?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0,0.5945822901245702,0.7742248178746066,0.7601766229033696],"correctness":[1,1,1,0],"refusal":[1,1,1,1]}},{"id":"kpop","group":"genre","question":"Which K-pop groups are in the data?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.7920665879012353,0.7839690927740386,0.8153888177197954,0.7806638059260999],"correctness":[1,1,1,1],"refusal":[1,1,1,1]}},{"id":"latin","group":"genre","question":"Which Latin music artists are in the data?","values":{"recall":[0.75,0.75,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.6190748651392838,0.5843866286651179,0.8661049157314625,0.8365651102909979],"correctness":[0.5,0.5,1,1],"refusal":[1,1,1,1]}},{"id":"bollywood","group":"genre","question":"Which artists are known for Indian film music or Bollywood?","values":{"recall":[0.6,0.6,0.6,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.4328856001736405,0.8014594692387612,0.80990509101734,0.7266332080154391],"correctness":[0.5,0.5,0.5,1],"refusal":[1,1,1,1]}},{"id":"soul","group":"genre","question":"Which classic soul or Motown singers are in the data?","values":{"recall":[0.6666666666666666,0.6666666666666666,1,1],"precision":[1,1,0.9666666666666666,0.9166666666666666],"faithfulness":[0.75,1,1,0],"relevancy":[0.917669586301901,0.9087308378891409,0.443787890632515,0.4309665206461822],"correctness":[0.5,0.5,0.5,0.5],"refusal":[1,1,1,1]}},{"id":"hiphop-rnb","group":"open","question":"Which artists blend hip hop with R&B, and what are some of their albums?","values":{"recall":[null,null,null,null],"precision":[null,null,null,null],"faithfulness":[1,1,1,1],"relevancy":[0.7322200002148769,0.4522731980240904,0.595432663925496,0],"correctness":[null,null,null,null],"refusal":[1,1,0,0]}},{"id":"zombie","group":"fact","question":"In what year did Fela Kuti release Zombie?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.9506745647583718,0.6362163653732318,0.5931230188888931,0.6892414350226886],"correctness":[1,1,1,1],"refusal":[1,1,1,1]}},{"id":"stromae","group":"fact","question":"Which country is Stromae from?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.37235506823568754,0.4425430844397056,0.9504370396811962,0.9038234679075835],"correctness":[1,1,1,1],"refusal":[1,1,1,1]}},{"id":"adele-21","group":"fact","question":"When did Adele release 21?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.6190737082650762,0.6677306950110006,0.6447207852246287,0.6506244145038799],"correctness":[1,1,1,1],"refusal":[1,1,1,1]}},{"id":"daft-punk","group":"fact","question":"Where are Daft Punk from, and since when have they been active?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[1,1,1,1],"relevancy":[0.845064766169497,0.7391817177859977,0.3896071674513271,0.841612349176545],"correctness":[1,1,1,1],"refusal":[1,1,1,1]}},{"id":"grammys","group":"trap","question":"How many Grammy awards has Beyoncé won?","values":{"recall":[1,1,1,1],"precision":[1,1,1,1],"faithfulness":[null,null,null,null],"relevancy":[null,null,null,null],"correctness":[null,null,null,null],"refusal":[1,1,1,1]}},{"id":"australia","group":"out-of-scope","question":"What is the capital of Australia?","values":{"recall":[null,null,null,null],"precision":[null,null,null,null],"faithfulness":[null,null,null,null],"relevancy":[null,null,null,null],"correctness":[null,null,null,null],"refusal":[1,1,1,1]}},{"id":"world-cup","group":"out-of-scope","question":"Who won the 2018 FIFA World Cup?","values":{"recall":[null,null,null,null],"precision":[null,null,null,null],"faithfulness":[null,null,null,null],"relevancy":[null,null,null,null],"correctness":[null,null,null,null],"refusal":[1,1,1,1]}}],"metrics":[{"key":"recall","label":"Context recall"},{"key":"precision","label":"Context precision"},{"key":"faithfulness","label":"Faithfulness"},{"key":"relevancy","label":"Answer relevancy"},{"key":"correctness","label":"Correctness"},{"key":"refusal","label":"Refusal right"}]}</script>
+<script>
+(() => {
+  const { meta, averages, grid, metrics } = JSON.parse(document.getElementById('data').textContent);
+  const NS = 'http://www.w3.org/2000/svg';
+  const tooltip = document.getElementById('tooltip');
+  const svg = document.getElementById('dots');
+  // Next to the cursor, flipped to the left near the right edge
+  function placeTooltip(e) {
+    tooltip.style.display = 'block';
+    const w = tooltip.offsetWidth;
+    const left = e.clientX + 12 + w > window.innerWidth - 8 ? e.clientX - 12 - w : e.clientX + 12;
+    tooltip.style.left = Math.max(8, left) + 'px';
+    tooltip.style.top = e.clientY + 12 + 'px';
+  }
+
+  // Dot plot: metric rows, a 0–1 axis
+  const W = 1000, LEFT = 170, RIGHT = 30, ROW = 52, TOP = 26;
+  const H = TOP + averages.length * ROW + 10;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  const x = (v) => LEFT + v * (W - LEFT - RIGHT);
+  const el = (tag, attrs, text) => {
+    const node = document.createElementNS(NS, tag);
+    for (const k in attrs) node.setAttribute(k, attrs[k]);
+    if (text !== undefined) node.textContent = text;
+    svg.appendChild(node);
+    return node;
+  };
+  for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+    el('line', { x1: x(t), x2: x(t), y1: TOP - 6, y2: H - 6, stroke: 'var(--hairline)', 'stroke-width': 1 });
+    el('text', { x: x(t), y: TOP - 12, 'text-anchor': 'middle', 'font-size': 12, fill: 'var(--text-muted)' }, String(t));
+  }
+  averages.forEach((a, row) => {
+    const cy = TOP + row * ROW + ROW / 2;
+    el('text', { x: LEFT - 14, y: cy + 4, 'text-anchor': 'end', 'font-size': 14, fill: 'var(--text-primary)' }, a.label);
+    el('line', { x1: x(0), x2: x(1), y1: cy, y2: cy, stroke: 'var(--hairline)', 'stroke-width': 1 });
+    // Noise band: the range across runs that share a strategy
+    const byStrategy = {};
+    meta.forEach((m, i) => { if (a.values[i] !== null) (byStrategy[m.strategy] ||= []).push(a.values[i]); });
+    for (const values of Object.values(byStrategy)) {
+      if (values.length < 2) continue;
+      const lo = Math.min(...values), hi = Math.max(...values);
+      el('rect', { x: x(lo) - 8, y: cy - 18, width: x(hi) - x(lo) + 16, height: 36, rx: 12, fill: 'var(--wash)', stroke: 'var(--hairline)' });
+    }
+    meta.forEach((m, i) => {
+      const v = a.values[i];
+      if (v === null) return;
+      // Small vertical offset per run, so runs with equal scores don't hide each other
+      const dy = (i - (meta.length - 1) / 2) * 6;
+      const dot = el('circle', { cx: x(v), cy: cy + dy, r: 7, fill: m.hollow ? 'var(--surface-1)' : m.colour, stroke: m.hollow ? m.colour : 'var(--surface-1)', 'stroke-width': m.hollow ? 2.5 : 2 });
+      dot.addEventListener('mousemove', (e) => {
+        tooltip.textContent = m.name + ' · ' + a.label + ': ' + v.toFixed(2);
+        placeTooltip(e);
+      });
+      dot.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    });
+  });
+
+  // Question grid for one metric
+  const select = document.getElementById('metric');
+  metrics.forEach((m) => select.add(new Option(m.label, m.key)));
+  select.value = 'correctness';
+  const table = document.getElementById('grid');
+  const step = (v) => Math.min(5, Math.floor(v * 5) + 1);
+  function drawGrid() {
+    const key = select.value;
+    table.replaceChildren();
+    const head = table.createTHead().insertRow();
+    const th = document.createElement('th'); th.textContent = 'Question'; head.appendChild(th);
+    meta.forEach((m) => { const h = document.createElement('th'); h.textContent = m.name; head.appendChild(h); });
+    const body = table.createTBody();
+    let group = '';
+    for (const q of grid) {
+      if (q.group !== group) {
+        group = q.group;
+        const g = body.insertRow(); g.className = 'group-row';
+        const gh = document.createElement('th'); gh.colSpan = meta.length + 1; gh.textContent = group; g.appendChild(gh);
+      }
+      const row = body.insertRow();
+      const qh = document.createElement('th'); qh.className = 'q'; qh.textContent = q.question; row.appendChild(qh);
+      q.values[key].forEach((v) => {
+        const cell = row.insertCell();
+        cell.className = 'cell' + (v === null ? ' na' : '');
+        if (v === null) { cell.textContent = '–'; return; }
+        const s = step(v);
+        cell.style.background = 'var(--seq-' + s + ')';
+        cell.style.color = 'var(--seq-ink-' + s + ')';
+        cell.textContent = v.toFixed(2);
+      });
+    }
+  }
+  select.addEventListener('change', drawGrid);
+  drawGrid();
+})();
+</script>
+</body>
+</html>

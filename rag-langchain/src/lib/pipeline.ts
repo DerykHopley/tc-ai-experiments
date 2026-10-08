@@ -187,6 +187,49 @@ export async function getVectorStore(): Promise<Chroma> {
   });
 }
 
+// How the top chunks are picked:
+// - top-k: the k nearest chunks. One artist with many matching chunks can
+//   fill most of the slots and push other relevant artists out.
+// - two-per-artist / one-per-artist: fetch more candidates, then keep the
+//   nearest ones while allowing at most 2 (or 1) chunks per artist. More
+//   artists fit in, but a question about one artist gets fewer of its chunks.
+export const STRATEGIES = [
+  'top-k',
+  'two-per-artist',
+  'one-per-artist',
+] as const;
+export type RetrievalStrategy = (typeof STRATEGIES)[number];
+const PER_ARTIST_CAP = { 'two-per-artist': 2, 'one-per-artist': 1 };
+// Candidates fetched before capping, so there are enough to fill k slots
+const CANDIDATES = 30;
+
+export async function retrieve(
+  vectorStore: Chroma,
+  question: string,
+  strategy: RetrievalStrategy = 'top-k',
+  k = RAG_K,
+): Promise<[Document, number][]> {
+  if (strategy === 'top-k') {
+    return vectorStore.similaritySearchWithScore(question, k);
+  }
+  const cap = PER_ARTIST_CAP[strategy];
+  const candidates = await vectorStore.similaritySearchWithScore(
+    question,
+    CANDIDATES,
+  );
+  const perArtist = new Map<string, number>();
+  const kept: [Document, number][] = [];
+  for (const hit of candidates) {
+    const artist = String(hit[0].metadata.artist_name);
+    const count = perArtist.get(artist) ?? 0;
+    if (count >= cap) continue;
+    perArtist.set(artist, count + 1);
+    kept.push(hit);
+    if (kept.length === k) break;
+  }
+  return kept;
+}
+
 // ---------------------------------------------------------------------------
 // 4. Prompt + LLM
 // ---------------------------------------------------------------------------
