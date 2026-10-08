@@ -2,7 +2,7 @@
 
 The CSVs are the [Global Music Popularity & Cultural Attention](https://www.kaggle.com/datasets/blixture/global-music-popularity-and-cultural-attention) dataset by Blixture on Kaggle. It covers 51 artists with their MusicBrainz metadata and releases, plus Wikipedia pageviews. It's published under the MIT licence, copied below, and the files are unchanged.
 
-`music_ground_truths.json` is ours: hand-labelled queries with the artists each one should find. `npm run 3-search` uses it to check retrieval.
+`music_ground_truths.json` is ours. It holds test queries with the artists each one should find, generated with Claude from `artists.csv` and the data dictionaries. The expected artists are judgement calls, and the `notes` field explains the borderline ones, so treat it as a rough check rather than a gold standard. `npm run 3-search` uses it to check retrieval.
 
 ## Licence (CSV files)
 

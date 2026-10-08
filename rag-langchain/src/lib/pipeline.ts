@@ -10,7 +10,8 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { initChatModel } from 'langchain';
 
 const DATA_DIR = 'data';
-// Hand-labelled queries + the artists each one should find
+// Test queries + the artists each one should find (generated with Claude
+// from the dataset; see data/README.md)
 export const GROUND_TRUTHS_PATH = 'data/music_ground_truths.json';
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 

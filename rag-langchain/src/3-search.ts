@@ -68,7 +68,7 @@ console.table(
   })),
 );
 
-// 4. Check retrieval against the hand-labelled expected artists. Queries that
+// 4. Check retrieval against the expected artists in the test file. Queries that
 // need a metadata filter in the ground truth file are skipped here.
 let found = 0;
 let expected = 0;
