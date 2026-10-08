@@ -1,0 +1,4 @@
+# Every project: secrets, dependencies, local databases
+.env
+node_modules/
+chroma-data/
