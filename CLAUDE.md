@@ -5,7 +5,6 @@ Compares how embedding models relate 68 historical figures by their biographies.
 ## Working with the user
 
 - Turing College student, coming from Python and learning TypeScript. Python comparisons help (f-strings vs template literals, pandas vs plain arrays). Explain *why* a change is better, not just what changed.
-- The course repo is `../1-2-development-environment-api`. This project started as its exercise 26.
 - `npm start` calls the embeddings API once per model (a fraction of a cent per run). Running it to verify a change is fine. For page-only changes, re-render from saved data instead (below).
 
 ## Gotchas

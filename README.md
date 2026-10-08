@@ -2,8 +2,6 @@
 
 How do different embedding models relate the same people? This project embeds 68 short biographies of historical figures with several models, finds each person's 3 closest neighbours under each model, and writes an interactive page comparing them.
 
-It grew out of exercise 26 (embedding-based search) of the Turing College course in `../1-2-development-environment-api`.
-
 ## Setup
 
 Requires Node 22 or later.
