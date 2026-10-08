@@ -16,7 +16,7 @@ Method, full results, the project's history and open ideas: [FINDINGS.md](FINDIN
 
 ## See the results
 
-**[Open the comparison page](https://derykhopley.github.io/tc-embedding-model-comparison/output/model-comparison.html)** (and the [3D map experiment](https://derykhopley.github.io/tc-embedding-model-comparison/output/map-3d.html)). These are the pages from the latest run, committed in `output/` and published with GitHub Pages.
+**[Open the comparison page](https://derykhopley.github.io/tc-ai-experiments/embedding-model-comparison/output/model-comparison.html)** (and the [3D map experiment](https://derykhopley.github.io/tc-ai-experiments/embedding-model-comparison/output/map-3d.html)). These are the pages from the latest run, committed in `output/` and published with GitHub Pages.
 
 - **What we found**: four findings written out in plain language (gender, Marie Curie on the list and on the map, Shakespeare). The numbers are computed from the data, so they stay correct after a rerun; the findings themselves are coded for these people in `src/lib/model-comparison-page.ts`.
 

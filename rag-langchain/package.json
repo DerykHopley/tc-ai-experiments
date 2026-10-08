@@ -1,0 +1,35 @@
+{
+  "name": "rag-langchain",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write 'src/**/*.ts'",
+    "chroma": "chroma run --path ./chroma-data --port 8001",
+    "reindex": "npm run file src/reindex.ts",
+    "1-load": "npm run file src/1-load.ts",
+    "2-split": "npm run file src/2-split.ts",
+    "3-search": "npm run file src/3-search.ts",
+    "4-rag": "npm run file src/4-rag.ts",
+    "5-visualize": "npm run file src/5-visualize.ts",
+    "6-walkthrough": "npm run file src/6-walkthrough.ts",
+    "file": "tsx --env-file-if-exists=.env --no-deprecation"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@langchain/classic": "^1.0.52",
+    "@langchain/community": "^1.1.29",
+    "@langchain/core": "^1.2.17",
+    "@langchain/openai": "^1.6.2",
+    "@langchain/textsplitters": "^1.0.2",
+    "@thi.ng/tsne": "^0.1.75",
+    "chromadb": "^3.5.0",
+    "d3-dsv": "^3.0.1",
+    "langchain": "^1.5.15"
+  }
+}

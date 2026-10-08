@@ -1,0 +1,99 @@
+[
+  {
+    "query": "Afrobeat and African music",
+    "ground_truth": ["Fela Kuti", "Burna Boy", "Wizkid"],
+    "notes": "Meaning only: genre and region"
+  },
+  {
+    "query": "Latin music artists",
+    "ground_truth": ["Bad Bunny", "J Balvin", "Shakira", "Daddy Yankee"],
+    "notes": "Meaning only"
+  },
+  {
+    "query": "Indian film music and Bollywood singers",
+    "ground_truth": [
+      "A. R. Rahman",
+      "Arijit Singh",
+      "Lata Mangeshkar",
+      "Kishore Kumar",
+      "Diljit Dosanjh"
+    ],
+    "notes": "Meaning only. Diljit Dosanjh is tagged bhangra/punjabi rather than filmi"
+  },
+  {
+    "query": "K-pop groups",
+    "ground_truth": ["BTS", "BLACKPINK"],
+    "notes": "Meaning only"
+  },
+  {
+    "query": "Classic soul and Motown singers",
+    "ground_truth": ["Stevie Wonder", "Marvin Gaye", "Aretha Franklin"],
+    "notes": "Meaning only"
+  },
+  {
+    "query": "Rappers and hip hop artists",
+    "ground_truth": [
+      "Drake",
+      "Kendrick Lamar",
+      "Eminem",
+      "JAŸ-Z",
+      "Nicki Minaj",
+      "Cardi B"
+    ],
+    "notes": "Meaning only. Many artists carry a hip hop tag, so expect near misses"
+  },
+  {
+    "query": "Female singers from the UK",
+    "where": { "$and": [{ "gender": "female" }, { "country": "GB" }] },
+    "ground_truth": ["Adele", "Dua Lipa"],
+    "notes": "Two exact fields"
+  },
+  {
+    "query": "Bands and groups",
+    "where": { "artist_type": "Group" },
+    "ground_truth": [
+      "Queen",
+      "The Beatles",
+      "BTS",
+      "BLACKPINK",
+      "Daft Punk",
+      "Kanye West Tribute Band"
+    ],
+    "notes": "One exact field. The tribute band counts: the data says it is a Group"
+  },
+  {
+    "query": "Artists born before 1945",
+    "where": { "begin_year": { "$lt": 1945 } },
+    "ground_truth": [
+      "Frank Sinatra",
+      "Lata Mangeshkar",
+      "Kishore Kumar",
+      "Elvis Presley",
+      "Fela Kuti",
+      "Marvin Gaye",
+      "Bob Dylan",
+      "Aretha Franklin"
+    ],
+    "notes": "Number comparison on begin_year"
+  },
+  {
+    "query": "Female rappers",
+    "where": { "gender": "female" },
+    "ground_truth": ["Nicki Minaj", "Cardi B"],
+    "notes": "Mixed: the filter handles 'female', the search handles 'rappers'"
+  },
+  {
+    "query": "Female artists born after 1995",
+    "where": {
+      "$and": [{ "gender": "female" }, { "begin_year": { "$gt": 1995 } }]
+    },
+    "ground_truth": ["Billie Eilish", "Sabrina Carpenter", "Olivia Rodrigo"],
+    "notes": "Two filters, one of them a number comparison"
+  },
+  {
+    "query": "Latin artists with more than 100,000 Wikipedia pageviews in the last month",
+    "where": { "total_pageviews": { "$gt": 100000 } },
+    "ground_truth": ["Shakira", "Bad Bunny"],
+    "notes": "Mixed: pageviews summed from pageviews.csv"
+  }
+]
