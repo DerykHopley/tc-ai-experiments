@@ -165,6 +165,8 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
   h2 { font-size: 1.1rem; margin: 0 0 0.5rem; }
   p { color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.6rem; }
   .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+  .runlinks { font-size: 0.9rem; margin: 0.25rem 0 0; }
+  .runlinks a { color: var(--text-primary); }
   .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-size: 0.85rem; color: var(--text-secondary); margin: 0.5rem 0; }
   .key { display: inline-flex; align-items: center; gap: 0.4rem; }
   .strategies { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; }
@@ -205,6 +207,7 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
     <li><b>one-per-artist</b>: the nearest chunk from each of ${first.config.k} different artists.</li>
   </ul>
   <div class="legend" aria-label="Runs">${legend}</div>
+  <p class="runlinks">Each run’s full results, with every claim and the judge’s verdict on it: ${meta.map((m) => `<a href="${esc(m.name)}.html">${esc(m.name)}</a>`).join(' · ')}</p>
 
   <section class="card">
     <h2>Average scores</h2>

@@ -8,7 +8,11 @@ These pages come from the latest run. They're committed in `output/` and publish
 
 - **[Walkthrough](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/walkthrough.html)**: one question followed through all 12 steps, from CSV row to answer, with the real data at each step.
 - **[Embedding map](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/embedding-map.html)**: every chunk on a 2D t-SNE map, with genre and artist highlights and what each query retrieves.
-- **[Evaluation](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/comparison.html)**: 13 test questions scored with an LLM as judge, comparing three retrieval strategies. It links to each run's page, where every claim and the judge's verdict on it are listed.
+- **[Evaluation](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/comparison.html)**: 13 test questions scored with an LLM as judge, comparing three retrieval strategies. Each run has its own page, listing every claim and the judge's verdict on it:
+  - [top-k-a](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/top-k-a.html) (the first run)
+  - [top-k-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/top-k-b.html) (same settings again, to measure noise)
+  - [two-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/two-per-artist.html)
+  - [one-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/one-per-artist.html)
 
 ## Setup
 

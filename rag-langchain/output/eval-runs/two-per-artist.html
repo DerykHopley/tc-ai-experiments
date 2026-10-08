@@ -81,6 +81,8 @@
   .viz-root { min-height: 100vh; background: var(--page); color: var(--text-primary); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; padding: 2rem 16px; box-sizing: border-box; }
   main { max-width: 1100px; margin: 0 auto; }
   h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  .back { margin: 0 0 0.5rem; font-size: 0.85rem; }
+  .back a { color: var(--text-secondary); }
   h2 { font-size: 1.1rem; margin: 0 0 0.5rem; }
   h3 { font-size: 1.1rem; margin: 0.1rem 0 0.5rem; }
   h4 { font-size: 0.9rem; margin: 1rem 0 0.4rem; }
@@ -138,6 +140,7 @@
 <body>
 <div class="viz-root">
 <main>
+  <p class="back"><a href="comparison.html">← Compare all runs</a></p>
   <h1>Evaluating the RAG pipeline</h1>
   <p>13 test questions, each run through the real pipeline and scored. Retrieval is scored with plain arithmetic. The answers are scored by a second LLM acting as judge, using metrics modelled on <a href="https://docs.ragas.io">Ragas</a>.</p>
   <div class="chips">
