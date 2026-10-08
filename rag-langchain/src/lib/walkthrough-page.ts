@@ -246,7 +246,7 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
   .lane a:hover { border-color: var(--text-secondary); }
   .lane b { display: block; font-size: 0.8rem; }
   .lane small { display: block; font-size: 0.7rem; color: var(--text-muted); }
-  .tooltip { position: fixed; pointer-events: none; display: none; padding: 0.3rem 0.5rem; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-variant-numeric: tabular-nums; }
+  .tooltip { position: fixed; pointer-events: none; display: none; white-space: nowrap; padding: 0.3rem 0.5rem; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -415,8 +415,8 @@ ${vectorBlock(
     `<pre class="answer">${esc(llm.answer)}</pre>`,
   )}
 </main>
-</div>
 <div class="tooltip" id="tooltip"></div>
+</div>
 
 <script id="data" type="application/json">${data}</script>
 <script>
@@ -425,6 +425,14 @@ ${vectorBlock(
   vectors.product = vectors.query.map((n, i) => n * vectors.chunk[i]);
   const NS = 'http://www.w3.org/2000/svg';
   const tooltip = document.getElementById('tooltip');
+  // Next to the cursor, flipped to the left near the right edge
+  function placeTooltip(e) {
+    tooltip.style.display = 'block';
+    const w = tooltip.offsetWidth;
+    const left = e.clientX + 12 + w > window.innerWidth - 8 ? e.clientX - 12 - w : e.clientX + 12;
+    tooltip.style.left = Math.max(8, left) + 'px';
+    tooltip.style.top = e.clientY + 12 + 'px';
+  }
 
   // One cell per number: red for positive, blue for negative, stronger for
   // larger values, over the grey midpoint
@@ -445,9 +453,7 @@ ${vectorBlock(
       const rect = svg.getBoundingClientRect();
       const i = Math.min(values.length - 1, Math.max(0, Math.floor(((event.clientX - rect.left) / rect.width) * values.length)));
       tooltip.textContent = 'dimension ' + i + ': ' + values[i].toFixed(5);
-      tooltip.style.left = event.clientX + 12 + 'px';
-      tooltip.style.top = event.clientY + 12 + 'px';
-      tooltip.style.display = 'block';
+      placeTooltip(event);
     });
     svg.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
   }
