@@ -10,6 +10,7 @@
  *   npm run 7-evaluate -- --name top-k-b               (same again: the noise)
  *   npm run 7-evaluate -- --strategy two-per-artist
  *   npm run 7-evaluate -- --strategy one-per-artist
+ *   npm run 7-evaluate -- --strategy rerank            (30 candidates, LLM picks 6)
  *   npm run 7-evaluate -- --strategy long-context      (no search: the baseline)
  *   npm run 8-compare
  */

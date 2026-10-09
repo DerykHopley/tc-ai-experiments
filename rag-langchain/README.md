@@ -13,6 +13,7 @@ These pages come from the latest run. They're committed in `output/` and publish
   - [top-k-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/top-k-b.html) (same settings again, to measure noise)
   - [two-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/two-per-artist.html)
   - [one-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/one-per-artist.html)
+  - [rerank-a](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-a.html) and [rerank-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-b.html) (30 candidates, an LLM keeps the best 6)
   - [long-context-a](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/long-context-a.html) and [long-context-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/long-context-b.html) (no retrieval: the baseline)
 
 ## Setup
@@ -34,7 +35,7 @@ Run the stages in order. Each one reuses the earlier stages from `src/lib/pipeli
 | `npm run 4-rag -- "question"` | RAG | Retrieve 6 chunks, fill a `ChatPromptTemplate`, then `gpt-5-mini` answers using only that context. |
 | `npm run 5-visualize` | Looking at embeddings | Writes `output/embedding-map.html`: every chunk on a 2D t-SNE map, with genre or artist highlights, each query's top 6 retrieved chunks, and a nearest-neighbour check on the full vectors. |
 | `npm run 6-walkthrough -- "question"` | The whole pipeline, one question | Writes `output/walkthrough.html`. It follows one real question through all 12 steps, with the data each step produced: CSV row, Document, chunks (overlap marked), the vector as a colour strip, the search with the cut-off, how the #1 score adds up, the filled prompt, token counts and the answer. |
-| `npm run 7-evaluate` | Evaluating the pipeline | Runs the 13 questions in `data/eval_questions.json` through the pipeline and scores retrieval (context recall and precision, no LLM) and answers (faithfulness, answer relevancy, correctness, refusal) with `gemini-2.5-flash` as judge. Choose how chunks are picked with `-- --strategy top-k`, `two-per-artist` or `one-per-artist`, or skip retrieval with `long-context`, and name the run with `-- --name`. Each run is saved as `output/eval-runs/<name>.json` with its own page. `-- --render` rebuilds the pages without API calls. |
+| `npm run 7-evaluate` | Evaluating the pipeline | Runs the 13 questions in `data/eval_questions.json` through the pipeline and scores retrieval (context recall and precision, no LLM) and answers (faithfulness, answer relevancy, correctness, refusal) with `gemini-2.5-flash` as judge. Choose how chunks are picked with `-- --strategy top-k`, `two-per-artist` or `one-per-artist`, re-rank with `rerank`, or skip retrieval with `long-context`, and name the run with `-- --name`. Each run is saved as `output/eval-runs/<name>.json` with its own page. `-- --render` rebuilds the pages without API calls. |
 | `npm run 8-compare` | Comparing runs | Writes `output/eval-runs/comparison.html` from every saved run: average scores as a dot plot with a noise band, a question-by-question grid, and which artists each strategy retrieved. No API calls. |
 | `npm run reindex` | Rebuild the index | Drops the collection and embeds everything again. |
 
@@ -154,6 +155,23 @@ The first evaluation showed that every retrieval miss came from one artist filli
   - **Afrobeat:** the extra variety brought in Prince (tagged "afro house; african"). The model included him, and the judge marked the answer incorrect against our narrower reference.
 - **Breadth cost the open question.** With either cap, JAŸ-Z's album chunks were dropped. The hip hop + R&B answer then named only Beyoncé and said it didn't know her albums, which the refusal check flags.
 - **What the numbers point to next:** the cap decides how many chunks an artist gets, but not which ones. Always pairing the artist's profile chunk (the one with the tags) with the best-matching detail chunk, a form of parent-document retrieval, might keep both breadth and grounding.
+
+## Re-ranking
+
+The `rerank` strategy fetches the 30 nearest chunks, the same pool the per-artist caps use, and has an LLM (`gpt-4o-mini`, a different model from both the answering model and the judge) score each one 0–3 for how useful it is for the question. The 6 highest-scoring chunks are kept; ties keep their search order. Two runs on 2026-10-09:
+
+| Run | Recall | Faithfulness | Relevancy | Correctness | Refusal right |
+| --- | --- | --- | --- | --- | --- |
+| top-k (a) | 0.90 | 0.97 | 0.63 | 0.83 | 13/13 |
+| two-per-artist | 0.96 | 1.00 | 0.69 | 0.89 | 12/13 |
+| rerank (a) | 0.93 | 1.00 | 0.67 | 0.89 | 13/13 |
+| rerank (b) | 0.93 | 1.00 | 0.63 | 0.89 | 11/13 |
+
+- **It fixed crowding where the re-ranker could read the evidence.** For "Latin artists", Shakira was in the 30 candidates but too far down for top-k. The re-ranker read her tags and kept her in both runs, and the answer became correct.
+- **A 0–3 scale fills up, and then the crowding comes back.** For soul, Stevie Wonder's profile chunk (with his tags) was candidate 18, but all 6 kept chunks scored 3. So at least 6 chunks tied at the top score, and ties fall back to search order, where Marvin Gaye's and Aretha Franklin's chunks rank 1–6. The same happened to Kishore Kumar (candidate 11) and Diljit Dosanjh (17) for Bollywood. Only the kept chunks' scores are saved, so the tie is inferred. A finer scale, or re-ranking combined with a per-artist cap, are the obvious next tries.
+- **It can drop what a question needs.** In both runs no JAŸ-Z chunk was kept for the hip hop + R&B question, although top-k had three of his chunks in its 6. The kept chunks went to Kendrick Lamar, Rihanna, Beyoncé and Drake. The answers stayed reasonable, but they named different artists.
+- **The re-ranker adds its own noise.** The same question got different scores and different chunks between runs: for afrobeat, run a kept 3 Fela Kuti chunks, all scored 3, and run b kept 2 each of Fela Kuti, Burna Boy and Wizkid, scored 3, 3, 3, 1, 1, 1. rerank-b's refusal failures are the judge reading "I don't know about any others" caveats as declining.
+- **Still below long context.** At 0.89 it ties the best per-artist cap, while putting every profile in the prompt reached 1.00 and 0.89. It costs one extra call per question with about 24,000 characters of candidates, a quarter of long context's input.
 
 ## Long context: no retrieval at all
 

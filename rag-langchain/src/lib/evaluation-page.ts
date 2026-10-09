@@ -16,6 +16,8 @@ export type QuestionResult = {
     rank: number;
     artist: string;
     distance: number | null;
+    // The re-ranker's 0-3 usefulness score (rerank strategy only)
+    rerankScore?: number;
     text: string;
   }[];
   answer: string;
@@ -139,7 +141,7 @@ function detail(r: QuestionResult, run: EvalRun): string {
   const chunks = r.retrieved
     .map(
       (c) => `<details class="chunk">
-  <summary><span class="rank">[${c.rank}]</span> ${esc(c.artist)}${r.expectedArtists ? (expected.has(c.artist) ? ' <span class="tag yes">expected</span>' : ' <span class="tag">not expected</span>') : ''}${c.distance === null ? '' : `<span class="dist">distance ${c.distance.toFixed(3)}</span>`}</summary>
+  <summary><span class="rank">[${c.rank}]</span> ${esc(c.artist)}${r.expectedArtists ? (expected.has(c.artist) ? ' <span class="tag yes">expected</span>' : ' <span class="tag">not expected</span>') : ''}${c.distance === null ? '' : `<span class="dist">${c.rerankScore === undefined ? '' : `re-ranked ${c.rerankScore}/3 · `}distance ${c.distance.toFixed(3)}</span>`}</summary>
   <pre>${esc(c.text)}</pre>
 </details>`,
     )

@@ -8,6 +8,7 @@ import { Chroma } from '@langchain/community/vectorstores/chroma';
 import { ChromaClient } from 'chromadb';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { initChatModel } from 'langchain';
+import { z } from 'zod';
 
 const DATA_DIR = 'data';
 // Test queries + the artists each one should find (generated with Claude
@@ -193,6 +194,9 @@ export async function getVectorStore(): Promise<Chroma> {
 // - two-per-artist / one-per-artist: fetch more candidates, then keep the
 //   nearest ones while allowing at most 2 (or 1) chunks per artist. More
 //   artists fit in, but a question about one artist gets fewer of its chunks.
+// - rerank: fetch more candidates, have an LLM score how useful each one is
+//   for the question, and keep the best. The search finds chunks that look
+//   like the question; the re-ranker reads them.
 // - long-context: no search at all. Every artist's whole profile goes into
 //   the prompt (51 profiles, about 28k tokens), in the CSV's order. The
 //   baseline that shows whether retrieval helps.
@@ -200,6 +204,7 @@ export const STRATEGIES = [
   'top-k',
   'two-per-artist',
   'one-per-artist',
+  'rerank',
   'long-context',
 ] as const;
 export type RetrievalStrategy = (typeof STRATEGIES)[number];
@@ -209,6 +214,61 @@ let allProfiles: Promise<Document[]> | undefined;
 // Candidates fetched before capping, so there are enough to fill k slots
 const CANDIDATES = 30;
 
+// The re-ranker: a different model from the answering one and the judge,
+// so the judge isn't also choosing what the answer is based on
+export const RERANK_MODEL = 'openai/gpt-4o-mini';
+let reranker: ReturnType<typeof initChatModel> | undefined;
+
+// One call scores every candidate 0-3. Sorted by score, ties keep their
+// search order. The score is kept in metadata.rerank_score for the pages.
+async function rerank(
+  question: string,
+  candidates: [Document, number][],
+): Promise<[Document, number][]> {
+  reranker ??= initChatModel(RERANK_MODEL, {
+    modelProvider: 'openai',
+    ...openRouterConfig,
+  });
+  const schema = z.object({
+    scores: z.array(
+      z.object({
+        chunk: z.number().describe('The chunk number'),
+        score: z.number().int().min(0).max(3),
+      }),
+    ),
+  });
+  const raw = await (
+    await reranker
+  ).withStructuredOutput(schema, { name: 'score_chunks' })
+    .invoke(`Score how useful each chunk is for answering the question.
+3 = it directly answers the question or names an artist the question asks for, with the facts needed
+2 = relevant, but only part of the answer
+1 = loosely related
+0 = not useful
+Score every chunk, by its number.
+
+Question: ${question}
+
+${candidates.map(([doc], i) => `[${i + 1}] ${doc.pageContent}`).join('\n\n')}`);
+  const { scores } = schema.parse(raw);
+  const scoreOf = new Map(scores.map((s) => [s.chunk, s.score]));
+  return candidates
+    .map(([doc, distance], i) => ({
+      hit: [
+        new Document({
+          ...doc,
+          // A chunk the re-ranker skipped counts as not useful
+          metadata: { ...doc.metadata, rerank_score: scoreOf.get(i + 1) ?? 0 },
+        }),
+        distance,
+      ] as [Document, number],
+      score: scoreOf.get(i + 1) ?? 0,
+      i,
+    }))
+    .sort((a, b) => b.score - a.score || a.i - b.i)
+    .map((x) => x.hit);
+}
+
 export async function retrieve(
   vectorStore: Chroma,
   question: string,
@@ -217,6 +277,13 @@ export async function retrieve(
 ): Promise<[Document, number][]> {
   if (strategy === 'top-k') {
     return vectorStore.similaritySearchWithScore(question, k);
+  }
+  if (strategy === 'rerank') {
+    const candidates = await vectorStore.similaritySearchWithScore(
+      question,
+      CANDIDATES,
+    );
+    return (await rerank(question, candidates)).slice(0, k);
   }
   if (strategy === 'long-context') {
     // No search, so no distance: NaN marks "not searched"

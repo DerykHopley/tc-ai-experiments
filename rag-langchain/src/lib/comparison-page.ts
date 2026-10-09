@@ -12,30 +12,39 @@ const esc = (s: string) =>
     .replace(/"/g, '&quot;');
 
 // Colour follows the strategy, never the run's position. Runs repeating a
-// strategy get the same colour with a hollow marker. long-context is the
-// no-search baseline, not a fourth strategy: it's drawn as an ink diamond,
-// because a fourth hue can't be told apart from the others when every pair
-// can sit side by side (yellow vs orange fails the palette validator).
+// strategy get the same colour with a hollow marker. Only three hues can be
+// told apart when every pair can sit side by side (a fourth, yellow, fails
+// the palette validator against orange), so later strategies are drawn in
+// ink and told apart by shape instead: rerank a square, the long-context
+// baseline a diamond.
 const STRATEGY_COLOUR: Record<string, string> = {
   'top-k': 'var(--series-1)',
   'two-per-artist': 'var(--series-2)',
   'one-per-artist': 'var(--series-3)',
+  rerank: 'var(--text-primary)',
   'long-context': 'var(--text-primary)',
 };
-const DIAMOND = new Set(['long-context']);
+type Shape = 'circle' | 'square' | 'diamond';
+const SHAPE: Record<string, Shape> = {
+  rerank: 'square',
+  'long-context': 'diamond',
+};
 
-// A run's marker for the legend and column heads: circle or diamond,
-// filled for a strategy's first run, hollow for repeats
+// A run's marker for the legend and column heads, filled for a strategy's
+// first run, hollow for repeats
 function marker(
-  m: { colour: string; hollow: boolean; diamond: boolean },
+  m: { colour: string; hollow: boolean; shape: Shape },
   size: number,
 ): string {
   const c = size / 2;
   const r = c - 2;
   const paint = `fill="${m.hollow ? 'var(--surface-1)' : m.colour}" stroke="${m.colour}" stroke-width="2"`;
-  const shape = m.diamond
-    ? `<polygon points="${c},${c - r - 0.5} ${c + r + 0.5},${c} ${c},${c + r + 0.5} ${c - r - 0.5},${c}" ${paint}/>`
-    : `<circle cx="${c}" cy="${c}" r="${r}" ${paint}/>`;
+  const shape =
+    m.shape === 'diamond'
+      ? `<polygon points="${c},${c - r - 0.5} ${c + r + 0.5},${c} ${c},${c + r + 0.5} ${c - r - 0.5},${c}" ${paint}/>`
+      : m.shape === 'square'
+        ? `<rect x="${c - r + 0.5}" y="${c - r + 0.5}" width="${2 * r - 1}" height="${2 * r - 1}" rx="1.5" ${paint}/>`
+        : `<circle cx="${c}" cy="${c}" r="${r}" ${paint}/>`;
   return `<svg width="${size}" height="${size}" aria-hidden="true">${shape}</svg>`;
 }
 
@@ -94,7 +103,7 @@ export function renderComparisonHtml(runs: EvalRun[]): string {
       strategy: run.config.strategy,
       colour: STRATEGY_COLOUR[run.config.strategy] ?? 'var(--text-secondary)',
       hollow: n > 0,
-      diamond: DIAMOND.has(run.config.strategy),
+      shape: SHAPE[run.config.strategy] ?? 'circle',
     };
   });
 
@@ -227,6 +236,7 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
     <li><b>top-k</b>: the ${first.config.k} nearest chunks. One artist can fill several slots.</li>
     <li><b>two-per-artist</b>: the nearest chunks, at most 2 from any artist.</li>
     <li><b>one-per-artist</b>: the nearest chunk from each of ${first.config.k} different artists.</li>
+    ${runs.some((r) => r.config.strategy === 'rerank') ? '<li><b>rerank</b> (the ■ squares): the 30 nearest chunks, scored 0–3 for usefulness by an LLM (<code>gpt-4o-mini</code>); the best 6 are kept.</li>' : ''}
     ${runs.some((r) => r.config.strategy === 'long-context') ? '<li><b>long-context</b> (the ◆ diamonds): no search at all. Every artist’s whole profile goes into the prompt, about 28k tokens. The baseline that shows what retrieval adds; its retrieval isn’t scored.</li>' : ''}
   </ul>
   <div class="legend" aria-label="Runs">${legend}</div>
@@ -322,9 +332,11 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
       const dy = (i - (meta.length - 1) / 2) * 6;
       const paint = { fill: m.hollow ? 'var(--surface-1)' : m.colour, stroke: m.hollow ? m.colour : 'var(--surface-1)', 'stroke-width': m.hollow ? 2.5 : 2 };
       const px = x(v), py = cy + dy;
-      const dot = m.diamond
+      const dot = m.shape === 'diamond'
         ? el('polygon', { points: [px, py - 9, px + 9, py, px, py + 9, px - 9, py].join(' '), ...paint })
-        : el('circle', { cx: px, cy: py, r: 7, ...paint });
+        : m.shape === 'square'
+          ? el('rect', { x: px - 6.5, y: py - 6.5, width: 13, height: 13, rx: 2, ...paint })
+          : el('circle', { cx: px, cy: py, r: 7, ...paint });
       dot.addEventListener('mousemove', (e) => {
         tooltip.textContent = m.name + ' · ' + a.label + ': ' + v.toFixed(2);
         placeTooltip(e);
