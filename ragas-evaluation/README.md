@@ -6,6 +6,8 @@ It's a separate project because the data changed: the artist profiles here label
 
 ## Key findings
 
+**[Read the comparison report](https://derykhopley.github.io/tc-ai-experiments/ragas-evaluation/output/evaluation-comparison.html)**: rag-langchain's evaluation and this one side by side, covering what each measures, what each found and missed, how far the judges can be trusted, and which to use.
+
 ### Two judges, the same claims
 
 rag-langchain's 4 evaluation runs hold 161 claims that `gemini-2.5-flash` already judged. RAGAS's verdict step (`gpt-4o-mini` with RAGAS's prompt) judged the same claims against the same chunks on 2026-10-09.
@@ -13,6 +15,7 @@ rag-langchain's 4 evaluation runs hold 161 claims that `gemini-2.5-flash` alread
 - **They agree on 90% of claims** (145 of 161). Of the 16 disagreements, **Gemini was right on 12 and RAGAS on 4**. 13 were settled from the chunk text; 3 were judgement calls decided by hand.
 - **RAGAS's judge misses facts that are in plain sight.** It rejected `21 (2011)` as evidence that Adele released 21 in 2011 three times, missed values in tag lists five times, and read "soul *or* Motown" as "and" twice. It also accepted two soul claims that the chunks don't support. Gemini's mistakes were different: it missed a tag once, used outside knowledge once (calling A. R. Rahman "Bollywood" from film titles alone), and lost both judgement calls.
 - **The judge moves the score more than the thing being tested.** On the same answers, faithfulness per run is 0.97–1.00 with Gemini but 0.83–0.95 with RAGAS, a gap of up to 0.17. The retrieval strategies rag-langchain compared differ by at most 0.10. The judges even reverse the ranking: Gemini puts one-per-artist last (0.90), RAGAS puts it first (0.95), partly by accepting claims the chunks don't support. Checked against the decisions, the runs score 0.99, 1.00, 1.00 and 0.91, close to Gemini's numbers.
+- **When both judges agree, they're usually right.** A seeded sample of 20 agreed claims (the 2 both rejected, plus 18 of the 143 both accepted) had 19 right. The miss: both rejected "Aretha Franklin is a classic soul / Motown singer", although her tags include soul.
 - **What "supported" means is a choice.** Is one crowd-sourced tag ("african") enough to say Prince makes African music? Is an album called "Queen of Soul" evidence that Aretha Franklin is a soul singer? A judge prompt can't settle these. Here the answers were no and no. A "Motown Superstar Series" release was accepted as linking Marvin Gaye to Motown.
 
 ### This project's own run
@@ -26,6 +29,8 @@ From the run on 2026-10-09: 12 questions, answers by `gpt-5-mini`, judged by `gp
 - **Ask the questions the model could answer from memory.** Three of the five "should say I don't know" questions ask for things the model knows but the data doesn't hold: BTS's members, Beyoncé's Grammy count, Daft Punk's best seller. It declined all three. Off-topic questions alone wouldn't have tested whether it sticks to the data.
 
 ## See the results
+
+**[Open the comparison report](https://derykhopley.github.io/tc-ai-experiments/ragas-evaluation/output/evaluation-comparison.html)**: the two evaluation processes compared, with a recommendation.
 
 **[Open the two-judge comparison](https://derykhopley.github.io/tc-ai-experiments/ragas-evaluation/output/cross-judge.html)**: the agreement grid, what each judge does to the scores, the mistakes grouped by kind, and every disagreement with its evidence and decision.
 
@@ -41,7 +46,9 @@ The raw data is in `output/eval/`: `samples.jsonl` (the questions, retrieved chu
 | `eval/2_score.py` | Python | Scores each sample. **Refusal**: a rule for plain "I don't know based on the data.", otherwise a RAGAS `DiscreteMetric` (answered or refused) compared with the question's label. **Faithfulness**, for answers only: RAGAS splits the answer into claims, then checks each claim against the chunks. Score = supported ÷ all. Writes `output/eval/results.json`. |
 | `src/3-walkthrough.ts` | TypeScript | Writes `output/eval-walkthrough.html` from the results. No API calls. |
 | `eval/4_cross_judge.py` | Python | Gives the claims Gemini judged in rag-langchain's runs (copied to `data/rag-langchain-runs/`) to RAGAS's verdict step, with the same numbered chunks. RAGAS's claim splitting is skipped, so every claim gets exactly two verdicts. Writes `output/cross-judge/verdicts.json`. |
-| `src/5-cross-judge-page.ts` | TypeScript | Writes `output/cross-judge.html` from the verdicts and the decisions in `eval/cross-judge-labels.json`. No API calls. |
+| `eval/sample_agreements.py` | Python (standard library) | Draws a seeded sample of the claims both judges agreed on into `eval/agreement-sample.json`, for checking by hand. Keeps decisions already made. |
+| `src/5-cross-judge-page.ts` | TypeScript | Writes `output/cross-judge.html` from the verdicts, the decisions in `eval/cross-judge-labels.json` and the checked sample. No API calls. |
+| `src/6-report-page.ts` | TypeScript | Writes `output/evaluation-comparison.html`, the report comparing the two evaluation processes. The text is fixed; every number is read from the saved runs. No API calls. |
 
 The pipeline is split across two languages because RAGAS is Python-only and the pipeline is TypeScript. One file sits between them.
 
@@ -64,6 +71,7 @@ npm run walkthrough   # build the page; add -- 6 to follow question 6
 npm run score         # rescore the same answers, to see how much the judge moves
 npm run cross-judge        # RAGAS's verdicts on rag-langchain's claims
 npm run cross-judge-page   # build the comparison page; rerun after editing a decision
+npm run report             # build the comparison report
 ```
 
 `eval/judge.py` holds the judge setup that both Python scripts share. Each disagreement's decision in `eval/cross-judge-labels.json` records who made it: decisions made from the chunk text quote the evidence line, and judgement calls are marked as such. A rerun of `npm run cross-judge` can produce new disagreements; the page shows any without a decision as undecided.

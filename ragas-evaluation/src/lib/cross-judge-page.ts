@@ -36,10 +36,20 @@ export type Label = {
   by: string | null;
 };
 
+// A sampled claim both judges agreed on, checked by hand
+export type SampleCheck = {
+  claim: string;
+  judges_said: boolean;
+  supported: boolean | null;
+  evidence: string;
+  by: string | null;
+};
+
 export type CrossJudgePageData = {
   summary: CrossJudgeSummary;
   claims: JudgedClaim[];
   labels: Record<string, Label>;
+  sample: Record<string, SampleCheck>;
 };
 
 const esc = (s: string) =>
@@ -59,10 +69,12 @@ function verdictMark(supported: boolean): string {
 // Faithfulness per answer under each judge's verdicts, averaged per run.
 // "checked" uses the shared verdict where the judges agree and the decision
 // where they don't (null while any disagreement in the run is undecided).
-function runScores(
+// Sampled agreements that were checked use the checked answer instead.
+export function runScores(
   claims: JudgedClaim[],
   runs: string[],
   labels: Record<string, Label>,
+  sample: Record<string, SampleCheck>,
 ) {
   return runs.map((run) => {
     const answers = new Map<string, JudgedClaim[]>();
@@ -83,10 +95,34 @@ function runScores(
       )
         ? null
         : score((c) =>
-            c.agree ? c.gemini.supported : labels[keyOf(c)].supported,
+            c.agree
+              ? (sample[keyOf(c)]?.supported ?? c.gemini.supported)
+              : labels[keyOf(c)].supported,
           ),
     };
   });
+}
+
+function sampleSection(d: CrossJudgePageData): string {
+  const entries = Object.entries(d.sample);
+  if (!entries.length) return '';
+  const checked = entries.filter(([, s]) => s.supported !== null);
+  const wrong = checked.filter(([, s]) => s.supported !== s.judges_said);
+  const rejected = entries.filter(([, s]) => !s.judges_said).length;
+  const rows = entries
+    .map(([key, s]) => {
+      const ok = s.supported === null ? null : s.supported === s.judges_said;
+      return `<tr class="${ok === false ? 'wrong' : ''}"><td>${ok === null ? '<span class="pending">?</span>' : ok ? '<span class="pass">✓</span>' : '<span class="fail">✗</span>'}</td><td>${esc(s.claim)}<div class="muted small">${esc(key)} · both judges: ${s.judges_said ? 'supported' : 'not supported'}</div></td><td class="small">${esc(s.evidence)}${s.by && !s.by.startsWith('claude') ? ` <span class="muted">(${esc(s.by)})</span>` : ''}</td></tr>`;
+    })
+    .join('');
+  return `<section class="card">
+    <h2>Can we trust it when they agree?</h2>
+    <p>Two judges agreeing doesn’t make them right. ${entries.length} agreed claims were checked against the chunks: the ${rejected} that both judges rejected, plus ${entries.length - rejected} drawn at random from the ones both accepted (seed 42, <code>eval/sample_agreements.py</code>). <b>${checked.length - wrong.length} of ${checked.length}</b> were right.${wrong.length ? ` Where they were wrong, both judges made the same mistake.` : ''}</p>
+    <div class="table-wrap"><table class="sample">
+      <thead><tr><th></th><th>Claim</th><th>Evidence in the chunks</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  </section>`;
 }
 
 export function renderCrossJudgeHtml(d: CrossJudgePageData): string {
@@ -114,7 +150,7 @@ export function renderCrossJudgeHtml(d: CrossJudgePageData): string {
   </tbody>
 </table>`;
 
-  const scores = runScores(claims, summary.runs, labels);
+  const scores = runScores(claims, summary.runs, labels, d.sample);
   const scoreRows = scores
     .map(
       (s) =>
@@ -208,6 +244,11 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
   mark { background: var(--mark-bg); color: inherit; }
   .decision { color: var(--text-primary); }
   .pending { color: var(--series-2); font-weight: 700; }
+  .pass { color: var(--ok); font-weight: 700; }
+  .fail { color: var(--div-pos); font-weight: 700; }
+  .small { font-size: 0.8rem; }
+  table.sample td { vertical-align: top; }
+  table.sample tr.wrong td { background: var(--mark-alt-bg); }
   ul { color: var(--text-secondary); line-height: 1.5; padding-left: 1.2rem; }
   li { margin: 0.35rem 0; }
   code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 0.85em; }
@@ -256,12 +297,14 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
     ${disagreements.map(card).join('\n')}
   </section>
 
+  ${sampleSection(d)}
+
   <section class="card">
     <h2>Limits</h2>
     <ul>
       <li><strong>Gemini wrote the claims.</strong> RAGAS’s claim-splitting step was skipped so the verdicts could be compared one to one, so every claim is phrased the way Gemini split the answer.</li>
       <li><strong>One pass of the RAGAS judge.</strong> Its verdicts move between runs. The agreement rate is for this pass.</li>
-      <li><strong>Only disagreements were checked.</strong> Where both judges agree, they could both be wrong. Checking a sample of the agreements would measure that.</li>
+      <li><strong>Agreements were only sampled.</strong> ${Object.keys(d.sample).length} of ${summary.agree} were checked, so the error rate among agreements is a rough estimate. The “checked” scores assume every agreement not in the sample is right.</li>
       <li><strong>The four runs share questions,</strong> so the same claim (“Adele released 21 in 2011”) can count up to four times.</li>
     </ul>
   </section>

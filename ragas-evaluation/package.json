@@ -11,7 +11,8 @@
     "score": "uv run eval/2_score.py",
     "walkthrough": "tsx --env-file-if-exists=.env --no-deprecation src/3-walkthrough.ts",
     "cross-judge": "uv run eval/4_cross_judge.py",
-    "cross-judge-page": "tsx --env-file-if-exists=.env --no-deprecation src/5-cross-judge-page.ts"
+    "cross-judge-page": "tsx --env-file-if-exists=.env --no-deprecation src/5-cross-judge-page.ts",
+    "report": "tsx --env-file-if-exists=.env --no-deprecation src/6-report-page.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",

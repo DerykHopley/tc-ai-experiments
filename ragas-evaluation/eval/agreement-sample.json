@@ -1,0 +1,142 @@
+{
+  "top-k-a/soul/5": {
+    "claim": "Aretha Franklin is a classic soul / Motown singer.",
+    "judges_said": false,
+    "supported": true,
+    "evidence": "Tags: …; soul; …; the queen of soul; … (Aretha Franklin, chunk [5]). Nothing says Motown; “/” read as “or”, as in the “soul or Motown” decisions.",
+    "by": "the author's judgement call: “/” = “or”"
+  },
+  "one-per-artist/soul/3": {
+    "claim": "Michael Jackson is a classic soul or Motown singer.",
+    "judges_said": false,
+    "supported": false,
+    "evidence": "Michael Jackson’s only chunk is a release list; nothing mentions soul or Motown.",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/hiphop-rnb/6": {
+    "claim": "JAŸ-Z's album is The Blueprint (2001).",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "- The Blueprint (2001) (JAŸ-Z, chunk [2])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/kpop/3": {
+    "claim": "BTS is a South Korean boy group.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Description: South Korean boy group (BTS, chunk [2])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/hiphop-rnb/9": {
+    "claim": "Beyoncé is an artist.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Artist: Beyoncé (continued) (chunk [6])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/hiphop-rnb/1": {
+    "claim": "JAŸ-Z is tagged with \"hip hop rnb and dance hall\".",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Tags: …; hip hop rnb and dance hall; … (JAŸ-Z, chunk [3])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/bollywood/5": {
+    "claim": "Arijit Singh is known for Bollywood.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "No tags. Two titles say Bollywood (“Bollywood Nonstop Dandiya 2023”, “Brand Bollywood Downunder”) and 36 songs are marked “(From <film>)”.",
+    "by": "the author's judgement call"
+  },
+  "top-k-b/afrobeat/1": {
+    "claim": "Fela Kuti's tags include \"afro-beat\".",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Tags: …; afro-beat; … (Fela Kuti, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/hiphop-rnb/4": {
+    "claim": "JAŸ-Z's album is Vol. 3… Life and Times of S. Carter (1999).",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "- Vol. 3… Life and Times of S. Carter (1999) (JAŸ-Z, chunk [2])",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/stromae/0": {
+    "claim": "Stromae is from Belgium.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Country: BE (Belgium) (Stromae, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/soul/7": {
+    "claim": "Aretha Franklin is known as \"the queen of soul\".",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Tags: …; the queen of soul; … (Aretha Franklin, chunk [5])",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/afrobeat/2": {
+    "claim": "Fela Kuti is Nigerian.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Country: NG (Nigeria); Tags: …; nigerian; … (Fela Kuti, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/latin/0": {
+    "claim": "J Balvin is a Latin music artist.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Tags: …; latin urban; …; latin pop; …; latin (J Balvin, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/kpop/4": {
+    "claim": "BTS is from South Korea.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Country: KR (South Korea) (BTS, chunk [2])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/hiphop-rnb/1": {
+    "claim": "JAŸ-Z's album is Reasonable Doubt (1996).",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "- Reasonable Doubt (1996) (JAŸ-Z, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/bollywood/3": {
+    "claim": "Lata Mangeshkar is referred to as \"The Nightingale Of India\" in the release titled \"The Golden Voices Of Bollywood - Volume 1\".",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "- The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India (2007) (Lata Mangeshkar, chunk [4])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/bollywood/7": {
+    "claim": "Some of Arijit Singh's film songs include \"Kesariya (From 'Brahmastra')\", \"Chaleya (From 'Jawan')\", and \"What Jhumka? (From 'Rocky Aur Rani Kii Prem Kahaani')\".",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "- Kesariya (From “Brahmastra”), - Chaleya (From “Jawan”), - What Jhumka? (From “Rocky Aur Rani Kii Prem Kahaani”) (Arijit Singh, chunks [5] and [6])",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/bollywood/4": {
+    "claim": "Arijit Singh is known for Bollywood.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "No tags. Two titles say Bollywood and 9 songs are marked “(From <film>)” (Arijit Singh, chunk [2]).",
+    "by": "the author's judgement call"
+  },
+  "top-k-b/latin/1": {
+    "claim": "Bad Bunny is a Latin music artist.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Tags: …; latin; …; latin urban; latin trap; … (Bad Bunny, chunk [2])",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/afrobeat/1": {
+    "claim": "Fela Kuti makes Afro-beat music.",
+    "judges_said": true,
+    "supported": true,
+    "evidence": "Tags: …; afrobeat; …; afro-beat; … (Fela Kuti, chunk [1])",
+    "by": "claude, from the chunk text"
+  }
+}

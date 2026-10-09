@@ -3,7 +3,8 @@
  * npm run cross-judge-page
  * ---
  * Reads output/cross-judge/verdicts.json (from `npm run cross-judge`) and the
- * decisions in eval/cross-judge-labels.json, and writes
+ * decisions in eval/cross-judge-labels.json and eval/agreement-sample.json,
+ * and writes
  * output/cross-judge.html. No API calls, so rerun it after editing a label.
  */
 import fs from 'fs';
@@ -14,13 +15,17 @@ import {
 
 const VERDICTS = 'output/cross-judge/verdicts.json';
 const LABELS = 'eval/cross-judge-labels.json';
+const SAMPLE = 'eval/agreement-sample.json';
 const OUTPUT = 'output/cross-judge.html';
 
 const { summary, claims } = JSON.parse(fs.readFileSync(VERDICTS, 'utf8'));
 const labels = fs.existsSync(LABELS)
   ? JSON.parse(fs.readFileSync(LABELS, 'utf8'))
   : {};
-const data: CrossJudgePageData = { summary, claims, labels };
+const sample = fs.existsSync(SAMPLE)
+  ? JSON.parse(fs.readFileSync(SAMPLE, 'utf8'))
+  : {};
+const data: CrossJudgePageData = { summary, claims, labels, sample };
 
 fs.writeFileSync(OUTPUT, renderCrossJudgeHtml(data));
 const open = claims.filter(
