@@ -1,0 +1,1470 @@
+{
+  "name": "top-k-a",
+  "date": "2026-10-08T14:47:49.593Z",
+  "config": {
+    "strategy": "top-k",
+    "chatModel": "openai/gpt-5-mini",
+    "judgeModel": "google/gemini-2.5-flash",
+    "embeddingModel": "openai/text-embedding-3-small",
+    "k": 6,
+    "chunkSize": 800,
+    "chunkOverlap": 100
+  },
+  "seconds": 112,
+  "results": [
+    {
+      "id": "afrobeat",
+      "group": "genre",
+      "question": "Which artists in the data make Afrobeat or other African music?",
+      "expectedArtists": [
+        "Fela Kuti",
+        "Burna Boy",
+        "Wizkid"
+      ],
+      "reference": "Fela Kuti, Burna Boy and Wizkid, all from Nigeria.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Fela Kuti",
+          "distance": 0.47758466,
+          "text": "Artist: Fela Kuti\nType: Person\nCountry: NG (Nigeria)\nActive since: 1938-10-15\nTags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; j\u00f9j\u00fa\nAlso known as: \u30d5\u30a7\u30e9\u30fb\u30af\u30c6\u30a3; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela & Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti & Africa '70; Fela\nReleases:\n- Fela Ransome Kuti and His Koola Lobitos (1965)\n- Fela Fela Fela (1969)\n- Afro Beat Live (1969)\n- Black man's cry (1970)\n- Live! (1971)\n- Open & Close (1971)\n- Na Poi (1971)\n- Na Fight - O ! Part I & II (1971)\n- Fela\u2019s London Scene (1971)\n- Why Black Man Dey Suffer (1971)\n- Shakara (1972)\n- Roforofo Fight (1972)\n- Beggar's Song (Orin Alagbe) 1 & 2 (1972)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)"
+        },
+        {
+          "rank": 2,
+          "artist": "Fela Kuti",
+          "distance": 0.52221906,
+          "text": "Artist: Fela Kuti (continued)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)\n- International Thief Thief (I.T.T.) (1979)\n- Unknown Soldier (1979)\n- V.I.P. (Vagabonds in Power) (1979)\n- Music of Many Colours (1980)\n- Authority Stealing (1980)\n- Coffin for Head of State (1981)\n- Original Sufferhead (1981)\n- Black President (1981)\n- Unnecessary Begging (1982)\n- Perambulator (1983)\n- Army Arrangement (1984)\n- Live in Amsterdam (1984)\n- Teacher Don\u2019t Teach Me Nonsense (1986)\n- Mr. Follow Follow (1986)\n- I Go Shout Plenty!!! (1986)\n- 2000 Blacks (1987)\n- Beasts of No Nation (1989)\n- ODOO: Overtake Don Overtake Overtake (1989)\n- Confusion Break Bones (1990)\n- O.D.O.O. (Overtake Don Overtake Overtake) (1990)\n- ODOO (Overtake Don Overtake Overtake) (1990)"
+        },
+        {
+          "rank": 3,
+          "artist": "Fela Kuti",
+          "distance": 0.52441746,
+          "text": "Artist: Fela Kuti (continued)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)\n- Confusion (1974)\n- Going In And Coming Out (Part 1 & 2) (1974)\n- Before I Jump Like Monkey Give Me Banana (1975)\n- Expensive Shit (1975)\n- Music of Fela Volume 2: Question Jam Answer (1975)\n- He Miss Road (1975)\n- Everything Scatter (1975)\n- Noise for Vendor Mouth (1975)\n- Ikoyi Blindness (1976)\n- Zombie (1976)\n- Up Side Down (1976)\n- Yellow Fever (1976)\n- Excuse O (1976)\n- No Bread (1976)\n- Kalakuta Show (1976)\n- No Agreement (1977)\n- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)\n- Vol. 1 & 2 (1977)\n- Sorrow Tears and Blood (1977)\n- Stalemate (1977)\n- Fear Not for Man (1977)\n- Opposite People (1977)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)"
+        },
+        {
+          "rank": 4,
+          "artist": "Burna Boy",
+          "distance": 0.5551392,
+          "text": "Artist: Burna Boy\nType: Person\nCountry: NG (Nigeria)\nDescription: Nigerian rapper, singer-songwriter, and record producer\nActive since: 1991-07-02\nTags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion\nAlso known as: Damini Ogulu; Damini Ebunoluwa Ogulu\nReleases:\n- Best of Burn Series, Vol. 1 (2011)\n- Like to Party (2012)\n- Tonight (2012)\n- L.I.F.E: Leaving an Impact for Eternity (2013)\n- Always Love You (2013)\n- L.I.F.E - Leaving an Impact for Eternity (2013)\n- Run My Race (2013)\n- Don Gorgon (2014)\n- Check & Balance (2014)\n- Soke (2015)\n- Follow Me (2015)\n- Check and Balance (2015)\n- Baddest (2015)\n- On a Spaceship (2015)\n- Jealousy (2015)\n- No! (2015)\n- Pree Me (2016)\n- Redemption (2016)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)"
+        },
+        {
+          "rank": 5,
+          "artist": "Wizkid",
+          "distance": 0.5879704,
+          "text": "Artist: Wizkid\nType: Person\nCountry: NG (Nigeria)\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\nActive since: 1990-07-16\nTags: pop; afrobeat; afropop; afrobeats; tryt\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\nReleases:\n- Superstar (2011)\n- Beat of Life (2012)\n- Zombie (2012)\n- Love You (2013)\n- Mr 1 Take Jake Vol.1 (2013)\n- Jaiye Jaiye (2013)\n- The Matter (2013)\n- New Bounce (2013)\n- Ayo (2014)\n- Feel Me (2014)\n- Don\u2019t Tell \u2019Em (2014)\n- One Life (2015)\n- Mamacita (2016)\n- U Don't Know (2016)\n- One Dance (US\u2019s \"No Sex in the Champagne Room\" edit) (2016)\n- Don't dull (Freestyle) remix (2016)\n- Like This (2016)\n- Daddy Yo (2016)\n- One Dance (2016)\n- Sounds From the Other Side (2017)\n- Sounds From The Other Side (2017)"
+        },
+        {
+          "rank": 6,
+          "artist": "Burna Boy",
+          "distance": 0.60990167,
+          "text": "Artist: Burna Boy (continued)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)\n- Gbona (2018)\n- On the low (2018)\n- Heaven's Gate (2018)\n- Dangote (2019)\n- Money Play (2019)\n- Own It (Joel Corry remix) (2019)\n- Stormzy - Own It (Sonny Fodera edit) (2019)\n- Be Honest (2019)\n- Steel & Copper (2019)\n- Own It (2019)\n- Killin Dem (2019)\n- African Giant (2019)\n- Anybody (2019)\n- Twice as Tall (2020)\n- Jerusalema (remix) (2020)\n- My Oasis (2020)\n- 20 10 20 (2020)\n- Winter (2020)\n- Wonderful (2020)\n- Odogwu (2020)\n- Lenu (Remix) (2020)\n- Hey Boy (2021)\n- Rotate (2021)\n- B. D\u2019OR (2021)\n- Question (2021)\n- Kilometre (2021)\n- B. D'OR (2021)\n- Want It All (2021)\n- Love, Damini (2022)\n- Last Last (2022)\n- I Told Them\u2026 (2023)\n- Mera Na (2023)\n- Big 7 (2023)\n- Apple Music Live: Burna Boy (2023)"
+        }
+      ],
+      "answer": "Artists used: Fela Kuti; Burna Boy; Wizkid\n\n- Fela Kuti \u2014 tags include: afrobeat; afro-beat; african; nigerian; j\u00f9j\u00fa  \n- Burna Boy \u2014 tags include: afrobeat; afrobeats; afro fusion  \n- Wizkid \u2014 tags include: afrobeat; afropop; afrobeats\n\nI don't know based on the data about any other artists making Afrobeat or other African music.",
+      "answerMs": 8254,
+      "outputTokens": 774,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "Fela Kuti",
+            "Burna Boy",
+            "Wizkid"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "Fela Kuti makes afrobeat, afro-beat, african, nigerian and j\u00f9j\u00fa music.",
+              "supported": true,
+              "source": 1,
+              "reason": "The tags for Fela Kuti include 'afrobeat', 'afro-beat', 'african', 'nigerian', and 'j\u00f9j\u00fa'."
+            },
+            {
+              "claim": "Burna Boy makes afrobeat, afrobeats and afro fusion music.",
+              "supported": true,
+              "source": 4,
+              "reason": "The tags for Burna Boy include 'afrobeat', 'afrobeats', and 'afro fusion'."
+            },
+            {
+              "claim": "Wizkid makes afrobeat, afropop and afrobeats music.",
+              "supported": true,
+              "source": 5,
+              "reason": "The tags for Wizkid include 'afrobeat', 'afropop', and 'afrobeats'."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0,
+          "noncommittal": true,
+          "questions": [
+            {
+              "question": "Which artists who create Afrobeat or other African music are in the dataset?",
+              "similarity": 0.8546627883068832
+            },
+            {
+              "question": "Can you list the Afrobeat and African music artists represented in your data?",
+              "similarity": 0.8348104402709532
+            },
+            {
+              "question": "Based on the dataset, who are the artists associated with Afrobeat and other African genres?",
+              "similarity": 0.8613333285940451
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 1,
+          "verdict": "correct",
+          "reason": "The answer correctly identifies the artists and their associated music genres, aligning with the reference answer."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides the requested information and then states it doesn't know about any other artists.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "kpop",
+      "group": "genre",
+      "question": "Which K-pop groups are in the data?",
+      "expectedArtists": [
+        "BTS",
+        "BLACKPINK"
+      ],
+      "reference": "BTS and BLACKPINK.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "BLACKPINK",
+          "distance": 0.54865,
+          "text": "Artist: BLACKPINK\nType: Group\nCountry: KR (South Korea)\nActive since: 2016-08-08\nTags: pop; hip hop; j-pop; girl group; female vocals; k-pop; 2010s; 2020s; 3rd gen k-pop; girl crush\nAlso known as: \u624d\u8c8c\u4ff1\u5168; BLACKPINK; Beullaekpingkeu; \u0411\u043b\u0435\u043a\u043f\u0438\u043d\u043a; \u0f56\u0fb3\u0f7a\u0f40\u0f0b\u0f54\u0f72\u0f44\u0f40\u0f0b; \u0628\u06b5\u0627\u06a9\u067e\u06cc\u0646\u06a9; \u05d1\u05dc\u05d0\u05e7\u05e4\u05d9\u05e0\u05e7; \u1018\u101c\u1000\u103a\u1015\u1004\u1037\u103a; \u1015\u101c\u1085\u1075\u103a\u1038\u107d\u102d\u1004\u103a\u1038; BL\u039b\u0186KPI\u0418K; \u0e41\u0e1a\u0e25\u0e47\u0e01\u0e1e\u0e34\u0e07\u0e01\u0e4c; \u092c\u094d\u0932\u094d\u092f\u093e\u0915\u092a\u093f\u0919\u094d\u0915; \u0ec1\u0e9a\u0eb1\u0e81\u0e9e\u0eb4\u0ec9\u0e87; \u1794\u17d2\u179b\u17c1\u1780\u1797\u17b8\u1784; \u092c\u094d\u0932\u0948\u0915\u092a\u093f\u0902\u0915; \u0628\u0644\u06a9\u200c\u067e\u06cc\u0646\u06a9; \u09ac\u09cd\u09b2\u09cd\u09af\u09be\u0995\u09aa\u09bf\u0999\u09cd\u0995; \u0628\u0644\u06a9 \u067e\u06cc\u0646\u06a9; \u0628\u0644\u0627\u0643\u0628\u064a\u0646\u0643; \ube14\ub799\ud551\ud06c; Black Pink\nReleases:\n- \ud718\ud30c\ub78c (2016)\n- WHISTLE (2016)\n- \ubd88\uc7a5\ub09c (2016)\n- SQUARE TWO (2016)\n- BOOMBAYAH (2016)\n- STAY (2016)\n- SQUARE ONE (2016)\n- \ub9c8\uc9c0\ub9c9\ucc98\ub7fc (2017)\n- As If It\u2019s Your Last (2017)\n- BLACKPINK (2017)\n- Sure Thing (2017)\n- PLAYING WITH FIRE (2017)\n- AS IF IT\u2019S YOUR LAST (2017)\n- PLAYING WITH FIRE -JP ver.- (2017)\n- SO HOT (THEBLACKLABEL remix) (2017)\n- DDU-DU DDU-DU (2018)"
+        },
+        {
+          "rank": 2,
+          "artist": "BTS",
+          "distance": 0.56331134,
+          "text": "Artist: BTS\nType: Group\nCountry: KR (South Korea)\nDescription: South Korean boy group\nActive since: 2013-06-13\nTags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop\nAlso known as: \ubc29\ud0c4; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; B\u014ddan Sh\u014dnendan; Bulletproof Boy Scouts; Beyond the Scene; \ubc29\ud0c4\uc18c\ub144\ub2e8; \u9632\u5f3e\u5c11\u5e74\u56e3; Bangtan Boys; BTS\nReleases:\n- O!RUL8,2? (2013)\n- 2 COOL 4 SKOOL (2013)\n- 2 Cool 4 Skool (2013)\n- DARK&WILD (2014)\n- NO MORE DREAM (2014)\n- BOY IN LUV (2014)\n- No More Dream (Japanese ver.) (2014)\n- Wake Up (2014)\n- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)\n- WAKE UP (2014)\n- NO MORE DREAM -Japanese ver.- (2014)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)"
+        },
+        {
+          "rank": 3,
+          "artist": "BTS",
+          "distance": 0.6875478,
+          "text": "Artist: BTS (continued)\n- You Never Walk Alone (2017)\n- \u8840, \u6c57, \u6dda / Chi, Ase, Namida (\ud53c, \ub540, \ub208\ubb3c) (Blood Sweat & Tears) (2017)\n- LOVE YOURSELF \u627f \u2018Her\u2019 (2017)\n- Come Back Home (2017)\n- MIC Drop / DNA / Crystal Snow (2017)\n- \u8840\u3001\u6c57\u3001\u6d99 (2017)\n- With Seoul (2017)\n- THE BEST OF \u9632\u5f48\u5c11\u5e74\u5718 -KOREA EDITION- (2017)\n- Blood Sweat & Tears (2017)\n- THE BEST OF \u9632\u5f48\u5c11\u5e74\u5718 -JAPAN EDITION- (2017)\n- YOU NEVER WALK ALONE (2017)\n- FACE YOURSELF (2018)"
+        },
+        {
+          "rank": 4,
+          "artist": "BLACKPINK",
+          "distance": 0.6940503,
+          "text": "Artist: BLACKPINK (continued)\n- PLAYING WITH FIRE -JP ver.- (2017)\n- SO HOT (THEBLACKLABEL remix) (2017)\n- DDU-DU DDU-DU (2018)\n- BLACKPINK IN YOUR AREA (2018)\n- SQUARE UP (2018)\n- DDU\u2010DU DDU\u2010DU (2018)\n- Re: BLACKPINK (2018)\n- Kiss and Make Up (2018)\n- \ub69c\ub450\ub69c\ub450 (DDU-DU DDU-DU) (2018)\n- BLACKPINK ARENA TOUR 2018 \u201cSPECIAL FINAL IN KYOCERA DOME OSAKA\u201d (2019)\n- KILL THIS LOVE (2019)\n- As If It\u2019s Your Last (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)\n- Kill This Love (2019)\n- KILL THIS LOVE -JP ver.- (2019)\n- STAY (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)\n- BLACKPINK 2018 TOUR \u2018IN YOUR AREA\u2019 SEOUL (2019)\n- DDU-DU DDU-DU (remix) -JP ver.- (2019)\n- DDU\u2010DU DDU\u2010DU (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)"
+        },
+        {
+          "rank": 5,
+          "artist": "BTS",
+          "distance": 0.70412743,
+          "text": "Artist: BTS (continued)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)\n- Danger (Mo-Blue-Mix) (2014)\n- 2 COOL 4 SKOOL / O!RUL8,2? (2014)\n- Boy in Luv (Japanese ver.) (2014)\n- 2019-04-13: Saturday Night Live, New York, NY, USA (2014)\n- Danger -Japanese ver.- (2014)\n- \ud654\uc591\uc5f0\ud654 pt.2 (2015)\n- For You (2015)\n- Danger (Japanese ver.) (2015)\n- \ud654\uc591\uc5f0\ud654 pt.1 (2015)\n- I NEED U (2015)\n- The Most Beautiful Moment in Life, Pt. 2 (2015)\n- FOR YOU (2015)\n- The Most Beautiful Moment in Life, Pt. 1 (2015)\n- RUN (2016)\n- WINGS (2016)\n- Youth (2016)\n- YOUTH (2016)\n- \ud654\uc591\uc5f0\ud654 Young Forever (2016)\n- The Most Beautiful Moment in Life: Young Forever (2016)\n- Wings (2016)\n- MIC Drop (Steve Aoki remix) (2017)\n- You Never Walk Alone (2017)\n- \u8840, \u6c57, \u6dda / Chi, Ase, Namida (\ud53c, \ub540, \ub208\ubb3c) (Blood Sweat & Tears) (2017)"
+        },
+        {
+          "rank": 6,
+          "artist": "Kanye West Tribute Band",
+          "distance": 0.71775484,
+          "text": "Artist: Kanye West Tribute Band\nType: Group\nCountry: unknown (unknown area)\nActive since: unknown\nTags: \nAlso known as: \nReleases:\n- Smooth Sax Tribute to Kanye West (2006)"
+        }
+      ],
+      "answer": "Artists in the data that are K\u2011pop groups:\n- BLACKPINK \u2014 Type: Group; Country: KR; tags include \"k-pop\".\n- BTS \u2014 Type: Group; Country: KR; description: \"South Korean boy group\"; tags include \"k-pop\".",
+      "answerMs": 6432,
+      "outputTokens": 473,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "BTS",
+            "BLACKPINK"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "BLACKPINK is a K-pop group.",
+              "supported": true,
+              "source": 1,
+              "reason": "The tags for BLACKPINK include 'k-pop'."
+            },
+            {
+              "claim": "BLACKPINK is from South Korea.",
+              "supported": true,
+              "source": 1,
+              "reason": "The country listed for BLACKPINK is 'KR (South Korea)'."
+            },
+            {
+              "claim": "BTS is a K-pop group.",
+              "supported": true,
+              "source": 2,
+              "reason": "The tags for BTS include 'k-pop'."
+            },
+            {
+              "claim": "BTS is a South Korean boy group.",
+              "supported": true,
+              "source": 2,
+              "reason": "The description for BTS is 'South Korean boy group'."
+            },
+            {
+              "claim": "BTS is from South Korea.",
+              "supported": true,
+              "source": 2,
+              "reason": "The country listed for BTS is 'KR (South Korea)'."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.7920665879012353,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Which K-pop groups are included in the dataset?",
+              "similarity": 0.8730613040740047
+            },
+            {
+              "question": "Could you list all of the K-pop artists present in the data?",
+              "similarity": 0.7744107848934277
+            },
+            {
+              "question": "Based on the provided information, which artists are categorized as K-pop groups?",
+              "similarity": 0.7287276747362732
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 1,
+          "verdict": "correct",
+          "reason": "The answer identifies both K-pop groups mentioned in the reference answer and provides additional true details about them without contradiction."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides a list of K-pop groups found in the data, which directly answers the question.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "latin",
+      "group": "genre",
+      "question": "Which Latin music artists are in the data?",
+      "expectedArtists": [
+        "Bad Bunny",
+        "J Balvin",
+        "Shakira",
+        "Daddy Yankee"
+      ],
+      "reference": "Bad Bunny, J Balvin, Shakira and Daddy Yankee.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "J Balvin",
+          "distance": 0.55455196,
+          "text": "Artist: J Balvin\nType: Person\nCountry: CO (Colombia)\nActive since: 1985-05-07\nTags: kolumbien; spanish; columbia; pop; spanisch; latin urban; hip hop; latin pop; rnb; reggaeton; latin\nAlso known as: J.Balvin; Jos\u00e9 \u00c1lvaro Osorio Balv\u00edn; J. Balvin\nReleases:\n- Real (2009)\n- El negocio (2011)\n- El negocio: Unreleased Edition (2011)\n- Lleg\u00f3 Navidad (2011)\n- Sin compromiso (remix) (2011)\n- Donde est\u00e9s llegar\u00e9 (remix) (2012)\n- Con flow m\u00e1talo (2012)\n- Mix Tape (2012)\n- Yo te lo dije (2012)\n- Tranquila (2013)\n- Sola (2013)\n- 6 AM (2013)\n- La familia (2013)\n- Blurred Lines (2013)\n- Orgullo (remix) (2014)\n- Cola Song (2014)\n- Ay vamos (2014)\n- S\u00f3lo t\u00fa (remix) (2014)\n- Cola Song (remixes) (2014)\n- La hoja se volte\u00f3 (2014)\n- La familia: B Sides (2014)\n- Maps (Rumba Whoa remix) (2014)"
+        },
+        {
+          "rank": 2,
+          "artist": "Bad Bunny",
+          "distance": 0.59839714,
+          "text": "Artist: Bad Bunny\nType: Person\nCountry: PR (Puerto Rico)\nActive since: 1994-03-10\nTags: pop; hip hop; spanish; latin; english; reggaeton; latin urban; latin trap; trap latino\nAlso known as: Benito Antonio Mart\u00ednez Ocasio\nReleases:\n- 1 polvo (2016)\n- Diles (2016)\n- Soy peor (2016)\n- Coronamos (remix) (2016)\n- T\u00fa no vive as\u00ed (2016)\n- Caile (2016)\n- Me llamas (2016)\n- Pa ti (2016)\n- Amigos y Enemigos (Remix) (2017)\n- Sensualidad (2017)\n- Chambea (2017)\n- Blockia (2017)\n- Mala y peligrosa (2017)\n- T\u00f3cate t\u00fa misma (2017)\n- T\u00fa no metes cabra (remix) (2017)\n- El amante (remix) (2017)\n- Netflixxx (2017)\n- La \u00faltima vez (2017)\n- Andan por ah\u00ed (2017)\n- Me llueven (2017)\n- Tranquilo (2017)\n- B\u00e1ilame (remix) (2017)\n- Panamera (remix) (2017)\n- Mayores (2017)\n- Puerta abierta (2017)"
+        },
+        {
+          "rank": 3,
+          "artist": "J Balvin",
+          "distance": 0.5989605,
+          "text": "Artist: J Balvin (continued)\n- Love Is the Name (2016)\n- Otra vez (2016)\n- Ginza (The remixes) (2016)\n- DM (remix) (2016)\n- 35 pa las 12 (2016)\n- Turn Out the Light (2016)\n- Energ\u00eda Lado B (2017)\n- Sigo extra\u00f1\u00e1ndote (Solano remix) (2017)\n- Mi gente (4B remix) (2017)\n- Mi gente (Sunnery James & Ryan Marciano remix) (2017)\n- El cartel (2017)\n- Mi gente (Steve Aoki remix) (2017)\n- Mi gente (2017)\n- Mi gente (F4st, Velza & Loudness remix) (2017)\n- Mi gente (Dillon Francis remix) (2017)\n- Bonita (2017)\n- Ahora dice (2017)\n- Hey Ma (2017)\n- Mi gente (Cedric Gervais remix) (2017)\n- Energ\u00eda lado B (2017)\n- Unforgettable (latin remix) (2017)\n- Mi gente (Alesso remix) (2017)\n- Ayer 2 (2017)\n- Quisiera (remix) (2017)\n- Mi gente (Hardwell & Quintino remix) (2017)\n- La ocasi\u00f3n (remix) (2017)\n- Mi gente (Aazar remix) (2017)"
+        },
+        {
+          "rank": 4,
+          "artist": "J Balvin",
+          "distance": 0.60039264,
+          "text": "Artist: J Balvin (continued)\n- La hoja se volte\u00f3 (2014)\n- La familia: B Sides (2014)\n- Maps (Rumba Whoa remix) (2014)\n- Travesuras (remix) (2014)\n- I Want Cha (2014)\n- Tu sombra (2014)\n- Ginza (2015)\n- Can\u2019t Stop Dancin\u2019 (J Balvin remix) (2015)\n- Ay vamos (remix) (2015)\n- Tu protagonista (remix) (2015)\n- Stuck On a Feeling (2015)\n- Lean On (J Balvin & Farruko remix) (2015)\n- Ginza (remix) (2015)\n- Sorry (Latino remix) (2015)\n- Translation (remixes) (2015)\n- Bailemos otra vez (remix) (2015)\n- La frontera (2015)\n- Cuando seas grande (2016)\n- Love Is the Name (Nando Pro latin urban remix) (2016)\n- Energ\u00eda (2016)\n- Qu\u00e9 raro (2016)\n- Love Is the Name (MADIZIN remix) (2016)\n- 35 pa las 12 (La Tostadora remix) (2016)\n- Bobo (2016)\n- Love Is the Name (2016)\n- Otra vez (2016)\n- Ginza (The remixes) (2016)\n- DM (remix) (2016)"
+        },
+        {
+          "rank": 5,
+          "artist": "J Balvin",
+          "distance": 0.6050854,
+          "text": "Artist: J Balvin (continued)\n- La ocasi\u00f3n (remix) (2017)\n- Mi gente (Aazar remix) (2017)\n- Mi gente (Busta K remix) (2017)\n- Mi gente (Henry Fong remix) (2017)"
+        },
+        {
+          "rank": 6,
+          "artist": "Daddy Yankee",
+          "distance": 0.60603356,
+          "text": "Artist: Daddy Yankee\nType: Person\nCountry: PR (Puerto Rico)\nActive since: 1977-02-03\nTags: electronic; rap; dance; hip hop; reggae; latin pop; latin; english; reggaeton; hip hop rnb and dance hall; puerto rico; latin urban; englisch\nAlso known as: DY; Raymond Ayala; Winchestra Yankee; Winchester 30-30; Ram\u00f3n Luis Ayala Rodr\u00edguez; Winchester Yankee\nReleases:\n- No Mercy (1995)\n- El Cartel (1998)\n- El Cartel II: Los Cangris (2001)\n- El Cangri.com (2002)\n- Los Homerun-es Vol. 1 (2003)\n- Barrio fino (2004)\n- Los hits y unreleased (2004)\n- Oye mi canto (2004)\n- Ahora le toca al cangri live (2005)\n- Gasolina (2005)\n- Barrio fino en directo (2005)\n- Tempted to Touch (Reggaeton Bubbling Remix 2005) (2005)\n- Rompe (2005)\n- Los Homerun-es (2005)\n- Get Down / Gasolina (2005)\n- Lo que pas\u00f3, pas\u00f3 (2005)"
+        }
+      ],
+      "answer": "Artists in the data (from the provided context):\n- J Balvin \u2014 Country: CO (Colombia)\n- Bad Bunny \u2014 Country: PR (Puerto Rico)\n- Daddy Yankee \u2014 Country: PR (Puerto Rico)",
+      "answerMs": 5214,
+      "outputTokens": 400,
+      "metrics": {
+        "contextRecall": {
+          "score": 0.75,
+          "found": [
+            "Bad Bunny",
+            "J Balvin",
+            "Daddy Yankee"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "J Balvin is a Latin music artist.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context mentions tags like 'latin urban', 'hip hop', and 'latin pop' for J Balvin."
+            },
+            {
+              "claim": "J Balvin is from Colombia.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context explicitly states 'Country: CO (Colombia)' for J Balvin."
+            },
+            {
+              "claim": "Bad Bunny is a Latin music artist.",
+              "supported": true,
+              "source": 2,
+              "reason": "The context mentions tags like 'latin', 'reggaeton', 'latin urban', and 'latin trap' for Bad Bunny."
+            },
+            {
+              "claim": "Bad Bunny is from Puerto Rico.",
+              "supported": true,
+              "source": 2,
+              "reason": "The context explicitly states 'Country: PR (Puerto Rico)' for Bad Bunny."
+            },
+            {
+              "claim": "Daddy Yankee is a Latin music artist.",
+              "supported": true,
+              "source": 6,
+              "reason": "The context mentions tags like 'latin pop', 'latin', 'reggaeton', and 'latin urban' for Daddy Yankee."
+            },
+            {
+              "claim": "Daddy Yankee is from Puerto Rico.",
+              "supported": true,
+              "source": 6,
+              "reason": "The context explicitly states 'Country: PR (Puerto Rico)' for Daddy Yankee."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.6190748651392838,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Which Latin American countries are represented by the artists in the dataset?",
+              "similarity": 0.7620634157333207
+            },
+            {
+              "question": "Could you list the countries of origin for J Balvin, Bad Bunny, and Daddy Yankee?",
+              "similarity": 0.4537199181385479
+            },
+            {
+              "question": "What are the nationalities of the musical artists included in the data?",
+              "similarity": 0.6414412615459829
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 0.5,
+          "verdict": "partial",
+          "reason": "The answer misses one artist (Shakira) from the reference answer."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides the requested information by listing Latin music artists and their countries from the data.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "bollywood",
+      "group": "genre",
+      "question": "Which artists are known for Indian film music or Bollywood?",
+      "expectedArtists": [
+        "A. R. Rahman",
+        "Arijit Singh",
+        "Lata Mangeshkar",
+        "Kishore Kumar",
+        "Diljit Dosanjh"
+      ],
+      "reference": "A. R. Rahman, Arijit Singh, Lata Mangeshkar and Kishore Kumar. Diljit Dosanjh is a Punjabi singer who also works in film.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "A. R. Rahman",
+          "distance": 0.5228437,
+          "text": "Artist: A. R. Rahman (continued)\n- Hrudayaanjali (1994)\n- Rangeela (1995)\n- Tu Hi Mera Dil (1995)\n- Bombay (1995)\n- Love Birds (1995)\n- Muthu (1995)\n- Indira (1995)\n- Rangeli (1995)\n- Priyanka (1995)\n- Rangeela & The Hits of A.R. Rahman (1995)\n- Muthu Maharaja (1995)\n- Anthimanthaarai (1996)\n- Minsara Kanavu (1996)\n- Hindustani (1996)\n- Mr. Romeo (1996)\n- Duniya Dilwalon Ki (1996)\n- Kadhal Desam (1996)\n- Indian (1996)\n- Prema Desam (1996)\n- Fire (1996)\n- Bharateeyudu (1996)\n- Andhimantharai (1996)\n- Vande M\u0101taram (1997)\n- Minsara Kanavu (Original Motion Picture Soundtrack) (1997)\n- Sapnay (1997)\n- Daud: Original Motion Picture Soundtrack (1997)\n- Kabhi Na Kabhi (1997)\n- Iruvar (1997)\n- Vishwa Vidhaata (1997)\n- Ratchagan (1997)\n- Vande Mataram (1997)"
+        },
+        {
+          "rank": 2,
+          "artist": "A. R. Rahman",
+          "distance": 0.5654582,
+          "text": "Artist: A. R. Rahman\nType: Person\nCountry: IN (India)\nActive since: 1967-01-06\nTags: soundtrack; classical; bollywood; world fusion; indian; theatre; film score; asian; easy listening soundtracks and musicals; filmi; ar-rahman; cham cham; academy award winner\nAlso known as: A.S. Dileep Kumar; Allahrakka Rahman; A.R. Rahman, Melody King; A.R RAHMAN; A. R. Rehman; AR. Rehman; A.R.Rahman; A R Rahman; \u0b85\u0bb2\u0bcd\u0bb2\u0bbe \u0bb0\u0b95\u0bcd\u0b95\u0bbe \u0bb0\u0bb9\u0bcd\u0bae\u0bbe\u0ba9\u0bcd; \u0a8f. \u0a86\u0ab0. \u0ab0\u0ab9\u0ac7\u0aae\u0abe\u0aa8; \u0905\u0932\u094d\u0932\u093e\u0939 \u0930\u0915\u094d\u0916\u093e \u0930\u0939\u092e\u093e\u0928; \u098f \u0986\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8; \u0d0e.\u0d06\u0d7c. \u0d31\u0d39\u0d4d\u200c\u0d2e\u0d3e\u0d7b; AR Rahman; Allah Rakha Rahman; Allah-Rakha Rahman; A. S. Dileepkumar; A.R. Rahman; A.R. Rehman; \u0b8f.\u0b86\u0bb0\u0bcd.\u0bb0\u0bb9\u0bcd\u0bae\u0bbe\u0ba9\u0bcd\nReleases:\n- Beauty Palace / Aranmanai Vaasal (1990)\n- Set Me Free (1991)\n- Roja (1992)\n- Ashokan (1992)\n- Dharam Yoddha (1992)\n- Yoddha (1992)\n- Yoddha (Original Motion Picture Soundtrack) (1992)"
+        },
+        {
+          "rank": 3,
+          "artist": "Arijit Singh",
+          "distance": 0.5687674,
+          "text": "Artist: Arijit Singh (continued)\n- What Jhumka? (From \u201cRocky Aur Rani Kii Prem Kahaani\u201d) (2023)\n- Dil Haareya (2023)\n- Le Aaunga (From \u201cSatyaprem Ki Katha\u201d) (2023)\n- Bairiya (2023)\n- O Bedardeya (From \u201cTu Jhoothi Main Makkaar\u201d) (2023)\n- Kesariya (Lost Frequencies remix) (2023)\n- Tumhe Kitna Pyaar Karte (From \"Bawaal\") (2023)\n- Leke Prabhu Ka Naam (From \u201cTiger 3\u201d) (2023)\n- Rooh Jaga Doon (2023)\n- Barkha (2023)\n- Galtiyan (2023)\n- Pyaar Hota Kayi Baar Hai (From \u201cTu Jhoothi Main Makkaar\u201d) (2023)\n- Bollywood Nonstop Dandiya 2023 (2023)\n- Tere Pyaar Mein (From \"Tu Jhoothi Main Makkaar\") (2023)\n- Heeriye (lofi remix) (2023)\n- Pasoori Nu (From \u201cSatyaprem Ki Katha\u201d) (2023)\n- Phir Aur Kya Chahiye (From \u201cZara Hatke Zara Bachke\u201d) (2023)\n- Aaja Baija Tu (from \u201cBrand Bollywood Downunder\u201d) (2023)\n- Gham Khushiyan (2023)"
+        },
+        {
+          "rank": 4,
+          "artist": "Lata Mangeshkar",
+          "distance": 0.572504,
+          "text": "Artist: Lata Mangeshkar (continued)\n- The Golden Collection - Lata Mangeshkar, Vol. 3 (2006)\n- The Legend (disc 2) (2006)\n- Maestros - Masters of Melody Disc 1 (2007)\n- The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India (2007)\n- Utha Rashtraveer Ho Deshbhaktigeete (2007)\n- Sadabahar Sangeetkar - Vasant Prabhu (2008)\n- Timeless (2010)\n- Alaoukik Gaani (2010)\n- Bhajan Masterpieces - II (2011)\n- 101 Lata Mangeshkar Hits (2011)\n- Flash Back - Kishore Kumar with Tabassum (2012)\n- Flash Back - Lata Mangeshkar with Tabassum (2013)\n- Magic in Movies Rajesh Khanna (2013)\n- Geet Shilp Marathi Geete (2013)\n- Tribute to Salil Da : Mone Pore Pa Ma Ga Re Sa - CD 1 (2015)\n- Tribute to Salil Da : Mone Pore Pa Ma Ga Re Sa - CD 2 (2015)\n- Melody Queens (2016)\n- MasterWorks (2016)\n- Sumadhur Geete (2017)"
+        },
+        {
+          "rank": 5,
+          "artist": "Arijit Singh",
+          "distance": 0.579676,
+          "text": "Artist: Arijit Singh (continued)\n- Rasiya Reprise (From \u201cBrahmastra\u201d) (2022)\n- Dhaagon Se Baandhaa (From \u201cRaksha Bandhan\u201d) (2022)\n- Tur Kalleyan (From \"Laal Singh Chaddha\") (2022)\n- Jo Tum Saath Ho (From \u201cSalaam Venky\u201d) (2022)\n- Oboseshe (From \u201cKishmish\u201d) (2022)\n- Kesariya Audio Teaser (From \u201cBrahmastra\u201d) (2022)\n- Dance Ka Bhoot (From \u201cBrahmastra\u201d) (2022)\n- Tere Hawaale (From \u201cLaal Singh Chaddha\u201d) (2022)\n- Seher (From \"OM - Rashtra Kavach\") (2022)\n- Lutt Putt Gaya (From \u201cDunki\u201d) (2023)\n- Phir Aur Kya Chahiye - LoFi (2023)\n- Chaleya (From \u201cJawan\u201d) (2023)\n- Chedkhaniyan (From \u201cShehzada\u201d) (2023)\n- Bhide (2023)\n- All Time Hits (2023)\n- Tera Hua (From \u201cBad Boy\u201d) (2023)\n- Tum Kya Mile (From \u201cRocky Aur Rani Kii Prem Kahaani\u201d) (2023)\n- What Jhumka? (From \u201cRocky Aur Rani Kii Prem Kahaani\u201d) (2023)\n- Dil Haareya (2023)"
+        },
+        {
+          "rank": 6,
+          "artist": "Arijit Singh",
+          "distance": 0.58086133,
+          "text": "Artist: Arijit Singh (continued)\n- Pachtaoge (2019)\n- Bekhayali (2019)\n- Ve Maahi (2019)\n- Made In China (2019)\n- Tujhe Kitna Chahne Lage (From \u201cKabir Singh\u201d) (2019)\n- Mukto Kore Dao (2020)\n- Dil Ko Maine Di Kasam (2020)\n- Rihaa (2020)\n- YRF Top 10 - Nightout Sounds (2021)\n- Mere Yaaraa (From \u201cSooryavanshi\u201d) (2021)\n- Pagglait (2021)\n- Maan Le (From \u201cChitrakut\u201d) (2022)\n- Apna Bana Le (From \u201cBhediya\u201d) (2022)\n- Mahi Mera Dil (From \u201cDhokha Round D Corner\u201d) (2022)\n- Kaala Jaadu (From \u201cFreddy\u201d) (2022)\n- Samjhawan (Lofi Flip) (2022)\n- Deva Deva (From \u201cBrahmastra\u201d) (2022)\n- Kesariya (From \u201cBrahmastra\u201d) (2022)\n- Yaar Ve (From \u201cCode Name Tiranga\u201d) (2022)\n- Kitni Haseen Hogi (From \"Hit - The First Case\") (2022)\n- Phir Na Aisi Raat Aayegi (From \"Laal Singh Chaddha\") (2022)\n- Rasiya Reprise (From \u201cBrahmastra\u201d) (2022)"
+        }
+      ],
+      "answer": "Artists used: A. R. Rahman; Arijit Singh; Lata Mangeshkar.\n\n- A. R. Rahman \u2014 tags include \"bollywood\", \"soundtrack\", \"film score\", \"filmi\", \"indian\" (context [2]).\n- Arijit Singh \u2014 many releases are film songs noted \"From <film>\" (examples: \"Kesariya (From 'Brahmastra')\", \"Tujhe Kitna Chahne Lage (From 'Kabir Singh')\", \"What Jhumka? (From 'Rocky Aur Rani Kii Prem Kahaani')\" \u2014 contexts [3],[5],[6]).\n- Lata Mangeshkar \u2014 has a release titled \"The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India\" (context [4]).",
+      "answerMs": 10154,
+      "outputTokens": 1055,
+      "metrics": {
+        "contextRecall": {
+          "score": 0.6,
+          "found": [
+            "A. R. Rahman",
+            "Arijit Singh",
+            "Lata Mangeshkar"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "A. R. Rahman's music is associated with the tags \"bollywood\", \"soundtrack\", \"film score\", \"filmi\", and \"indian\".",
+              "supported": true,
+              "source": 2,
+              "reason": "The context explicitly lists these tags under A. R. Rahman's information."
+            },
+            {
+              "claim": "Many of Arijit Singh's releases are film songs, such as \"Kesariya (From 'Brahmastra')\", \"Tujhe Kitna Chahne Lage (From 'Kabir Singh')\", and \"What Jhumka? (From 'Rocky Aur Rani Kii Prem Kahaani')\".",
+              "supported": true,
+              "source": 6,
+              "reason": "The context lists several of Arijit Singh's releases with \"(From ...)\" indicating they are film songs, including the examples given."
+            },
+            {
+              "claim": "Lata Mangeshkar has a release titled \"The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India\".",
+              "supported": true,
+              "source": 4,
+              "reason": "The context lists 'The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India' as one of Lata Mangeshkar's releases."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.4328856001736405,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "What musical artists are featured in this list, and what genres or contexts are they associated with?",
+              "similarity": 0.45839596414236067
+            },
+            {
+              "question": "Could you provide a list of artists and some relevant information or tags about their work?",
+              "similarity": 0.38486639180738275
+            },
+            {
+              "question": "Which artists are mentioned, and what details are available regarding their musical styles or notable works?",
+              "similarity": 0.45539444457117784
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 0.5,
+          "verdict": "partial",
+          "reason": "The answer misses Kishore Kumar and Diljit Dosanjh from the reference answer."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides artists known for Indian film music or Bollywood.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "soul",
+      "group": "genre",
+      "question": "Which classic soul or Motown singers are in the data?",
+      "expectedArtists": [
+        "Stevie Wonder",
+        "Marvin Gaye",
+        "Aretha Franklin"
+      ],
+      "reference": "Stevie Wonder, Marvin Gaye and Aretha Franklin.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Marvin Gaye",
+          "distance": 0.54200107,
+          "text": "Artist: Marvin Gaye (continued)\n- Live at the London Palladium (1977)\n- Got to Give It Up (1977)\n- Here, My Dear (1978)\n- A Funky Space Reincarnation, Parts 1 & 2 (1979)\n- Love Man (1979)\n- Motown Superstar Series, Volume 15 (1980)\n- In Our Lifetime (1981)\n- Midnight Love (1982)\n- My Love Is Waiting (1982)\n- Night Life (1982)\n- Sexual Healing (1982)\n- (Sexual) Healing (Club Mix) (1982)\n- (Sexual) Healing (1982)\n- Compact Command Performances: 15 Greatest Hits (1983)\n- The History of Rock, Volume Twenty Four (1984)\n- What's Going On (1984)\n- Marvin Gaye & His Women: 21 Classic Duets (1985)\n- Dream of a Lifetime (1985)\n- Sanctified Lady (1985)\n- Romantically Yours (1985)"
+        },
+        {
+          "rank": 2,
+          "artist": "Marvin Gaye",
+          "distance": 0.5497845,
+          "text": "Artist: Marvin Gaye\nType: Person\nCountry: US (United States)\nActive since: 1939-04-02\nTags: pop; american; funk; soul; rnb; sexual; motown; soul and reggae; pop soul; smooth soul; the very best of; death by murder; death by gun; multiple ipi; r&b; contemporary r&b; rhythm & blues; progressive soul\nAlso known as: Marvin Pentz Gay, Jr.; Marvin Gay; Marvine Gaye; Marving Gaye; Marvin P. Gaye\nReleases:\n- The Soulful Moods of Marvin Gaye (1961)\n- Let Your Conscience Be Your Guide (1961)\n- Hello There Angel / Hitch Hike (1962)\n- Marvin Gaye Recorded Live on Stage (1963)\n- Can I Get a Witness / I\u2019m Crazy \u2019Bout My Baby (1963)\n- That Stubborn Kinda\u2019 Fellow (1963)\n- Pride and Joy / One of These Days (1963)\n- How Sweet It Is (to Be Loved by You) / Forever (1964)\n- Greatest Hits (1964)"
+        },
+        {
+          "rank": 3,
+          "artist": "Marvin Gaye",
+          "distance": 0.550013,
+          "text": "Artist: Marvin Gaye (continued)\n- How Sweet It Is (to Be Loved by You) / Forever (1964)\n- Greatest Hits (1964)\n- Hello Broadway (1964)\n- Baby Don\u2019t You Do It (1964)\n- Together (1964)\n- When I\u2019m Alone I Cry (1964)\n- I'll Be Doggone (1965)\n- A Tribute to the Great Nat King Cole (1965)\n- How Sweet It Is to Be Loved by You (1965)\n- Take Two (1966)\n- It Takes Two / It's Got To Be A Miracle (This Thing Called Love) (1966)\n- Moods of Marvin Gaye (1966)\n- United (1967)\n- Greatest Hits, Vol. 2 (1967)\n- Ain't No Mountain High Enough (1967)\n- In the Groove (1968)\n- Just a Closer Walk With Thee / His Eye Is on the Sparrow (1968)\n- I Heard It Through the Grapevine (1968)\n- Ain\u2019t Nothing Like the Real Thing / Little Ole Boy, Little Ole Girl (1968)\n- You\u2019re All I Need (1968)\n- In The Groove (1968)\n- That\u2019s The Way Love Is (1969)"
+        },
+        {
+          "rank": 4,
+          "artist": "Aretha Franklin",
+          "distance": 0.5587133,
+          "text": "Artist: Aretha Franklin (continued)\n- Aretha Arrives (1967)\n- Take It Like You Give It (1967)\n- Baby I Love You / Going Down Slow (1967)\n- Presenting Aretha Franklin (1967)\n- Take a Look (1967)\n- Chain of Fools / Prove It (1967)\n- Aretha in Paris (1968)\n- The House That Jack Built / I Say a Little Prayer (1968)\n- Lady Soul (1968)\n- Queen of Soul (1968)\n- I Say a Little Prayer / See-Saw (1968)\n- Think (1968)\n- Soul, Soul, Soul (1968)\n- Aretha Now (1968)\n- See Saw / My Song (1968)\n- Ain\u2019t No Way / Do Right Woman \u2013 Do Right Man (1968)\n- (Sweet Sweet Baby) Since You\u2019ve Been Gone (1968)\n- Aretha\u2019s Gold (1969)\n- Soft and Beautiful (1969)\n- Once in a Lifetime (1969)\n- Eleanor Rigby / It Ain\u2019t Fair (1969)\n- The Weight / Tracks of My Tears (1969)\n- Today I Sing the Blues (1969)\n- I Can\u2019t See Myself Leaving You (1969)"
+        },
+        {
+          "rank": 5,
+          "artist": "Aretha Franklin",
+          "distance": 0.5655056,
+          "text": "Artist: Aretha Franklin\nType: Person\nCountry: US (United States)\nActive since: 1942-03-25\nTags: rock; pop; jazz; american; soul; rnb; gospel; quiet storm; southern soul; deep soul; soul and reggae; pop soul; smooth soul; r&b; rhythm & blues; the queen of soul; server name; 2008 universal fire victim; aln-sh\nAlso known as: \u30a2\u30ec\u30b5\u30fb\u30d5\u30e9\u30f3\u30af\u30ea\u30f3; Aretha Louise Franklin; Aretha Fanklin; Aretha Franklyn; Franklin, Aretha; Arthaa Franklin; Aretja Franklin\nReleases:\n- Never Grow Old / You Grow Closer (1956)\n- Are You Sure / Maybe I'm A Fool (1961)\n- Aretha (1961)\n- The Big Hits (1961)\n- Rock-A-Bye Your Baby With A Dixie Melody / Operation Heartbreak (1961)\n- The Electrifying Aretha Franklin (1962)\n- The Tender, the Moving, the Swinging (1962)\n- Laughing on the Outside (1963)"
+        },
+        {
+          "rank": 6,
+          "artist": "Aretha Franklin",
+          "distance": 0.57539403,
+          "text": "Artist: Aretha Franklin (continued)\n- The Tender, the Moving, the Swinging (1962)\n- Laughing on the Outside (1963)\n- The Christmas Song (Chestnuts Roasting on an Open Fire) / Winter Wonderland (1964)\n- Runnin\u2019 Out of Fools (1964)\n- Unforgettable: A Tribute to Dinah Washington (1964)\n- Songs of Faith (1965)\n- One Step Ahead / I Can\u2019t Wait Until I See My Baby\u2019s Face (1965)\n- Yeah!!! (1965)\n- Hands Off / Tighten Up Your Tie, Button Up Your Jacket (Make It for the Door) (1966)\n- Cry Like a Baby / Swanee (1966)\n- Soul Sister (1966)\n- (You Make Me Feel Like) A Natural Woman / Baby, Baby, Baby (1967)\n- I Never Loved a Man (the Way I Love You) (1967)\n- I Never Loved a Man the Way I Love You (1967)\n- (I Can't Get No) Satisfaction / Chain Of Fools (1967)\n- Aretha Arrives (1967)\n- Take It Like You Give It (1967)"
+        }
+      ],
+      "answer": "Artists in the data that are classic soul / Motown singers:\n\n- Marvin Gaye \u2014 tags include motown; soul; r&b (also listed as Marvin Pentz Gay, Jr. and other aliases).\n- Aretha Franklin \u2014 tags include soul; \"the queen of soul\".",
+      "answerMs": 3379,
+      "outputTokens": 280,
+      "metrics": {
+        "contextRecall": {
+          "score": 0.6666666666666666,
+          "found": [
+            "Marvin Gaye",
+            "Aretha Franklin"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "faithfulness": {
+          "score": 0.75,
+          "claims": [
+            {
+              "claim": "Marvin Gaye is a classic soul / Motown singer.",
+              "supported": false,
+              "source": null,
+              "reason": "The context provides tags like 'motown' and 'soul' for Marvin Gaye, but it does not explicitly state he is a 'classic soul / Motown singer'."
+            },
+            {
+              "claim": "Marvin Gaye's tags include Motown.",
+              "supported": true,
+              "source": 2,
+              "reason": "The context lists 'motown' among Marvin Gaye's tags."
+            },
+            {
+              "claim": "Marvin Gaye's tags include soul.",
+              "supported": true,
+              "source": 2,
+              "reason": "The context lists 'soul' among Marvin Gaye's tags."
+            },
+            {
+              "claim": "Marvin Gaye's tags include R&B.",
+              "supported": true,
+              "source": 2,
+              "reason": "The context lists 'r&b' among Marvin Gaye's tags."
+            },
+            {
+              "claim": "Marvin Gaye is also known as Marvin Pentz Gay, Jr.",
+              "supported": true,
+              "source": 2,
+              "reason": "The context explicitly states that Marvin Gaye is also known as 'Marvin Pentz Gay, Jr.'."
+            },
+            {
+              "claim": "Aretha Franklin is a classic soul / Motown singer.",
+              "supported": false,
+              "source": null,
+              "reason": "The context provides tags like 'soul' for Aretha Franklin, but it does not explicitly state she is a 'classic soul / Motown singer' or mention Motown in her tags."
+            },
+            {
+              "claim": "Aretha Franklin's tags include soul.",
+              "supported": true,
+              "source": 5,
+              "reason": "The context lists 'soul' among Aretha Franklin's tags."
+            },
+            {
+              "claim": "Aretha Franklin is known as \"the queen of soul\".",
+              "supported": true,
+              "source": 5,
+              "reason": "The context lists 'the queen of soul' among Aretha Franklin's tags."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.917669586301901,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Which artists in the data are classic soul or Motown singers?",
+              "similarity": 0.9206695394250386
+            },
+            {
+              "question": "Can you list some classic soul or Motown artists from the data?",
+              "similarity": 0.8948791419857873
+            },
+            {
+              "question": "Who are the classic soul and Motown singers in the provided data?",
+              "similarity": 0.9374600774948771
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 0.5,
+          "verdict": "partial",
+          "reason": "The answer misses Stevie Wonder, but includes other correct information."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides the requested information by listing the classic soul or Motown singers present in the data.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "hiphop-rnb",
+      "group": "open",
+      "question": "Which artists blend hip hop with R&B, and what are some of their albums?",
+      "note": "Open question with no single right list, so only the judge-based metrics apply.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "JA\u0178-Z",
+          "distance": 0.5839288,
+          "text": "Artist: JA\u0178-Z (continued)\n- Feelin\u2019 It (1996)\n- I\u2019ll Be (1996)\n- Can't Knock the Hustle (1996)\n- Ain\u2019t No Nigga (1996)\n- Reasonable Doubt (1996)\n- Dead Presidents (1996)\n- Hustlers EP (1996)\n- Ain't No Playa (1996)\n- Time After Time / All of My Days (1996)\n- In My Lifetime, Vol. 1 (1997)\n- Rocafella Mixtape (1997)\n- Who You Wit (1997)\n- Sunshine (1997)\n- It's Alright / The Doe (1998)\n- Lobster & Scrimp (1998)\n- The City is Mine (1998)\n- Wishing on a Star (1998)\n- Vol. 2\u2026 Hard Knock Life (1998)\n- Can I Get a... (1998)\n- The City Is Mine (1998)\n- A Million and One Questions (1998)\n- Nigga What, Nigga Who (1998)\n- Vol. 2... Hard Knock Life (1998)\n- Be Alone No More (1998)\n- Hard Knock Life (Ghetto Anthem) (1998)\n- A Million And One Questions (Extended Mix) (1998)\n- Vol. 3\u2026 Life and Times of S. Carter (1999)"
+        },
+        {
+          "rank": 2,
+          "artist": "JA\u0178-Z",
+          "distance": 0.5876485,
+          "text": "Artist: JA\u0178-Z (continued)\n- A Million And One Questions (Extended Mix) (1998)\n- Vol. 3\u2026 Life and Times of S. Carter (1999)\n- Vol.3.. Life and Times of S. Carter (1999)\n- Can I Get a... (Def Jam's Rush Hour) (1999)\n- Jigga My N**** (1999)\n- Do It Again (Put Ya Hands Up) (1999)\n- Hard Knock Life (1999)\n- I Just Wanna Love U (Give It 2 Me) (2000)\n- Big Pimpin\u2019 (2000)\n- Big Pimpin' (2000)\n- The Dynasty: Roc La Familia (2000)\n- Anything (2000)\n- The Blueprint (2001)\n- It's Obvious (2001)\n- Izzo (H.O.V.A.) (2001)\n- Unplugged (2001)\n- Girls, Girls, Girls (2001)\n- The Hits & Unreleased, Volume 1 (2001)\n- Guilty Until Proven Innocent (2001)\n- Izzo (H.O.V.A) (2001)\n- The Blueprint\u00b2: The Gift & The Curse (2002)\n- The Best of Both Worlds (2002)\n- Song Cry (2002)\n- Chapter One (2002)"
+        },
+        {
+          "rank": 3,
+          "artist": "JA\u0178-Z",
+          "distance": 0.6190248,
+          "text": "Artist: JA\u0178-Z\nType: Person\nCountry: US (United States)\nDescription: US rapper\nActive since: 1969-12-04\nTags: pop; rap; hip-hop; hip hop; hiphop; pop rap; rapper; us; mashup; hip hop rnb and dance hall; united states; grammy winner; boom bap; east coast hip hop; hardcore hip hop; new york hip hop; luxury rap; relic inn; chipmunk soul\nAlso known as: JA\u0178\u2010Z; JAY\u2010Z; jay z; Jay\u2010Z; Ja\u00ff\u2010Z; JAY:Z; JAY Z; Shawn C Carter; Shawn Carter; S. Carter; Shawn Corey Carter; Jayz; Hova; Jay-Hova; Jigga; Jay Z; Jay - Z; Hova da God\nReleases:\n- In My Lifetime / I Can\u2019t Get Wid Dat (1994)\n- In My Lifetime (1995)\n- Can\u2019t Knock the Hustle (Fool's Paradise remix) (1996)\n- Can\u2019t Knock the Hustle (1996)\n- Feelin\u2019 It (1996)\n- I\u2019ll Be (1996)\n- Can't Knock the Hustle (1996)\n- Ain\u2019t No Nigga (1996)"
+        },
+        {
+          "rank": 4,
+          "artist": "Kendrick Lamar",
+          "distance": 0.6391599,
+          "text": "Artist: Kendrick Lamar (continued)\n- Overly Dedicated (2010)\n- Look Out for Detox (2010)\n- She Needs Me (remix) (ringtone) (2010)\n- 6\u20197\u2019 Freestyle (2010)\n- The Heart, Part 1 (2010)\n- Ronald Reagan Era (2011)\n- Section.80 (2011)\n- My People (2011)\n- Hood Gone Love It (2011)\n- Compton State of Mind (2011)\n- Rapper Shit (2011)\n- Vanity Slave, Pt. 2 (2011)\n- Sex With Society (2011)\n- HiiiPoWeR (2011)\n- Moscato (2011)\n- Hol\u2019 Up (2011)\n- Swimming Pools (Drank) (2012)\n- ILLuminate (2012)\n- Westside, Right on Time (2012)\n- The Recipe (2012)\n- good kid, m.A.A.d city (2012)\n- Poetic Justice (2012)\n- Swimming Pools (Drank) (Remixes) (2012)\n- Cartoon & Cereal (2012)\n- Let Us Move On (prod. Jeff Bhasker and Plain Pat) (2012)\n- Let Us Move On (2012)\n- Fuckin\u2019 Problems (2012)\n- Push Thru (2012)\n- Ever Heard of Section 80 (2012)"
+        },
+        {
+          "rank": 5,
+          "artist": "Rihanna",
+          "distance": 0.65092933,
+          "text": "Artist: Rihanna (continued)\n- Pon de Replay (Dance Remixes) (2005)\n- Bring It Back (2005)\n- Music Of The Sun (2005)\n- The One (2005)\n- Pon De Replay (Dance Remixes) (2005)\n- Pon De Replay (2005)\n- We Ride (Club Mixes) (2006)\n- A Girl Like Me (2006)\n- We Ride (2006)\n- Unfaithful (2006)\n- S.O.S. (2006)\n- Break It Off (2006)\n- SOS (2006)\n- Unfaithful (Remix EP) (2006)\n- SOS (Remixes) (2006)\n- Unfaithful (Remixes) (2006)\n- S.O.S. (Mixes) (2006)\n- Roll It (2007)\n- Umbrella (2007)\n- Good Girl Gone Bad (2007)\n- Don\u2019t Stop the Music: Remixes (2007)\n- Umbrella (Remixes) (2007)\n- Shut Up and Drive (2007)\n- Don't Stop the Music (2007)\n- Umbrella (Travis Barker Remix) (2007)"
+        },
+        {
+          "rank": 6,
+          "artist": "Beyonc\u00e9",
+          "distance": 0.65162504,
+          "text": "Artist: Beyonc\u00e9 (continued)\nCountry: US (United States)\nActive since: 1981-09-04\nTags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&b; singer/songwriter; contemporary r&b; 2010s; mbs-333; art pop; alternative r&b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper"
+        }
+      ],
+      "answer": "Artists found in the data that blend hip hop with R&B:\n- JA\u0178-Z\n  - Some albums/releases in the data: Reasonable Doubt (1996); In My Lifetime, Vol. 1 (1997); Vol. 2\u2026 Hard Knock Life (1998); Vol. 3\u2026 Life and Times of S. Carter (1999); The Dynasty: Roc La Familia (2000); The Blueprint (2001); The Blueprint\u00b2: The Gift & The Curse (2002).\n- Beyonc\u00e9\n  - I don't know based on the data.",
+      "answerMs": 10802,
+      "outputTokens": 1129,
+      "metrics": {
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "JA\u0178-Z blends hip hop with R&B.",
+              "supported": true,
+              "source": 3,
+              "reason": "The context lists 'hip hop rnb and dance hall' as one of JA\u0178-Z's tags."
+            },
+            {
+              "claim": "JA\u0178-Z's album is Reasonable Doubt (1996).",
+              "supported": true,
+              "source": 1,
+              "reason": "The context lists 'Reasonable Doubt (1996)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "JA\u0178-Z's album is In My Lifetime, Vol. 1 (1997).",
+              "supported": true,
+              "source": 1,
+              "reason": "The context lists 'In My Lifetime, Vol. 1 (1997)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "JA\u0178-Z's album is Vol. 2\u2026 Hard Knock Life (1998).",
+              "supported": true,
+              "source": 1,
+              "reason": "The context lists 'Vol. 2\u2026 Hard Knock Life (1998)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "JA\u0178-Z's album is Vol. 3\u2026 Life and Times of S. Carter (1999).",
+              "supported": true,
+              "source": 1,
+              "reason": "The context lists 'Vol. 3\u2026 Life and Times of S. Carter (1999)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "JA\u0178-Z's album is The Dynasty: Roc La Familia (2000).",
+              "supported": true,
+              "source": 2,
+              "reason": "The context lists 'The Dynasty: Roc La Familia (2000)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "JA\u0178-Z's album is The Blueprint (2001).",
+              "supported": true,
+              "source": 2,
+              "reason": "The context lists 'The Blueprint (2001)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "JA\u0178-Z's album is The Blueprint\u00b2: The Gift & The Curse (2002).",
+              "supported": true,
+              "source": 2,
+              "reason": "The context lists 'The Blueprint\u00b2: The Gift & The Curse (2002)' under JA\u0178-Z's releases."
+            },
+            {
+              "claim": "Beyonc\u00e9 blends hip hop with R&B.",
+              "supported": true,
+              "source": 6,
+              "reason": "The context lists 'hip hop rnb and dance hall' and 'hip hop soul' as tags for Beyonc\u00e9."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.7322200002148769,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Which artists in the dataset fuse hip hop and R&B?",
+              "similarity": 0.6929638357236624
+            },
+            {
+              "question": "Could you list artists that incorporate elements of both hip hop and R&B based on the provided data, along with some of their relevant albums?",
+              "similarity": 0.751128879015048
+            },
+            {
+              "question": "Show me artists who combine hip hop and R&B from the data, and include any known albums for them.",
+              "similarity": 0.7525672859059204
+            }
+          ]
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer lists artists and their albums as requested.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "zombie",
+      "group": "fact",
+      "question": "In what year did Fela Kuti release Zombie?",
+      "expectedArtists": [
+        "Fela Kuti"
+      ],
+      "reference": "1976.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Fela Kuti",
+          "distance": 0.30293524,
+          "text": "Artist: Fela Kuti (continued)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)\n- Confusion (1974)\n- Going In And Coming Out (Part 1 & 2) (1974)\n- Before I Jump Like Monkey Give Me Banana (1975)\n- Expensive Shit (1975)\n- Music of Fela Volume 2: Question Jam Answer (1975)\n- He Miss Road (1975)\n- Everything Scatter (1975)\n- Noise for Vendor Mouth (1975)\n- Ikoyi Blindness (1976)\n- Zombie (1976)\n- Up Side Down (1976)\n- Yellow Fever (1976)\n- Excuse O (1976)\n- No Bread (1976)\n- Kalakuta Show (1976)\n- No Agreement (1977)\n- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)\n- Vol. 1 & 2 (1977)\n- Sorrow Tears and Blood (1977)\n- Stalemate (1977)\n- Fear Not for Man (1977)\n- Opposite People (1977)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)"
+        },
+        {
+          "rank": 2,
+          "artist": "Fela Kuti",
+          "distance": 0.36948043,
+          "text": "Artist: Fela Kuti (continued)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)\n- International Thief Thief (I.T.T.) (1979)\n- Unknown Soldier (1979)\n- V.I.P. (Vagabonds in Power) (1979)\n- Music of Many Colours (1980)\n- Authority Stealing (1980)\n- Coffin for Head of State (1981)\n- Original Sufferhead (1981)\n- Black President (1981)\n- Unnecessary Begging (1982)\n- Perambulator (1983)\n- Army Arrangement (1984)\n- Live in Amsterdam (1984)\n- Teacher Don\u2019t Teach Me Nonsense (1986)\n- Mr. Follow Follow (1986)\n- I Go Shout Plenty!!! (1986)\n- 2000 Blacks (1987)\n- Beasts of No Nation (1989)\n- ODOO: Overtake Don Overtake Overtake (1989)\n- Confusion Break Bones (1990)\n- O.D.O.O. (Overtake Don Overtake Overtake) (1990)\n- ODOO (Overtake Don Overtake Overtake) (1990)"
+        },
+        {
+          "rank": 3,
+          "artist": "Fela Kuti",
+          "distance": 0.3720081,
+          "text": "Artist: Fela Kuti\nType: Person\nCountry: NG (Nigeria)\nActive since: 1938-10-15\nTags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; j\u00f9j\u00fa\nAlso known as: \u30d5\u30a7\u30e9\u30fb\u30af\u30c6\u30a3; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela & Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti & Africa '70; Fela\nReleases:\n- Fela Ransome Kuti and His Koola Lobitos (1965)\n- Fela Fela Fela (1969)\n- Afro Beat Live (1969)\n- Black man's cry (1970)\n- Live! (1971)\n- Open & Close (1971)\n- Na Poi (1971)\n- Na Fight - O ! Part I & II (1971)\n- Fela\u2019s London Scene (1971)\n- Why Black Man Dey Suffer (1971)\n- Shakara (1972)\n- Roforofo Fight (1972)\n- Beggar's Song (Orin Alagbe) 1 & 2 (1972)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)"
+        },
+        {
+          "rank": 4,
+          "artist": "Burna Boy",
+          "distance": 0.576357,
+          "text": "Artist: Burna Boy\nType: Person\nCountry: NG (Nigeria)\nDescription: Nigerian rapper, singer-songwriter, and record producer\nActive since: 1991-07-02\nTags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion\nAlso known as: Damini Ogulu; Damini Ebunoluwa Ogulu\nReleases:\n- Best of Burn Series, Vol. 1 (2011)\n- Like to Party (2012)\n- Tonight (2012)\n- L.I.F.E: Leaving an Impact for Eternity (2013)\n- Always Love You (2013)\n- L.I.F.E - Leaving an Impact for Eternity (2013)\n- Run My Race (2013)\n- Don Gorgon (2014)\n- Check & Balance (2014)\n- Soke (2015)\n- Follow Me (2015)\n- Check and Balance (2015)\n- Baddest (2015)\n- On a Spaceship (2015)\n- Jealousy (2015)\n- No! (2015)\n- Pree Me (2016)\n- Redemption (2016)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)"
+        },
+        {
+          "rank": 5,
+          "artist": "Burna Boy",
+          "distance": 0.5917653,
+          "text": "Artist: Burna Boy (continued)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)\n- Gbona (2018)\n- On the low (2018)\n- Heaven's Gate (2018)\n- Dangote (2019)\n- Money Play (2019)\n- Own It (Joel Corry remix) (2019)\n- Stormzy - Own It (Sonny Fodera edit) (2019)\n- Be Honest (2019)\n- Steel & Copper (2019)\n- Own It (2019)\n- Killin Dem (2019)\n- African Giant (2019)\n- Anybody (2019)\n- Twice as Tall (2020)\n- Jerusalema (remix) (2020)\n- My Oasis (2020)\n- 20 10 20 (2020)\n- Winter (2020)\n- Wonderful (2020)\n- Odogwu (2020)\n- Lenu (Remix) (2020)\n- Hey Boy (2021)\n- Rotate (2021)\n- B. D\u2019OR (2021)\n- Question (2021)\n- Kilometre (2021)\n- B. D'OR (2021)\n- Want It All (2021)\n- Love, Damini (2022)\n- Last Last (2022)\n- I Told Them\u2026 (2023)\n- Mera Na (2023)\n- Big 7 (2023)\n- Apple Music Live: Burna Boy (2023)"
+        },
+        {
+          "rank": 6,
+          "artist": "Wizkid",
+          "distance": 0.6042156,
+          "text": "Artist: Wizkid\nType: Person\nCountry: NG (Nigeria)\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\nActive since: 1990-07-16\nTags: pop; afrobeat; afropop; afrobeats; tryt\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\nReleases:\n- Superstar (2011)\n- Beat of Life (2012)\n- Zombie (2012)\n- Love You (2013)\n- Mr 1 Take Jake Vol.1 (2013)\n- Jaiye Jaiye (2013)\n- The Matter (2013)\n- New Bounce (2013)\n- Ayo (2014)\n- Feel Me (2014)\n- Don\u2019t Tell \u2019Em (2014)\n- One Life (2015)\n- Mamacita (2016)\n- U Don't Know (2016)\n- One Dance (US\u2019s \"No Sex in the Champagne Room\" edit) (2016)\n- Don't dull (Freestyle) remix (2016)\n- Like This (2016)\n- Daddy Yo (2016)\n- One Dance (2016)\n- Sounds From the Other Side (2017)\n- Sounds From The Other Side (2017)"
+        }
+      ],
+      "answer": "Fela Kuti \u2014 \"Zombie\" was released in 1976.",
+      "answerMs": 3237,
+      "outputTokens": 200,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "Fela Kuti"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            false,
+            false,
+            false
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "Fela Kuti released \"Zombie\" in 1976.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context explicitly states that Fela Kuti released 'Zombie' in 1976."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.9506745647583718,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "When was Fela Kuti's \"Zombie\" released?",
+              "similarity": 0.9535437005327382
+            },
+            {
+              "question": "Can you tell me the release year of the song \"Zombie\" by Fela Kuti?",
+              "similarity": 0.9125929071872305
+            },
+            {
+              "question": "What year did Fela Kuti release \"Zombie\"?",
+              "similarity": 0.9858870865551465
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 1,
+          "verdict": "correct",
+          "reason": "The answer provides the correct year for the release of 'Zombie' and includes the artist and song title, which is extra true detail."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides the requested information.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "stromae",
+      "group": "fact",
+      "question": "Which country is Stromae from?",
+      "expectedArtists": [
+        "Stromae"
+      ],
+      "reference": "Belgium.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Stromae",
+          "distance": 0.30075884,
+          "text": "Artist: Stromae\nType: Person\nCountry: BE (Belgium)\nActive since: 1985-03-12\nTags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson fran\u00e7aise\nAlso known as: Paul Van Haver; Sromae\nReleases:\n- Racine Carr\u00e9e Live (\u221a Live)\n- 2015-04-19: Coachella Valley Music & Arts Festival, Indio, CA, USA\n- Juste un cerveau, un flow, un fond et un mic\u2026 (2007)\n- Enfants de l'an 2000 (2009)\n- Mixture Elecstro (2009)\n- Alors on danse (2009)\n- Up Saw Liz (remix) (2009)\n- Up Saw Liz (2009)\n- Cheese (2010)\n- Alors On Danse (Remixes) (2010)\n- Alors on danse (remix) (2010)\n- Te Quiero (2010)\n- Alors on danse (Remix) (2010)\n- Peace or Violence (Remixes) (2011)\n- Peace or Violence (2011)\n- Papaoutai Remixes (2013)\n- Racine carr\u00e9e (2013)\n- Formidable (2013)\n- Papaoutai (2013)"
+        },
+        {
+          "rank": 2,
+          "artist": "Stromae",
+          "distance": 0.4311961,
+          "text": "Artist: Stromae (continued)\n- Papaoutai Remixes (2013)\n- Racine carr\u00e9e (2013)\n- Formidable (2013)\n- Papaoutai (2013)\n- Remixes (2013)\n- Tous Les M\u00eames (2013)\n- Meltdown (2014)\n- Live au Centre Bell de Montr\u00e9al, Qu\u00e9bec, Canada - 28 & 29 septembre 2015 (2015)\n- Repetto X Mosaert (2017)\n- D\u00e9filer (Bande originale de la capsule No. 5 Mosaert) (2018)\n- La pluie (2018)\n- Alors on danse (Dubdogz remix) (2019)\n- Alors on Danse (DubDogz remix) (2019)\n- Papaoutai (Amaury Lacroix Remix) (2020)\n- Sant\u00e9 (2021)\n- L\u2019enfer (2022)\n- Multitude (2022)\n- Mon amour (2022)\n- Ma Meilleure Ennemie (from the series Arcane League of Legends) (2024)\n- Ma meilleure ennemie (2025)\n- QUE CE SOIT CLAIR (2025)\n- Anderlecht Champion (Stromae Remix) (2025)\n- Pardon (2025)\n- des fleurs (2026)\n- My Sins Are My Savior (2026)"
+        },
+        {
+          "rank": 3,
+          "artist": "Bruno Mars",
+          "distance": 0.6443064,
+          "text": "Artist: Bruno Mars\nType: Person\nCountry: US (United States)\nDescription: US singer\nActive since: 1985-10-08\nTags: rock; pop; new wave; hip hop; reggae; funk; soul; pop rock; new jack swing; pop soul; r&b; contemporary pop/rock; contemporary r&b; 2010s; synth funk; a filk artist; relic inn; music for soccer moms\nAlso known as: Bruno Mars; \ube0c\ub8e8\ub178 \ub9c8\uc2a4; Bruno Mars; Peter Gene Hernandez; \u30d6\u30eb\u30fc\u30ce\u30fb\u30de\u30fc\u30ba\nReleases:\n- Tomorrow's King (1990)\n- Nothin' on You (2009)\n- It's Better If You Don't Understand (2010)\n- Billionaire (2010)\n- Grenade (2010)\n- Doo-Wops & Hooligans (2010)\n- Grenade (Remixes) (2010)\n- Just The Way You Are (2010)\n- The Lost Planet (2010)\n- Just the Way You Are (2010)\n- Nothin\u2019 on You (2010)\n- It\u2019s Better If You Don\u2019t Understand (2010)\n- Just the Way You Are (Remix) (2010)"
+        },
+        {
+          "rank": 4,
+          "artist": "Daft Punk",
+          "distance": 0.70359504,
+          "text": "Artist: Daft Punk\nType: Group\nCountry: FR (France)\nDescription: French electronic duo\nActive since: 1993\nTags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas\nAlso known as: DaftPunk; daft punk; Duft Punk; \u30c0\u30d5\u30c8\u30fb\u30d1\u30f3\u30af; Daft Punk; Da Funk\nReleases:\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)"
+        },
+        {
+          "rank": 5,
+          "artist": "Stevie Wonder",
+          "distance": 0.7355773,
+          "text": "Artist: Stevie Wonder\nType: Person\nCountry: US (United States)\nActive since: 1950-05-13\nTags: rock; pop; singer-songwriter; funk; vegan; soul; motown; film soundtrack; rock and indie; pop soul; grammy winner; contemporary r&b; rhythm & blues\nAlso known as: Steveland Hardaway Judkins; \u0421\u0442\u0438\u0432\u0438 \u0423\u0430\u043d\u0434\u0435\u0440; Little Stevie Wonder; Steve Wonder; Strvie Wonder; Steevie Wonder; Wonder; Stevland Hardaway Judkins; Stevland Hardaway Morris; Stevie Wonder; \u30b9\u30c6\u30a3\u30fc\u30f4\u30a3\u30fc\u30fb\u30ef\u30f3\u30c0\u30fc\nReleases:\n- The Jazz Soul of Little Stevie (1962)\n- Fingertips (1963)\n- Little Stevie Wonder 12 Year Old Genius (1963)\n- Tribute to Uncle Ray (1963)\n- With a Song in My Heart (1963)\n- Fingerstips (1963)\n- Recorded Live: The 12 Year Old Genius (1963)\n- Hey Harmonica Man (1964)\n- Stevie at the Beach (1964)"
+        },
+        {
+          "rank": 6,
+          "artist": "The Weeknd",
+          "distance": 0.73625046,
+          "text": "Artist: The Weeknd\nType: Person\nCountry: CA (Canada)\nDescription: Canadian R&B singer\nActive since: 1990-02-16\nTags: electronic; pop; dubstep; hip hop; soul; synth-pop; rnb; dance-pop; hypnagogic pop; r&b; contemporary r&b; 2010s; alternative r&b; pbr&b; 2020s\nAlso known as: The Weeknd feat. Playboi Carti; The Weeknd; Abel Makkonen Tesfaye; \u12a0\u1264\u120d \u1218\u12ae\u1295\u1295 \u1270\u1235\u134b\u12ec; Abel Tesfaye; \u30b6\u30fb\u30a6\u30a3\u30fc\u30af\u30a8\u30f3\u30c9; The Weekend\nReleases:\n- House of Balloons (2011)\n- Thursday (Chopped & Screwed) (2011)\n- Live at the Mod Club (2011)\n- Echoes of Silence (2011)\n- MOTMXO (2011)\n- The Weeknd Prequel: The Noise (2011)\n- Thursday (Chopped Not Slopped by OG Ron C) (2011)\n- House Of Balloon (Chopped Not Slopped by OG Ron C) (2011)\n- Thursdays Screwed (2011)\n- The Remix (2011)\n- Heaven or Las Vegas (2011)\n- Til\u2019 We Overdose (2011)"
+        }
+      ],
+      "answer": "Artist used: Stromae \u2014 Country: BE (Belgium).",
+      "answerMs": 2336,
+      "outputTokens": 195,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "Stromae"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "Stromae is from Belgium.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context states 'Country: BE (Belgium)' for Stromae."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.37235506823568754,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Which artist sang this song and where is he from?",
+              "similarity": 0.39812154674444566
+            },
+            {
+              "question": "Could you provide details about the artist of this song, including their nationality?",
+              "similarity": 0.3547573196960259
+            },
+            {
+              "question": "Who is the artist for this track, and what is their country of origin?",
+              "similarity": 0.3641863382665911
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 1,
+          "verdict": "correct",
+          "reason": "The answer provides the correct country, Belgium, and includes the country code 'BE', which is additional true information."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides the country Stromae is from.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "adele-21",
+      "group": "fact",
+      "question": "When did Adele release 21?",
+      "expectedArtists": [
+        "Adele"
+      ],
+      "reference": "2011.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Adele",
+          "distance": 0.46904337,
+          "text": "Artist: Adele (continued)\n- 88 (2008)\n- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)\n- Cold Shoulder (2008)\n- 2008-06-03: The Current Studios, St. Paul, MN, USA (2008)\n- Right as Rain (2008)\n- Hometown Glory (High Contrast Remixes) (2008)\n- Chasing Pavements (Various Production edit) (2009)\n- Water and a Flame (2009)\n- 1988 (2009)\n- iTunes Live From SoHo (2009)\n- Rolling in the Deep (Remixes) (2010)\n- 2010-10-21: The Current Studios, St. Paul, MN, USA (2010)\n- Rolling in the Deep (2010)\n- 21 (2011)\n- Set Fire to the Rain (remixes) (2011)\n- iTunes Festival: London 2011 (2011)\n- Rolling in the Deep (Jamie xx shuffle) (2011)\n- Set Fire to the Rain (Moonlight Matters remix) (2011)\n- Rumour Has It (2011)\n- 2011-04-08: Paradiso FM, Amsterdam, Netherlands (2011)"
+        },
+        {
+          "rank": 2,
+          "artist": "Adele",
+          "distance": 0.47715902,
+          "text": "Artist: Adele\nType: Person\nCountry: GB (United Kingdom)\nDescription: UK soul/jazz singer\nActive since: 1988-05-05\nTags: pop; jazz; singer-songwriter; singer; soul; adult contemporary; blue-eyed soul; neo soul; pop and chart; pop soul; blue eyed soul; r&b; adele; alternative/indie rock; adult alternative pop/rock; 2010s; blues-pop; english singer; music for soccer moms; aln-sh\nAlso known as: Ad\u00e8le; \uc544\ub378; Adele Adkins; Adele; \u30a2\u30c7\u30eb; Adele Laurie Blue Adkins; \u963f\u9edb\u5c14\nReleases:\n- 2015-11-22: Saturday Night Live: New York, NY, USA (2005)\n- Hometown Glory (2007)\n- Ep & Demos (2007)\n- Make You Feel My Love (2008)\n- 19 (2008)\n- Hometown Glory (remixes) (2008)\n- Chasing Pavements (2008)\n- 88 (2008)\n- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)\n- Cold Shoulder (2008)"
+        },
+        {
+          "rank": 3,
+          "artist": "Adele",
+          "distance": 0.52374864,
+          "text": "Artist: Adele (continued)\n- Rumour Has It (2011)\n- 2011-04-08: Paradiso FM, Amsterdam, Netherlands (2011)\n- Rolling in the Deep (Dirty Noise \u2018Meets the Dubstep\u2019 remix) (2011)\n- Set Fire to the Rain (2011)\n- Adele Live at the Royal Albert Hall (2011)\n- Set Fire to the Rain (Random But Raw Bootleg) (2011)\n- Live at the Royal Albert Hall (2011)\n- Someone Like You (Live at her home) (2011)\n- Someone Like You (2011)\n- Rolling in the Deep (remixes) (2011)"
+        },
+        {
+          "rank": 4,
+          "artist": "Ed Sheeran",
+          "distance": 0.61936677,
+          "text": "Artist: Ed Sheeran (continued)\n- + (2011)\n- The A Team (2011)\n- Live At the Bedford (2011)\n- Thank You EP (2011)\n- No.5 Collaborations Project (2011)\n- You Need Me, I Don't Need You (2011)\n- Small Bump (2011)\n- You Need Me, I Don\u2019t Need You (remixes) (2011)\n- Lego House (2011)\n- The A Team (Remixes) (2011)\n- One Take (2011)\n- Spotify Session (2011)\n- Little Lady (2011)\n- You Need Me EP (2011)\n- iTunes Festival: London 2011 (2011)\n- Hush Little Baby (2012)\n- iTunes Festival: London 2012 (2012)\n- Drunk (remixes) (2012)\n- Drunk (2012)\n- The Slumdon Bridge (2012)\n- Watchtower (2012)"
+        },
+        {
+          "rank": 5,
+          "artist": "Billie Eilish",
+          "distance": 0.6343894,
+          "text": "Artist: Billie Eilish (continued)\n- hotline bling (2018)\n- WHEN WE ALL FALL ASLEEP, WHERE DO WE GO? (2019)\n- bury a friend (the remixes) (2019)\n- WHEN I WAS OLDER (2019)\n- wish you were gay (2019)\n- bury a friend (2019)"
+        },
+        {
+          "rank": 6,
+          "artist": "Olivia Rodrigo",
+          "distance": 0.6381158,
+          "text": "Artist: Olivia Rodrigo (continued)\n- Pretender (2021)\n- Granted (2021)\n- \u30c0\u30a4\u30ca\u30df\u30c3\u30af\u30d8\u30c3\u30c9\u30c8\u30e9\u30c3\u30ad\u30f3\u30b0\u6a5f\u80fd\u3092\u5099\u3048\u305f\u7a7a\u9593\u30aa\u30fc\u30c7\u30a3\u30aa\u306e\u7d39\u4ecb (2021)\n- The Best Part (2021)\n- Unreleased (2021)\n- Olivia Rodrigo: driving home 2 u (a SOUR film) (2022)\n- singles 4 you (2022)\n- Olivia Rodrigo: driving home 2 u (2022)"
+        }
+      ],
+      "answer": "Artist used: Adele.\n\nAccording to the data, 21 was released in 2011.",
+      "answerMs": 3187,
+      "outputTokens": 255,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "Adele"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            false,
+            false,
+            false
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "Adele released 21 in 2011.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context block [1] lists '21 (2011)' under the artist Adele, indicating its release in that year."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.6190737082650762,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Which artist released the album '21'?",
+              "similarity": 0.7410012512210297
+            },
+            {
+              "question": "What artist released an album in 2011?",
+              "similarity": 0.41948634864696466
+            },
+            {
+              "question": "What is the name of the artist that released 21 in 2011?",
+              "similarity": 0.6967335249272345
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 1,
+          "verdict": "correct",
+          "reason": "The answer provides the correct release year, matching the reference."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer provides the requested information explicitly.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "daft-punk",
+      "group": "fact",
+      "question": "Where are Daft Punk from, and since when have they been active?",
+      "expectedArtists": [
+        "Daft Punk"
+      ],
+      "reference": "France, active since 1993.",
+      "shouldRefuse": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Daft Punk",
+          "distance": 0.28853655,
+          "text": "Artist: Daft Punk\nType: Group\nCountry: FR (France)\nDescription: French electronic duo\nActive since: 1993\nTags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas\nAlso known as: DaftPunk; daft punk; Duft Punk; \u30c0\u30d5\u30c8\u30fb\u30d1\u30f3\u30af; Daft Punk; Da Funk\nReleases:\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)"
+        },
+        {
+          "rank": 2,
+          "artist": "Daft Punk",
+          "distance": 0.42667055,
+          "text": "Artist: Daft Punk (continued)\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)\n- 1995-08-05: Soir\u00e9e Prophecy, Le Cannet, France (1995)\n- Revolution 909 (1996)\n- Around the World (1996)\n- Indo Silver Club (1996)\n- 1997-03-02: BBC Radio 1 Essential Mix (1997)\n- Burnin\u2019 (1997)\n- Homework (1997)\n- Burnin' (1997)\n- Live @ Tribal Party, NRJ, Paris, France (1997)\n- Live @ We Are Family (full set) (1997)\n- Alive 1997 (Mayan Theater) (1997)\n- Assault (1997)\n- Live @ We Are Family (1997)\n- Burnin\u2019 (edit) (1997)\n- 1998-12-31: Daft Punk, BBC Radio One Essential Selection (1998)\n- Live @ Birmingham November 1997 (1998)\n- Around the World (Masters at Work Remixes) (1998)\n- Untitled (1999)\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)"
+        },
+        {
+          "rank": 3,
+          "artist": "Daft Punk",
+          "distance": 0.45822895,
+          "text": "Artist: Daft Punk (continued)\n- Untitled (1999)\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)\n- D.A.F.T. : A Story About Dogs, Androids, Firemen and Tomatoes (1999)\n- One More Time (2000)\n- Stronger (2000)\n- \"One More Time\" (12\" mix) (2000)\n- ONE MORE VIRGIN \u2013tracks for CELEBRATION of new century\u2013 (2000)\n- Aerodynamic (2001)\n- Discovery (2001)\n- Digital Love (Digital dub) (2001)"
+        },
+        {
+          "rank": 4,
+          "artist": "Stromae",
+          "distance": 0.62449497,
+          "text": "Artist: Stromae\nType: Person\nCountry: BE (Belgium)\nActive since: 1985-03-12\nTags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson fran\u00e7aise\nAlso known as: Paul Van Haver; Sromae\nReleases:\n- Racine Carr\u00e9e Live (\u221a Live)\n- 2015-04-19: Coachella Valley Music & Arts Festival, Indio, CA, USA\n- Juste un cerveau, un flow, un fond et un mic\u2026 (2007)\n- Enfants de l'an 2000 (2009)\n- Mixture Elecstro (2009)\n- Alors on danse (2009)\n- Up Saw Liz (remix) (2009)\n- Up Saw Liz (2009)\n- Cheese (2010)\n- Alors On Danse (Remixes) (2010)\n- Alors on danse (remix) (2010)\n- Te Quiero (2010)\n- Alors on danse (Remix) (2010)\n- Peace or Violence (Remixes) (2011)\n- Peace or Violence (2011)\n- Papaoutai Remixes (2013)\n- Racine carr\u00e9e (2013)\n- Formidable (2013)\n- Papaoutai (2013)"
+        },
+        {
+          "rank": 5,
+          "artist": "Prince",
+          "distance": 0.65516454,
+          "text": "Artist: Prince\nType: Person\nCountry: US (United States)\nDescription: \u201cThe Artist Formerly Known as\u2026\u201d\nActive since: 1958-06-07\nTags: rock; pop; 70s; 80s; 90s; jazz; dance; house; punk; american; usa; funk; deep house; funk rock; soul; disco; am\u00e9ricain; dance-pop; psychedelic pop; pop rock; neo-psychedelia; rock music; club; african; composers; 00s; robin; film soundtrack; pop and chart; pop soul; singers; caribbean; psychedelic soul; minneapolis sound; r&b; pop/rock; contemporary pop/rock; contemporary r&b; dance-rock; adult contemporary r&b; synth funk; afro house; trap; prince revolution; pretzelbodylogic; james scutt; popular music; future bass; anniversary; organic house; server name; sound recording executives and producers; instrumentalists; rhythm and blues music"
+        },
+        {
+          "rank": 6,
+          "artist": "Kendrick Lamar",
+          "distance": 0.66204786,
+          "text": "Artist: Kendrick Lamar\nType: Person\nCountry: US (United States)\nActive since: 1987-06-17\nTags: pop; rap; jazz; dance; house; hip hop; funk; disco; gangsta rap; pop rap; neo soul; alternative hip hop; experimental hip hop; west coast hip hop; boom bap; r&b; 2010s; jazz rap; conscious hip hop; political hip hop; hardcore hip hop; trap; future bass; relic inn; 2020s; progressive rap; contemporary rap; conscious rapper\nAlso known as: Kendrick Lamar, SZA; K. Duckworth; Kendrick Duckworth; Kendrick Lamar Duckworth; \u30b1\u30f3\u30c9\u30ea\u30c3\u30af\u30fb\u30e9\u30de\u30fc; \ucf04\ub4dc\ub9ad \ub77c\ub9c8; OKLAMA; K\u2010Dot; K. Dot\nReleases:\n- Hub City Threat: Minor of the Year (2004)\n- Training Day (2005)\n- No Sleep Til NYC (2007)\n- C4 (2009)\n- Kendrick Lamar (2009)\n- Overly Dedicated (2010)\n- Look Out for Detox (2010)\n- She Needs Me (remix) (ringtone) (2010)"
+        }
+      ],
+      "answer": "Daft Punk: from France (FR); active since 1993.",
+      "answerMs": 2087,
+      "outputTokens": 169,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "Daft Punk"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            false,
+            false,
+            false
+          ]
+        },
+        "faithfulness": {
+          "score": 1,
+          "claims": [
+            {
+              "claim": "Daft Punk is from France.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context states Daft Punk's country is 'FR (France)'."
+            },
+            {
+              "claim": "Daft Punk has been active since 1993.",
+              "supported": true,
+              "source": 1,
+              "reason": "The context explicitly states 'Active since: 1993' for Daft Punk."
+            }
+          ]
+        },
+        "answerRelevancy": {
+          "score": 0.845064766169497,
+          "noncommittal": false,
+          "questions": [
+            {
+              "question": "Where is Daft Punk from and how long have they been active?",
+              "similarity": 0.9758855240296688
+            },
+            {
+              "question": "When was Daft Punk formed and what is their country of origin?",
+              "similarity": 0.822171847506023
+            },
+            {
+              "question": "Can you tell me about Daft Punk?",
+              "similarity": 0.7371369269727993
+            }
+          ]
+        },
+        "answerCorrectness": {
+          "score": 1,
+          "verdict": "correct",
+          "reason": "The answer provides all the information present in the reference answer and does not contradict any facts."
+        },
+        "behaviour": {
+          "refused": false,
+          "reason": "The answer directly provides the requested information.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "grammys",
+      "group": "trap",
+      "question": "How many Grammy awards has Beyonc\u00e9 won?",
+      "note": "The data tags Beyonc\u00e9 as a 'grammy winner' but has no count, so a faithful answer says it doesn't know the number.",
+      "expectedArtists": [
+        "Beyonc\u00e9"
+      ],
+      "shouldRefuse": true,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Beyonc\u00e9",
+          "distance": 0.47293013,
+          "text": "Artist: Beyonc\u00e9 (continued)\nCountry: US (United States)\nActive since: 1981-09-04\nTags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&b; singer/songwriter; contemporary r&b; 2010s; mbs-333; art pop; alternative r&b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper"
+        },
+        {
+          "rank": 2,
+          "artist": "Beyonc\u00e9",
+          "distance": 0.5511935,
+          "text": "Artist: Beyonc\u00e9\nType: Person\nCountry: US (United States)\nActive since: 1981-09-04"
+        },
+        {
+          "rank": 3,
+          "artist": "Beyonc\u00e9",
+          "distance": 0.5712663,
+          "text": "Artist: Beyonc\u00e9 (continued)\nAlso known as: \u78a7\u6602\u7d72; Beyonc\u00e9; Beyonc\u00e9 Knowles-Carter; \u30d3\u30e8\u30f3\u30bb; Beyonce; Beyonce'; B1C; Beyonc\u00e9 Giselle Knowles-Carter; Beyonc\u00e9 Giselle Knowles; Beyonc\u00e9 Knowles; Queen Bey\nReleases:\n- Work It Out (2002)\n- Me, Myself and I (2003)\n- Baby Boy (2003)\n- Dangerously in Love (2003)\n- Crazy in Love (2003)\n- Krazy in Luv (Adam 12 So Crazy remix) (2003)\n- What's It Gonna Be (2003)\n- Krazy in Luv (Rockwilder remix) (2003)\n- Baby Boy / Walked Outta Heaven (2003)\n- I Can't Take No More (2003)\n- Krazy in Luv (2003)\n- Naughty Girl (2003)\n- Me, Myself and I (dance mixes) (2003)\n- Fighting Temptation / Summertime (2003)\n- Crazy in Love (drum & bass remix) / Dreaming (drum & bass remix) (2003)\n- \u201903 Bonnie and Clyde (2003)\n- Crazy in Love (The Remixes) (2003)\n- Summertime (2003)\n- \u201903 Bonnie & Clyde (2003)"
+        },
+        {
+          "rank": 4,
+          "artist": "Beyonc\u00e9",
+          "distance": 0.5917562,
+          "text": "Artist: Beyonc\u00e9 (continued)\n- Crazy in Love (The Remixes) (2003)\n- Summertime (2003)\n- \u201903 Bonnie & Clyde (2003)\n- Me Myself And I / Crazy Love (2004)\n- L'Or\u00e9al Paris (2004)\n- Live at Wembley (2004)\n- Speak My Mind (2004)\n- Star Spangled Banner (From the Super Bowl XXXVIII Performance) (2004)\n- Check on It (2005)\n- Check on It (Bama Boyz After Dark remix) (2005)\n- Check on It (dance mixes) (2005)\n- Deja vu (2006)"
+        },
+        {
+          "rank": 5,
+          "artist": "Cardi B",
+          "distance": 0.69279146,
+          "text": "Artist: Cardi B (continued)\n- No Limit (2017)\n- Gangsta Bitch Music, Vol. 2 (2017)\n- Bodak Yellow (2017)\n- MotorSport (2017)\n- Right Now (2017)\n- Finesse (Remix) (2017)\n- Red Barz (2017)\n- La modelo (2017)\n- Bodak Yellow (Money Moves) (2017)\n- Bodak Yellow [Latin Trap Remix] (2017)\n- Bodak Yellow (Latin Trap remix) (2017)\n- Bartier Cardi (2017)\n- Bodak Yellow (remix) (2017)\n- Finesse (2018)\n- Girls (Martin Jensen remix) (2018)\n- Taki Taki (2018)\n- Invasion of Privacy (2018)\n- Girls (Steve Aoki remix) (2018)\n- I Like It (2018)\n- Ahora dice (Real hasta la muerte remix) (2018)\n- Money (Neybuu remix) (2018)\n- Twerk (2018)\n- I Like It (Dillon Francis remix) (2018)\n- Dinero (2018)\n- Girls Like You (2018)\n- Backin\u2019 It Up (2018)\n- Finesse (Remixes) (2018)\n- Money (2018)\n- I Like It (Demo) (2018)\n- Finesse (remix) (2018)"
+        },
+        {
+          "rank": 6,
+          "artist": "Nicki Minaj",
+          "distance": 0.70507616,
+          "text": "Artist: Nicki Minaj (continued)\n- It's Barbie Bitch! The Mixtape (2009)\n- Who's Got the Crown (2009)\n- Beam Me Up Scotty (2009)\n- Shakin' It 4 Daddy (2009)\n- Step Your P*ssy Up! (2009)\n- Check It Out (2010)\n- Hello Good Morning (remix) (2010)\n- Pink Friday (2010)\n- Nikita (2010)\n- Woohoo (2010)\n- Pink Friday (deluxe edition) (2010)\n- It\u2019s Barbie Bitch (2010)\n- Your Love (2010)\n- Right Thru Me (2010)\n- Monster (2010)\n- Barbie R&B (2010)\n- Barbie World (2010)\n- Barbie World: The Mixtape (2010)\n- Trickin or What (2010)\n- All I Do Is Win (remix) (2010)\n- Harajuku R-N-Barbie (2010)\n- Up Out My Face (2010)\n- Love Pink (2010)\n- Letting Go (Dutty Love) (2010)\n- Check It Out (Remixes) (2010)\n- The Nicki Effect (2010)\n- My Chick Bad (2010)\n- Queen of Collaborations (2010)\n- 2012 (It Ain\u2019t the End) (2010)"
+        }
+      ],
+      "answer": "I don't know based on the data.\n\nArtists used: Beyonc\u00e9",
+      "answerMs": 3658,
+      "outputTokens": 225,
+      "metrics": {
+        "contextRecall": {
+          "score": 1,
+          "found": [
+            "Beyonc\u00e9"
+          ]
+        },
+        "contextPrecision": {
+          "score": 1,
+          "relevant": [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false
+          ]
+        },
+        "faithfulness": {
+          "score": null,
+          "claims": []
+        },
+        "behaviour": {
+          "refused": true,
+          "reason": "The answer says it does not know.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "australia",
+      "group": "out-of-scope",
+      "question": "What is the capital of Australia?",
+      "shouldRefuse": true,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Sia",
+          "distance": 0.7913927,
+          "text": "Artist: Sia\nType: Person\nCountry: AU (Australia)\nDescription: Australian singer\u2010songwriter\nActive since: 1975-12-18\nTags: downtempo; pop; australian; electropop; female vocals; indie pop; dance-pop; acid jazz; alternative pop; english; chamber pop; pop and chart; adult alternative pop/rock; alternative singer/songwriter; mbs-333; art pop; left-field pop; australian pop; trainwreck\nAlso known as: Sia Kate I. Furler; Sia Kate Isobelle Furler; Sia Furler; Sia; Sia Kate Furler; \u30b7\u30fc\u30a2; Sia\nReleases:\n- OnlySee (1997)\n- Little Man (2000)\n- Taken for Granted (2000)\n- Get Me (Groove Chronicles Mix) (2000)\n- Drink to Get Drunk (2001)\n- Healing Is Difficult (2001)\n- Destiny (2001)\n- Distractions (2002)\n- Colour the Small One (2004)\n- Where I Belong (2004)\n- Colour The Small One (2004)"
+        },
+        {
+          "rank": 2,
+          "artist": "Sia",
+          "distance": 0.82579917,
+          "text": "Artist: Sia (continued)\n- Where I Belong Remixes 2 (2008)\n- Numb Remixes, Part 2 (2008)\n- Soon We\u2019ll Be Found (2008)\n- Where I Belong - Remixes 1 (2008)\n- The Girl You Lost (2008)\n- iTunes Live from Sydney (2009)\n- You\u2019ve Changed (2009)\n- You\u2019ve Changed: Remixes (2009)\n- I Go to Sleep (triple j Like a Version) (2009)\n- Metro Cabaret (Live at Sydney 25.03.2009) (2009)\n- Some People Have REAL Problems (2009)\n- You\u2019ve Changed: More Remixes (2009)\n- Clap Your Hands (2010)\n- Live: The We Meaning You Tour (2010)\n- Under the Milky Way (2010)\n- iTunes Live: ARIA Awards Concert Series 2010 (2010)"
+        },
+        {
+          "rank": 3,
+          "artist": "Adele",
+          "distance": 0.88399273,
+          "text": "Artist: Adele\nType: Person\nCountry: GB (United Kingdom)\nDescription: UK soul/jazz singer\nActive since: 1988-05-05\nTags: pop; jazz; singer-songwriter; singer; soul; adult contemporary; blue-eyed soul; neo soul; pop and chart; pop soul; blue eyed soul; r&b; adele; alternative/indie rock; adult alternative pop/rock; 2010s; blues-pop; english singer; music for soccer moms; aln-sh\nAlso known as: Ad\u00e8le; \uc544\ub378; Adele Adkins; Adele; \u30a2\u30c7\u30eb; Adele Laurie Blue Adkins; \u963f\u9edb\u5c14\nReleases:\n- 2015-11-22: Saturday Night Live: New York, NY, USA (2005)\n- Hometown Glory (2007)\n- Ep & Demos (2007)\n- Make You Feel My Love (2008)\n- 19 (2008)\n- Hometown Glory (remixes) (2008)\n- Chasing Pavements (2008)\n- 88 (2008)\n- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)\n- Cold Shoulder (2008)"
+        },
+        {
+          "rank": 4,
+          "artist": "Taylor Swift",
+          "distance": 0.8903427,
+          "text": "Artist: Taylor Swift\nType: Person\nCountry: US (United States)\nActive since: 1989-12-13\nTags: pop; dance; singer-songwriter; country; synth-pop; electropop; americana; female vocals; indie pop; icon; 2000s; dance-pop; indie folk; pop rock; country pop; alternative pop; folk pop; chamber pop; contemporary country; teen pop; top 40; country-pop; taylor-swift; re-recording; singer/songwriter; list; 2010s; fixme label mess; hp; millennial; relic inn; 2020s; loves planes; late 2000s; nuno; artist of the decade; cultural icon"
+        },
+        {
+          "rank": 5,
+          "artist": "Billie Eilish",
+          "distance": 0.8952502,
+          "text": "Artist: Billie Eilish\nType: Person\nCountry: US (United States)\nActive since: 2001-12-18\nTags: electronic; downtempo; pop; singer-songwriter; usa; electronica; alternative; electropop; lo-fi; female vocals; indie pop; leftfield; pop rock; alternative pop; english; indietronica; los angeles; queer; teen pop; pop soul; alt-pop; progressive pop; dark pop; contemporary r&b; 2010s; art pop; alternative r&b; trap; bedroom pop; pity pop; englisch; 2020s; sad girl pop; gen z; late 2010s; nepo baby"
+        },
+        {
+          "rank": 6,
+          "artist": "Arijit Singh",
+          "distance": 0.8955098,
+          "text": "Artist: Arijit Singh (continued)\n- Aaja Baija Tu (from \u201cBrand Bollywood Downunder\u201d) (2023)\n- Gham Khushiyan (2023)\n- Pal (Analogue Mix) (2023)\n- Bhool Jaa (2023)"
+        }
+      ],
+      "answer": "I don't know based on the data.\n\nArtist(s) used: Sia.",
+      "answerMs": 4921,
+      "outputTokens": 452,
+      "metrics": {
+        "faithfulness": {
+          "score": null,
+          "claims": []
+        },
+        "behaviour": {
+          "refused": true,
+          "reason": "The answer explicitly states that it does not know the information based on the data.",
+          "pass": true
+        }
+      }
+    },
+    {
+      "id": "world-cup",
+      "group": "out-of-scope",
+      "question": "Who won the 2018 FIFA World Cup?",
+      "shouldRefuse": true,
+      "retrieved": [
+        {
+          "rank": 1,
+          "artist": "Cardi B",
+          "distance": 0.77757037,
+          "text": "Artist: Cardi B (continued)\n- Finesse (Remixes) (2018)\n- Money (2018)\n- I Like It (Demo) (2018)\n- Finesse (remix) (2018)\n- Dinero (CADE remix) (2018)\n- Girls Like You (CRAY remix) (2018)\n- Be Careful (2018)\n- Girls (2018)\n- Drip (2018)\n- Thotiana (remix) (2019)\n- South of the Border (2019)\n- South of the Border (Sam Feldt remix) (2019)\n- Press (2019)\n- Writing on the Wall (2019)\n- Please Me (2019)\n- YES (2019)\n- Clout (2019)\n- South of the Border (Cheat Codes remix) (2019)"
+        },
+        {
+          "rank": 2,
+          "artist": "Wizkid",
+          "distance": 0.80206025,
+          "text": "Artist: Wizkid\nType: Person\nCountry: NG (Nigeria)\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\nActive since: 1990-07-16\nTags: pop; afrobeat; afropop; afrobeats; tryt\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\nReleases:\n- Superstar (2011)\n- Beat of Life (2012)\n- Zombie (2012)\n- Love You (2013)\n- Mr 1 Take Jake Vol.1 (2013)\n- Jaiye Jaiye (2013)\n- The Matter (2013)\n- New Bounce (2013)\n- Ayo (2014)\n- Feel Me (2014)\n- Don\u2019t Tell \u2019Em (2014)\n- One Life (2015)\n- Mamacita (2016)\n- U Don't Know (2016)\n- One Dance (US\u2019s \"No Sex in the Champagne Room\" edit) (2016)\n- Don't dull (Freestyle) remix (2016)\n- Like This (2016)\n- Daddy Yo (2016)\n- One Dance (2016)\n- Sounds From the Other Side (2017)\n- Sounds From The Other Side (2017)"
+        },
+        {
+          "rank": 3,
+          "artist": "Burna Boy",
+          "distance": 0.80528784,
+          "text": "Artist: Burna Boy (continued)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)\n- Gbona (2018)\n- On the low (2018)\n- Heaven's Gate (2018)\n- Dangote (2019)\n- Money Play (2019)\n- Own It (Joel Corry remix) (2019)\n- Stormzy - Own It (Sonny Fodera edit) (2019)\n- Be Honest (2019)\n- Steel & Copper (2019)\n- Own It (2019)\n- Killin Dem (2019)\n- African Giant (2019)\n- Anybody (2019)\n- Twice as Tall (2020)\n- Jerusalema (remix) (2020)\n- My Oasis (2020)\n- 20 10 20 (2020)\n- Winter (2020)\n- Wonderful (2020)\n- Odogwu (2020)\n- Lenu (Remix) (2020)\n- Hey Boy (2021)\n- Rotate (2021)\n- B. D\u2019OR (2021)\n- Question (2021)\n- Kilometre (2021)\n- B. D'OR (2021)\n- Want It All (2021)\n- Love, Damini (2022)\n- Last Last (2022)\n- I Told Them\u2026 (2023)\n- Mera Na (2023)\n- Big 7 (2023)\n- Apple Music Live: Burna Boy (2023)"
+        },
+        {
+          "rank": 4,
+          "artist": "BLACKPINK",
+          "distance": 0.8093355,
+          "text": "Artist: BLACKPINK (continued)\n- PLAYING WITH FIRE -JP ver.- (2017)\n- SO HOT (THEBLACKLABEL remix) (2017)\n- DDU-DU DDU-DU (2018)\n- BLACKPINK IN YOUR AREA (2018)\n- SQUARE UP (2018)\n- DDU\u2010DU DDU\u2010DU (2018)\n- Re: BLACKPINK (2018)\n- Kiss and Make Up (2018)\n- \ub69c\ub450\ub69c\ub450 (DDU-DU DDU-DU) (2018)\n- BLACKPINK ARENA TOUR 2018 \u201cSPECIAL FINAL IN KYOCERA DOME OSAKA\u201d (2019)\n- KILL THIS LOVE (2019)\n- As If It\u2019s Your Last (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)\n- Kill This Love (2019)\n- KILL THIS LOVE -JP ver.- (2019)\n- STAY (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)\n- BLACKPINK 2018 TOUR \u2018IN YOUR AREA\u2019 SEOUL (2019)\n- DDU-DU DDU-DU (remix) -JP ver.- (2019)\n- DDU\u2010DU DDU\u2010DU (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)"
+        },
+        {
+          "rank": 5,
+          "artist": "BTS",
+          "distance": 0.80933934,
+          "text": "Artist: BTS (continued)\n- You Never Walk Alone (2017)\n- \u8840, \u6c57, \u6dda / Chi, Ase, Namida (\ud53c, \ub540, \ub208\ubb3c) (Blood Sweat & Tears) (2017)\n- LOVE YOURSELF \u627f \u2018Her\u2019 (2017)\n- Come Back Home (2017)\n- MIC Drop / DNA / Crystal Snow (2017)\n- \u8840\u3001\u6c57\u3001\u6d99 (2017)\n- With Seoul (2017)\n- THE BEST OF \u9632\u5f48\u5c11\u5e74\u5718 -KOREA EDITION- (2017)\n- Blood Sweat & Tears (2017)\n- THE BEST OF \u9632\u5f48\u5c11\u5e74\u5718 -JAPAN EDITION- (2017)\n- YOU NEVER WALK ALONE (2017)\n- FACE YOURSELF (2018)"
+        },
+        {
+          "rank": 6,
+          "artist": "Bad Bunny",
+          "distance": 0.809847,
+          "text": "Artist: Bad Bunny (continued)\n- Amorfoda (2018)\n- Salimos a Buscarte (2018)\n- El combo me llamas 2 (2018)\n- Thinkin (2018)\n- El ba\u00f1o (2018)"
+        }
+      ],
+      "answer": "Artists checked: Cardi B; Wizkid; Burna Boy; BLACKPINK; BTS; Bad Bunny.\n\nI don't know based on the data.",
+      "answerMs": 5328,
+      "outputTokens": 412,
+      "metrics": {
+        "faithfulness": {
+          "score": null,
+          "claims": []
+        },
+        "behaviour": {
+          "refused": true,
+          "reason": "The answer explicitly states 'I don't know based on the data'.",
+          "pass": true
+        }
+      }
+    }
+  ]
+}

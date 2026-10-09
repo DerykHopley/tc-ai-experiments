@@ -4,6 +4,8 @@
 
 The evaluation questions in `../eval/questions.json` are ours, written with Claude from this data.
 
+`rag-langchain-runs/` holds the four evaluation runs from [rag-langchain/output/eval-runs](../../rag-langchain/output/eval-runs/), copied unchanged as of commit `346aca6`: the answers, retrieved chunks and Gemini's claim verdicts that `eval/4_cross_judge.py` judges again.
+
 ## Licence (CSV files)
 
 MIT License

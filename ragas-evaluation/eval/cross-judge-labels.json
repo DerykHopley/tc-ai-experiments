@@ -1,0 +1,114 @@
+{
+  "top-k-a/soul/0": {
+    "claim": "Marvin Gaye is a classic soul / Motown singer.",
+    "supported": true,
+    "pattern": "Tag list missed",
+    "evidence": "Tags: …; soul; …; motown; … (Marvin Gaye, chunk [2])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/hiphop-rnb/0": {
+    "claim": "JAŸ-Z blends hip hop with R&B.",
+    "supported": true,
+    "pattern": "Tag list missed",
+    "evidence": "Tags: …; hip hop rnb and dance hall; … (JAŸ-Z, chunk [3])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/hiphop-rnb/8": {
+    "claim": "Beyoncé blends hip hop with R&B.",
+    "supported": true,
+    "pattern": "Tag list missed",
+    "evidence": "Tags: …; hip hop rnb and dance hall; hip hop soul; … (Beyoncé, chunk [6])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-a/adele-21/0": {
+    "claim": "Adele released 21 in 2011.",
+    "supported": true,
+    "pattern": "Year in a release list missed",
+    "evidence": "- 21 (2011) (Adele, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/soul/1": {
+    "claim": "2. Aretha Franklin is a classic soul or Motown singer.",
+    "supported": true,
+    "pattern": "“or” read as “and”",
+    "evidence": "Tags: …; soul; …; the queen of soul; … (Aretha Franklin, chunk [5]). Soul alone makes the “or” true.",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/hiphop-rnb/10": {
+    "claim": "Beyoncé's tags include \"hip hop rnb and dance hall\".",
+    "supported": true,
+    "pattern": "Tag list missed",
+    "evidence": "Tags: …; hip hop rnb and dance hall; … (Beyoncé, chunk [6])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/hiphop-rnb/11": {
+    "claim": "Beyoncé's tags include \"contemporary r&b\".",
+    "supported": true,
+    "pattern": "Tag list missed",
+    "evidence": "Tags: …; contemporary r&b; … (Beyoncé, chunk [6])",
+    "by": "claude, from the chunk text"
+  },
+  "top-k-b/adele-21/0": {
+    "claim": "Adele released 21 in 2011.",
+    "supported": true,
+    "pattern": "Year in a release list missed",
+    "evidence": "- 21 (2011) (Adele, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "two-per-artist/soul/1": {
+    "claim": "Aretha Franklin is a classic soul or Motown singer.",
+    "supported": true,
+    "pattern": "“or” read as “and”",
+    "evidence": "Tags: …; soul; …; the queen of soul; … (Aretha Franklin, chunk [4]). Soul alone makes the “or” true.",
+    "by": "claude, from the chunk text"
+  },
+  "two-per-artist/adele-21/0": {
+    "claim": "Adele released 21 in 2011.",
+    "supported": true,
+    "pattern": "Year in a release list missed",
+    "evidence": "- 21 (2011) (Adele, chunk [1])",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/afrobeat/10": {
+    "claim": "Prince makes Afro house music.",
+    "supported": true,
+    "pattern": "Tag list missed",
+    "evidence": "Tags: …; afro house; … (Prince, chunk [6])",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/afrobeat/11": {
+    "claim": "Prince makes African music.",
+    "supported": false,
+    "pattern": "Is a tag enough?",
+    "evidence": "Prince has the tag “african”. Does one crowd-sourced tag support “makes African music”?",
+    "by": "the author's judgement call"
+  },
+  "one-per-artist/bollywood/1": {
+    "claim": "A. R. Rahman is known for Bollywood.",
+    "supported": false,
+    "pattern": "Outside knowledge used",
+    "evidence": "The chunk is only release titles (Rangeela, Bombay, …). Nothing says film music or Bollywood; knowing those are Bollywood films is outside knowledge.",
+    "by": "claude, from the chunk text"
+  },
+  "one-per-artist/soul/0": {
+    "claim": "Marvin Gaye is a classic soul or Motown singer.",
+    "supported": true,
+    "pattern": "Inference from a title",
+    "evidence": "No tags in this chunk. One release is “Motown Superstar Series, Volume 15 (1980)”. Does that support “soul or Motown singer”?",
+    "by": "the author's judgement call"
+  },
+  "one-per-artist/soul/1": {
+    "claim": "Aretha Franklin is a classic soul or Motown singer.",
+    "supported": false,
+    "pattern": "Inference from a title",
+    "evidence": "No tags in this chunk. Releases include “Queen of Soul (1968)” and “Lady Soul (1968)”. Does an album title support “soul singer”?",
+    "by": "the author's judgement call"
+  },
+  "one-per-artist/soul/2": {
+    "claim": "Stevie Wonder is a classic soul or Motown singer.",
+    "supported": false,
+    "pattern": "Nothing in the chunk",
+    "evidence": "No tags in this chunk, and no release mentions soul or Motown.",
+    "by": "claude, from the chunk text"
+  }
+}

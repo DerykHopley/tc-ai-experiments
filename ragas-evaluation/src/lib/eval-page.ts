@@ -78,7 +78,7 @@ export function closestLine(
 }
 
 // Wrap the shared words in <mark>, on already-escaped text
-function markWords(line: string, shared: string[]): string {
+export function markWords(line: string, shared: string[]): string {
   if (!shared.length) return esc(line);
   const pattern = new RegExp(
     `(${shared.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`,

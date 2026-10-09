@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Two Judges Compared</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --hairline: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.1);
+    --muted-mark: #c3c2b7;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --div-neg: #2a78d6;
+    --div-pos: #e34948;
+    --div-mid: #f0efec;
+    --code-bg: rgba(11, 11, 11, 0.04);
+    --mark-bg: rgba(42, 120, 214, 0.16);
+    --mark-alt-bg: rgba(235, 104, 52, 0.16);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --hairline: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.1);
+      --muted-mark: #4a4a46;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --div-neg: #3987e5;
+      --div-pos: #e66767;
+      --div-mid: #383835;
+      --code-bg: rgba(255, 255, 255, 0.05);
+      --mark-bg: rgba(57, 135, 229, 0.28);
+      --mark-alt-bg: rgba(217, 89, 38, 0.3);
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --border: rgba(255, 255, 255, 0.1);
+    --muted-mark: #4a4a46;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --div-neg: #3987e5;
+    --div-pos: #e66767;
+    --div-mid: #383835;
+    --code-bg: rgba(255, 255, 255, 0.05);
+    --mark-bg: rgba(57, 135, 229, 0.28);
+    --mark-alt-bg: rgba(217, 89, 38, 0.3);
+  }
+  body { margin: 0; background: #f9f9f7; }
+  @media (prefers-color-scheme: dark) { body { background: #0d0d0d; } }
+  .viz-root {
+    min-height: 100vh; background: var(--page); color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 2rem 16px; box-sizing: border-box;
+    --ok: var(--series-3); --bad: var(--series-2);
+  }
+  main { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.1rem; margin: 0 0 0.5rem; }
+  p { color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.75rem; }
+  .muted { color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+  .stat { border: 1px solid var(--hairline); border-radius: 8px; padding: 0.6rem 0.9rem; min-width: 130px; background: var(--surface-1); }
+  .stat b { display: block; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 0.8rem; color: var(--text-secondary); }
+  table { border-collapse: collapse; font-size: 0.875rem; }
+  th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--text-secondary); font-weight: 600; }
+  .tnum { font-variant-numeric: tabular-nums; text-align: right; }
+  .table-wrap { overflow-x: auto; }
+  .matrix td { text-align: center; font-size: 1.1rem; font-variant-numeric: tabular-nums; min-width: 6rem; }
+  .matrix td.same { background: var(--mark-bg); font-weight: 700; }
+  .matrix td.diff { background: var(--mark-alt-bg); font-weight: 700; }
+  .sq { display: inline-grid; place-items: center; width: 1.1rem; height: 1.1rem; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #fff; vertical-align: text-bottom; }
+  .sq.ok { background: var(--ok); }
+  .sq.bad { background: var(--bad); }
+  .claim { border: 1px solid var(--hairline); border-radius: 8px; padding: 0.75rem; margin-top: 0.75rem; }
+  .claim.open { border: 2px dashed var(--series-2); }
+  .claim p { margin: 0.3rem 0; font-size: 0.875rem; }
+  .claim .text { font-size: 1rem; color: var(--text-primary); }
+  .claim .where { font-size: 0.8rem; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 1rem; }
+  .tag { display: inline-block; font-size: 0.75rem; border: 1px solid var(--hairline); border-radius: 999px; padding: 0 0.5rem; color: var(--text-secondary); }
+  .evidence code { background: var(--code-bg); padding: 0.1rem 0.3rem; border-radius: 4px; overflow-wrap: anywhere; font-size: 0.8rem; }
+  mark { background: var(--mark-bg); color: inherit; }
+  .decision { color: var(--text-primary); }
+  .pending { color: var(--series-2); font-weight: 700; }
+  ul { color: var(--text-secondary); line-height: 1.5; padding-left: 1.2rem; }
+  li { margin: 0.35rem 0; }
+  code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 0.85em; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<main>
+  <h1>Two judges, the same claims</h1>
+  <p>rag-langchain scored its answers with <code>google/gemini-2.5-flash</code> as the judge. Here the same 161 claims from 40 answers (4 runs) were judged again by <code>openai/gpt-4o-mini</code> with RAGAS’s own verdict prompt, against the same numbered chunks. Where the two disagree, the chunk text decides who was right.</p>
+
+  <div class="stats">
+    <div class="stat"><b>90%</b><span>of claims get the same verdict (145 of 161)</span></div>
+    <div class="stat"><b>16</b><span>disagreements</span></div>
+    <div class="stat"><b>12 – 4</b><span>right on the 16 decided: Gemini – RAGAS</span></div>
+    
+  </div>
+
+  <section class="card">
+    <h2>Where they agree</h2>
+    <p>Rows are Gemini’s verdict, columns RAGAS’s. Blue cells are agreement; orange cells are the disagreements listed below. Most disagreements are claims Gemini accepted and RAGAS rejected: RAGAS’s judge is stricter, but stricter isn’t the same as right.</p>
+    <div class="table-wrap"><table class="matrix">
+  <thead><tr><th></th><th colspan="2">openai/gpt-4o-mini (RAGAS prompt)</th></tr>
+  <tr><th>google/gemini-2.5-flash</th><th>supported</th><th>not supported</th></tr></thead>
+  <tbody>
+    <tr><th>supported</th><td class="same">143</td><td class="diff">12</td></tr>
+    <tr><th>not supported</th><td class="diff">4</td><td class="same">2</td></tr>
+  </tbody>
+</table></div>
+  </section>
+
+  <section class="card">
+    <h2>What it does to the score</h2>
+    <p>The same answers, scored with each judge’s verdicts (supported ÷ claims per answer, averaged per run). This is how much a faithfulness score depends on which judge you pick. <b>Checked</b> uses the shared verdict where the judges agree, and the decision below where they don’t.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Run</th><th class="tnum">Answers</th><th class="tnum">Gemini</th><th class="tnum">RAGAS</th><th class="tnum">Checked</th></tr></thead>
+      <tbody><tr><td>top-k-a</td><td class="tnum">10</td><td class="tnum">0.97</td><td class="tnum">0.87</td><td class="tnum"><b>0.99</b></td></tr><tr><td>top-k-b</td><td class="tnum">10</td><td class="tnum">1.00</td><td class="tnum">0.83</td><td class="tnum"><b>1.00</b></td></tr><tr><td>two-per-artist</td><td class="tnum">10</td><td class="tnum">1.00</td><td class="tnum">0.85</td><td class="tnum"><b>1.00</b></td></tr><tr><td>one-per-artist</td><td class="tnum">10</td><td class="tnum">0.90</td><td class="tnum">0.95</td><td class="tnum"><b>0.91</b></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>What went wrong</h2>
+    <p>Each disagreement, grouped by the kind of mistake, and which judge made it.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Pattern</th><th class="tnum">Claims</th><th class="tnum">Gemini wrong</th><th class="tnum">RAGAS wrong</th></tr></thead>
+      <tbody><tr><td>Tag list missed</td><td class="tnum">6</td><td class="tnum">1</td><td class="tnum">5</td></tr><tr><td>Year in a release list missed</td><td class="tnum">3</td><td class="tnum"></td><td class="tnum">3</td></tr><tr><td>“or” read as “and”</td><td class="tnum">2</td><td class="tnum"></td><td class="tnum">2</td></tr><tr><td>Inference from a title</td><td class="tnum">2</td><td class="tnum">1</td><td class="tnum">1</td></tr><tr><td>Is a tag enough?</td><td class="tnum">1</td><td class="tnum">1</td><td class="tnum"></td></tr><tr><td>Outside knowledge used</td><td class="tnum">1</td><td class="tnum">1</td><td class="tnum"></td></tr><tr><td>Nothing in the chunk</td><td class="tnum">1</td><td class="tnum"></td><td class="tnum">1</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>Every disagreement</h2>
+    <p>Decisions are in <code>eval/cross-judge-labels.json</code>. Clear cases were decided from the chunk text (the evidence line is quoted). Dashed cards are judgement calls, left for a person to decide.</p>
+    <div class="claim">
+  <p class="where"><span class="muted">#1 · top-k-a · Which classic soul or Motown singers are in the data?</span> <span class="tag">Tag list missed</span></p>
+  <p class="text">“Marvin Gaye is a classic soul / Motown singer.”</p>
+  <div class="two">
+    <p><span class="sq bad">✗</span> <b>Gemini</b> The context provides tags like 'motown' and 'soul' for Marvin Gaye, but it does not explicitly state he is a 'classic soul / Motown singer'.</p>
+    <p><span class="sq ok">✓</span> <b>RAGAS</b> The context describes Marvin Gaye as an artist associated with Motown and soul music.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; soul; …; motown; … (Marvin Gaye, chunk [2])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>RAGAS</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#2 · top-k-a · Which artists blend hip hop with R&amp;B, and what are some of their albums?</span> <span class="tag">Tag list missed</span></p>
+  <p class="text">“JAŸ-Z blends hip hop with R&amp;B.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context lists 'hip hop rnb and dance hall' as one of JAŸ-Z's tags.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context does not provide specific information about JAŸ-Z's musical style or genre blending.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; hip hop rnb and dance hall; … (JAŸ-Z, chunk [3])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#3 · top-k-a · Which artists blend hip hop with R&amp;B, and what are some of their albums?</span> <span class="tag">Tag list missed</span></p>
+  <p class="text">“Beyoncé blends hip hop with R&amp;B.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context lists 'hip hop rnb and dance hall' and 'hip hop soul' as tags for Beyoncé.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context does not provide specific information about Beyoncé's musical style or genre blending.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; hip hop rnb and dance hall; hip hop soul; … (Beyoncé, chunk [6])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#4 · top-k-a · When did Adele release 21?</span> <span class="tag">Year in a release list missed</span></p>
+  <p class="text">“Adele released 21 in 2011.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context block [1] lists '21 (2011)' under the artist Adele, indicating its release in that year.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context mentions Adele's album '21' but does not specify the release year as 2011; it only states '21 (2011)' without confirming it as a release date.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> - 21 (2011) (Adele, chunk [1])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#5 · top-k-b · Which classic soul or Motown singers are in the data?</span> <span class="tag">“or” read as “and”</span></p>
+  <p class="text">“2. Aretha Franklin is a classic soul or Motown singer.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context mentions that Aretha Franklin's tags include 'soul' and 'motown'.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context identifies Aretha Franklin as the 'Queen of Soul' and associates her with soul music, which supports her classification as a classic soul singer, but does not explicitly mention Motown.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; soul; …; the queen of soul; … (Aretha Franklin, chunk [5]). Soul alone makes the “or” true.</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#6 · top-k-b · Which artists blend hip hop with R&amp;B, and what are some of their albums?</span> <span class="tag">Tag list missed</span></p>
+  <p class="text">“Beyoncé's tags include &quot;hip hop rnb and dance hall&quot;.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The tags for Beyoncé include &quot;hip hop rnb and dance hall&quot;.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context does not provide any tags for Beyoncé, so this statement cannot be verified.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; hip hop rnb and dance hall; … (Beyoncé, chunk [6])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#7 · top-k-b · Which artists blend hip hop with R&amp;B, and what are some of their albums?</span> <span class="tag">Tag list missed</span></p>
+  <p class="text">“Beyoncé's tags include &quot;contemporary r&amp;b&quot;.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The tags for Beyoncé include &quot;contemporary r&amp;b&quot;.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context does not provide any tags for Beyoncé, so this statement cannot be verified.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; contemporary r&amp;b; … (Beyoncé, chunk [6])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#8 · top-k-b · When did Adele release 21?</span> <span class="tag">Year in a release list missed</span></p>
+  <p class="text">“Adele released 21 in 2011.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context states '21 (2011)' under the artist Adele.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context mentions Adele's album '21' but does not specify the release year as 2011; it only states that she was active since 1988 and lists various releases without confirming the year for '21'.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> - 21 (2011) (Adele, chunk [1])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#9 · two-per-artist · Which classic soul or Motown singers are in the data?</span> <span class="tag">“or” read as “and”</span></p>
+  <p class="text">“Aretha Franklin is a classic soul or Motown singer.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> Aretha Franklin's tags include 'soul' and 'motown' is not listed.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context describes Aretha Franklin as the 'Queen of Soul' and associates her with soul music, which supports her classification as a classic soul singer, but does not explicitly mention Motown.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; soul; …; the queen of soul; … (Aretha Franklin, chunk [4]). Soul alone makes the “or” true.</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#10 · two-per-artist · When did Adele release 21?</span> <span class="tag">Year in a release list missed</span></p>
+  <p class="text">“Adele released 21 in 2011.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context states that Adele released &quot;21 (2011)&quot;.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context does not mention the album '21' being released by Adele in 2011; it only lists her releases without specifying '21'.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> - 21 (2011) (Adele, chunk [1])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#11 · one-per-artist · Which artists in the data make Afrobeat or other African music?</span> <span class="tag">Tag list missed</span></p>
+  <p class="text">“Prince makes Afro house music.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> Prince's tags include &quot;afro house&quot;.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> There is no mention of 'Afro house' in the context related to Prince.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Tags: …; afro house; … (Prince, chunk [6])</p>
+  <p class="decision">Decided: <b>supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#12 · one-per-artist · Which artists in the data make Afrobeat or other African music?</span> <span class="tag">Is a tag enough?</span></p>
+  <p class="text">“Prince makes African music.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> Prince's tags include &quot;african&quot;.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> While Prince is an American artist, the context does not explicitly state that he makes African music.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> Prince has the tag “african”. Does one crowd-sourced tag support “makes African music”?</p>
+  <p class="decision">Decided: <b>not supported</b> → <b>RAGAS</b> was right <span class="muted">(the author's judgement call)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#13 · one-per-artist · Which artists are known for Indian film music or Bollywood?</span> <span class="tag">Outside knowledge used</span></p>
+  <p class="text">“A. R. Rahman is known for Bollywood.”</p>
+  <div class="two">
+    <p><span class="sq ok">✓</span> <b>Gemini</b> The context lists several releases with titles such as 'Bombay' and 'Rangeela', which are common Bollywood film titles, suggesting an association with Bollywood.</p>
+    <p><span class="sq bad">✗</span> <b>RAGAS</b> The context does not explicitly mention A. R. Rahman being known for Bollywood specifically, as it focuses on his film soundtracks without specifying the industry.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> The chunk is only release titles (Rangeela, Bombay, …). Nothing says film music or Bollywood; knowing those are Bollywood films is outside knowledge.</p>
+  <p class="decision">Decided: <b>not supported</b> → <b>RAGAS</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#14 · one-per-artist · Which classic soul or Motown singers are in the data?</span> <span class="tag">Inference from a title</span></p>
+  <p class="text">“Marvin Gaye is a classic soul or Motown singer.”</p>
+  <div class="two">
+    <p><span class="sq bad">✗</span> <b>Gemini</b> The context provides a list of Marvin Gaye's releases but does not describe his musical genre or association with Motown.</p>
+    <p><span class="sq ok">✓</span> <b>RAGAS</b> The context lists Marvin Gaye as an artist associated with Motown, indicating his genre.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> No tags in this chunk. One release is “Motown Superstar Series, Volume 15 (1980)”. Does that support “soul or Motown singer”?</p>
+  <p class="decision">Decided: <b>supported</b> → <b>RAGAS</b> was right <span class="muted">(the author's judgement call)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#15 · one-per-artist · Which classic soul or Motown singers are in the data?</span> <span class="tag">Inference from a title</span></p>
+  <p class="text">“Aretha Franklin is a classic soul or Motown singer.”</p>
+  <div class="two">
+    <p><span class="sq bad">✗</span> <b>Gemini</b> The context lists Aretha Franklin's releases but does not state her musical genre or connection to Motown.</p>
+    <p><span class="sq ok">✓</span> <b>RAGAS</b> The context lists Aretha Franklin as an artist associated with soul music, confirming her genre.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> No tags in this chunk. Releases include “Queen of Soul (1968)” and “Lady Soul (1968)”. Does an album title support “soul singer”?</p>
+  <p class="decision">Decided: <b>not supported</b> → <b>Gemini</b> was right <span class="muted">(the author's judgement call)</span></p>
+</div>
+<div class="claim">
+  <p class="where"><span class="muted">#16 · one-per-artist · Which classic soul or Motown singers are in the data?</span> <span class="tag">Nothing in the chunk</span></p>
+  <p class="text">“Stevie Wonder is a classic soul or Motown singer.”</p>
+  <div class="two">
+    <p><span class="sq bad">✗</span> <b>Gemini</b> The context provides a list of Stevie Wonder's releases but does not describe his musical genre or association with Motown.</p>
+    <p><span class="sq ok">✓</span> <b>RAGAS</b> The context lists Stevie Wonder as an artist associated with Motown, indicating his genre.</p>
+  </div>
+  <p class="evidence"><span class="muted">Evidence:</span> No tags in this chunk, and no release mentions soul or Motown.</p>
+  <p class="decision">Decided: <b>not supported</b> → <b>Gemini</b> was right <span class="muted">(claude, from the chunk text)</span></p>
+</div>
+  </section>
+
+  <section class="card">
+    <h2>Limits</h2>
+    <ul>
+      <li><strong>Gemini wrote the claims.</strong> RAGAS’s claim-splitting step was skipped so the verdicts could be compared one to one, so every claim is phrased the way Gemini split the answer.</li>
+      <li><strong>One pass of the RAGAS judge.</strong> Its verdicts move between runs. The agreement rate is for this pass.</li>
+      <li><strong>Only disagreements were checked.</strong> Where both judges agree, they could both be wrong. Checking a sample of the agreements would measure that.</li>
+      <li><strong>The four runs share questions,</strong> so the same claim (“Adele released 21 in 2011”) can count up to four times.</li>
+    </ul>
+  </section>
+</main>
+</div>
+</body>
+</html>
