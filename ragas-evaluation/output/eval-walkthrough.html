@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RAG Evaluation Walkthrough</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --hairline: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.1);
+    --muted-mark: #c3c2b7;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --div-neg: #2a78d6;
+    --div-pos: #e34948;
+    --div-mid: #f0efec;
+    --code-bg: rgba(11, 11, 11, 0.04);
+    --mark-bg: rgba(42, 120, 214, 0.16);
+    --mark-alt-bg: rgba(235, 104, 52, 0.16);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --hairline: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.1);
+      --muted-mark: #4a4a46;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --div-neg: #3987e5;
+      --div-pos: #e66767;
+      --div-mid: #383835;
+      --code-bg: rgba(255, 255, 255, 0.05);
+      --mark-bg: rgba(57, 135, 229, 0.28);
+      --mark-alt-bg: rgba(217, 89, 38, 0.3);
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --border: rgba(255, 255, 255, 0.1);
+    --muted-mark: #4a4a46;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --div-neg: #3987e5;
+    --div-pos: #e66767;
+    --div-mid: #383835;
+    --code-bg: rgba(255, 255, 255, 0.05);
+    --mark-bg: rgba(57, 135, 229, 0.28);
+    --mark-alt-bg: rgba(217, 89, 38, 0.3);
+  }
+  body { margin: 0; background: #f9f9f7; }
+  @media (prefers-color-scheme: dark) { body { background: #0d0d0d; } }
+  .viz-root {
+    min-height: 100vh; background: var(--page); color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 2rem 16px; box-sizing: border-box;
+    --ok: var(--series-3); --bad: var(--series-2);
+  }
+  main { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.1rem; margin: 0; }
+  h3 { font-size: 0.95rem; margin: 1.25rem 0 0.5rem; }
+  p { color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.75rem; }
+  a { color: inherit; }
+  .muted { color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+  .phase { margin: 2rem 0 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+  .phase + p { margin-top: 0.25rem; }
+  .num { flex: none; display: inline-grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--text-primary); color: var(--page); font-weight: 700; font-size: 0.9rem; }
+  .num.small { width: 1.4rem; height: 1.4rem; font-size: 0.75rem; }
+  .step-head { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.75rem; }
+  .what { margin: 0.2rem 0 0; }
+  pre, code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 0.8rem; }
+  pre { white-space: pre-wrap; word-break: break-word; background: var(--code-bg); border-radius: 8px; padding: 0.75rem; margin: 0.5rem 0; line-height: 1.45; }
+  pre.code { border-left: 3px solid var(--text-muted); }
+  .answer { font-family: inherit; font-size: 0.9rem; }
+  .label { font-size: 0.85rem; color: var(--text-secondary); margin: 0.75rem 0 0.25rem; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; }
+  .question { font-size: 1.15rem; line-height: 1.5; border-left: 4px solid var(--series-1); padding-left: 0.9rem; margin: 0.5rem 0; color: var(--text-primary); }
+  .stats { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+  .stat { border: 1px solid var(--hairline); border-radius: 8px; padding: 0.6rem 0.9rem; min-width: 130px; background: var(--surface-1); }
+  .stat b { display: block; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 0.8rem; color: var(--text-secondary); }
+  .tnum { font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; font-size: 0.75rem; border-radius: 999px; padding: 0.05rem 0.5rem; border: 1px solid var(--hairline); white-space: nowrap; }
+  .tag.answer { border-color: var(--series-1); }
+  .tag.refuse { border-style: dashed; border-color: var(--text-muted); }
+  .badge { font-size: 0.7rem; background: var(--text-primary); color: var(--page); border-radius: 999px; padding: 0.05rem 0.45rem; font-weight: 600; vertical-align: middle; }
+  .pass { color: var(--ok); font-weight: 700; }
+  .fail { color: var(--div-pos); font-weight: 700; }
+  .verdict { display: inline-flex; gap: 0.5rem; align-items: center; font-size: 1rem; border: 1px solid var(--hairline); border-radius: 8px; padding: 0.4rem 0.75rem; margin: 0.25rem 0.5rem 0.25rem 0; }
+  .squares { display: inline-flex; flex-wrap: wrap; gap: 3px; margin-left: 0.5rem; vertical-align: middle; }
+  .sq { display: inline-grid; place-items: center; width: 1.1rem; height: 1.1rem; border-radius: 3px; font-size: 0.7rem; font-weight: 700; color: #fff; flex: none; }
+  .sq.ok { background: var(--ok); }
+  .sq.bad { background: var(--bad); }
+  .big-squares .sq { width: 2rem; height: 2rem; font-size: 1rem; border-radius: 6px; }
+  .big-squares .squares { gap: 6px; margin: 0; }
+  .equation { font-size: 1rem; margin: 0.75rem 0; color: var(--text-primary); }
+  .scale { position: relative; height: 12px; border-radius: 6px; background: var(--div-mid); margin: 1.5rem 0 2rem; }
+  .scale .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: var(--series-1); }
+  .scale .tick { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--text-secondary); }
+  .scale .tick span { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap; }
+  .claims-list { margin: 0.5rem 0 0; padding-left: 1.4rem; }
+  .claims-list li { margin: 0.3rem 0; line-height: 1.45; }
+  .claim { border: 1px solid var(--hairline); border-left: 4px solid var(--ok); border-radius: 8px; padding: 0.6rem 0.75rem; margin-top: 0.5rem; }
+  .claim.bad { border-left-color: var(--bad); }
+  .claim-head { display: flex; gap: 0.5rem; align-items: flex-start; }
+  .claim-head b { font-weight: 600; line-height: 1.4; }
+  .reason { font-size: 0.85rem; margin: 0.35rem 0 0; }
+  .near { font-size: 0.8rem; margin: 0.35rem 0 0; }
+  .near code { background: var(--code-bg); padding: 0.1rem 0.3rem; border-radius: 4px; overflow-wrap: anywhere; }
+  mark { background: var(--mark-bg); color: inherit; border-radius: 3px; padding: 0 1px; }
+  details.prompt { margin-top: 0.5rem; }
+  details.prompt summary { cursor: pointer; font-size: 0.85rem; color: var(--text-secondary); }
+  .gate { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; margin-top: 0.75rem; font-size: 0.85rem; }
+  .gate div { border: 1px solid var(--hairline); border-radius: 8px; padding: 0.5rem 0.75rem; color: var(--text-secondary); }
+  .gate .on { border: 2px solid var(--text-primary); color: var(--text-primary); }
+  .gate .arrow { border: none; padding: 0; text-align: center; color: var(--text-muted); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+  th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  th { color: var(--text-secondary); font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+  details.row { border: 1px solid var(--hairline); border-radius: 8px; margin-top: 0.5rem; background: var(--surface-1); }
+  details.row.wrong { border-color: var(--div-pos); }
+  details.row summary { cursor: pointer; display: grid; grid-template-columns: 1.5rem 1fr auto; gap: 0.25rem 0.75rem; padding: 0.6rem 0.75rem; align-items: center; list-style: none; }
+  details.row summary::-webkit-details-marker { display: none; }
+  .row-n { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .row-q { line-height: 1.4; }
+  .row-refusal { grid-column: 3; white-space: nowrap; }
+  .row-faith { grid-column: 2 / 4; display: flex; align-items: center; flex-wrap: wrap; }
+  @media (min-width: 720px) {
+    details.row summary { grid-template-columns: 1.5rem 1fr 11rem 12rem; }
+    .row-faith { grid-column: 4; }
+  }
+  .row-body { padding: 0 0.75rem 0.75rem 2.75rem; }
+  .row-head { display: none; }
+  @media (min-width: 720px) {
+    .row-head { display: grid; grid-template-columns: 1.5rem 1fr 11rem 12rem; gap: 0.75rem; padding: 0 0.75rem; font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-top: 1rem; }
+  }
+  nav.flow { margin-top: 1.25rem; }
+  .lane { margin-top: 0.75rem; }
+  .lane:first-child { margin-top: 0; }
+  .lane-name { display: block; margin-bottom: 0.35rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .lane ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .lane li { display: flex; align-items: center; }
+  .lane li + li::before { content: "→"; color: var(--text-muted); margin-right: 0.4rem; }
+  .lane a { display: flex; align-items: center; gap: 0.4rem; text-decoration: none; border: 1px solid var(--border); border-radius: 8px; padding: 0.3rem 0.5rem; background: var(--surface-1); }
+  .lane a:hover { border-color: var(--text-secondary); }
+  .lane b { display: block; font-size: 0.8rem; }
+  .lane small { display: block; font-size: 0.7rem; color: var(--text-muted); }
+  ul.check { padding-left: 1.2rem; }
+  ul.check li { margin: 0.5rem 0; line-height: 1.45; color: var(--text-secondary); }
+  ul.check li b { color: var(--text-primary); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<main>
+  <h1>Grading the answers with RAGAS</h1>
+  <p>The <a href="https://github.com/DerykHopley/tc-ai-experiments/tree/main/rag-langchain">rag-langchain</a> project followed questions through the pipeline. This page grades the pipeline’s answers: a second LLM (the <em>judge</em>) checks every answer against the chunks that were retrieved for it. Every value below is real output from the last <code>npm run eval</code>. Answers: <code>openai/gpt-5-mini</code>. Judge: <code>openai/gpt-4o-mini</code>.</p>
+
+  <div class="stats">
+    <div class="stat"><b>0.96</b><span>mean faithfulness, over 7 answers</span></div>
+    <div class="stat"><b>12 / 12</b><span>answered or refused as expected</span></div>
+    <div class="stat"><b>42 / 43</b><span>claims supported by the chunks</span></div>
+  </div>
+
+  <nav class="flow card" aria-label="Evaluation steps">
+    <div class="lane"><span class="lane-name">Prepare</span><ol><li><a href="#step-1"><span class="num small">1</span><span><b>Questions</b><small>12, labelled</small></span></a></li><li><a href="#step-2"><span class="num small">2</span><span><b>Run the RAG</b><small>per question</small></span></a></li><li><a href="#step-3"><span class="num small">3</span><span><b>Sample</b><small>RAGAS fields</small></span></a></li></ol></div>
+    <div class="lane"><span class="lane-name">Judge (per answer)</span><ol><li><a href="#step-4"><span class="num small">4</span><span><b>Refusal check</b><small>answered / refused</small></span></a></li><li><a href="#step-5"><span class="num small">5</span><span><b>Split into claims</b><small>4 here</small></span></a></li><li><a href="#step-6"><span class="num small">6</span><span><b>Check each claim</b><small>3 supported</small></span></a></li><li><a href="#step-7"><span class="num small">7</span><span><b>Score</b><small>0.75</small></span></a></li></ol></div>
+    <div class="lane"><span class="lane-name">Report</span><ol><li><a href="#step-8"><span class="num small">8</span><span><b>Every question</b><small>12 results</small></span></a></li><li><a href="#step-9"><span class="num small">9</span><span><b>What to check</b><small>1 items</small></span></a></li></ol></div>
+  </nav>
+
+  <h2 class="phase">Prepare the samples</h2>
+  <p>Steps 1–3 run in TypeScript (<code>src/1-export.ts</code>), because that’s where the pipeline is. Steps 4–7 run in Python (<code>eval/2_score.py</code>), because RAGAS is a Python library. Between them sits one file, <code>output/eval/samples.jsonl</code>.</p>
+
+  <section class="card step" id="step-1">
+  <div class="step-head">
+    <span class="num">1</span>
+    <div><h2>Write questions with the behaviour you expect</h2><p class="what">An evaluation is only as good as its questions. Each one is labelled: should the data answer it, or should the model say it doesn’t know? The “don’t know” ones include tempting questions the model could answer from its own training, but our data can’t.</p></div>
+  </div>
+  <pre class="code"><code>eval/questions.json  →  [{ &quot;question&quot;: &quot;...&quot;, &quot;expect&quot;: &quot;answer&quot; | &quot;refuse&quot;, &quot;notes&quot;: &quot;...&quot; }]</code></pre>
+<div class="table-wrap"><table>
+  <thead><tr><th>#</th><th>Question</th><th>Expect</th><th>Why it’s in the set</th></tr></thead>
+  <tbody><tr><td class="tnum">1</td><td>Which artists blend hip hop with R&amp;B, and what are some of their albums?</td><td><span class="tag answer">answers</span></td><td class="muted">Multi-artist, the rag-langchain stage 4 example</td></tr><tr><td class="tnum">2</td><td>Where is Fela Kuti from, and what kind of music did he make?</td><td><span class="tag answer">answers</span></td><td class="muted">Single artist, facts are in the profile chunk</td></tr><tr><td class="tnum">3</td><td>When did Daft Punk start, and what country are they from?</td><td><span class="tag answer">answers</span></td><td class="muted">Begin date and country fields</td></tr><tr><td class="tnum">4</td><td>Name some K-pop groups and one release by each. <span class="badge">followed below</span></td><td><span class="tag answer">answers</span></td><td class="muted">BTS and BLACKPINK</td></tr><tr><td class="tnum">5</td><td>Which artists in the data are from Nigeria?</td><td><span class="tag answer">answers</span></td><td class="muted">Fela Kuti, Burna Boy, Wizkid</td></tr><tr><td class="tnum">6</td><td>Who are some classic soul singers, and when did they start their careers?</td><td><span class="tag answer">answers</span></td><td class="muted">Stevie Wonder, Marvin Gaye, Aretha Franklin</td></tr><tr><td class="tnum">7</td><td>What are some Latin music artists and their albums?</td><td><span class="tag answer">answers</span></td><td class="muted">Bad Bunny, J Balvin, Shakira, Daddy Yankee</td></tr><tr><td class="tnum">8</td><td>Who are the members of BTS?</td><td><span class="tag refuse">says “don’t know”</span></td><td class="muted">Tempting: the model knows, but member names aren't in the data</td></tr><tr><td class="tnum">9</td><td>How many Grammy awards has Beyoncé won?</td><td><span class="tag refuse">says “don’t know”</span></td><td class="muted">Tempting: awards aren't in the data</td></tr><tr><td class="tnum">10</td><td>Which Daft Punk album sold the most copies?</td><td><span class="tag refuse">says “don’t know”</span></td><td class="muted">Tempting: sales aren't in the data</td></tr><tr><td class="tnum">11</td><td>What is the capital of Australia?</td><td><span class="tag refuse">says “don’t know”</span></td><td class="muted">Off-topic</td></tr><tr><td class="tnum">12</td><td>What is the best way to learn the guitar?</td><td><span class="tag refuse">says “don’t know”</span></td><td class="muted">Off-topic, music-flavoured</td></tr></tbody>
+</table></div>
+</section>
+
+  <section class="card step" id="step-2">
+  <div class="step-head">
+    <span class="num">2</span>
+    <div><h2>Run each question through the RAG pipeline</h2><p class="what">The usual RAG steps: retrieve the top 6 chunks, fill the prompt, call the LLM. From here on the page follows question 4.</p></div>
+  </div>
+  <pre class="code"><code>const hits = await vectorStore.similaritySearchWithScore(question, 6);
+const messages = await ragPrompt.formatMessages({ context: formatContext(docs), question });
+const response = await model.invoke(messages);</code></pre>
+<p class="question">Name some K-pop groups and one release by each.</p>
+<div class="two">
+  <div><p class="label">Retrieved chunks (cosine distance)</p><table><tbody><tr><td class="tnum">[1]</td><td>BLACKPINK</td><td class="tnum">0.562</td></tr><tr><td class="tnum">[2]</td><td>BTS</td><td class="tnum">0.583</td></tr><tr><td class="tnum">[3]</td><td>BTS</td><td class="tnum">0.621</td></tr><tr><td class="tnum">[4]</td><td>Arijit Singh</td><td class="tnum">0.674</td></tr><tr><td class="tnum">[5]</td><td>BTS</td><td class="tnum">0.679</td></tr><tr><td class="tnum">[6]</td><td>Diljit Dosanjh</td><td class="tnum">0.680</td></tr></tbody></table></div>
+  <div><p class="label">The answer</p><pre class="answer">Artists used: BLACKPINK; BTS
+
+- BLACKPINK — BOOMBAYAH (2016)
+- BTS — WINGS (2016)</pre></div>
+</div>
+</section>
+
+  <section class="card step" id="step-3">
+  <div class="step-head">
+    <span class="num">3</span>
+    <div><h2>Save it as a RAGAS sample</h2><p class="what">RAGAS expects fixed field names. Faithfulness needs three of them: the question, the retrieved chunks and the answer. (The fourth, <code>reference</code>, a hand-written correct answer, is only needed by the retrieval metrics we skipped.) <code>expect</code> is our own label, passed through.</p></div>
+  </div>
+  <pre class="code"><code>{
+  &quot;user_input&quot;: &quot;Name some K-pop groups and one release by each.&quot;,
+  &quot;retrieved_contexts&quot;: [
+    &quot;Artist: BLACKPINK Type: Group Country: KR (South Korea) Formed: 2016-0… (783 chars)&quot;,
+    &quot;Artist: BTS Type: Group Country: KR (South Korea) Description: South K… (790 chars)&quot;,
+    &quot;Artist: BTS (continued) - You Never Walk Alone (2017) - 血, 汗, 淚 / Chi,… (419 chars)&quot;,
+    &quot;Artist: Arijit Singh (continued) - Pachtaoge (2019) - Bekhayali (2019)… (815 chars)&quot;,
+    &quot;Artist: BTS (continued) - BOY IN LUV -Japanese ver.- (2014) - Skool Lu… (812 chars)&quot;,
+    &quot;Artist: Diljit Dosanjh (continued) - Con.Fi.Den.Tial (2018) - Kylie &amp; … (821 chars)&quot;
+  ],
+  &quot;response&quot;: &quot;Artists used: BLACKPINK; BTS\n\n- BLACKPINK — BOOMBAYAH (2016)\n- BTS — WINGS (2016)&quot;,
+  &quot;expect&quot;: &quot;answer&quot;
+}</code></pre>
+</section>
+
+  <h2 class="phase">The judge</h2>
+  <p>Each step below is one LLM call to the judge model, with a fixed prompt. The judge returns JSON, which RAGAS reads into the verdicts. Expand a prompt to see exactly what the judge was sent.</p>
+
+  <section class="card step" id="step-4">
+  <div class="step-head">
+    <span class="num">4</span>
+    <div><h2>Did it answer, or say it doesn’t know?</h2><p class="what">A RAGAS <code>DiscreteMetric</code>: our own prompt, and the judge must pick one of a fixed set of values and give a reason. This runs first, because it decides whether faithfulness applies at all. Answers that are only “I don’t know based on the data.” (plus the “Artists used” line) skip the judge: a rule marks them refused, because the small judge kept misreading them.</p></div>
+  </div>
+  <div>
+  <span class="verdict">Judge: <b>answered</b></span>
+  <span class="verdict">Expected: <span class="tag answer">answers</span></span>
+  <span class="verdict"><span class="pass">✓ match</span></span>
+</div>
+<p class="reason"><span class="muted">Reason:</span> The response provides specific K-pop groups and one release by each, fulfilling the requirement to answer the question.</p>
+<details class="prompt"><summary>Prompt sent to the judge <span class="muted">(768 chars)</span></summary><pre>A music Q&amp;A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.
+
+Question: Name some K-pop groups and one release by each.
+Response: Artists used: BLACKPINK; BTS
+
+- BLACKPINK — BOOMBAYAH (2016)
+- BTS — WINGS (2016)
+
+Score 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.
+
+Example: 'Artists used: Adele\n\nI don't know based on the data.' -&gt; refused
+Example: 'Artists used: Adele, Sia\n\n- Adele: 21 (2011)\n- Sia: I don't know based on the data.' -&gt; answered</pre></details>
+<div class="gate">
+  <div class="on"><b>answered</b> → check its claims (steps 5–7)</div>
+  <div class="arrow">or</div>
+  <div class=""><b>refused</b> → faithfulness n/a: “I don’t know” makes no claims about the data</div>
+</div>
+</section>
+
+  <section class="card step" id="step-5">
+  <div class="step-head">
+    <span class="num">5</span>
+    <div><h2>Split the answer into claims</h2><p class="what">RAGAS Faithfulness, call 1. The judge rewrites the answer as short standalone statements, with names instead of pronouns, so each one can be checked on its own. This step decides what gets counted: a long answer with many small facts gets many claims.</p></div>
+  </div>
+  <div class="two">
+  <div><p class="label">The answer</p><pre class="answer">Artists used: BLACKPINK; BTS
+
+- BLACKPINK — BOOMBAYAH (2016)
+- BTS — WINGS (2016)</pre></div>
+  <div><p class="label">4 claims</p><ol class="claims-list"><li>One K-pop group is BLACKPINK.</li><li>BLACKPINK released the song BOOMBAYAH in 2016.</li><li>Another K-pop group is BTS.</li><li>BTS released the song WINGS in 2016.</li></ol></div>
+</div>
+<details class="prompt"><summary>Prompt sent to the judge (RAGAS’s own, with a worked example) <span class="muted">(1,822 chars)</span></summary><pre>Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.
+Please return the output in a JSON format that complies with the following schema as specified in JSON Schema:
+{&quot;description&quot;: &quot;Structured output for statement generation.&quot;, &quot;properties&quot;: {&quot;statements&quot;: {&quot;description&quot;: &quot;The generated statements from the answer&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;title&quot;: &quot;Statements&quot;, &quot;type&quot;: &quot;array&quot;}}, &quot;required&quot;: [&quot;statements&quot;], &quot;title&quot;: &quot;StatementGeneratorOutput&quot;, &quot;type&quot;: &quot;object&quot;}Do not use single quotes in your response but double quotes,properly escaped with a backslash.
+
+--------EXAMPLES-----------
+Example 1
+Input: {
+    &quot;question&quot;: &quot;Who was Albert Einstein and what is he best known for?&quot;,
+    &quot;answer&quot;: &quot;He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.&quot;
+}
+Output: {
+    &quot;statements&quot;: [
+        &quot;Albert Einstein was a German-born theoretical physicist.&quot;,
+        &quot;Albert Einstein is recognized as one of the greatest and most influential physicists of all time.&quot;,
+        &quot;Albert Einstein was best known for developing the theory of relativity.&quot;,
+        &quot;Albert Einstein made important contributions to the development of the theory of quantum mechanics.&quot;
+    ]
+}
+-----------------------------
+
+Now perform the same with the following input
+input: {
+    &quot;question&quot;: &quot;Name some K-pop groups and one release by each.&quot;,
+    &quot;answer&quot;: &quot;Artists used: BLACKPINK; BTS\n\n- BLACKPINK — BOOMBAYAH (2016)\n- BTS — WINGS (2016)&quot;
+}
+Output: </pre></details>
+</section>
+
+  <section class="card step" id="step-6">
+  <div class="step-head">
+    <span class="num">6</span>
+    <div><h2>Check each claim against the retrieved chunks</h2><p class="what">RAGAS Faithfulness, call 2. The judge gets all 6 chunks joined together, plus the claims, and returns 1 if a claim can be inferred directly from the chunks, otherwise 0, with a reason. Under each verdict is the line in the chunks with the most words in common with the claim. This page finds that line, not the judge. Use it to check the verdict yourself.</p></div>
+  </div>
+  <div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. One K-pop group is BLACKPINK.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that BLACKPINK is a K-pop group.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Tags: <mark>pop</mark>; hip hop; j-<mark>pop</mark>; girl <mark>group</mark>; female vocals; k-<mark>pop</mark>; 2010s; 2020s; 3rd gen k-<mark>pop</mark>; girl crush</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. BLACKPINK released the song BOOMBAYAH in 2016.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context lists BOOMBAYAH as one of BLACKPINK's releases in 2016.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>- <mark>BOOMBAYAH</mark> (<mark>2016</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. Another K-pop group is BTS.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that BTS is a K-pop group.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Tags: <mark>pop</mark>; hip hop; j-<mark>pop</mark>; girl <mark>group</mark>; female vocals; k-<mark>pop</mark>; 2010s; 2020s; 3rd gen k-<mark>pop</mark>; girl crush</code></p>
+</div>
+<div class="claim bad">
+  <div class="claim-head"><span class="sq bad">✗</span><b>4. BTS released the song WINGS in 2016.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context lists WINGS as one of BTS's releases, but it was released in 2016, not explicitly stated in the context.</p>
+  <p class="near"><span class="muted">Closest line, chunk [5]:</span> <code>- <mark>WINGS</mark> (<mark>2016</mark>)</code></p>
+</div>
+<details class="prompt"><summary>Prompt sent to the judge (RAGAS’s own, with the chunks and claims filled in) <span class="muted">(7,880 chars)</span></summary><pre>Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.
+Please return the output in a JSON format that complies with the following schema as specified in JSON Schema:
+{&quot;$defs&quot;: {&quot;StatementFaithfulnessAnswer&quot;: {&quot;description&quot;: &quot;Individual statement with reason and verdict for NLI evaluation.&quot;, &quot;properties&quot;: {&quot;statement&quot;: {&quot;description&quot;: &quot;the original statement, word-by-word&quot;, &quot;title&quot;: &quot;Statement&quot;, &quot;type&quot;: &quot;string&quot;}, &quot;reason&quot;: {&quot;description&quot;: &quot;the reason of the verdict&quot;, &quot;title&quot;: &quot;Reason&quot;, &quot;type&quot;: &quot;string&quot;}, &quot;verdict&quot;: {&quot;description&quot;: &quot;the verdict(0/1) of the faithfulness&quot;, &quot;title&quot;: &quot;Verdict&quot;, &quot;type&quot;: &quot;integer&quot;}}, &quot;required&quot;: [&quot;statement&quot;, &quot;reason&quot;, &quot;verdict&quot;], &quot;title&quot;: &quot;StatementFaithfulnessAnswer&quot;, &quot;type&quot;: &quot;object&quot;}}, &quot;description&quot;: &quot;Structured output for NLI statement evaluation.&quot;, &quot;properties&quot;: {&quot;statements&quot;: {&quot;description&quot;: &quot;Evaluated statements with verdicts&quot;, &quot;items&quot;: {&quot;$ref&quot;: &quot;#/$defs/StatementFaithfulnessAnswer&quot;}, &quot;title&quot;: &quot;Statements&quot;, &quot;type&quot;: &quot;array&quot;}}, &quot;required&quot;: [&quot;statements&quot;], &quot;title&quot;: &quot;NLIStatementOutput&quot;, &quot;type&quot;: &quot;object&quot;}Do not use single quotes in your response but double quotes,properly escaped with a backslash.
+
+--------EXAMPLES-----------
+Example 1
+Input: {
+    &quot;context&quot;: &quot;John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.&quot;,
+    &quot;statements&quot;: [
+        &quot;John is majoring in Biology.&quot;,
+        &quot;John is taking a course on Artificial Intelligence.&quot;,
+        &quot;John is a dedicated student.&quot;,
+        &quot;John has a part-time job.&quot;
+    ]
+}
+Output: {
+    &quot;statements&quot;: [
+        {
+            &quot;statement&quot;: &quot;John is majoring in Biology.&quot;,
+            &quot;reason&quot;: &quot;John's major is explicitly stated as Computer Science, not Biology.&quot;,
+            &quot;verdict&quot;: 0
+        },
+        {
+            &quot;statement&quot;: &quot;John is taking a course on Artificial Intelligence.&quot;,
+            &quot;reason&quot;: &quot;The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.&quot;,
+            &quot;verdict&quot;: 0
+        },
+        {
+            &quot;statement&quot;: &quot;John is a dedicated student.&quot;,
+            &quot;reason&quot;: &quot;The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.&quot;,
+            &quot;verdict&quot;: 1
+        },
+        {
+            &quot;statement&quot;: &quot;John has a part-time job.&quot;,
+            &quot;reason&quot;: &quot;There is no information in the context about John having a part-time job.&quot;,
+            &quot;verdict&quot;: 0
+        }
+    ]
+}
+-----------------------------
+
+Now perform the same with the following input
+input: {
+    &quot;context&quot;: &quot;Artist: BLACKPINK\nType: Group\nCountry: KR (South Korea)\nFormed: 2016-08-08\nTags: pop; hip hop; j-pop; girl group; female vocals; k-pop; 2010s; 2020s; 3rd gen k-pop; girl crush\nAlso known as: 才貌俱全; BLACKPINK; Beullaekpingkeu; Блекпинк; བླེཀ་པིངཀ་; بڵاکپینک; בלאקפינק; ဘလက်ပင့်; ပလႅၵ်းၽိင်း; BLΛƆKPIИK; แบล็กพิงก์; ब्ल्याकपिङ्क; ແບັກພິ້ງ; ប្លេកភីង; ब्लैकपिंक; بلک‌پینک; ব্ল্যাকপিঙ্ক; بلک پینک; بلاكبينك; 블랙핑크; Black Pink\nReleases:\n- 휘파람 (2016)\n- WHISTLE (2016)\n- 불장난 (2016)\n- SQUARE TWO (2016)\n- BOOMBAYAH (2016)\n- STAY (2016)\n- SQUARE ONE (2016)\n- 마지막처럼 (2017)\n- As If It’s Your Last (2017)\n- BLACKPINK (2017)\n- Sure Thing (2017)\n- PLAYING WITH FIRE (2017)\n- AS IF IT’S YOUR LAST (2017)\n- PLAYING WITH FIRE -JP ver.- (2017)\n- SO HOT (THEBLACKLABEL remix) (2017)\n- DDU-DU DDU-DU (2018)\nArtist: BTS\nType: Group\nCountry: KR (South Korea)\nDescription: South Korean boy group\nFormed: 2013-06-13\nTags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop\nAlso known as: 방탄; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; Bōdan Shōnendan; Bulletproof Boy Scouts; Beyond the Scene; 방탄소년단; 防弾少年団; Bangtan Boys; BTS\nReleases:\n- O!RUL8,2? (2013)\n- 2 COOL 4 SKOOL (2013)\n- 2 Cool 4 Skool (2013)\n- DARK&amp;WILD (2014)\n- NO MORE DREAM (2014)\n- BOY IN LUV (2014)\n- No More Dream (Japanese ver.) (2014)\n- Wake Up (2014)\n- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)\n- WAKE UP (2014)\n- NO MORE DREAM -Japanese ver.- (2014)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)\nArtist: BTS (continued)\n- You Never Walk Alone (2017)\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat &amp; Tears) (2017)\n- LOVE YOURSELF 承 ‘Her’ (2017)\n- Come Back Home (2017)\n- MIC Drop / DNA / Crystal Snow (2017)\n- 血、汗、涙 (2017)\n- With Seoul (2017)\n- THE BEST OF 防彈少年團 -KOREA EDITION- (2017)\n- Blood Sweat &amp; Tears (2017)\n- THE BEST OF 防彈少年團 -JAPAN EDITION- (2017)\n- YOU NEVER WALK ALONE (2017)\n- FACE YOURSELF (2018)\nArtist: Arijit Singh (continued)\n- Pachtaoge (2019)\n- Bekhayali (2019)\n- Ve Maahi (2019)\n- Made In China (2019)\n- Tujhe Kitna Chahne Lage (From “Kabir Singh”) (2019)\n- Mukto Kore Dao (2020)\n- Dil Ko Maine Di Kasam (2020)\n- Rihaa (2020)\n- YRF Top 10 - Nightout Sounds (2021)\n- Mere Yaaraa (From “Sooryavanshi”) (2021)\n- Pagglait (2021)\n- Maan Le (From “Chitrakut”) (2022)\n- Apna Bana Le (From “Bhediya”) (2022)\n- Mahi Mera Dil (From “Dhokha Round D Corner”) (2022)\n- Kaala Jaadu (From “Freddy”) (2022)\n- Samjhawan (Lofi Flip) (2022)\n- Deva Deva (From “Brahmastra”) (2022)\n- Kesariya (From “Brahmastra”) (2022)\n- Yaar Ve (From “Code Name Tiranga”) (2022)\n- Kitni Haseen Hogi (From \&quot;Hit - The First Case\&quot;) (2022)\n- Phir Na Aisi Raat Aayegi (From \&quot;Laal Singh Chaddha\&quot;) (2022)\n- Rasiya Reprise (From “Brahmastra”) (2022)\nArtist: BTS (continued)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)\n- Danger (Mo-Blue-Mix) (2014)\n- 2 COOL 4 SKOOL / O!RUL8,2? (2014)\n- Boy in Luv (Japanese ver.) (2014)\n- 2019-04-13: Saturday Night Live, New York, NY, USA (2014)\n- Danger -Japanese ver.- (2014)\n- 화양연화 pt.2 (2015)\n- For You (2015)\n- Danger (Japanese ver.) (2015)\n- 화양연화 pt.1 (2015)\n- I NEED U (2015)\n- The Most Beautiful Moment in Life, Pt. 2 (2015)\n- FOR YOU (2015)\n- The Most Beautiful Moment in Life, Pt. 1 (2015)\n- RUN (2016)\n- WINGS (2016)\n- Youth (2016)\n- YOUTH (2016)\n- 화양연화 Young Forever (2016)\n- The Most Beautiful Moment in Life: Young Forever (2016)\n- Wings (2016)\n- MIC Drop (Steve Aoki remix) (2017)\n- You Never Walk Alone (2017)\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat &amp; Tears) (2017)\nArtist: Diljit Dosanjh (continued)\n- Con.Fi.Den.Tial (2018)\n- Kylie &amp; Kareena (2019)\n- Kali Teri Gutt (MTV Unplugged) (2019)\n- Hum Do Hamare Dus (2019)\n- G.O.A.T. (2020)\n- Welcome to My Hood (2020)\n- In Love With Diljit Dosanjh (2021)\n- Unforgettable (2021)\n- MoonChild Era (2021)\n- What Ve (2021)\n- Route 66 (2021)\n- Umbrella (2021)\n- RiRi (2021)\n- Jugni (2022)\n- Koka (From “Babe Bhangra Paunde Ne”) (2022)\n- Chauffeur (2022)\n- Balle Jatta (2022)\n- VIP (2022)\n- Babe Bhangra Paunde Ne - Title Track (2022)\n- Bachelor Party (From “Babe Bhangra Paunde Ne”) (2022)\n- Nazarey (From “Babe Bhangra Paunde Ne”) (2022)\n- Drive Thru (2022)\n- Jatt Di Jaan (From “Jodi”) (2023)\n- Hass Hass (2023)\n- Very Best of Coke Studio Vol. 1 (2023)\n- Munda Sona Hoon Main (From “Shehzada”) (2023)\n- Banda (From “Dunki”) (2023)\n- Ghost (2023)&quot;,
+    &quot;statements&quot;: [
+        &quot;One K-pop group is BLACKPINK.&quot;,
+        &quot;BLACKPINK released the song BOOMBAYAH in 2016.&quot;,
+        &quot;Another K-pop group is BTS.&quot;,
+        &quot;BTS released the song WINGS in 2016.&quot;
+    ]
+}
+Output: </pre></details>
+</section>
+
+  <section class="card step" id="step-7">
+  <div class="step-head">
+    <span class="num">7</span>
+    <div><h2>Score: supported claims ÷ all claims</h2><p class="what">No LLM here, just counting. Each square is one claim from step 6.</p></div>
+  </div>
+  <div class="big-squares"><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq bad">✗</span></span></div>
+<p class="equation">3 supported ÷ 4 claims = <b>0.75</b></p>
+<div class="scale" role="img" aria-label="Score 0.75 on a 0 to 1 scale">
+  <div class="fill" style="width:75.0%"></div>
+  <div class="tick" style="left:60%"><span>0.6 problem</span></div>
+  <div class="tick" style="left:80%"><span>0.8 target</span></div>
+</div>
+<p>A common rule of thumb: aim for 0.8 or above; under 0.6 means a real hallucination problem. But a low score is either an answer that adds facts, or a judge that missed one. Step 6 tells you which.</p>
+</section>
+
+  <h2 class="phase">Report</h2>
+
+  <section class="card step" id="step-8">
+  <div class="step-head">
+    <span class="num">8</span>
+    <div><h2>Every question</h2><p class="what">Click a row to see the answer, the refusal verdict and every claim. Rows with a red border are where the refusal judge disagrees with the label in <code>questions.json</code>.</p></div>
+  </div>
+  <div class="row-head" aria-hidden="true"><span>#</span><span>Question</span><span>Refusal check</span><span>Faithfulness</span></div>
+<details class="row">
+  <summary>
+    <span class="row-n">1</span>
+    <span class="row-q">Which artists blend hip hop with R&amp;B, and what are some of their albums?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">1.00</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· Multi-artist, the rag-langchain stage 4 example</span></p>
+    <p class="label">Retrieved (top 6): JAŸ-Z, JAŸ-Z, JAŸ-Z, Kendrick Lamar, Rihanna, Beyoncé</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: JAŸ-Z; Beyoncé
+
+- JAŸ-Z — tags include &quot;hip hop rnb and dance hall&quot; and other hip‑hop/R&amp;B related tags. Some releases listed in the context: Reasonable Doubt (1996); In My Lifetime, Vol. 1 (1997); Vol. 2... Hard Knock Life (1998); Vol. 3… Life and Times of S. Carter (1999); The Dynasty: Roc La Familia (2000); The Blueprint (2001); The Blueprint²: The Gift &amp; The Curse (2002).
+
+- Beyoncé — tags in the context include &quot;hip hop rnb and dance hall&quot;, &quot;hip hop soul&quot; and &quot;contemporary r&amp;b&quot;, indicating a blend of hip hop and R&amp;B. The provided context does not list her album releases, so I don't know her albums based on the data.</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides information about JAŸ-Z and his albums, which answers part of the question. Although it does not provide album information for Beyoncé, the presence of any answer from the dataset qualifies the response as 'answered'.</p>
+    <p class="label">Faithfulness: 5 of 5 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. Artists mentioned include JAŸ-Z and Beyoncé.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly mentions both JAŸ-Z and Beyoncé as artists.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>JAŸ</mark>-Z (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. JAŸ-Z is associated with tags such as 'hip hop rnb and dance hall' and other hip-hop/R&amp;B related tags.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context lists various tags associated with JAŸ-Z, including 'hip hop rnb and dance hall'.</p>
+  <p class="near"><span class="muted">Closest line, chunk [3]:</span> <code><mark>Tags</mark>: pop; rap; <mark>hip</mark>-<mark>hop</mark>; <mark>hip</mark> <mark>hop</mark>; <mark>hip</mark><mark>hop</mark>; pop rap; rapper; us; mashup; <mark>hip</mark> <mark>hop</mark> <mark>rnb</mark> and <mark>dance</mark> <mark>hall</mark>; united states; grammy winner; boom bap; east coast <mark>hip</mark> <mark>hop</mark>; hardcore <mark>hip</mark> <mark>hop</mark>; new york <mark>hip</mark> <mark>hop</mark>; luxury rap; relic inn; c<mark>hip</mark>munk soul</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. Some of JAŸ-Z's releases include Reasonable Doubt (1996), In My Lifetime, Vol. 1 (1997), Vol. 2... Hard Knock Life (1998), Vol. 3… Life and Times of S. Carter (1999), The Dynasty: Roc La Familia (2000), The Blueprint (2001), and The Blueprint²: The Gift &amp; The Curse (2002).</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context provides a detailed list of JAŸ-Z's releases, confirming the statement.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>- <mark>Vol</mark>. <mark>3</mark>… <mark>Life</mark> and <mark>Times</mark> of S. <mark>Carter</mark> (<mark>1999</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>4. Beyoncé is associated with tags such as 'hip hop rnb and dance hall', 'hip hop soul', and 'contemporary r&amp;b', indicating a blend of hip hop and R&amp;B.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context lists tags associated with Beyoncé, including 'hip hop rnb and dance hall' and 'hip hop soul'.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code><mark>Tags</mark>: pop; rap; <mark>dance</mark>; house; american; vocalist; singer-songwriter; <mark>hip</mark> <mark>hop</mark>; hard rock; funk; country; bass; actress; <mark>soul</mark>; electropop; disco; <mark>rnb</mark>; pianist; americana; director; southern <mark>hip</mark> <mark>hop</mark>; icon; 2000s; <mark>dance</mark>-pop; adult <mark>contemporary</mark>; pop rock; pop rap; neo <mark>soul</mark>; progressive house; club; <mark>dance</mark>r; <mark>hip</mark> <mark>hop</mark> <mark>rnb</mark> and <mark>dance</mark> <mark>hall</mark>; <mark>hip</mark> <mark>hop</mark> <mark>soul</mark>; <mark>contemporary</mark> country; teen pop; pop <mark>soul</mark>; sxsw; top 100; grammy winner; r&amp;b; singer/songwriter; <mark>contemporary</mark> r&amp;b; 2010s; mbs-333; art pop; alternative r&amp;b; moombahton; trap; slim thug; <mark>contemporary</mark> pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>5. The provided context does not list Beyoncé's album releases.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context does not include any information about Beyoncé's album releases.</p>
+  <p class="near"><span class="muted">Closest line, chunk [3]:</span> <code><mark>Releases</mark>:</code></p>
+</div>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">2</span>
+    <span class="row-q">Where is Fela Kuti from, and what kind of music did he make?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">1.00</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· Single artist, facts are in the profile chunk</span></p>
+    <p class="label">Retrieved (top 6): Fela Kuti, Fela Kuti, Fela Kuti, Burna Boy, Wizkid, Burna Boy</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artist used: Fela Kuti
+
+Fela Kuti is from Nigeria. His music is tagged as jazz, world, jazz-funk, afrobeat (afro-beat), and jùjú.</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides information about Fela Kuti's origin and the genres of music he is associated with, which answers part of the question.</p>
+    <p class="label">Faithfulness: 6 of 6 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. Fela Kuti is from Nigeria.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Fela Kuti is from Nigeria (Country: NG (Nigeria)).</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. Fela Kuti's music is tagged as jazz.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes 'Tags: jazz', confirming that Fela Kuti's music is tagged as jazz.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. Fela Kuti's music is tagged as world.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes 'Tags: world', confirming that Fela Kuti's music is tagged as world.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>4. Fela Kuti's music is tagged as jazz-funk.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes 'Tags: jazz-funk', confirming that Fela Kuti's music is tagged as jazz-funk.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>5. Fela Kuti's music is tagged as afrobeat.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes 'Tags: afrobeat', confirming that Fela Kuti's music is tagged as afrobeat.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>6. Fela Kuti's music is tagged as jùjú.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes 'Tags: jùjú', confirming that Fela Kuti's music is tagged as jùjú.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">3</span>
+    <span class="row-q">When did Daft Punk start, and what country are they from?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">1.00</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· Begin date and country fields</span></p>
+    <p class="label">Retrieved (top 6): Daft Punk, Daft Punk, Daft Punk, Prince, The Beatles, Stromae</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Daft Punk — Formed: 1993; Country: FR (France).</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides a specific formation year and country for Daft Punk, which answers part of the question.</p>
+    <p class="label">Faithfulness: 2 of 2 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. Daft Punk was formed in 1993.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daft Punk was formed in 1993.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Daft</mark> <mark>Punk</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. Daft Punk is from France.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context indicates that Daft Punk is associated with France, as it mentions 'Country: FR (France)'.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Daft</mark> <mark>Punk</mark></code></p>
+</div>
+  </div>
+</details>
+<details class="row" id="featured-row">
+  <summary>
+    <span class="row-n">4</span>
+    <span class="row-q">Name some K-pop groups and one release by each. <span class="badge">followed above</span></span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">0.75</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq bad">✗</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· BTS and BLACKPINK</span></p>
+    <p class="label">Retrieved (top 6): BLACKPINK, BTS, BTS, Arijit Singh, BTS, Diljit Dosanjh</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: BLACKPINK; BTS
+
+- BLACKPINK — BOOMBAYAH (2016)
+- BTS — WINGS (2016)</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides specific K-pop groups and one release by each, fulfilling the requirement to answer the question.</p>
+    <p class="label">Faithfulness: 3 of 4 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. One K-pop group is BLACKPINK.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that BLACKPINK is a K-pop group.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Tags: <mark>pop</mark>; hip hop; j-<mark>pop</mark>; girl <mark>group</mark>; female vocals; k-<mark>pop</mark>; 2010s; 2020s; 3rd gen k-<mark>pop</mark>; girl crush</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. BLACKPINK released the song BOOMBAYAH in 2016.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context lists BOOMBAYAH as one of BLACKPINK's releases in 2016.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>- <mark>BOOMBAYAH</mark> (<mark>2016</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. Another K-pop group is BTS.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that BTS is a K-pop group.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Tags: <mark>pop</mark>; hip hop; j-<mark>pop</mark>; girl <mark>group</mark>; female vocals; k-<mark>pop</mark>; 2010s; 2020s; 3rd gen k-<mark>pop</mark>; girl crush</code></p>
+</div>
+<div class="claim bad">
+  <div class="claim-head"><span class="sq bad">✗</span><b>4. BTS released the song WINGS in 2016.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context lists WINGS as one of BTS's releases, but it was released in 2016, not explicitly stated in the context.</p>
+  <p class="near"><span class="muted">Closest line, chunk [5]:</span> <code>- <mark>WINGS</mark> (<mark>2016</mark>)</code></p>
+</div>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">5</span>
+    <span class="row-q">Which artists in the data are from Nigeria?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">1.00</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· Fela Kuti, Burna Boy, Wizkid</span></p>
+    <p class="label">Retrieved (top 6): Fela Kuti, Wizkid, Burna Boy, Fela Kuti, Fela Kuti, Wizkid</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists from Nigeria in the data:
+- Fela Kuti
+- Wizkid
+- Burna Boy</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides a list of artists from Nigeria, which is a direct answer to the question asked.</p>
+    <p class="label">Faithfulness: 3 of 3 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. Fela Kuti is an artist from Nigeria.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Fela Kuti is an artist and mentions Nigeria as his country.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code><mark>Artist</mark>: <mark>Fela</mark> <mark>Kuti</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. Wizkid is an artist from Nigeria.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Wizkid is an artist and mentions Nigeria as his country.</p>
+  <p class="near"><span class="muted">Closest line, chunk [2]:</span> <code><mark>Artist</mark>: <mark>Wizkid</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. Burna Boy is an artist from Nigeria.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Burna Boy is an artist and mentions Nigeria as his country.</p>
+  <p class="near"><span class="muted">Closest line, chunk [3]:</span> <code><mark>Artist</mark>: <mark>Burna</mark> <mark>Boy</mark></code></p>
+</div>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">6</span>
+    <span class="row-q">Who are some classic soul singers, and when did they start their careers?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">1.00</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· Stevie Wonder, Marvin Gaye, Aretha Franklin</span></p>
+    <p class="label">Retrieved (top 6): Aretha Franklin, Aretha Franklin, Aretha Franklin, Aretha Franklin, Aretha Franklin, Marvin Gaye</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: Aretha Franklin; Marvin Gaye
+
+- Aretha Franklin — tagged in the data as &quot;the queen of soul.&quot; Earliest listed release in the profile: &quot;Never Grow Old / You Grow Closer&quot; (1956), so her recorded releases in this data begin in 1956.  
+- Marvin Gaye — earliest listed releases in the provided data are from 1964 (e.g., &quot;Greatest Hits&quot; (1964), &quot;Hello Broadway&quot; (1964)), so his recorded releases in this data begin in 1964.
+
+I don't know based on the data if there are earlier career start dates than these listed releases.</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides information about Aretha Franklin and Marvin Gaye, including their earliest recorded releases, which qualifies as an answer from the dataset.</p>
+    <p class="label">Faithfulness: 7 of 7 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. Aretha Franklin is tagged in the data as 'the queen of soul.'</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly mentions that Aretha Franklin is tagged as 'the queen of soul.'</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Aretha</mark> <mark>Franklin</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. The earliest listed release for Aretha Franklin in the profile is 'Never Grow Old / You Grow Closer' from 1956.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context states that 'Never Grow Old / You Grow Closer' is listed as a release from 1956.</p>
+  <p class="near"><span class="muted">Closest line, chunk [4]:</span> <code>- <mark>Never</mark> <mark>Grow</mark> <mark>Old</mark> / <mark>You</mark> <mark>Grow</mark> <mark>Closer</mark> (<mark>1956</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. Aretha Franklin's recorded releases in this data begin in 1956.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context indicates that the first release listed for Aretha Franklin is from 1956, implying her recorded releases begin then.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>Artist: <mark>Aretha</mark> <mark>Franklin</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>4. Marvin Gaye's earliest listed releases in the provided data are from 1964.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context mentions that Marvin Gaye's earliest listed releases are from 1964.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code>Artist: <mark>Marvin</mark> <mark>Gaye</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>5. Examples of Marvin Gaye's earliest listed releases include 'Greatest Hits' from 1964 and 'Hello Broadway' from 1964.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context provides specific examples of Marvin Gaye's releases from 1964, confirming this statement.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code>- <mark>Greatest</mark> <mark>Hits</mark> (<mark>1964</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>6. Marvin Gaye's recorded releases in this data begin in 1964.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context states that Marvin Gaye's earliest listed releases are from 1964, indicating that his recorded releases begin then.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code>Artist: <mark>Marvin</mark> <mark>Gaye</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>7. The data does not provide information on whether there are earlier career start dates than the listed releases.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context does not mention any earlier career start dates for either artist beyond the listed releases.</p>
+  <p class="near"><span class="muted">Closest line, chunk [4]:</span> <code><mark>Releases</mark>:</code></p>
+</div>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">7</span>
+    <span class="row-q">What are some Latin music artists and their albums?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag answer">answers</span></span>
+    <span class="row-faith"><b class="tnum">1.00</b><span class="squares" aria-hidden="true"><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span><span class="sq ok">✓</span></span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag answer">answers</span> <span class="muted">· Bad Bunny, J Balvin, Shakira, Daddy Yankee</span></p>
+    <p class="label">Retrieved (top 6): J Balvin, Daddy Yankee, J Balvin, J Balvin, J Balvin, Daddy Yankee</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: J Balvin; Daddy Yankee
+
+J Balvin — some releases from the data:
+- Real (2009)
+- El negocio (2011)
+- La familia (2013)
+- Ginza (2015)
+- Love Is the Name (2016)
+- Energía (2016)
+- Mi gente (2017)
+
+Daddy Yankee — some releases from the data:
+- El Cartel (1998)
+- El Cartel II: Los Cangris (2001)
+- El Cangri.com (2002)
+- Barrio fino (2004)
+- Gasolina (2005)
+- Rompe (2005)
+- El Cartel: The Big Boss (2007)</pre>
+    <p class="label">Refusal check (judge): <b>answered</b></p>
+    <p class="reason">The response provides specific artists and their albums from the dataset, indicating that some information is available.</p>
+    <p class="label">Faithfulness: 16 of 16 claims supported</p><div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>1. J Balvin is a Latin music artist.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes tags such as 'latin urban', 'reggaeton', and 'latin pop', indicating that J Balvin is a Latin music artist.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code><mark>Artist</mark>: J <mark>Balvin</mark></code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>2. J Balvin has released the album Real in 2009.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'Real' in 2009.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>- <mark>Real</mark> (<mark>2009</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>3. J Balvin has released the album El negocio in 2011.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'El negocio' in 2011.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>- El <mark>negocio</mark> (<mark>2011</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>4. J Balvin has released the album La familia in 2013.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'La familia' in 2013.</p>
+  <p class="near"><span class="muted">Closest line, chunk [1]:</span> <code>- La <mark>familia</mark> (<mark>2013</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>5. J Balvin has released the album Ginza in 2015.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'Ginza' in 2015.</p>
+  <p class="near"><span class="muted">Closest line, chunk [3]:</span> <code>- <mark>Ginza</mark> (<mark>2015</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>6. J Balvin has released the album Love Is the Name in 2016.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'Love Is the Name' in 2016.</p>
+  <p class="near"><span class="muted">Closest line, chunk [3]:</span> <code>- <mark>Love</mark> Is the <mark>Name</mark> (Nando Pro latin urban remix) (<mark>2016</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>7. J Balvin has released the album Energía in 2016.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'Energía' in 2016.</p>
+  <p class="near"><span class="muted">Closest line, chunk [3]:</span> <code>- <mark>Energía</mark> (<mark>2016</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>8. J Balvin has released the album Mi gente in 2017.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that J Balvin released the album 'Mi gente' in 2017.</p>
+  <p class="near"><span class="muted">Closest line, chunk [4]:</span> <code>- Mi <mark>gente</mark> (Aazar remix) (<mark>2017</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>9. Daddy Yankee is a Latin music artist.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context includes tags such as 'latin', 'reggaeton', and 'latin urban', indicating that Daddy Yankee is a Latin music artist.</p>
+  <p class="near"><span class="muted">Closest line, chunk [2]:</span> <code><mark>Artist</mark>: <mark>Daddy</mark> <mark>Yankee</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>10. Daddy Yankee has released the album El Cartel in 1998.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'El Cartel' in 1998.</p>
+  <p class="near"><span class="muted">Closest line, chunk [2]:</span> <code>Artist: <mark>Daddy</mark> <mark>Yankee</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>11. Daddy Yankee has released the album El Cartel II: Los Cangris in 2001.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'El Cartel II: Los Cangris' in 2001.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code>- El <mark>Cartel</mark> II: <mark>Los</mark> <mark>Cangris</mark> (<mark>2001</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>12. Daddy Yankee has released the album El Cangri.com in 2002.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'El Cangri.com' in 2002.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code>- El <mark>Cangri</mark>.<mark>com</mark> (<mark>2002</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>13. Daddy Yankee has released the album Barrio fino in 2004.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'Barrio fino' in 2004.</p>
+  <p class="near"><span class="muted">Closest line, chunk [6]:</span> <code>- <mark>Barrio</mark> <mark>fino</mark> (<mark>2004</mark>)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>14. Daddy Yankee has released the album Gasolina in 2005.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'Gasolina' in 2005.</p>
+  <p class="near"><span class="muted">Closest line, chunk [2]:</span> <code>Artist: <mark>Daddy</mark> <mark>Yankee</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>15. Daddy Yankee has released the album Rompe in 2005.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'Rompe' in 2005.</p>
+  <p class="near"><span class="muted">Closest line, chunk [2]:</span> <code>Artist: <mark>Daddy</mark> <mark>Yankee</mark> (continued)</code></p>
+</div>
+<div class="claim ok">
+  <div class="claim-head"><span class="sq ok">✓</span><b>16. Daddy Yankee has released the album El Cartel: The Big Boss in 2007.</b></div>
+  <p class="reason"><span class="muted">Judge:</span> The context explicitly states that Daddy Yankee released the album 'El Cartel: The Big Boss' in 2007.</p>
+  <p class="near"><span class="muted">Closest line, chunk [2]:</span> <code>- El <mark>cartel</mark>: The <mark>Big</mark> <mark>Boss</mark> (<mark>2007</mark>)</code></p>
+</div>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">8</span>
+    <span class="row-q">Who are the members of BTS?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag refuse">says “don’t know”</span></span>
+    <span class="row-faith"><span class="muted">n/a</span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag refuse">says “don’t know”</span> <span class="muted">· Tempting: the model knows, but member names aren't in the data</span></p>
+    <p class="label">Retrieved (top 6): BTS, BTS, BTS, The Beatles, Kendrick Lamar, BLACKPINK</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: BTS
+
+I don't know based on the data.</pre>
+    <p class="label">Refusal check (rule): <b>refused</b></p>
+    <p class="reason">Rule: the answer is only the refusal sentence, so the judge wasn't asked.</p>
+    <p class="label muted">Faithfulness not scored: the answer says it doesn’t know, so there are no claims about the data to check.</p>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">9</span>
+    <span class="row-q">How many Grammy awards has Beyoncé won?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag refuse">says “don’t know”</span></span>
+    <span class="row-faith"><span class="muted">n/a</span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag refuse">says “don’t know”</span> <span class="muted">· Tempting: awards aren't in the data</span></p>
+    <p class="label">Retrieved (top 6): Beyoncé, Beyoncé, Beyoncé, Beyoncé, Cardi B, Nicki Minaj</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: Beyoncé.
+
+I don't know based on the data.</pre>
+    <p class="label">Refusal check (rule): <b>refused</b></p>
+    <p class="reason">Rule: the answer is only the refusal sentence, so the judge wasn't asked.</p>
+    <p class="label muted">Faithfulness not scored: the answer says it doesn’t know, so there are no claims about the data to check.</p>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">10</span>
+    <span class="row-q">Which Daft Punk album sold the most copies?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag refuse">says “don’t know”</span></span>
+    <span class="row-faith"><span class="muted">n/a</span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag refuse">says “don’t know”</span> <span class="muted">· Tempting: sales aren't in the data</span></p>
+    <p class="label">Retrieved (top 6): Daft Punk, Daft Punk, Daft Punk, JAŸ-Z, Stromae, Stromae</p>
+    <p class="label">Answer</p>
+    <pre class="answer">Artists used: Daft Punk
+
+I don't know based on the data.</pre>
+    <p class="label">Refusal check (rule): <b>refused</b></p>
+    <p class="reason">Rule: the answer is only the refusal sentence, so the judge wasn't asked.</p>
+    <p class="label muted">Faithfulness not scored: the answer says it doesn’t know, so there are no claims about the data to check.</p>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">11</span>
+    <span class="row-q">What is the capital of Australia?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag refuse">says “don’t know”</span></span>
+    <span class="row-faith"><span class="muted">n/a</span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag refuse">says “don’t know”</span> <span class="muted">· Off-topic</span></p>
+    <p class="label">Retrieved (top 6): Sia, Sia, Adele, Taylor Swift, Arijit Singh, Billie Eilish</p>
+    <p class="label">Answer</p>
+    <pre class="answer">I don't know based on the data.
+
+Artists used: Sia (Australian singer‐songwriter)</pre>
+    <p class="label">Refusal check (rule): <b>refused</b></p>
+    <p class="reason">Rule: the answer is only the refusal sentence, so the judge wasn't asked.</p>
+    <p class="label muted">Faithfulness not scored: the answer says it doesn’t know, so there are no claims about the data to check.</p>
+  </div>
+</details>
+<details class="row">
+  <summary>
+    <span class="row-n">12</span>
+    <span class="row-q">What is the best way to learn the guitar?</span>
+    <span class="row-refusal"><span class="pass">✓</span> <span class="tag refuse">says “don’t know”</span></span>
+    <span class="row-faith"><span class="muted">n/a</span></span>
+  </summary>
+  <div class="row-body">
+    <p class="label">Expected: <span class="tag refuse">says “don’t know”</span> <span class="muted">· Off-topic, music-flavoured</span></p>
+    <p class="label">Retrieved (top 6): Bob Dylan, Bob Dylan, Taylor Swift, Taylor Swift, Elvis Presley, Elvis Presley</p>
+    <p class="label">Answer</p>
+    <pre class="answer">I don't know based on the data.
+
+Artists in the provided context: Bob Dylan; Taylor Swift; Elvis Presley.</pre>
+    <p class="label">Refusal check (rule): <b>refused</b></p>
+    <p class="reason">Rule: the answer is only the refusal sentence, so the judge wasn't asked.</p>
+    <p class="label muted">Faithfulness not scored: the answer says it doesn’t know, so there are no claims about the data to check.</p>
+  </div>
+</details>
+</section>
+
+  <section class="card step" id="step-9">
+  <div class="step-head">
+    <span class="num">9</span>
+    <div><h2>What to check by hand</h2><p class="what">Scores point you to the answers worth reading. For each item, decide who is wrong: the RAG answer (fix the prompt, retrieval or data) or the judge (fix the judge prompt, use a stronger judge, or accept the noise).</p></div>
+  </div>
+  <ul class="check"><li><b>Q4, unsupported claim:</b> “BTS released the song WINGS in 2016.” <span class="muted">Closest line:</span> <code>- <mark>WINGS</mark> (<mark>2016</mark>)</code></li></ul>
+<p>Judge verdicts change a little between runs. Rerun <code>uv run eval/2_score.py</code> (scoring only, no new answers) to see which items are noise and which come up every time.</p>
+</section>
+</main>
+</div>
+</body>
+</html>

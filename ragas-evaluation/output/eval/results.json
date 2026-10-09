@@ -1,0 +1,890 @@
+{
+  "summary": {
+    "judge_model": "openai/gpt-4o-mini",
+    "samples": 12,
+    "faithfulness_mean": 0.9642857142857143,
+    "faithfulness_scored": 7,
+    "refusal_correct": 12
+  },
+  "results": [
+    {
+      "user_input": "Which artists blend hip hop with R&B, and what are some of their albums?",
+      "retrieved_contexts": [
+        "Artist: JAŸ-Z (continued)\n- A Million And One Questions (Extended Mix) (1998)\n- Vol. 3… Life and Times of S. Carter (1999)\n- Vol.3.. Life and Times of S. Carter (1999)\n- Can I Get a... (Def Jam's Rush Hour) (1999)\n- Jigga My N**** (1999)\n- Do It Again (Put Ya Hands Up) (1999)\n- Hard Knock Life (1999)\n- I Just Wanna Love U (Give It 2 Me) (2000)\n- Big Pimpin’ (2000)\n- Big Pimpin' (2000)\n- The Dynasty: Roc La Familia (2000)\n- Anything (2000)\n- The Blueprint (2001)\n- It's Obvious (2001)\n- Izzo (H.O.V.A.) (2001)\n- Unplugged (2001)\n- Girls, Girls, Girls (2001)\n- The Hits & Unreleased, Volume 1 (2001)\n- Guilty Until Proven Innocent (2001)\n- Izzo (H.O.V.A) (2001)\n- The Blueprint²: The Gift & The Curse (2002)\n- The Best of Both Worlds (2002)\n- Song Cry (2002)\n- Chapter One (2002)",
+        "Artist: JAŸ-Z (continued)\n- I’ll Be (1996)\n- Can't Knock the Hustle (1996)\n- Ain’t No Nigga (1996)\n- Reasonable Doubt (1996)\n- Dead Presidents (1996)\n- Hustlers EP (1996)\n- Ain't No Playa (1996)\n- Time After Time / All of My Days (1996)\n- In My Lifetime, Vol. 1 (1997)\n- Rocafella Mixtape (1997)\n- Who You Wit (1997)\n- Sunshine (1997)\n- It's Alright / The Doe (1998)\n- Lobster & Scrimp (1998)\n- The City is Mine (1998)\n- Wishing on a Star (1998)\n- Vol. 2… Hard Knock Life (1998)\n- Can I Get a... (1998)\n- The City Is Mine (1998)\n- A Million and One Questions (1998)\n- Nigga What, Nigga Who (1998)\n- Vol. 2... Hard Knock Life (1998)\n- Be Alone No More (1998)\n- Hard Knock Life (Ghetto Anthem) (1998)\n- A Million And One Questions (Extended Mix) (1998)\n- Vol. 3… Life and Times of S. Carter (1999)",
+        "Artist: JAŸ-Z\nType: Person\nCountry: US (United States)\nDescription: US rapper\nBorn: 1969-12-04\nTags: pop; rap; hip-hop; hip hop; hiphop; pop rap; rapper; us; mashup; hip hop rnb and dance hall; united states; grammy winner; boom bap; east coast hip hop; hardcore hip hop; new york hip hop; luxury rap; relic inn; chipmunk soul\nAlso known as: JAŸ‐Z; JAY‐Z; jay z; Jay‐Z; Jaÿ‐Z; JAY:Z; JAY Z; Shawn C Carter; Shawn Carter; S. Carter; Shawn Corey Carter; Jayz; Hova; Jay-Hova; Jigga; Jay Z; Jay - Z; Hova da God\nReleases:\n- In My Lifetime / I Can’t Get Wid Dat (1994)\n- In My Lifetime (1995)\n- Can’t Knock the Hustle (Fool's Paradise remix) (1996)\n- Can’t Knock the Hustle (1996)\n- Feelin’ It (1996)\n- I’ll Be (1996)\n- Can't Knock the Hustle (1996)\n- Ain’t No Nigga (1996)\n- Reasonable Doubt (1996)",
+        "Artist: Kendrick Lamar (continued)\n- Overly Dedicated (2010)\n- Look Out for Detox (2010)\n- She Needs Me (remix) (ringtone) (2010)\n- 6’7’ Freestyle (2010)\n- The Heart, Part 1 (2010)\n- Ronald Reagan Era (2011)\n- Section.80 (2011)\n- My People (2011)\n- Hood Gone Love It (2011)\n- Compton State of Mind (2011)\n- Rapper Shit (2011)\n- Vanity Slave, Pt. 2 (2011)\n- Sex With Society (2011)\n- HiiiPoWeR (2011)\n- Moscato (2011)\n- Hol’ Up (2011)\n- Swimming Pools (Drank) (2012)\n- ILLuminate (2012)\n- Westside, Right on Time (2012)\n- The Recipe (2012)\n- good kid, m.A.A.d city (2012)\n- Poetic Justice (2012)\n- Swimming Pools (Drank) (Remixes) (2012)\n- Cartoon & Cereal (2012)\n- Let Us Move On (prod. Jeff Bhasker and Plain Pat) (2012)\n- Let Us Move On (2012)\n- Fuckin’ Problems (2012)\n- Push Thru (2012)\n- Ever Heard of Section 80 (2012)",
+        "Artist: Rihanna (continued)\n- Bring It Back (2005)\n- Music Of The Sun (2005)\n- The One (2005)\n- Pon De Replay (Dance Remixes) (2005)\n- Pon De Replay (2005)\n- We Ride (Club Mixes) (2006)\n- A Girl Like Me (2006)\n- We Ride (2006)\n- Unfaithful (2006)\n- S.O.S. (2006)\n- Break It Off (2006)\n- SOS (2006)\n- Unfaithful (Remix EP) (2006)\n- SOS (Remixes) (2006)\n- Unfaithful (Remixes) (2006)\n- S.O.S. (Mixes) (2006)\n- Roll It (2007)\n- Umbrella (2007)\n- Good Girl Gone Bad (2007)\n- Don’t Stop the Music: Remixes (2007)\n- Umbrella (Remixes) (2007)\n- Shut Up and Drive (2007)\n- Don't Stop the Music (2007)\n- Umbrella (Travis Barker Remix) (2007)",
+        "Artist: Beyoncé (continued)\nType: Person\nCountry: US (United States)\nBorn: 1981-09-04\nTags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&b; singer/songwriter; contemporary r&b; 2010s; mbs-333; art pop; alternative r&b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper"
+      ],
+      "response": "Artists used: JAŸ-Z; Beyoncé\n\n- JAŸ-Z — tags include \"hip hop rnb and dance hall\" and other hip‑hop/R&B related tags. Some releases listed in the context: Reasonable Doubt (1996); In My Lifetime, Vol. 1 (1997); Vol. 2... Hard Knock Life (1998); Vol. 3… Life and Times of S. Carter (1999); The Dynasty: Roc La Familia (2000); The Blueprint (2001); The Blueprint²: The Gift & The Curse (2002).\n\n- Beyoncé — tags in the context include \"hip hop rnb and dance hall\", \"hip hop soul\" and \"contemporary r&b\", indicating a blend of hip hop and R&B. The provided context does not list her album releases, so I don't know her albums based on the data.",
+      "expect": "answer",
+      "notes": "Multi-artist, the rag-langchain stage 4 example",
+      "retrieved": [
+        {
+          "artist": "JAŸ-Z",
+          "distance": 0.5876255
+        },
+        {
+          "artist": "JAŸ-Z",
+          "distance": 0.5947582
+        },
+        {
+          "artist": "JAŸ-Z",
+          "distance": 0.61746234
+        },
+        {
+          "artist": "Kendrick Lamar",
+          "distance": 0.6391599
+        },
+        {
+          "artist": "Rihanna",
+          "distance": 0.65395015
+        },
+        {
+          "artist": "Beyoncé",
+          "distance": 0.656993
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 1.0,
+        "claims": [
+          {
+            "claim": "Artists mentioned include JAŸ-Z and Beyoncé.",
+            "supported": true,
+            "reason": "The context explicitly mentions both JAŸ-Z and Beyoncé as artists."
+          },
+          {
+            "claim": "JAŸ-Z is associated with tags such as 'hip hop rnb and dance hall' and other hip-hop/R&B related tags.",
+            "supported": true,
+            "reason": "The context lists various tags associated with JAŸ-Z, including 'hip hop rnb and dance hall'."
+          },
+          {
+            "claim": "Some of JAŸ-Z's releases include Reasonable Doubt (1996), In My Lifetime, Vol. 1 (1997), Vol. 2... Hard Knock Life (1998), Vol. 3… Life and Times of S. Carter (1999), The Dynasty: Roc La Familia (2000), The Blueprint (2001), and The Blueprint²: The Gift & The Curse (2002).",
+            "supported": true,
+            "reason": "The context provides a detailed list of JAŸ-Z's releases, confirming the statement."
+          },
+          {
+            "claim": "Beyoncé is associated with tags such as 'hip hop rnb and dance hall', 'hip hop soul', and 'contemporary r&b', indicating a blend of hip hop and R&B.",
+            "supported": true,
+            "reason": "The context lists tags associated with Beyoncé, including 'hip hop rnb and dance hall' and 'hip hop soul'."
+          },
+          {
+            "claim": "The provided context does not list Beyoncé's album releases.",
+            "supported": true,
+            "reason": "The context does not include any information about Beyoncé's album releases."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"Which artists blend hip hop with R&B, and what are some of their albums?\",\n    \"answer\": \"Artists used: JAŸ-Z; Beyoncé\\n\\n- JAŸ-Z — tags include \\\"hip hop rnb and dance hall\\\" and other hip‑hop/R&B related tags. Some releases listed in the context: Reasonable Doubt (1996); In My Lifetime, Vol. 1 (1997); Vol. 2... Hard Knock Life (1998); Vol. 3… Life and Times of S. Carter (1999); The Dynasty: Roc La Familia (2000); The Blueprint (2001); The Blueprint²: The Gift & The Curse (2002).\\n\\n- Beyoncé — tags in the context include \\\"hip hop rnb and dance hall\\\", \\\"hip hop soul\\\" and \\\"contemporary r&b\\\", indicating a blend of hip hop and R&B. The provided context does not list her album releases, so I don't know her albums based on the data.\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: JAŸ-Z (continued)\\n- A Million And One Questions (Extended Mix) (1998)\\n- Vol. 3… Life and Times of S. Carter (1999)\\n- Vol.3.. Life and Times of S. Carter (1999)\\n- Can I Get a... (Def Jam's Rush Hour) (1999)\\n- Jigga My N**** (1999)\\n- Do It Again (Put Ya Hands Up) (1999)\\n- Hard Knock Life (1999)\\n- I Just Wanna Love U (Give It 2 Me) (2000)\\n- Big Pimpin’ (2000)\\n- Big Pimpin' (2000)\\n- The Dynasty: Roc La Familia (2000)\\n- Anything (2000)\\n- The Blueprint (2001)\\n- It's Obvious (2001)\\n- Izzo (H.O.V.A.) (2001)\\n- Unplugged (2001)\\n- Girls, Girls, Girls (2001)\\n- The Hits & Unreleased, Volume 1 (2001)\\n- Guilty Until Proven Innocent (2001)\\n- Izzo (H.O.V.A) (2001)\\n- The Blueprint²: The Gift & The Curse (2002)\\n- The Best of Both Worlds (2002)\\n- Song Cry (2002)\\n- Chapter One (2002)\\nArtist: JAŸ-Z (continued)\\n- I’ll Be (1996)\\n- Can't Knock the Hustle (1996)\\n- Ain’t No Nigga (1996)\\n- Reasonable Doubt (1996)\\n- Dead Presidents (1996)\\n- Hustlers EP (1996)\\n- Ain't No Playa (1996)\\n- Time After Time / All of My Days (1996)\\n- In My Lifetime, Vol. 1 (1997)\\n- Rocafella Mixtape (1997)\\n- Who You Wit (1997)\\n- Sunshine (1997)\\n- It's Alright / The Doe (1998)\\n- Lobster & Scrimp (1998)\\n- The City is Mine (1998)\\n- Wishing on a Star (1998)\\n- Vol. 2… Hard Knock Life (1998)\\n- Can I Get a... (1998)\\n- The City Is Mine (1998)\\n- A Million and One Questions (1998)\\n- Nigga What, Nigga Who (1998)\\n- Vol. 2... Hard Knock Life (1998)\\n- Be Alone No More (1998)\\n- Hard Knock Life (Ghetto Anthem) (1998)\\n- A Million And One Questions (Extended Mix) (1998)\\n- Vol. 3… Life and Times of S. Carter (1999)\\nArtist: JAŸ-Z\\nType: Person\\nCountry: US (United States)\\nDescription: US rapper\\nBorn: 1969-12-04\\nTags: pop; rap; hip-hop; hip hop; hiphop; pop rap; rapper; us; mashup; hip hop rnb and dance hall; united states; grammy winner; boom bap; east coast hip hop; hardcore hip hop; new york hip hop; luxury rap; relic inn; chipmunk soul\\nAlso known as: JAŸ‐Z; JAY‐Z; jay z; Jay‐Z; Jaÿ‐Z; JAY:Z; JAY Z; Shawn C Carter; Shawn Carter; S. Carter; Shawn Corey Carter; Jayz; Hova; Jay-Hova; Jigga; Jay Z; Jay - Z; Hova da God\\nReleases:\\n- In My Lifetime / I Can’t Get Wid Dat (1994)\\n- In My Lifetime (1995)\\n- Can’t Knock the Hustle (Fool's Paradise remix) (1996)\\n- Can’t Knock the Hustle (1996)\\n- Feelin’ It (1996)\\n- I’ll Be (1996)\\n- Can't Knock the Hustle (1996)\\n- Ain’t No Nigga (1996)\\n- Reasonable Doubt (1996)\\nArtist: Kendrick Lamar (continued)\\n- Overly Dedicated (2010)\\n- Look Out for Detox (2010)\\n- She Needs Me (remix) (ringtone) (2010)\\n- 6’7’ Freestyle (2010)\\n- The Heart, Part 1 (2010)\\n- Ronald Reagan Era (2011)\\n- Section.80 (2011)\\n- My People (2011)\\n- Hood Gone Love It (2011)\\n- Compton State of Mind (2011)\\n- Rapper Shit (2011)\\n- Vanity Slave, Pt. 2 (2011)\\n- Sex With Society (2011)\\n- HiiiPoWeR (2011)\\n- Moscato (2011)\\n- Hol’ Up (2011)\\n- Swimming Pools (Drank) (2012)\\n- ILLuminate (2012)\\n- Westside, Right on Time (2012)\\n- The Recipe (2012)\\n- good kid, m.A.A.d city (2012)\\n- Poetic Justice (2012)\\n- Swimming Pools (Drank) (Remixes) (2012)\\n- Cartoon & Cereal (2012)\\n- Let Us Move On (prod. Jeff Bhasker and Plain Pat) (2012)\\n- Let Us Move On (2012)\\n- Fuckin’ Problems (2012)\\n- Push Thru (2012)\\n- Ever Heard of Section 80 (2012)\\nArtist: Rihanna (continued)\\n- Bring It Back (2005)\\n- Music Of The Sun (2005)\\n- The One (2005)\\n- Pon De Replay (Dance Remixes) (2005)\\n- Pon De Replay (2005)\\n- We Ride (Club Mixes) (2006)\\n- A Girl Like Me (2006)\\n- We Ride (2006)\\n- Unfaithful (2006)\\n- S.O.S. (2006)\\n- Break It Off (2006)\\n- SOS (2006)\\n- Unfaithful (Remix EP) (2006)\\n- SOS (Remixes) (2006)\\n- Unfaithful (Remixes) (2006)\\n- S.O.S. (Mixes) (2006)\\n- Roll It (2007)\\n- Umbrella (2007)\\n- Good Girl Gone Bad (2007)\\n- Don’t Stop the Music: Remixes (2007)\\n- Umbrella (Remixes) (2007)\\n- Shut Up and Drive (2007)\\n- Don't Stop the Music (2007)\\n- Umbrella (Travis Barker Remix) (2007)\\nArtist: Beyoncé (continued)\\nType: Person\\nCountry: US (United States)\\nBorn: 1981-09-04\\nTags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&b; singer/songwriter; contemporary r&b; 2010s; mbs-333; art pop; alternative r&b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper\",\n    \"statements\": [\n        \"Artists mentioned include JAŸ-Z and Beyoncé.\",\n        \"JAŸ-Z is associated with tags such as 'hip hop rnb and dance hall' and other hip-hop/R&B related tags.\",\n        \"Some of JAŸ-Z's releases include Reasonable Doubt (1996), In My Lifetime, Vol. 1 (1997), Vol. 2... Hard Knock Life (1998), Vol. 3… Life and Times of S. Carter (1999), The Dynasty: Roc La Familia (2000), The Blueprint (2001), and The Blueprint²: The Gift & The Curse (2002).\",\n        \"Beyoncé is associated with tags such as 'hip hop rnb and dance hall', 'hip hop soul', and 'contemporary r&b', indicating a blend of hip hop and R&B.\",\n        \"The provided context does not list Beyoncé's album releases.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides information about JAŸ-Z and his albums, which answers part of the question. Although it does not provide album information for Beyoncé, the presence of any answer from the dataset qualifies the response as 'answered'.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: Which artists blend hip hop with R&B, and what are some of their albums?\nResponse: Artists used: JAŸ-Z; Beyoncé\n\n- JAŸ-Z — tags include \"hip hop rnb and dance hall\" and other hip‑hop/R&B related tags. Some releases listed in the context: Reasonable Doubt (1996); In My Lifetime, Vol. 1 (1997); Vol. 2... Hard Knock Life (1998); Vol. 3… Life and Times of S. Carter (1999); The Dynasty: Roc La Familia (2000); The Blueprint (2001); The Blueprint²: The Gift & The Curse (2002).\n\n- Beyoncé — tags in the context include \"hip hop rnb and dance hall\", \"hip hop soul\" and \"contemporary r&b\", indicating a blend of hip hop and R&B. The provided context does not list her album releases, so I don't know her albums based on the data.\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "Where is Fela Kuti from, and what kind of music did he make?",
+      "retrieved_contexts": [
+        "Artist: Fela Kuti\nType: Person\nCountry: NG (Nigeria)\nBorn: 1938-10-15\nTags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; jùjú\nAlso known as: フェラ・クティ; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela & Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti & Africa '70; Fela\nReleases:\n- Fela Ransome Kuti and His Koola Lobitos (1965)\n- Fela Fela Fela (1969)\n- Afro Beat Live (1969)\n- Black man's cry (1970)\n- Live! (1971)\n- Open & Close (1971)\n- Na Poi (1971)\n- Na Fight - O ! Part I & II (1971)\n- Fela’s London Scene (1971)\n- Why Black Man Dey Suffer (1971)\n- Shakara (1972)\n- Roforofo Fight (1972)\n- Beggar's Song (Orin Alagbe) 1 & 2 (1972)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)\n- Confusion (1974)",
+        "Artist: Fela Kuti (continued)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)\n- Confusion (1974)\n- Going In And Coming Out (Part 1 & 2) (1974)\n- Before I Jump Like Monkey Give Me Banana (1975)\n- Expensive Shit (1975)\n- Music of Fela Volume 2: Question Jam Answer (1975)\n- He Miss Road (1975)\n- Everything Scatter (1975)\n- Noise for Vendor Mouth (1975)\n- Ikoyi Blindness (1976)\n- Zombie (1976)\n- Up Side Down (1976)\n- Yellow Fever (1976)\n- Excuse O (1976)\n- No Bread (1976)\n- Kalakuta Show (1976)\n- No Agreement (1977)\n- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)\n- Vol. 1 & 2 (1977)\n- Sorrow Tears and Blood (1977)\n- Stalemate (1977)\n- Fear Not for Man (1977)\n- Opposite People (1977)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)",
+        "Artist: Fela Kuti (continued)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)\n- International Thief Thief (I.T.T.) (1979)\n- Unknown Soldier (1979)\n- V.I.P. (Vagabonds in Power) (1979)\n- Music of Many Colours (1980)\n- Authority Stealing (1980)\n- Coffin for Head of State (1981)\n- Original Sufferhead (1981)\n- Black President (1981)\n- Unnecessary Begging (1982)\n- Perambulator (1983)\n- Army Arrangement (1984)\n- Live in Amsterdam (1984)\n- Teacher Don’t Teach Me Nonsense (1986)\n- Mr. Follow Follow (1986)\n- I Go Shout Plenty!!! (1986)\n- 2000 Blacks (1987)\n- Beasts of No Nation (1989)\n- ODOO: Overtake Don Overtake Overtake (1989)\n- Confusion Break Bones (1990)\n- O.D.O.O. (Overtake Don Overtake Overtake) (1990)\n- ODOO (Overtake Don Overtake Overtake) (1990)",
+        "Artist: Burna Boy\nType: Person\nCountry: NG (Nigeria)\nDescription: Nigerian rapper, singer-songwriter, and record producer\nBorn: 1991-07-02\nTags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion\nAlso known as: Damini Ogulu; Damini Ebunoluwa Ogulu\nReleases:\n- Best of Burn Series, Vol. 1 (2011)\n- Like to Party (2012)\n- Tonight (2012)\n- L.I.F.E: Leaving an Impact for Eternity (2013)\n- Always Love You (2013)\n- L.I.F.E - Leaving an Impact for Eternity (2013)\n- Run My Race (2013)\n- Don Gorgon (2014)\n- Check & Balance (2014)\n- Soke (2015)\n- Follow Me (2015)\n- Check and Balance (2015)\n- Baddest (2015)\n- On a Spaceship (2015)\n- Jealousy (2015)\n- No! (2015)\n- Pree Me (2016)\n- Redemption (2016)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)\n- Gbona (2018)",
+        "Artist: Wizkid\nType: Person\nCountry: NG (Nigeria)\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\nBorn: 1990-07-16\nTags: pop; afrobeat; afropop; afrobeats; tryt\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\nReleases:\n- Superstar (2011)\n- Beat of Life (2012)\n- Zombie (2012)\n- Love You (2013)\n- Mr 1 Take Jake Vol.1 (2013)\n- Jaiye Jaiye (2013)\n- The Matter (2013)\n- New Bounce (2013)\n- Ayo (2014)\n- Feel Me (2014)\n- Don’t Tell ’Em (2014)\n- One Life (2015)\n- Mamacita (2016)\n- U Don't Know (2016)\n- One Dance (US’s \"No Sex in the Champagne Room\" edit) (2016)\n- Don't dull (Freestyle) remix (2016)\n- Like This (2016)\n- Daddy Yo (2016)\n- One Dance (2016)\n- Sounds From the Other Side (2017)\n- Sounds From The Other Side (2017)",
+        "Artist: Burna Boy (continued)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)\n- Gbona (2018)\n- On the low (2018)\n- Heaven's Gate (2018)\n- Dangote (2019)\n- Money Play (2019)\n- Own It (Joel Corry remix) (2019)\n- Stormzy - Own It (Sonny Fodera edit) (2019)\n- Be Honest (2019)\n- Steel & Copper (2019)\n- Own It (2019)\n- Killin Dem (2019)\n- African Giant (2019)\n- Anybody (2019)\n- Twice as Tall (2020)\n- Jerusalema (remix) (2020)\n- My Oasis (2020)\n- 20 10 20 (2020)\n- Winter (2020)\n- Wonderful (2020)\n- Odogwu (2020)\n- Lenu (Remix) (2020)\n- Hey Boy (2021)\n- Rotate (2021)\n- B. D’OR (2021)\n- Question (2021)\n- Kilometre (2021)\n- B. D'OR (2021)\n- Want It All (2021)\n- Love, Damini (2022)\n- Last Last (2022)\n- I Told Them… (2023)\n- Mera Na (2023)\n- Big 7 (2023)\n- Apple Music Live: Burna Boy (2023)"
+      ],
+      "response": "Artist used: Fela Kuti\n\nFela Kuti is from Nigeria. His music is tagged as jazz, world, jazz-funk, afrobeat (afro-beat), and jùjú.",
+      "expect": "answer",
+      "notes": "Single artist, facts are in the profile chunk",
+      "retrieved": [
+        {
+          "artist": "Fela Kuti",
+          "distance": 0.2517038
+        },
+        {
+          "artist": "Fela Kuti",
+          "distance": 0.36293912
+        },
+        {
+          "artist": "Fela Kuti",
+          "distance": 0.40300822
+        },
+        {
+          "artist": "Burna Boy",
+          "distance": 0.5780246
+        },
+        {
+          "artist": "Wizkid",
+          "distance": 0.6327094
+        },
+        {
+          "artist": "Burna Boy",
+          "distance": 0.6802115
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 1.0,
+        "claims": [
+          {
+            "claim": "Fela Kuti is from Nigeria.",
+            "supported": true,
+            "reason": "The context explicitly states that Fela Kuti is from Nigeria (Country: NG (Nigeria))."
+          },
+          {
+            "claim": "Fela Kuti's music is tagged as jazz.",
+            "supported": true,
+            "reason": "The context includes 'Tags: jazz', confirming that Fela Kuti's music is tagged as jazz."
+          },
+          {
+            "claim": "Fela Kuti's music is tagged as world.",
+            "supported": true,
+            "reason": "The context includes 'Tags: world', confirming that Fela Kuti's music is tagged as world."
+          },
+          {
+            "claim": "Fela Kuti's music is tagged as jazz-funk.",
+            "supported": true,
+            "reason": "The context includes 'Tags: jazz-funk', confirming that Fela Kuti's music is tagged as jazz-funk."
+          },
+          {
+            "claim": "Fela Kuti's music is tagged as afrobeat.",
+            "supported": true,
+            "reason": "The context includes 'Tags: afrobeat', confirming that Fela Kuti's music is tagged as afrobeat."
+          },
+          {
+            "claim": "Fela Kuti's music is tagged as jùjú.",
+            "supported": true,
+            "reason": "The context includes 'Tags: jùjú', confirming that Fela Kuti's music is tagged as jùjú."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"Where is Fela Kuti from, and what kind of music did he make?\",\n    \"answer\": \"Artist used: Fela Kuti\\n\\nFela Kuti is from Nigeria. His music is tagged as jazz, world, jazz-funk, afrobeat (afro-beat), and jùjú.\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: Fela Kuti\\nType: Person\\nCountry: NG (Nigeria)\\nBorn: 1938-10-15\\nTags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; jùjú\\nAlso known as: フェラ・クティ; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela & Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti & Africa '70; Fela\\nReleases:\\n- Fela Ransome Kuti and His Koola Lobitos (1965)\\n- Fela Fela Fela (1969)\\n- Afro Beat Live (1969)\\n- Black man's cry (1970)\\n- Live! (1971)\\n- Open & Close (1971)\\n- Na Poi (1971)\\n- Na Fight - O ! Part I & II (1971)\\n- Fela’s London Scene (1971)\\n- Why Black Man Dey Suffer (1971)\\n- Shakara (1972)\\n- Roforofo Fight (1972)\\n- Beggar's Song (Orin Alagbe) 1 & 2 (1972)\\n- Afrodisiac (1973)\\n- Gentleman (1973)\\n- Alagbon Close (1974)\\n- Confusion (1974)\\nArtist: Fela Kuti (continued)\\n- Afrodisiac (1973)\\n- Gentleman (1973)\\n- Alagbon Close (1974)\\n- Confusion (1974)\\n- Going In And Coming Out (Part 1 & 2) (1974)\\n- Before I Jump Like Monkey Give Me Banana (1975)\\n- Expensive Shit (1975)\\n- Music of Fela Volume 2: Question Jam Answer (1975)\\n- He Miss Road (1975)\\n- Everything Scatter (1975)\\n- Noise for Vendor Mouth (1975)\\n- Ikoyi Blindness (1976)\\n- Zombie (1976)\\n- Up Side Down (1976)\\n- Yellow Fever (1976)\\n- Excuse O (1976)\\n- No Bread (1976)\\n- Kalakuta Show (1976)\\n- No Agreement (1977)\\n- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)\\n- Vol. 1 & 2 (1977)\\n- Sorrow Tears and Blood (1977)\\n- Stalemate (1977)\\n- Fear Not for Man (1977)\\n- Opposite People (1977)\\n- Shuffering and Shmiling / Perambulator (1978)\\n- Shuffering and Shmiling (1978)\\nArtist: Fela Kuti (continued)\\n- Shuffering and Shmiling / Perambulator (1978)\\n- Shuffering and Shmiling (1978)\\n- International Thief Thief (I.T.T.) (1979)\\n- Unknown Soldier (1979)\\n- V.I.P. (Vagabonds in Power) (1979)\\n- Music of Many Colours (1980)\\n- Authority Stealing (1980)\\n- Coffin for Head of State (1981)\\n- Original Sufferhead (1981)\\n- Black President (1981)\\n- Unnecessary Begging (1982)\\n- Perambulator (1983)\\n- Army Arrangement (1984)\\n- Live in Amsterdam (1984)\\n- Teacher Don’t Teach Me Nonsense (1986)\\n- Mr. Follow Follow (1986)\\n- I Go Shout Plenty!!! (1986)\\n- 2000 Blacks (1987)\\n- Beasts of No Nation (1989)\\n- ODOO: Overtake Don Overtake Overtake (1989)\\n- Confusion Break Bones (1990)\\n- O.D.O.O. (Overtake Don Overtake Overtake) (1990)\\n- ODOO (Overtake Don Overtake Overtake) (1990)\\nArtist: Burna Boy\\nType: Person\\nCountry: NG (Nigeria)\\nDescription: Nigerian rapper, singer-songwriter, and record producer\\nBorn: 1991-07-02\\nTags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion\\nAlso known as: Damini Ogulu; Damini Ebunoluwa Ogulu\\nReleases:\\n- Best of Burn Series, Vol. 1 (2011)\\n- Like to Party (2012)\\n- Tonight (2012)\\n- L.I.F.E: Leaving an Impact for Eternity (2013)\\n- Always Love You (2013)\\n- L.I.F.E - Leaving an Impact for Eternity (2013)\\n- Run My Race (2013)\\n- Don Gorgon (2014)\\n- Check & Balance (2014)\\n- Soke (2015)\\n- Follow Me (2015)\\n- Check and Balance (2015)\\n- Baddest (2015)\\n- On a Spaceship (2015)\\n- Jealousy (2015)\\n- No! (2015)\\n- Pree Me (2016)\\n- Redemption (2016)\\n- Rock Your Body (2017)\\n- Hallelujah (2017)\\n- All My Life (2018)\\n- Outside (2018)\\n- Gbona (2018)\\nArtist: Wizkid\\nType: Person\\nCountry: NG (Nigeria)\\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\\nBorn: 1990-07-16\\nTags: pop; afrobeat; afropop; afrobeats; tryt\\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\\nReleases:\\n- Superstar (2011)\\n- Beat of Life (2012)\\n- Zombie (2012)\\n- Love You (2013)\\n- Mr 1 Take Jake Vol.1 (2013)\\n- Jaiye Jaiye (2013)\\n- The Matter (2013)\\n- New Bounce (2013)\\n- Ayo (2014)\\n- Feel Me (2014)\\n- Don’t Tell ’Em (2014)\\n- One Life (2015)\\n- Mamacita (2016)\\n- U Don't Know (2016)\\n- One Dance (US’s \\\"No Sex in the Champagne Room\\\" edit) (2016)\\n- Don't dull (Freestyle) remix (2016)\\n- Like This (2016)\\n- Daddy Yo (2016)\\n- One Dance (2016)\\n- Sounds From the Other Side (2017)\\n- Sounds From The Other Side (2017)\\nArtist: Burna Boy (continued)\\n- Rock Your Body (2017)\\n- Hallelujah (2017)\\n- All My Life (2018)\\n- Outside (2018)\\n- Gbona (2018)\\n- On the low (2018)\\n- Heaven's Gate (2018)\\n- Dangote (2019)\\n- Money Play (2019)\\n- Own It (Joel Corry remix) (2019)\\n- Stormzy - Own It (Sonny Fodera edit) (2019)\\n- Be Honest (2019)\\n- Steel & Copper (2019)\\n- Own It (2019)\\n- Killin Dem (2019)\\n- African Giant (2019)\\n- Anybody (2019)\\n- Twice as Tall (2020)\\n- Jerusalema (remix) (2020)\\n- My Oasis (2020)\\n- 20 10 20 (2020)\\n- Winter (2020)\\n- Wonderful (2020)\\n- Odogwu (2020)\\n- Lenu (Remix) (2020)\\n- Hey Boy (2021)\\n- Rotate (2021)\\n- B. D’OR (2021)\\n- Question (2021)\\n- Kilometre (2021)\\n- B. D'OR (2021)\\n- Want It All (2021)\\n- Love, Damini (2022)\\n- Last Last (2022)\\n- I Told Them… (2023)\\n- Mera Na (2023)\\n- Big 7 (2023)\\n- Apple Music Live: Burna Boy (2023)\",\n    \"statements\": [\n        \"Fela Kuti is from Nigeria.\",\n        \"Fela Kuti's music is tagged as jazz.\",\n        \"Fela Kuti's music is tagged as world.\",\n        \"Fela Kuti's music is tagged as jazz-funk.\",\n        \"Fela Kuti's music is tagged as afrobeat.\",\n        \"Fela Kuti's music is tagged as jùjú.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides information about Fela Kuti's origin and the genres of music he is associated with, which answers part of the question.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: Where is Fela Kuti from, and what kind of music did he make?\nResponse: Artist used: Fela Kuti\n\nFela Kuti is from Nigeria. His music is tagged as jazz, world, jazz-funk, afrobeat (afro-beat), and jùjú.\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "When did Daft Punk start, and what country are they from?",
+      "retrieved_contexts": [
+        "Artist: Daft Punk\nType: Group\nCountry: FR (France)\nDescription: French electronic duo\nFormed: 1993\nTags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas\nAlso known as: DaftPunk; daft punk; Duft Punk; ダフト・パンク; Daft Punk; Da Funk\nReleases:\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)",
+        "Artist: Daft Punk (continued)\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)\n- 1995-08-05: Soirée Prophecy, Le Cannet, France (1995)\n- Revolution 909 (1996)\n- Around the World (1996)\n- Indo Silver Club (1996)\n- 1997-03-02: BBC Radio 1 Essential Mix (1997)\n- Burnin’ (1997)\n- Homework (1997)\n- Burnin' (1997)\n- Live @ Tribal Party, NRJ, Paris, France (1997)\n- Live @ We Are Family (full set) (1997)\n- Alive 1997 (Mayan Theater) (1997)\n- Assault (1997)\n- Live @ We Are Family (1997)\n- Burnin’ (edit) (1997)\n- 1998-12-31: Daft Punk, BBC Radio One Essential Selection (1998)\n- Live @ Birmingham November 1997 (1998)\n- Around the World (Masters at Work Remixes) (1998)\n- Untitled (1999)\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)",
+        "Artist: Daft Punk (continued)\n- Untitled (1999)\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)\n- D.A.F.T. : A Story About Dogs, Androids, Firemen and Tomatoes (1999)\n- One More Time (2000)\n- Stronger (2000)\n- \"One More Time\" (12\" mix) (2000)\n- ONE MORE VIRGIN –tracks for CELEBRATION of new century– (2000)\n- Aerodynamic (2001)\n- Discovery (2001)\n- Digital Love (Digital dub) (2001)",
+        "Artist: Prince\nType: Person\nCountry: US (United States)\nDescription: “The Artist Formerly Known as…”\nBorn: 1958-06-07\nTags: rock; pop; 70s; 80s; 90s; jazz; dance; house; punk; american; usa; funk; deep house; funk rock; soul; disco; américain; dance-pop; psychedelic pop; pop rock; neo-psychedelia; rock music; club; african; composers; 00s; robin; film soundtrack; pop and chart; pop soul; singers; caribbean; psychedelic soul; minneapolis sound; r&b; pop/rock; contemporary pop/rock; contemporary r&b; dance-rock; adult contemporary r&b; synth funk; afro house; trap; prince revolution; pretzelbodylogic; james scutt; popular music; future bass; anniversary; organic house; server name; sound recording executives and producers; instrumentalists; rhythm and blues music",
+        "Artist: The Beatles\nType: Group\nCountry: GB (United Kingdom)\nDescription: UK rock band, “The Fab Four”\nFormed: 1960-03-27",
+        "Artist: Stromae\nType: Person\nCountry: BE (Belgium)\nBorn: 1985-03-12\nTags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson française\nAlso known as: Paul Van Haver; Sromae\nReleases:\n- Racine Carrée Live (√ Live)\n- 2015-04-19: Coachella Valley Music & Arts Festival, Indio, CA, USA\n- Juste un cerveau, un flow, un fond et un mic… (2007)\n- Enfants de l'an 2000 (2009)\n- Mixture Elecstro (2009)\n- Alors on danse (2009)\n- Up Saw Liz (remix) (2009)\n- Up Saw Liz (2009)\n- Cheese (2010)\n- Alors On Danse (Remixes) (2010)\n- Alors on danse (remix) (2010)\n- Te Quiero (2010)\n- Alors on danse (Remix) (2010)\n- Peace or Violence (Remixes) (2011)\n- Peace or Violence (2011)\n- Papaoutai Remixes (2013)\n- Racine carrée (2013)\n- Formidable (2013)\n- Papaoutai (2013)"
+      ],
+      "response": "Daft Punk — Formed: 1993; Country: FR (France).",
+      "expect": "answer",
+      "notes": "Begin date and country fields",
+      "retrieved": [
+        {
+          "artist": "Daft Punk",
+          "distance": 0.31133127
+        },
+        {
+          "artist": "Daft Punk",
+          "distance": 0.4504001
+        },
+        {
+          "artist": "Daft Punk",
+          "distance": 0.47227728
+        },
+        {
+          "artist": "Prince",
+          "distance": 0.65525013
+        },
+        {
+          "artist": "The Beatles",
+          "distance": 0.6562125
+        },
+        {
+          "artist": "Stromae",
+          "distance": 0.6622302
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 1.0,
+        "claims": [
+          {
+            "claim": "Daft Punk was formed in 1993.",
+            "supported": true,
+            "reason": "The context explicitly states that Daft Punk was formed in 1993."
+          },
+          {
+            "claim": "Daft Punk is from France.",
+            "supported": true,
+            "reason": "The context indicates that Daft Punk is associated with France, as it mentions 'Country: FR (France)'."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"When did Daft Punk start, and what country are they from?\",\n    \"answer\": \"Daft Punk — Formed: 1993; Country: FR (France).\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: Daft Punk\\nType: Group\\nCountry: FR (France)\\nDescription: French electronic duo\\nFormed: 1993\\nTags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas\\nAlso known as: DaftPunk; daft punk; Duft Punk; ダフト・パンク; Daft Punk; Da Funk\\nReleases:\\n- The New Wave (1994)\\n- Da Funk (1995)\\n- Musique / L'ombelico del mondo / Make It Funky (1995)\\nArtist: Daft Punk (continued)\\n- The New Wave (1994)\\n- Da Funk (1995)\\n- Musique / L'ombelico del mondo / Make It Funky (1995)\\n- 1995-08-05: Soirée Prophecy, Le Cannet, France (1995)\\n- Revolution 909 (1996)\\n- Around the World (1996)\\n- Indo Silver Club (1996)\\n- 1997-03-02: BBC Radio 1 Essential Mix (1997)\\n- Burnin’ (1997)\\n- Homework (1997)\\n- Burnin' (1997)\\n- Live @ Tribal Party, NRJ, Paris, France (1997)\\n- Live @ We Are Family (full set) (1997)\\n- Alive 1997 (Mayan Theater) (1997)\\n- Assault (1997)\\n- Live @ We Are Family (1997)\\n- Burnin’ (edit) (1997)\\n- 1998-12-31: Daft Punk, BBC Radio One Essential Selection (1998)\\n- Live @ Birmingham November 1997 (1998)\\n- Around the World (Masters at Work Remixes) (1998)\\n- Untitled (1999)\\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)\\nArtist: Daft Punk (continued)\\n- Untitled (1999)\\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)\\n- D.A.F.T. : A Story About Dogs, Androids, Firemen and Tomatoes (1999)\\n- One More Time (2000)\\n- Stronger (2000)\\n- \\\"One More Time\\\" (12\\\" mix) (2000)\\n- ONE MORE VIRGIN –tracks for CELEBRATION of new century– (2000)\\n- Aerodynamic (2001)\\n- Discovery (2001)\\n- Digital Love (Digital dub) (2001)\\nArtist: Prince\\nType: Person\\nCountry: US (United States)\\nDescription: “The Artist Formerly Known as…”\\nBorn: 1958-06-07\\nTags: rock; pop; 70s; 80s; 90s; jazz; dance; house; punk; american; usa; funk; deep house; funk rock; soul; disco; américain; dance-pop; psychedelic pop; pop rock; neo-psychedelia; rock music; club; african; composers; 00s; robin; film soundtrack; pop and chart; pop soul; singers; caribbean; psychedelic soul; minneapolis sound; r&b; pop/rock; contemporary pop/rock; contemporary r&b; dance-rock; adult contemporary r&b; synth funk; afro house; trap; prince revolution; pretzelbodylogic; james scutt; popular music; future bass; anniversary; organic house; server name; sound recording executives and producers; instrumentalists; rhythm and blues music\\nArtist: The Beatles\\nType: Group\\nCountry: GB (United Kingdom)\\nDescription: UK rock band, “The Fab Four”\\nFormed: 1960-03-27\\nArtist: Stromae\\nType: Person\\nCountry: BE (Belgium)\\nBorn: 1985-03-12\\nTags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson française\\nAlso known as: Paul Van Haver; Sromae\\nReleases:\\n- Racine Carrée Live (√ Live)\\n- 2015-04-19: Coachella Valley Music & Arts Festival, Indio, CA, USA\\n- Juste un cerveau, un flow, un fond et un mic… (2007)\\n- Enfants de l'an 2000 (2009)\\n- Mixture Elecstro (2009)\\n- Alors on danse (2009)\\n- Up Saw Liz (remix) (2009)\\n- Up Saw Liz (2009)\\n- Cheese (2010)\\n- Alors On Danse (Remixes) (2010)\\n- Alors on danse (remix) (2010)\\n- Te Quiero (2010)\\n- Alors on danse (Remix) (2010)\\n- Peace or Violence (Remixes) (2011)\\n- Peace or Violence (2011)\\n- Papaoutai Remixes (2013)\\n- Racine carrée (2013)\\n- Formidable (2013)\\n- Papaoutai (2013)\",\n    \"statements\": [\n        \"Daft Punk was formed in 1993.\",\n        \"Daft Punk is from France.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides a specific formation year and country for Daft Punk, which answers part of the question.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: When did Daft Punk start, and what country are they from?\nResponse: Daft Punk — Formed: 1993; Country: FR (France).\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "Name some K-pop groups and one release by each.",
+      "retrieved_contexts": [
+        "Artist: BLACKPINK\nType: Group\nCountry: KR (South Korea)\nFormed: 2016-08-08\nTags: pop; hip hop; j-pop; girl group; female vocals; k-pop; 2010s; 2020s; 3rd gen k-pop; girl crush\nAlso known as: 才貌俱全; BLACKPINK; Beullaekpingkeu; Блекпинк; བླེཀ་པིངཀ་; بڵاکپینک; בלאקפינק; ဘလက်ပင့်; ပလႅၵ်းၽိင်း; BLΛƆKPIИK; แบล็กพิงก์; ब्ल्याकपिङ्क; ແບັກພິ້ງ; ប្លេកភីង; ब्लैकपिंक; بلک‌پینک; ব্ল্যাকপিঙ্ক; بلک پینک; بلاكبينك; 블랙핑크; Black Pink\nReleases:\n- 휘파람 (2016)\n- WHISTLE (2016)\n- 불장난 (2016)\n- SQUARE TWO (2016)\n- BOOMBAYAH (2016)\n- STAY (2016)\n- SQUARE ONE (2016)\n- 마지막처럼 (2017)\n- As If It’s Your Last (2017)\n- BLACKPINK (2017)\n- Sure Thing (2017)\n- PLAYING WITH FIRE (2017)\n- AS IF IT’S YOUR LAST (2017)\n- PLAYING WITH FIRE -JP ver.- (2017)\n- SO HOT (THEBLACKLABEL remix) (2017)\n- DDU-DU DDU-DU (2018)",
+        "Artist: BTS\nType: Group\nCountry: KR (South Korea)\nDescription: South Korean boy group\nFormed: 2013-06-13\nTags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop\nAlso known as: 방탄; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; Bōdan Shōnendan; Bulletproof Boy Scouts; Beyond the Scene; 방탄소년단; 防弾少年団; Bangtan Boys; BTS\nReleases:\n- O!RUL8,2? (2013)\n- 2 COOL 4 SKOOL (2013)\n- 2 Cool 4 Skool (2013)\n- DARK&WILD (2014)\n- NO MORE DREAM (2014)\n- BOY IN LUV (2014)\n- No More Dream (Japanese ver.) (2014)\n- Wake Up (2014)\n- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)\n- WAKE UP (2014)\n- NO MORE DREAM -Japanese ver.- (2014)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)",
+        "Artist: BTS (continued)\n- You Never Walk Alone (2017)\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat & Tears) (2017)\n- LOVE YOURSELF 承 ‘Her’ (2017)\n- Come Back Home (2017)\n- MIC Drop / DNA / Crystal Snow (2017)\n- 血、汗、涙 (2017)\n- With Seoul (2017)\n- THE BEST OF 防彈少年團 -KOREA EDITION- (2017)\n- Blood Sweat & Tears (2017)\n- THE BEST OF 防彈少年團 -JAPAN EDITION- (2017)\n- YOU NEVER WALK ALONE (2017)\n- FACE YOURSELF (2018)",
+        "Artist: Arijit Singh (continued)\n- Pachtaoge (2019)\n- Bekhayali (2019)\n- Ve Maahi (2019)\n- Made In China (2019)\n- Tujhe Kitna Chahne Lage (From “Kabir Singh”) (2019)\n- Mukto Kore Dao (2020)\n- Dil Ko Maine Di Kasam (2020)\n- Rihaa (2020)\n- YRF Top 10 - Nightout Sounds (2021)\n- Mere Yaaraa (From “Sooryavanshi”) (2021)\n- Pagglait (2021)\n- Maan Le (From “Chitrakut”) (2022)\n- Apna Bana Le (From “Bhediya”) (2022)\n- Mahi Mera Dil (From “Dhokha Round D Corner”) (2022)\n- Kaala Jaadu (From “Freddy”) (2022)\n- Samjhawan (Lofi Flip) (2022)\n- Deva Deva (From “Brahmastra”) (2022)\n- Kesariya (From “Brahmastra”) (2022)\n- Yaar Ve (From “Code Name Tiranga”) (2022)\n- Kitni Haseen Hogi (From \"Hit - The First Case\") (2022)\n- Phir Na Aisi Raat Aayegi (From \"Laal Singh Chaddha\") (2022)\n- Rasiya Reprise (From “Brahmastra”) (2022)",
+        "Artist: BTS (continued)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)\n- Danger (Mo-Blue-Mix) (2014)\n- 2 COOL 4 SKOOL / O!RUL8,2? (2014)\n- Boy in Luv (Japanese ver.) (2014)\n- 2019-04-13: Saturday Night Live, New York, NY, USA (2014)\n- Danger -Japanese ver.- (2014)\n- 화양연화 pt.2 (2015)\n- For You (2015)\n- Danger (Japanese ver.) (2015)\n- 화양연화 pt.1 (2015)\n- I NEED U (2015)\n- The Most Beautiful Moment in Life, Pt. 2 (2015)\n- FOR YOU (2015)\n- The Most Beautiful Moment in Life, Pt. 1 (2015)\n- RUN (2016)\n- WINGS (2016)\n- Youth (2016)\n- YOUTH (2016)\n- 화양연화 Young Forever (2016)\n- The Most Beautiful Moment in Life: Young Forever (2016)\n- Wings (2016)\n- MIC Drop (Steve Aoki remix) (2017)\n- You Never Walk Alone (2017)\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat & Tears) (2017)",
+        "Artist: Diljit Dosanjh (continued)\n- Con.Fi.Den.Tial (2018)\n- Kylie & Kareena (2019)\n- Kali Teri Gutt (MTV Unplugged) (2019)\n- Hum Do Hamare Dus (2019)\n- G.O.A.T. (2020)\n- Welcome to My Hood (2020)\n- In Love With Diljit Dosanjh (2021)\n- Unforgettable (2021)\n- MoonChild Era (2021)\n- What Ve (2021)\n- Route 66 (2021)\n- Umbrella (2021)\n- RiRi (2021)\n- Jugni (2022)\n- Koka (From “Babe Bhangra Paunde Ne”) (2022)\n- Chauffeur (2022)\n- Balle Jatta (2022)\n- VIP (2022)\n- Babe Bhangra Paunde Ne - Title Track (2022)\n- Bachelor Party (From “Babe Bhangra Paunde Ne”) (2022)\n- Nazarey (From “Babe Bhangra Paunde Ne”) (2022)\n- Drive Thru (2022)\n- Jatt Di Jaan (From “Jodi”) (2023)\n- Hass Hass (2023)\n- Very Best of Coke Studio Vol. 1 (2023)\n- Munda Sona Hoon Main (From “Shehzada”) (2023)\n- Banda (From “Dunki”) (2023)\n- Ghost (2023)"
+      ],
+      "response": "Artists used: BLACKPINK; BTS\n\n- BLACKPINK — BOOMBAYAH (2016)\n- BTS — WINGS (2016)",
+      "expect": "answer",
+      "notes": "BTS and BLACKPINK",
+      "retrieved": [
+        {
+          "artist": "BLACKPINK",
+          "distance": 0.5618619
+        },
+        {
+          "artist": "BTS",
+          "distance": 0.5832386
+        },
+        {
+          "artist": "BTS",
+          "distance": 0.62064075
+        },
+        {
+          "artist": "Arijit Singh",
+          "distance": 0.67409074
+        },
+        {
+          "artist": "BTS",
+          "distance": 0.6790012
+        },
+        {
+          "artist": "Diljit Dosanjh",
+          "distance": 0.67974
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 0.75,
+        "claims": [
+          {
+            "claim": "One K-pop group is BLACKPINK.",
+            "supported": true,
+            "reason": "The context explicitly states that BLACKPINK is a K-pop group."
+          },
+          {
+            "claim": "BLACKPINK released the song BOOMBAYAH in 2016.",
+            "supported": true,
+            "reason": "The context lists BOOMBAYAH as one of BLACKPINK's releases in 2016."
+          },
+          {
+            "claim": "Another K-pop group is BTS.",
+            "supported": true,
+            "reason": "The context explicitly states that BTS is a K-pop group."
+          },
+          {
+            "claim": "BTS released the song WINGS in 2016.",
+            "supported": false,
+            "reason": "The context lists WINGS as one of BTS's releases, but it was released in 2016, not explicitly stated in the context."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"Name some K-pop groups and one release by each.\",\n    \"answer\": \"Artists used: BLACKPINK; BTS\\n\\n- BLACKPINK — BOOMBAYAH (2016)\\n- BTS — WINGS (2016)\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: BLACKPINK\\nType: Group\\nCountry: KR (South Korea)\\nFormed: 2016-08-08\\nTags: pop; hip hop; j-pop; girl group; female vocals; k-pop; 2010s; 2020s; 3rd gen k-pop; girl crush\\nAlso known as: 才貌俱全; BLACKPINK; Beullaekpingkeu; Блекпинк; བླེཀ་པིངཀ་; بڵاکپینک; בלאקפינק; ဘလက်ပင့်; ပလႅၵ်းၽိင်း; BLΛƆKPIИK; แบล็กพิงก์; ब्ल्याकपिङ्क; ແບັກພິ້ງ; ប្លេកភីង; ब्लैकपिंक; بلک‌پینک; ব্ল্যাকপিঙ্ক; بلک پینک; بلاكبينك; 블랙핑크; Black Pink\\nReleases:\\n- 휘파람 (2016)\\n- WHISTLE (2016)\\n- 불장난 (2016)\\n- SQUARE TWO (2016)\\n- BOOMBAYAH (2016)\\n- STAY (2016)\\n- SQUARE ONE (2016)\\n- 마지막처럼 (2017)\\n- As If It’s Your Last (2017)\\n- BLACKPINK (2017)\\n- Sure Thing (2017)\\n- PLAYING WITH FIRE (2017)\\n- AS IF IT’S YOUR LAST (2017)\\n- PLAYING WITH FIRE -JP ver.- (2017)\\n- SO HOT (THEBLACKLABEL remix) (2017)\\n- DDU-DU DDU-DU (2018)\\nArtist: BTS\\nType: Group\\nCountry: KR (South Korea)\\nDescription: South Korean boy group\\nFormed: 2013-06-13\\nTags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop\\nAlso known as: 방탄; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; Bōdan Shōnendan; Bulletproof Boy Scouts; Beyond the Scene; 방탄소년단; 防弾少年団; Bangtan Boys; BTS\\nReleases:\\n- O!RUL8,2? (2013)\\n- 2 COOL 4 SKOOL (2013)\\n- 2 Cool 4 Skool (2013)\\n- DARK&WILD (2014)\\n- NO MORE DREAM (2014)\\n- BOY IN LUV (2014)\\n- No More Dream (Japanese ver.) (2014)\\n- Wake Up (2014)\\n- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)\\n- WAKE UP (2014)\\n- NO MORE DREAM -Japanese ver.- (2014)\\n- BOY IN LUV -Japanese ver.- (2014)\\n- Skool Luv Affair (2014)\\n- Danger (2014)\\nArtist: BTS (continued)\\n- You Never Walk Alone (2017)\\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat & Tears) (2017)\\n- LOVE YOURSELF 承 ‘Her’ (2017)\\n- Come Back Home (2017)\\n- MIC Drop / DNA / Crystal Snow (2017)\\n- 血、汗、涙 (2017)\\n- With Seoul (2017)\\n- THE BEST OF 防彈少年團 -KOREA EDITION- (2017)\\n- Blood Sweat & Tears (2017)\\n- THE BEST OF 防彈少年團 -JAPAN EDITION- (2017)\\n- YOU NEVER WALK ALONE (2017)\\n- FACE YOURSELF (2018)\\nArtist: Arijit Singh (continued)\\n- Pachtaoge (2019)\\n- Bekhayali (2019)\\n- Ve Maahi (2019)\\n- Made In China (2019)\\n- Tujhe Kitna Chahne Lage (From “Kabir Singh”) (2019)\\n- Mukto Kore Dao (2020)\\n- Dil Ko Maine Di Kasam (2020)\\n- Rihaa (2020)\\n- YRF Top 10 - Nightout Sounds (2021)\\n- Mere Yaaraa (From “Sooryavanshi”) (2021)\\n- Pagglait (2021)\\n- Maan Le (From “Chitrakut”) (2022)\\n- Apna Bana Le (From “Bhediya”) (2022)\\n- Mahi Mera Dil (From “Dhokha Round D Corner”) (2022)\\n- Kaala Jaadu (From “Freddy”) (2022)\\n- Samjhawan (Lofi Flip) (2022)\\n- Deva Deva (From “Brahmastra”) (2022)\\n- Kesariya (From “Brahmastra”) (2022)\\n- Yaar Ve (From “Code Name Tiranga”) (2022)\\n- Kitni Haseen Hogi (From \\\"Hit - The First Case\\\") (2022)\\n- Phir Na Aisi Raat Aayegi (From \\\"Laal Singh Chaddha\\\") (2022)\\n- Rasiya Reprise (From “Brahmastra”) (2022)\\nArtist: BTS (continued)\\n- BOY IN LUV -Japanese ver.- (2014)\\n- Skool Luv Affair (2014)\\n- Danger (2014)\\n- Danger (Mo-Blue-Mix) (2014)\\n- 2 COOL 4 SKOOL / O!RUL8,2? (2014)\\n- Boy in Luv (Japanese ver.) (2014)\\n- 2019-04-13: Saturday Night Live, New York, NY, USA (2014)\\n- Danger -Japanese ver.- (2014)\\n- 화양연화 pt.2 (2015)\\n- For You (2015)\\n- Danger (Japanese ver.) (2015)\\n- 화양연화 pt.1 (2015)\\n- I NEED U (2015)\\n- The Most Beautiful Moment in Life, Pt. 2 (2015)\\n- FOR YOU (2015)\\n- The Most Beautiful Moment in Life, Pt. 1 (2015)\\n- RUN (2016)\\n- WINGS (2016)\\n- Youth (2016)\\n- YOUTH (2016)\\n- 화양연화 Young Forever (2016)\\n- The Most Beautiful Moment in Life: Young Forever (2016)\\n- Wings (2016)\\n- MIC Drop (Steve Aoki remix) (2017)\\n- You Never Walk Alone (2017)\\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat & Tears) (2017)\\nArtist: Diljit Dosanjh (continued)\\n- Con.Fi.Den.Tial (2018)\\n- Kylie & Kareena (2019)\\n- Kali Teri Gutt (MTV Unplugged) (2019)\\n- Hum Do Hamare Dus (2019)\\n- G.O.A.T. (2020)\\n- Welcome to My Hood (2020)\\n- In Love With Diljit Dosanjh (2021)\\n- Unforgettable (2021)\\n- MoonChild Era (2021)\\n- What Ve (2021)\\n- Route 66 (2021)\\n- Umbrella (2021)\\n- RiRi (2021)\\n- Jugni (2022)\\n- Koka (From “Babe Bhangra Paunde Ne”) (2022)\\n- Chauffeur (2022)\\n- Balle Jatta (2022)\\n- VIP (2022)\\n- Babe Bhangra Paunde Ne - Title Track (2022)\\n- Bachelor Party (From “Babe Bhangra Paunde Ne”) (2022)\\n- Nazarey (From “Babe Bhangra Paunde Ne”) (2022)\\n- Drive Thru (2022)\\n- Jatt Di Jaan (From “Jodi”) (2023)\\n- Hass Hass (2023)\\n- Very Best of Coke Studio Vol. 1 (2023)\\n- Munda Sona Hoon Main (From “Shehzada”) (2023)\\n- Banda (From “Dunki”) (2023)\\n- Ghost (2023)\",\n    \"statements\": [\n        \"One K-pop group is BLACKPINK.\",\n        \"BLACKPINK released the song BOOMBAYAH in 2016.\",\n        \"Another K-pop group is BTS.\",\n        \"BTS released the song WINGS in 2016.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides specific K-pop groups and one release by each, fulfilling the requirement to answer the question.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: Name some K-pop groups and one release by each.\nResponse: Artists used: BLACKPINK; BTS\n\n- BLACKPINK — BOOMBAYAH (2016)\n- BTS — WINGS (2016)\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "Which artists in the data are from Nigeria?",
+      "retrieved_contexts": [
+        "Artist: Fela Kuti\nType: Person\nCountry: NG (Nigeria)\nBorn: 1938-10-15\nTags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; jùjú\nAlso known as: フェラ・クティ; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela & Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti & Africa '70; Fela\nReleases:\n- Fela Ransome Kuti and His Koola Lobitos (1965)\n- Fela Fela Fela (1969)\n- Afro Beat Live (1969)\n- Black man's cry (1970)\n- Live! (1971)\n- Open & Close (1971)\n- Na Poi (1971)\n- Na Fight - O ! Part I & II (1971)\n- Fela’s London Scene (1971)\n- Why Black Man Dey Suffer (1971)\n- Shakara (1972)\n- Roforofo Fight (1972)\n- Beggar's Song (Orin Alagbe) 1 & 2 (1972)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)\n- Confusion (1974)",
+        "Artist: Wizkid\nType: Person\nCountry: NG (Nigeria)\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\nBorn: 1990-07-16\nTags: pop; afrobeat; afropop; afrobeats; tryt\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\nReleases:\n- Superstar (2011)\n- Beat of Life (2012)\n- Zombie (2012)\n- Love You (2013)\n- Mr 1 Take Jake Vol.1 (2013)\n- Jaiye Jaiye (2013)\n- The Matter (2013)\n- New Bounce (2013)\n- Ayo (2014)\n- Feel Me (2014)\n- Don’t Tell ’Em (2014)\n- One Life (2015)\n- Mamacita (2016)\n- U Don't Know (2016)\n- One Dance (US’s \"No Sex in the Champagne Room\" edit) (2016)\n- Don't dull (Freestyle) remix (2016)\n- Like This (2016)\n- Daddy Yo (2016)\n- One Dance (2016)\n- Sounds From the Other Side (2017)\n- Sounds From The Other Side (2017)",
+        "Artist: Burna Boy\nType: Person\nCountry: NG (Nigeria)\nDescription: Nigerian rapper, singer-songwriter, and record producer\nBorn: 1991-07-02\nTags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion\nAlso known as: Damini Ogulu; Damini Ebunoluwa Ogulu\nReleases:\n- Best of Burn Series, Vol. 1 (2011)\n- Like to Party (2012)\n- Tonight (2012)\n- L.I.F.E: Leaving an Impact for Eternity (2013)\n- Always Love You (2013)\n- L.I.F.E - Leaving an Impact for Eternity (2013)\n- Run My Race (2013)\n- Don Gorgon (2014)\n- Check & Balance (2014)\n- Soke (2015)\n- Follow Me (2015)\n- Check and Balance (2015)\n- Baddest (2015)\n- On a Spaceship (2015)\n- Jealousy (2015)\n- No! (2015)\n- Pree Me (2016)\n- Redemption (2016)\n- Rock Your Body (2017)\n- Hallelujah (2017)\n- All My Life (2018)\n- Outside (2018)\n- Gbona (2018)",
+        "Artist: Fela Kuti (continued)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)\n- International Thief Thief (I.T.T.) (1979)\n- Unknown Soldier (1979)\n- V.I.P. (Vagabonds in Power) (1979)\n- Music of Many Colours (1980)\n- Authority Stealing (1980)\n- Coffin for Head of State (1981)\n- Original Sufferhead (1981)\n- Black President (1981)\n- Unnecessary Begging (1982)\n- Perambulator (1983)\n- Army Arrangement (1984)\n- Live in Amsterdam (1984)\n- Teacher Don’t Teach Me Nonsense (1986)\n- Mr. Follow Follow (1986)\n- I Go Shout Plenty!!! (1986)\n- 2000 Blacks (1987)\n- Beasts of No Nation (1989)\n- ODOO: Overtake Don Overtake Overtake (1989)\n- Confusion Break Bones (1990)\n- O.D.O.O. (Overtake Don Overtake Overtake) (1990)\n- ODOO (Overtake Don Overtake Overtake) (1990)",
+        "Artist: Fela Kuti (continued)\n- Afrodisiac (1973)\n- Gentleman (1973)\n- Alagbon Close (1974)\n- Confusion (1974)\n- Going In And Coming Out (Part 1 & 2) (1974)\n- Before I Jump Like Monkey Give Me Banana (1975)\n- Expensive Shit (1975)\n- Music of Fela Volume 2: Question Jam Answer (1975)\n- He Miss Road (1975)\n- Everything Scatter (1975)\n- Noise for Vendor Mouth (1975)\n- Ikoyi Blindness (1976)\n- Zombie (1976)\n- Up Side Down (1976)\n- Yellow Fever (1976)\n- Excuse O (1976)\n- No Bread (1976)\n- Kalakuta Show (1976)\n- No Agreement (1977)\n- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)\n- Vol. 1 & 2 (1977)\n- Sorrow Tears and Blood (1977)\n- Stalemate (1977)\n- Fear Not for Man (1977)\n- Opposite People (1977)\n- Shuffering and Shmiling / Perambulator (1978)\n- Shuffering and Shmiling (1978)",
+        "Artist: Wizkid (continued)\n- One Dance (2016)\n- Sounds From the Other Side (2017)\n- Sounds From The Other Side (2017)\n- Naughty Ride (2017)\n- Can’t Believe (2017)\n- Come Closer (2017)\n- Like This (The Remixes) (2017)\n- Can't Believe (feat. Ty Dolla $ign & WizKid) (2017)\n- U Don’t Know (Remixes) (2017)\n- Drogba (Joanna) (2018)\n- KANA (2018)\n- Bella (2018)\n- Energy (Stay Far Away) (2018)\n- Fever (2018)\n- For You (2018)\n- Nowo (2018)\n- Soco (2018)\n- Joro (2019)\n- SoundMan Vol. 1 (2019)\n- Ghetto Love (2019)\n- Totori (2019)\n- Essence (2020)\n- Made in Lagos (2020)\n- Cool Me Down (2020)\n- BROWN SKIN GIRL (2020)\n- Smile (2020)\n- Eve Bounce (Remix) (2020)\n- Escape (2020)\n- Made In Lagos: Deluxe Edition (2021)\n- System (2021)\n- Essence (Jagr bootleg) (2021)\n- Apple Music Live: Wizkid (2022)\n- Call Me Every Day (2022)"
+      ],
+      "response": "Artists from Nigeria in the data:\n- Fela Kuti\n- Wizkid\n- Burna Boy",
+      "expect": "answer",
+      "notes": "Fela Kuti, Burna Boy, Wizkid",
+      "retrieved": [
+        {
+          "artist": "Fela Kuti",
+          "distance": 0.5320467
+        },
+        {
+          "artist": "Wizkid",
+          "distance": 0.5591113
+        },
+        {
+          "artist": "Burna Boy",
+          "distance": 0.56165063
+        },
+        {
+          "artist": "Fela Kuti",
+          "distance": 0.6169758
+        },
+        {
+          "artist": "Fela Kuti",
+          "distance": 0.6193722
+        },
+        {
+          "artist": "Wizkid",
+          "distance": 0.6401113
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 1.0,
+        "claims": [
+          {
+            "claim": "Fela Kuti is an artist from Nigeria.",
+            "supported": true,
+            "reason": "The context explicitly states that Fela Kuti is an artist and mentions Nigeria as his country."
+          },
+          {
+            "claim": "Wizkid is an artist from Nigeria.",
+            "supported": true,
+            "reason": "The context explicitly states that Wizkid is an artist and mentions Nigeria as his country."
+          },
+          {
+            "claim": "Burna Boy is an artist from Nigeria.",
+            "supported": true,
+            "reason": "The context explicitly states that Burna Boy is an artist and mentions Nigeria as his country."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"Which artists in the data are from Nigeria?\",\n    \"answer\": \"Artists from Nigeria in the data:\\n- Fela Kuti\\n- Wizkid\\n- Burna Boy\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: Fela Kuti\\nType: Person\\nCountry: NG (Nigeria)\\nBorn: 1938-10-15\\nTags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; jùjú\\nAlso known as: フェラ・クティ; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela & Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti & Africa '70; Fela\\nReleases:\\n- Fela Ransome Kuti and His Koola Lobitos (1965)\\n- Fela Fela Fela (1969)\\n- Afro Beat Live (1969)\\n- Black man's cry (1970)\\n- Live! (1971)\\n- Open & Close (1971)\\n- Na Poi (1971)\\n- Na Fight - O ! Part I & II (1971)\\n- Fela’s London Scene (1971)\\n- Why Black Man Dey Suffer (1971)\\n- Shakara (1972)\\n- Roforofo Fight (1972)\\n- Beggar's Song (Orin Alagbe) 1 & 2 (1972)\\n- Afrodisiac (1973)\\n- Gentleman (1973)\\n- Alagbon Close (1974)\\n- Confusion (1974)\\nArtist: Wizkid\\nType: Person\\nCountry: NG (Nigeria)\\nDescription: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.\\nBorn: 1990-07-16\\nTags: pop; afrobeat; afropop; afrobeats; tryt\\nAlso known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid\\nReleases:\\n- Superstar (2011)\\n- Beat of Life (2012)\\n- Zombie (2012)\\n- Love You (2013)\\n- Mr 1 Take Jake Vol.1 (2013)\\n- Jaiye Jaiye (2013)\\n- The Matter (2013)\\n- New Bounce (2013)\\n- Ayo (2014)\\n- Feel Me (2014)\\n- Don’t Tell ’Em (2014)\\n- One Life (2015)\\n- Mamacita (2016)\\n- U Don't Know (2016)\\n- One Dance (US’s \\\"No Sex in the Champagne Room\\\" edit) (2016)\\n- Don't dull (Freestyle) remix (2016)\\n- Like This (2016)\\n- Daddy Yo (2016)\\n- One Dance (2016)\\n- Sounds From the Other Side (2017)\\n- Sounds From The Other Side (2017)\\nArtist: Burna Boy\\nType: Person\\nCountry: NG (Nigeria)\\nDescription: Nigerian rapper, singer-songwriter, and record producer\\nBorn: 1991-07-02\\nTags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion\\nAlso known as: Damini Ogulu; Damini Ebunoluwa Ogulu\\nReleases:\\n- Best of Burn Series, Vol. 1 (2011)\\n- Like to Party (2012)\\n- Tonight (2012)\\n- L.I.F.E: Leaving an Impact for Eternity (2013)\\n- Always Love You (2013)\\n- L.I.F.E - Leaving an Impact for Eternity (2013)\\n- Run My Race (2013)\\n- Don Gorgon (2014)\\n- Check & Balance (2014)\\n- Soke (2015)\\n- Follow Me (2015)\\n- Check and Balance (2015)\\n- Baddest (2015)\\n- On a Spaceship (2015)\\n- Jealousy (2015)\\n- No! (2015)\\n- Pree Me (2016)\\n- Redemption (2016)\\n- Rock Your Body (2017)\\n- Hallelujah (2017)\\n- All My Life (2018)\\n- Outside (2018)\\n- Gbona (2018)\\nArtist: Fela Kuti (continued)\\n- Shuffering and Shmiling / Perambulator (1978)\\n- Shuffering and Shmiling (1978)\\n- International Thief Thief (I.T.T.) (1979)\\n- Unknown Soldier (1979)\\n- V.I.P. (Vagabonds in Power) (1979)\\n- Music of Many Colours (1980)\\n- Authority Stealing (1980)\\n- Coffin for Head of State (1981)\\n- Original Sufferhead (1981)\\n- Black President (1981)\\n- Unnecessary Begging (1982)\\n- Perambulator (1983)\\n- Army Arrangement (1984)\\n- Live in Amsterdam (1984)\\n- Teacher Don’t Teach Me Nonsense (1986)\\n- Mr. Follow Follow (1986)\\n- I Go Shout Plenty!!! (1986)\\n- 2000 Blacks (1987)\\n- Beasts of No Nation (1989)\\n- ODOO: Overtake Don Overtake Overtake (1989)\\n- Confusion Break Bones (1990)\\n- O.D.O.O. (Overtake Don Overtake Overtake) (1990)\\n- ODOO (Overtake Don Overtake Overtake) (1990)\\nArtist: Fela Kuti (continued)\\n- Afrodisiac (1973)\\n- Gentleman (1973)\\n- Alagbon Close (1974)\\n- Confusion (1974)\\n- Going In And Coming Out (Part 1 & 2) (1974)\\n- Before I Jump Like Monkey Give Me Banana (1975)\\n- Expensive Shit (1975)\\n- Music of Fela Volume 2: Question Jam Answer (1975)\\n- He Miss Road (1975)\\n- Everything Scatter (1975)\\n- Noise for Vendor Mouth (1975)\\n- Ikoyi Blindness (1976)\\n- Zombie (1976)\\n- Up Side Down (1976)\\n- Yellow Fever (1976)\\n- Excuse O (1976)\\n- No Bread (1976)\\n- Kalakuta Show (1976)\\n- No Agreement (1977)\\n- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)\\n- Vol. 1 & 2 (1977)\\n- Sorrow Tears and Blood (1977)\\n- Stalemate (1977)\\n- Fear Not for Man (1977)\\n- Opposite People (1977)\\n- Shuffering and Shmiling / Perambulator (1978)\\n- Shuffering and Shmiling (1978)\\nArtist: Wizkid (continued)\\n- One Dance (2016)\\n- Sounds From the Other Side (2017)\\n- Sounds From The Other Side (2017)\\n- Naughty Ride (2017)\\n- Can’t Believe (2017)\\n- Come Closer (2017)\\n- Like This (The Remixes) (2017)\\n- Can't Believe (feat. Ty Dolla $ign & WizKid) (2017)\\n- U Don’t Know (Remixes) (2017)\\n- Drogba (Joanna) (2018)\\n- KANA (2018)\\n- Bella (2018)\\n- Energy (Stay Far Away) (2018)\\n- Fever (2018)\\n- For You (2018)\\n- Nowo (2018)\\n- Soco (2018)\\n- Joro (2019)\\n- SoundMan Vol. 1 (2019)\\n- Ghetto Love (2019)\\n- Totori (2019)\\n- Essence (2020)\\n- Made in Lagos (2020)\\n- Cool Me Down (2020)\\n- BROWN SKIN GIRL (2020)\\n- Smile (2020)\\n- Eve Bounce (Remix) (2020)\\n- Escape (2020)\\n- Made In Lagos: Deluxe Edition (2021)\\n- System (2021)\\n- Essence (Jagr bootleg) (2021)\\n- Apple Music Live: Wizkid (2022)\\n- Call Me Every Day (2022)\",\n    \"statements\": [\n        \"Fela Kuti is an artist from Nigeria.\",\n        \"Wizkid is an artist from Nigeria.\",\n        \"Burna Boy is an artist from Nigeria.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides a list of artists from Nigeria, which is a direct answer to the question asked.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: Which artists in the data are from Nigeria?\nResponse: Artists from Nigeria in the data:\n- Fela Kuti\n- Wizkid\n- Burna Boy\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "Who are some classic soul singers, and when did they start their careers?",
+      "retrieved_contexts": [
+        "Artist: Aretha Franklin (continued)\n- Aretha Arrives (1967)\n- Take It Like You Give It (1967)\n- Baby I Love You / Going Down Slow (1967)\n- Presenting Aretha Franklin (1967)\n- Take a Look (1967)\n- Chain of Fools / Prove It (1967)\n- Aretha in Paris (1968)\n- The House That Jack Built / I Say a Little Prayer (1968)\n- Lady Soul (1968)\n- Queen of Soul (1968)\n- I Say a Little Prayer / See-Saw (1968)\n- Think (1968)\n- Soul, Soul, Soul (1968)\n- Aretha Now (1968)\n- See Saw / My Song (1968)\n- Ain’t No Way / Do Right Woman – Do Right Man (1968)\n- (Sweet Sweet Baby) Since You’ve Been Gone (1968)\n- Aretha’s Gold (1969)\n- Soft and Beautiful (1969)\n- Once in a Lifetime (1969)\n- Eleanor Rigby / It Ain’t Fair (1969)\n- The Weight / Tracks of My Tears (1969)\n- Today I Sing the Blues (1969)\n- I Can’t See Myself Leaving You (1969)",
+        "Artist: Aretha Franklin (continued)\n- The Tender, the Moving, the Swinging (1962)\n- Laughing on the Outside (1963)\n- The Christmas Song (Chestnuts Roasting on an Open Fire) / Winter Wonderland (1964)\n- Runnin’ Out of Fools (1964)\n- Unforgettable: A Tribute to Dinah Washington (1964)\n- Songs of Faith (1965)\n- One Step Ahead / I Can’t Wait Until I See My Baby’s Face (1965)\n- Yeah!!! (1965)\n- Hands Off / Tighten Up Your Tie, Button Up Your Jacket (Make It for the Door) (1966)\n- Cry Like a Baby / Swanee (1966)\n- Soul Sister (1966)\n- (You Make Me Feel Like) A Natural Woman / Baby, Baby, Baby (1967)\n- I Never Loved a Man (the Way I Love You) (1967)\n- I Never Loved a Man the Way I Love You (1967)\n- (I Can't Get No) Satisfaction / Chain Of Fools (1967)\n- Aretha Arrives (1967)\n- Take It Like You Give It (1967)",
+        "Artist: Aretha Franklin (continued)\n- Today I Sing the Blues (1969)\n- I Can’t See Myself Leaving You (1969)\n- Share Your Love With Me / Pledging My Love (1969)\n- Soul ’69 (1969)\n- Son of a Preacher Man / Call Me (1970)\n- Пее Арета Франклин (1970)\n- Spirit in the Dark (1970)\n- Don’t Play That Song / Let It Be (1970)\n- Eleanor Rigby (1970)\n- This Girl’s in Love With You (1970)\n- Spirit in the Dark / The Thrill Is Gone (1970)\n- Bridge Over Troubled Water / Brand New Me (1971)\n- Bridge Over Troubled Water (1971)\n- Aretha’s Greatest Hits (1971)\n- Live at Fillmore West (1971)\n- Brand New Me (1971)\n- Spanish Harlem / Lean on Me (1971)\n- You’re All I Need to Get By (1971)\n- Border Song / You and Me (1971)\n- Day Dreaming / I've Been Loving You Too Long (1972)\n- Amazing Grace (1972)\n- Young, Gifted and Black (1972)",
+        "Artist: Aretha Franklin\nType: Person\nCountry: US (United States)\nBorn: 1942-03-25\nTags: rock; pop; jazz; american; soul; rnb; gospel; quiet storm; southern soul; deep soul; soul and reggae; pop soul; smooth soul; r&b; rhythm & blues; the queen of soul; server name; 2008 universal fire victim; aln-sh\nAlso known as: アレサ・フランクリン; Aretha Louise Franklin; Aretha Fanklin; Aretha Franklyn; Franklin, Aretha; Arthaa Franklin; Aretja Franklin\nReleases:\n- Never Grow Old / You Grow Closer (1956)\n- Are You Sure / Maybe I'm A Fool (1961)\n- Aretha (1961)\n- The Big Hits (1961)\n- Rock-A-Bye Your Baby With A Dixie Melody / Operation Heartbreak (1961)\n- The Electrifying Aretha Franklin (1962)\n- The Tender, the Moving, the Swinging (1962)\n- Laughing on the Outside (1963)",
+        "Artist: Aretha Franklin (continued)\n- Amazing Grace (1972)\n- Young, Gifted and Black (1972)\n- Never Grow Old (1973)\n- Hey Now Hey (The Other Side of the Sky) (1973)\n- Master Of Eyes (The Deepness Of Your Eyes) / Moody's Mood For Love (1973)\n- The Best of Aretha Franklin (1973)\n- Let Me in Your Life (1974)\n- With Everything I Feel in Me (1974)\n- You (1975)\n- Sparkle (1976)",
+        "Artist: Marvin Gaye (continued)\n- Greatest Hits (1964)\n- Hello Broadway (1964)\n- Baby Don’t You Do It (1964)\n- Together (1964)\n- When I’m Alone I Cry (1964)\n- I'll Be Doggone (1965)\n- A Tribute to the Great Nat King Cole (1965)\n- How Sweet It Is to Be Loved by You (1965)\n- Take Two (1966)\n- It Takes Two / It's Got To Be A Miracle (This Thing Called Love) (1966)\n- Moods of Marvin Gaye (1966)\n- United (1967)\n- Greatest Hits, Vol. 2 (1967)\n- Ain't No Mountain High Enough (1967)\n- In the Groove (1968)\n- Just a Closer Walk With Thee / His Eye Is on the Sparrow (1968)\n- I Heard It Through the Grapevine (1968)\n- Ain’t Nothing Like the Real Thing / Little Ole Boy, Little Ole Girl (1968)\n- You’re All I Need (1968)\n- In The Groove (1968)\n- That’s The Way Love Is (1969)\n- Easy (1969)\n- M.P.G. (1969)"
+      ],
+      "response": "Artists used: Aretha Franklin; Marvin Gaye\n\n- Aretha Franklin — tagged in the data as \"the queen of soul.\" Earliest listed release in the profile: \"Never Grow Old / You Grow Closer\" (1956), so her recorded releases in this data begin in 1956.  \n- Marvin Gaye — earliest listed releases in the provided data are from 1964 (e.g., \"Greatest Hits\" (1964), \"Hello Broadway\" (1964)), so his recorded releases in this data begin in 1964.\n\nI don't know based on the data if there are earlier career start dates than these listed releases.",
+      "expect": "answer",
+      "notes": "Stevie Wonder, Marvin Gaye, Aretha Franklin",
+      "retrieved": [
+        {
+          "artist": "Aretha Franklin",
+          "distance": 0.5353268
+        },
+        {
+          "artist": "Aretha Franklin",
+          "distance": 0.5746224
+        },
+        {
+          "artist": "Aretha Franklin",
+          "distance": 0.5747696
+        },
+        {
+          "artist": "Aretha Franklin",
+          "distance": 0.60700303
+        },
+        {
+          "artist": "Aretha Franklin",
+          "distance": 0.6070835
+        },
+        {
+          "artist": "Marvin Gaye",
+          "distance": 0.617753
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 1.0,
+        "claims": [
+          {
+            "claim": "Aretha Franklin is tagged in the data as 'the queen of soul.'",
+            "supported": true,
+            "reason": "The context explicitly mentions that Aretha Franklin is tagged as 'the queen of soul.'"
+          },
+          {
+            "claim": "The earliest listed release for Aretha Franklin in the profile is 'Never Grow Old / You Grow Closer' from 1956.",
+            "supported": true,
+            "reason": "The context states that 'Never Grow Old / You Grow Closer' is listed as a release from 1956."
+          },
+          {
+            "claim": "Aretha Franklin's recorded releases in this data begin in 1956.",
+            "supported": true,
+            "reason": "The context indicates that the first release listed for Aretha Franklin is from 1956, implying her recorded releases begin then."
+          },
+          {
+            "claim": "Marvin Gaye's earliest listed releases in the provided data are from 1964.",
+            "supported": true,
+            "reason": "The context mentions that Marvin Gaye's earliest listed releases are from 1964."
+          },
+          {
+            "claim": "Examples of Marvin Gaye's earliest listed releases include 'Greatest Hits' from 1964 and 'Hello Broadway' from 1964.",
+            "supported": true,
+            "reason": "The context provides specific examples of Marvin Gaye's releases from 1964, confirming this statement."
+          },
+          {
+            "claim": "Marvin Gaye's recorded releases in this data begin in 1964.",
+            "supported": true,
+            "reason": "The context states that Marvin Gaye's earliest listed releases are from 1964, indicating that his recorded releases begin then."
+          },
+          {
+            "claim": "The data does not provide information on whether there are earlier career start dates than the listed releases.",
+            "supported": true,
+            "reason": "The context does not mention any earlier career start dates for either artist beyond the listed releases."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"Who are some classic soul singers, and when did they start their careers?\",\n    \"answer\": \"Artists used: Aretha Franklin; Marvin Gaye\\n\\n- Aretha Franklin — tagged in the data as \\\"the queen of soul.\\\" Earliest listed release in the profile: \\\"Never Grow Old / You Grow Closer\\\" (1956), so her recorded releases in this data begin in 1956.  \\n- Marvin Gaye — earliest listed releases in the provided data are from 1964 (e.g., \\\"Greatest Hits\\\" (1964), \\\"Hello Broadway\\\" (1964)), so his recorded releases in this data begin in 1964.\\n\\nI don't know based on the data if there are earlier career start dates than these listed releases.\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: Aretha Franklin (continued)\\n- Aretha Arrives (1967)\\n- Take It Like You Give It (1967)\\n- Baby I Love You / Going Down Slow (1967)\\n- Presenting Aretha Franklin (1967)\\n- Take a Look (1967)\\n- Chain of Fools / Prove It (1967)\\n- Aretha in Paris (1968)\\n- The House That Jack Built / I Say a Little Prayer (1968)\\n- Lady Soul (1968)\\n- Queen of Soul (1968)\\n- I Say a Little Prayer / See-Saw (1968)\\n- Think (1968)\\n- Soul, Soul, Soul (1968)\\n- Aretha Now (1968)\\n- See Saw / My Song (1968)\\n- Ain’t No Way / Do Right Woman – Do Right Man (1968)\\n- (Sweet Sweet Baby) Since You’ve Been Gone (1968)\\n- Aretha’s Gold (1969)\\n- Soft and Beautiful (1969)\\n- Once in a Lifetime (1969)\\n- Eleanor Rigby / It Ain’t Fair (1969)\\n- The Weight / Tracks of My Tears (1969)\\n- Today I Sing the Blues (1969)\\n- I Can’t See Myself Leaving You (1969)\\nArtist: Aretha Franklin (continued)\\n- The Tender, the Moving, the Swinging (1962)\\n- Laughing on the Outside (1963)\\n- The Christmas Song (Chestnuts Roasting on an Open Fire) / Winter Wonderland (1964)\\n- Runnin’ Out of Fools (1964)\\n- Unforgettable: A Tribute to Dinah Washington (1964)\\n- Songs of Faith (1965)\\n- One Step Ahead / I Can’t Wait Until I See My Baby’s Face (1965)\\n- Yeah!!! (1965)\\n- Hands Off / Tighten Up Your Tie, Button Up Your Jacket (Make It for the Door) (1966)\\n- Cry Like a Baby / Swanee (1966)\\n- Soul Sister (1966)\\n- (You Make Me Feel Like) A Natural Woman / Baby, Baby, Baby (1967)\\n- I Never Loved a Man (the Way I Love You) (1967)\\n- I Never Loved a Man the Way I Love You (1967)\\n- (I Can't Get No) Satisfaction / Chain Of Fools (1967)\\n- Aretha Arrives (1967)\\n- Take It Like You Give It (1967)\\nArtist: Aretha Franklin (continued)\\n- Today I Sing the Blues (1969)\\n- I Can’t See Myself Leaving You (1969)\\n- Share Your Love With Me / Pledging My Love (1969)\\n- Soul ’69 (1969)\\n- Son of a Preacher Man / Call Me (1970)\\n- Пее Арета Франклин (1970)\\n- Spirit in the Dark (1970)\\n- Don’t Play That Song / Let It Be (1970)\\n- Eleanor Rigby (1970)\\n- This Girl’s in Love With You (1970)\\n- Spirit in the Dark / The Thrill Is Gone (1970)\\n- Bridge Over Troubled Water / Brand New Me (1971)\\n- Bridge Over Troubled Water (1971)\\n- Aretha’s Greatest Hits (1971)\\n- Live at Fillmore West (1971)\\n- Brand New Me (1971)\\n- Spanish Harlem / Lean on Me (1971)\\n- You’re All I Need to Get By (1971)\\n- Border Song / You and Me (1971)\\n- Day Dreaming / I've Been Loving You Too Long (1972)\\n- Amazing Grace (1972)\\n- Young, Gifted and Black (1972)\\nArtist: Aretha Franklin\\nType: Person\\nCountry: US (United States)\\nBorn: 1942-03-25\\nTags: rock; pop; jazz; american; soul; rnb; gospel; quiet storm; southern soul; deep soul; soul and reggae; pop soul; smooth soul; r&b; rhythm & blues; the queen of soul; server name; 2008 universal fire victim; aln-sh\\nAlso known as: アレサ・フランクリン; Aretha Louise Franklin; Aretha Fanklin; Aretha Franklyn; Franklin, Aretha; Arthaa Franklin; Aretja Franklin\\nReleases:\\n- Never Grow Old / You Grow Closer (1956)\\n- Are You Sure / Maybe I'm A Fool (1961)\\n- Aretha (1961)\\n- The Big Hits (1961)\\n- Rock-A-Bye Your Baby With A Dixie Melody / Operation Heartbreak (1961)\\n- The Electrifying Aretha Franklin (1962)\\n- The Tender, the Moving, the Swinging (1962)\\n- Laughing on the Outside (1963)\\nArtist: Aretha Franklin (continued)\\n- Amazing Grace (1972)\\n- Young, Gifted and Black (1972)\\n- Never Grow Old (1973)\\n- Hey Now Hey (The Other Side of the Sky) (1973)\\n- Master Of Eyes (The Deepness Of Your Eyes) / Moody's Mood For Love (1973)\\n- The Best of Aretha Franklin (1973)\\n- Let Me in Your Life (1974)\\n- With Everything I Feel in Me (1974)\\n- You (1975)\\n- Sparkle (1976)\\nArtist: Marvin Gaye (continued)\\n- Greatest Hits (1964)\\n- Hello Broadway (1964)\\n- Baby Don’t You Do It (1964)\\n- Together (1964)\\n- When I’m Alone I Cry (1964)\\n- I'll Be Doggone (1965)\\n- A Tribute to the Great Nat King Cole (1965)\\n- How Sweet It Is to Be Loved by You (1965)\\n- Take Two (1966)\\n- It Takes Two / It's Got To Be A Miracle (This Thing Called Love) (1966)\\n- Moods of Marvin Gaye (1966)\\n- United (1967)\\n- Greatest Hits, Vol. 2 (1967)\\n- Ain't No Mountain High Enough (1967)\\n- In the Groove (1968)\\n- Just a Closer Walk With Thee / His Eye Is on the Sparrow (1968)\\n- I Heard It Through the Grapevine (1968)\\n- Ain’t Nothing Like the Real Thing / Little Ole Boy, Little Ole Girl (1968)\\n- You’re All I Need (1968)\\n- In The Groove (1968)\\n- That’s The Way Love Is (1969)\\n- Easy (1969)\\n- M.P.G. (1969)\",\n    \"statements\": [\n        \"Aretha Franklin is tagged in the data as 'the queen of soul.'\",\n        \"The earliest listed release for Aretha Franklin in the profile is 'Never Grow Old / You Grow Closer' from 1956.\",\n        \"Aretha Franklin's recorded releases in this data begin in 1956.\",\n        \"Marvin Gaye's earliest listed releases in the provided data are from 1964.\",\n        \"Examples of Marvin Gaye's earliest listed releases include 'Greatest Hits' from 1964 and 'Hello Broadway' from 1964.\",\n        \"Marvin Gaye's recorded releases in this data begin in 1964.\",\n        \"The data does not provide information on whether there are earlier career start dates than the listed releases.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides information about Aretha Franklin and Marvin Gaye, including their earliest recorded releases, which qualifies as an answer from the dataset.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: Who are some classic soul singers, and when did they start their careers?\nResponse: Artists used: Aretha Franklin; Marvin Gaye\n\n- Aretha Franklin — tagged in the data as \"the queen of soul.\" Earliest listed release in the profile: \"Never Grow Old / You Grow Closer\" (1956), so her recorded releases in this data begin in 1956.  \n- Marvin Gaye — earliest listed releases in the provided data are from 1964 (e.g., \"Greatest Hits\" (1964), \"Hello Broadway\" (1964)), so his recorded releases in this data begin in 1964.\n\nI don't know based on the data if there are earlier career start dates than these listed releases.\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "What are some Latin music artists and their albums?",
+      "retrieved_contexts": [
+        "Artist: J Balvin\nType: Person\nCountry: CO (Colombia)\nBorn: 1985-05-07\nTags: kolumbien; spanish; columbia; pop; spanisch; latin urban; hip hop; latin pop; rnb; reggaeton; latin\nAlso known as: J.Balvin; José Álvaro Osorio Balvín; J. Balvin\nReleases:\n- Real (2009)\n- El negocio (2011)\n- El negocio: Unreleased Edition (2011)\n- Llegó Navidad (2011)\n- Sin compromiso (remix) (2011)\n- Donde estés llegaré (remix) (2012)\n- Con flow mátalo (2012)\n- Mix Tape (2012)\n- Yo te lo dije (2012)\n- Tranquila (2013)\n- Sola (2013)\n- 6 AM (2013)\n- La familia (2013)\n- Blurred Lines (2013)\n- Orgullo (remix) (2014)\n- Cola Song (2014)\n- Ay vamos (2014)\n- Sólo tú (remix) (2014)\n- Cola Song (remixes) (2014)\n- La hoja se volteó (2014)\n- La familia: B Sides (2014)\n- Maps (Rumba Whoa remix) (2014)",
+        "Artist: Daddy Yankee (continued)\n- Rompe (2005)\n- Los Homerun-es (2005)\n- Get Down / Gasolina (2005)\n- Lo que pasó, pasó (2005)\n- Sacala (2005)\n- Tormenta tropical, Volume One (2006)\n- Colección 2006 (2006)\n- Barrio Fino En Directo (2006)\n- Rompe (remix) (2006)\n- Impacto (2007)\n- El cartel: The Big Boss (2007)\n- El Cartel: The Big Boss (2007)\n- Fiel amiga (2008)\n- Agresivo (remix) (2008)\n- Bailando fue (2008)\n- Talento de barrio (2008)\n- Llamado de emergencia (2008)\n- Talento de Barrio: M.U.N.D.I.A.L. (2009)\n- Qué Tengo Que Hacer? (Remix) (2009)\n- Dímelo mami (2009)\n- Mundial (2010)\n- Descontrol (2010)\n- Grito mundial (2010)\n- Rescate (2010)\n- Lovumba (2011)\n- Hoy (2011)\n- Muve Sessions: Prestige (2012)\n- Señorita (2012)\n- La pregunta (remix) (2012)\n- Pasarela (2012)\n- Prestige (2012)\n- Ven conmigo (2012)",
+        "Artist: J Balvin (continued)\n- La hoja se volteó (2014)\n- La familia: B Sides (2014)\n- Maps (Rumba Whoa remix) (2014)\n- Travesuras (remix) (2014)\n- I Want Cha (2014)\n- Tu sombra (2014)\n- Ginza (2015)\n- Can’t Stop Dancin’ (J Balvin remix) (2015)\n- Ay vamos (remix) (2015)\n- Tu protagonista (remix) (2015)\n- Stuck On a Feeling (2015)\n- Lean On (J Balvin & Farruko remix) (2015)\n- Ginza (remix) (2015)\n- Sorry (Latino remix) (2015)\n- Translation (remixes) (2015)\n- Bailemos otra vez (remix) (2015)\n- La frontera (2015)\n- Cuando seas grande (2016)\n- Love Is the Name (Nando Pro latin urban remix) (2016)\n- Energía (2016)\n- Qué raro (2016)\n- Love Is the Name (MADIZIN remix) (2016)\n- 35 pa las 12 (La Tostadora remix) (2016)\n- Bobo (2016)\n- Love Is the Name (2016)\n- Otra vez (2016)\n- Ginza (The remixes) (2016)\n- DM (remix) (2016)",
+        "Artist: J Balvin (continued)\n- La ocasión (remix) (2017)\n- Mi gente (Aazar remix) (2017)\n- Mi gente (Busta K remix) (2017)\n- Mi gente (Henry Fong remix) (2017)",
+        "Artist: J Balvin (continued)\n- Love Is the Name (2016)\n- Otra vez (2016)\n- Ginza (The remixes) (2016)\n- DM (remix) (2016)\n- 35 pa las 12 (2016)\n- Turn Out the Light (2016)\n- Energía Lado B (2017)\n- Sigo extrañándote (Solano remix) (2017)\n- Mi gente (4B remix) (2017)\n- Mi gente (Sunnery James & Ryan Marciano remix) (2017)\n- El cartel (2017)\n- Mi gente (Steve Aoki remix) (2017)\n- Mi gente (2017)\n- Mi gente (F4st, Velza & Loudness remix) (2017)\n- Mi gente (Dillon Francis remix) (2017)\n- Bonita (2017)\n- Ahora dice (2017)\n- Hey Ma (2017)\n- Mi gente (Cedric Gervais remix) (2017)\n- Energía lado B (2017)\n- Unforgettable (latin remix) (2017)\n- Mi gente (Alesso remix) (2017)\n- Ayer 2 (2017)\n- Quisiera (remix) (2017)\n- Mi gente (Hardwell & Quintino remix) (2017)\n- La ocasión (remix) (2017)\n- Mi gente (Aazar remix) (2017)",
+        "Artist: Daddy Yankee\nType: Person\nCountry: PR (Puerto Rico)\nBorn: 1977-02-03\nTags: electronic; rap; dance; hip hop; reggae; latin pop; latin; english; reggaeton; hip hop rnb and dance hall; puerto rico; latin urban; englisch\nAlso known as: DY; Raymond Ayala; Winchestra Yankee; Winchester 30-30; Ramón Luis Ayala Rodríguez; Winchester Yankee\nReleases:\n- No Mercy (1995)\n- El Cartel (1998)\n- El Cartel II: Los Cangris (2001)\n- El Cangri.com (2002)\n- Los Homerun-es Vol. 1 (2003)\n- Barrio fino (2004)\n- Los hits y unreleased (2004)\n- Oye mi canto (2004)\n- Ahora le toca al cangri live (2005)\n- Gasolina (2005)\n- Barrio fino en directo (2005)\n- Tempted to Touch (Reggaeton Bubbling Remix 2005) (2005)\n- Rompe (2005)\n- Los Homerun-es (2005)\n- Get Down / Gasolina (2005)\n- Lo que pasó, pasó (2005)"
+      ],
+      "response": "Artists used: J Balvin; Daddy Yankee\n\nJ Balvin — some releases from the data:\n- Real (2009)\n- El negocio (2011)\n- La familia (2013)\n- Ginza (2015)\n- Love Is the Name (2016)\n- Energía (2016)\n- Mi gente (2017)\n\nDaddy Yankee — some releases from the data:\n- El Cartel (1998)\n- El Cartel II: Los Cangris (2001)\n- El Cangri.com (2002)\n- Barrio fino (2004)\n- Gasolina (2005)\n- Rompe (2005)\n- El Cartel: The Big Boss (2007)",
+      "expect": "answer",
+      "notes": "Bad Bunny, J Balvin, Shakira, Daddy Yankee",
+      "retrieved": [
+        {
+          "artist": "J Balvin",
+          "distance": 0.5824099
+        },
+        {
+          "artist": "Daddy Yankee",
+          "distance": 0.5841509
+        },
+        {
+          "artist": "J Balvin",
+          "distance": 0.58854604
+        },
+        {
+          "artist": "J Balvin",
+          "distance": 0.6051086
+        },
+        {
+          "artist": "J Balvin",
+          "distance": 0.6086353
+        },
+        {
+          "artist": "Daddy Yankee",
+          "distance": 0.6291032
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": 1.0,
+        "claims": [
+          {
+            "claim": "J Balvin is a Latin music artist.",
+            "supported": true,
+            "reason": "The context includes tags such as 'latin urban', 'reggaeton', and 'latin pop', indicating that J Balvin is a Latin music artist."
+          },
+          {
+            "claim": "J Balvin has released the album Real in 2009.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'Real' in 2009."
+          },
+          {
+            "claim": "J Balvin has released the album El negocio in 2011.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'El negocio' in 2011."
+          },
+          {
+            "claim": "J Balvin has released the album La familia in 2013.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'La familia' in 2013."
+          },
+          {
+            "claim": "J Balvin has released the album Ginza in 2015.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'Ginza' in 2015."
+          },
+          {
+            "claim": "J Balvin has released the album Love Is the Name in 2016.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'Love Is the Name' in 2016."
+          },
+          {
+            "claim": "J Balvin has released the album Energía in 2016.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'Energía' in 2016."
+          },
+          {
+            "claim": "J Balvin has released the album Mi gente in 2017.",
+            "supported": true,
+            "reason": "The context explicitly states that J Balvin released the album 'Mi gente' in 2017."
+          },
+          {
+            "claim": "Daddy Yankee is a Latin music artist.",
+            "supported": true,
+            "reason": "The context includes tags such as 'latin', 'reggaeton', and 'latin urban', indicating that Daddy Yankee is a Latin music artist."
+          },
+          {
+            "claim": "Daddy Yankee has released the album El Cartel in 1998.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'El Cartel' in 1998."
+          },
+          {
+            "claim": "Daddy Yankee has released the album El Cartel II: Los Cangris in 2001.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'El Cartel II: Los Cangris' in 2001."
+          },
+          {
+            "claim": "Daddy Yankee has released the album El Cangri.com in 2002.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'El Cangri.com' in 2002."
+          },
+          {
+            "claim": "Daddy Yankee has released the album Barrio fino in 2004.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'Barrio fino' in 2004."
+          },
+          {
+            "claim": "Daddy Yankee has released the album Gasolina in 2005.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'Gasolina' in 2005."
+          },
+          {
+            "claim": "Daddy Yankee has released the album Rompe in 2005.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'Rompe' in 2005."
+          },
+          {
+            "claim": "Daddy Yankee has released the album El Cartel: The Big Boss in 2007.",
+            "supported": true,
+            "reason": "The context explicitly states that Daddy Yankee released the album 'El Cartel: The Big Boss' in 2007."
+          }
+        ],
+        "prompts": {
+          "claims": "Given a question and an answer, analyze the complexity of each sentence in the answer. Break down each sentence into one or more fully understandable statements. Ensure that no pronouns are used in any statement.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"description\": \"Structured output for statement generation.\", \"properties\": {\"statements\": {\"description\": \"The generated statements from the answer\", \"items\": {\"type\": \"string\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"StatementGeneratorOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"question\": \"Who was Albert Einstein and what is he best known for?\",\n    \"answer\": \"He was a German-born theoretical physicist, widely acknowledged to be one of the greatest and most influential physicists of all time. He was best known for developing the theory of relativity, he also made important contributions to the development of the theory of quantum mechanics.\"\n}\nOutput: {\n    \"statements\": [\n        \"Albert Einstein was a German-born theoretical physicist.\",\n        \"Albert Einstein is recognized as one of the greatest and most influential physicists of all time.\",\n        \"Albert Einstein was best known for developing the theory of relativity.\",\n        \"Albert Einstein made important contributions to the development of the theory of quantum mechanics.\"\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"question\": \"What are some Latin music artists and their albums?\",\n    \"answer\": \"Artists used: J Balvin; Daddy Yankee\\n\\nJ Balvin — some releases from the data:\\n- Real (2009)\\n- El negocio (2011)\\n- La familia (2013)\\n- Ginza (2015)\\n- Love Is the Name (2016)\\n- Energía (2016)\\n- Mi gente (2017)\\n\\nDaddy Yankee — some releases from the data:\\n- El Cartel (1998)\\n- El Cartel II: Los Cangris (2001)\\n- El Cangri.com (2002)\\n- Barrio fino (2004)\\n- Gasolina (2005)\\n- Rompe (2005)\\n- El Cartel: The Big Boss (2007)\"\n}\nOutput: ",
+          "verdicts": "Your task is to judge the faithfulness of a series of statements based on a given context. For each statement you must return verdict as 1 if the statement can be directly inferred based on the context or 0 if the statement can not be directly inferred based on the context.\nPlease return the output in a JSON format that complies with the following schema as specified in JSON Schema:\n{\"$defs\": {\"StatementFaithfulnessAnswer\": {\"description\": \"Individual statement with reason and verdict for NLI evaluation.\", \"properties\": {\"statement\": {\"description\": \"the original statement, word-by-word\", \"title\": \"Statement\", \"type\": \"string\"}, \"reason\": {\"description\": \"the reason of the verdict\", \"title\": \"Reason\", \"type\": \"string\"}, \"verdict\": {\"description\": \"the verdict(0/1) of the faithfulness\", \"title\": \"Verdict\", \"type\": \"integer\"}}, \"required\": [\"statement\", \"reason\", \"verdict\"], \"title\": \"StatementFaithfulnessAnswer\", \"type\": \"object\"}}, \"description\": \"Structured output for NLI statement evaluation.\", \"properties\": {\"statements\": {\"description\": \"Evaluated statements with verdicts\", \"items\": {\"$ref\": \"#/$defs/StatementFaithfulnessAnswer\"}, \"title\": \"Statements\", \"type\": \"array\"}}, \"required\": [\"statements\"], \"title\": \"NLIStatementOutput\", \"type\": \"object\"}Do not use single quotes in your response but double quotes,properly escaped with a backslash.\n\n--------EXAMPLES-----------\nExample 1\nInput: {\n    \"context\": \"John is a student at XYZ University. He is pursuing a degree in Computer Science. He is enrolled in several courses this semester, including Data Structures, Algorithms, and Database Management. John is a diligent student and spends a significant amount of time studying and completing assignments. He often stays late in the library to work on his projects.\",\n    \"statements\": [\n        \"John is majoring in Biology.\",\n        \"John is taking a course on Artificial Intelligence.\",\n        \"John is a dedicated student.\",\n        \"John has a part-time job.\"\n    ]\n}\nOutput: {\n    \"statements\": [\n        {\n            \"statement\": \"John is majoring in Biology.\",\n            \"reason\": \"John's major is explicitly stated as Computer Science, not Biology.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is taking a course on Artificial Intelligence.\",\n            \"reason\": \"The context mentions courses in Data Structures, Algorithms, and Database Management, but does not mention Artificial Intelligence.\",\n            \"verdict\": 0\n        },\n        {\n            \"statement\": \"John is a dedicated student.\",\n            \"reason\": \"The context states that John is a diligent student who spends a significant amount of time studying and completing assignments.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"John has a part-time job.\",\n            \"reason\": \"There is no information in the context about John having a part-time job.\",\n            \"verdict\": 0\n        }\n    ]\n}\n-----------------------------\n\nNow perform the same with the following input\ninput: {\n    \"context\": \"Artist: J Balvin\\nType: Person\\nCountry: CO (Colombia)\\nBorn: 1985-05-07\\nTags: kolumbien; spanish; columbia; pop; spanisch; latin urban; hip hop; latin pop; rnb; reggaeton; latin\\nAlso known as: J.Balvin; José Álvaro Osorio Balvín; J. Balvin\\nReleases:\\n- Real (2009)\\n- El negocio (2011)\\n- El negocio: Unreleased Edition (2011)\\n- Llegó Navidad (2011)\\n- Sin compromiso (remix) (2011)\\n- Donde estés llegaré (remix) (2012)\\n- Con flow mátalo (2012)\\n- Mix Tape (2012)\\n- Yo te lo dije (2012)\\n- Tranquila (2013)\\n- Sola (2013)\\n- 6 AM (2013)\\n- La familia (2013)\\n- Blurred Lines (2013)\\n- Orgullo (remix) (2014)\\n- Cola Song (2014)\\n- Ay vamos (2014)\\n- Sólo tú (remix) (2014)\\n- Cola Song (remixes) (2014)\\n- La hoja se volteó (2014)\\n- La familia: B Sides (2014)\\n- Maps (Rumba Whoa remix) (2014)\\nArtist: Daddy Yankee (continued)\\n- Rompe (2005)\\n- Los Homerun-es (2005)\\n- Get Down / Gasolina (2005)\\n- Lo que pasó, pasó (2005)\\n- Sacala (2005)\\n- Tormenta tropical, Volume One (2006)\\n- Colección 2006 (2006)\\n- Barrio Fino En Directo (2006)\\n- Rompe (remix) (2006)\\n- Impacto (2007)\\n- El cartel: The Big Boss (2007)\\n- El Cartel: The Big Boss (2007)\\n- Fiel amiga (2008)\\n- Agresivo (remix) (2008)\\n- Bailando fue (2008)\\n- Talento de barrio (2008)\\n- Llamado de emergencia (2008)\\n- Talento de Barrio: M.U.N.D.I.A.L. (2009)\\n- Qué Tengo Que Hacer? (Remix) (2009)\\n- Dímelo mami (2009)\\n- Mundial (2010)\\n- Descontrol (2010)\\n- Grito mundial (2010)\\n- Rescate (2010)\\n- Lovumba (2011)\\n- Hoy (2011)\\n- Muve Sessions: Prestige (2012)\\n- Señorita (2012)\\n- La pregunta (remix) (2012)\\n- Pasarela (2012)\\n- Prestige (2012)\\n- Ven conmigo (2012)\\nArtist: J Balvin (continued)\\n- La hoja se volteó (2014)\\n- La familia: B Sides (2014)\\n- Maps (Rumba Whoa remix) (2014)\\n- Travesuras (remix) (2014)\\n- I Want Cha (2014)\\n- Tu sombra (2014)\\n- Ginza (2015)\\n- Can’t Stop Dancin’ (J Balvin remix) (2015)\\n- Ay vamos (remix) (2015)\\n- Tu protagonista (remix) (2015)\\n- Stuck On a Feeling (2015)\\n- Lean On (J Balvin & Farruko remix) (2015)\\n- Ginza (remix) (2015)\\n- Sorry (Latino remix) (2015)\\n- Translation (remixes) (2015)\\n- Bailemos otra vez (remix) (2015)\\n- La frontera (2015)\\n- Cuando seas grande (2016)\\n- Love Is the Name (Nando Pro latin urban remix) (2016)\\n- Energía (2016)\\n- Qué raro (2016)\\n- Love Is the Name (MADIZIN remix) (2016)\\n- 35 pa las 12 (La Tostadora remix) (2016)\\n- Bobo (2016)\\n- Love Is the Name (2016)\\n- Otra vez (2016)\\n- Ginza (The remixes) (2016)\\n- DM (remix) (2016)\\nArtist: J Balvin (continued)\\n- La ocasión (remix) (2017)\\n- Mi gente (Aazar remix) (2017)\\n- Mi gente (Busta K remix) (2017)\\n- Mi gente (Henry Fong remix) (2017)\\nArtist: J Balvin (continued)\\n- Love Is the Name (2016)\\n- Otra vez (2016)\\n- Ginza (The remixes) (2016)\\n- DM (remix) (2016)\\n- 35 pa las 12 (2016)\\n- Turn Out the Light (2016)\\n- Energía Lado B (2017)\\n- Sigo extrañándote (Solano remix) (2017)\\n- Mi gente (4B remix) (2017)\\n- Mi gente (Sunnery James & Ryan Marciano remix) (2017)\\n- El cartel (2017)\\n- Mi gente (Steve Aoki remix) (2017)\\n- Mi gente (2017)\\n- Mi gente (F4st, Velza & Loudness remix) (2017)\\n- Mi gente (Dillon Francis remix) (2017)\\n- Bonita (2017)\\n- Ahora dice (2017)\\n- Hey Ma (2017)\\n- Mi gente (Cedric Gervais remix) (2017)\\n- Energía lado B (2017)\\n- Unforgettable (latin remix) (2017)\\n- Mi gente (Alesso remix) (2017)\\n- Ayer 2 (2017)\\n- Quisiera (remix) (2017)\\n- Mi gente (Hardwell & Quintino remix) (2017)\\n- La ocasión (remix) (2017)\\n- Mi gente (Aazar remix) (2017)\\nArtist: Daddy Yankee\\nType: Person\\nCountry: PR (Puerto Rico)\\nBorn: 1977-02-03\\nTags: electronic; rap; dance; hip hop; reggae; latin pop; latin; english; reggaeton; hip hop rnb and dance hall; puerto rico; latin urban; englisch\\nAlso known as: DY; Raymond Ayala; Winchestra Yankee; Winchester 30-30; Ramón Luis Ayala Rodríguez; Winchester Yankee\\nReleases:\\n- No Mercy (1995)\\n- El Cartel (1998)\\n- El Cartel II: Los Cangris (2001)\\n- El Cangri.com (2002)\\n- Los Homerun-es Vol. 1 (2003)\\n- Barrio fino (2004)\\n- Los hits y unreleased (2004)\\n- Oye mi canto (2004)\\n- Ahora le toca al cangri live (2005)\\n- Gasolina (2005)\\n- Barrio fino en directo (2005)\\n- Tempted to Touch (Reggaeton Bubbling Remix 2005) (2005)\\n- Rompe (2005)\\n- Los Homerun-es (2005)\\n- Get Down / Gasolina (2005)\\n- Lo que pasó, pasó (2005)\",\n    \"statements\": [\n        \"J Balvin is a Latin music artist.\",\n        \"J Balvin has released the album Real in 2009.\",\n        \"J Balvin has released the album El negocio in 2011.\",\n        \"J Balvin has released the album La familia in 2013.\",\n        \"J Balvin has released the album Ginza in 2015.\",\n        \"J Balvin has released the album Love Is the Name in 2016.\",\n        \"J Balvin has released the album Energía in 2016.\",\n        \"J Balvin has released the album Mi gente in 2017.\",\n        \"Daddy Yankee is a Latin music artist.\",\n        \"Daddy Yankee has released the album El Cartel in 1998.\",\n        \"Daddy Yankee has released the album El Cartel II: Los Cangris in 2001.\",\n        \"Daddy Yankee has released the album El Cangri.com in 2002.\",\n        \"Daddy Yankee has released the album Barrio fino in 2004.\",\n        \"Daddy Yankee has released the album Gasolina in 2005.\",\n        \"Daddy Yankee has released the album Rompe in 2005.\",\n        \"Daddy Yankee has released the album El Cartel: The Big Boss in 2007.\"\n    ]\n}\nOutput: "
+        }
+      },
+      "refusal": {
+        "value": "answered",
+        "reason": "The response provides specific artists and their albums from the dataset, indicating that some information is available.",
+        "by": "judge",
+        "prompt": "A music Q&A assistant may only answer from its dataset. When the dataset doesn't cover a question, it should say it doesn't know.\n\nQuestion: What are some Latin music artists and their albums?\nResponse: Artists used: J Balvin; Daddy Yankee\n\nJ Balvin — some releases from the data:\n- Real (2009)\n- El negocio (2011)\n- La familia (2013)\n- Ginza (2015)\n- Love Is the Name (2016)\n- Energía (2016)\n- Mi gente (2017)\n\nDaddy Yankee — some releases from the data:\n- El Cartel (1998)\n- El Cartel II: Los Cangris (2001)\n- El Cangri.com (2002)\n- Barrio fino (2004)\n- Gasolina (2005)\n- Rompe (2005)\n- El Cartel: The Big Boss (2007)\n\nScore 'answered' if the response gives any answer from the data, even a partial one that says some of the question isn't covered. Score 'refused' only if it gives no answer at all, just that it doesn't know. A line that only lists the artists it looked at (like 'Artists used: X') is not an answer.\n\nExample: 'Artists used: Adele\\n\\nI don't know based on the data.' -> refused\nExample: 'Artists used: Adele, Sia\\n\\n- Adele: 21 (2011)\\n- Sia: I don't know based on the data.' -> answered",
+        "correct": true
+      }
+    },
+    {
+      "user_input": "Who are the members of BTS?",
+      "retrieved_contexts": [
+        "Artist: BTS\nType: Group\nCountry: KR (South Korea)\nDescription: South Korean boy group\nFormed: 2013-06-13\nTags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop\nAlso known as: 방탄; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; Bōdan Shōnendan; Bulletproof Boy Scouts; Beyond the Scene; 방탄소년단; 防弾少年団; Bangtan Boys; BTS\nReleases:\n- O!RUL8,2? (2013)\n- 2 COOL 4 SKOOL (2013)\n- 2 Cool 4 Skool (2013)\n- DARK&WILD (2014)\n- NO MORE DREAM (2014)\n- BOY IN LUV (2014)\n- No More Dream (Japanese ver.) (2014)\n- Wake Up (2014)\n- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)\n- WAKE UP (2014)\n- NO MORE DREAM -Japanese ver.- (2014)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)",
+        "Artist: BTS (continued)\n- You Never Walk Alone (2017)\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat & Tears) (2017)\n- LOVE YOURSELF 承 ‘Her’ (2017)\n- Come Back Home (2017)\n- MIC Drop / DNA / Crystal Snow (2017)\n- 血、汗、涙 (2017)\n- With Seoul (2017)\n- THE BEST OF 防彈少年團 -KOREA EDITION- (2017)\n- Blood Sweat & Tears (2017)\n- THE BEST OF 防彈少年團 -JAPAN EDITION- (2017)\n- YOU NEVER WALK ALONE (2017)\n- FACE YOURSELF (2018)",
+        "Artist: BTS (continued)\n- BOY IN LUV -Japanese ver.- (2014)\n- Skool Luv Affair (2014)\n- Danger (2014)\n- Danger (Mo-Blue-Mix) (2014)\n- 2 COOL 4 SKOOL / O!RUL8,2? (2014)\n- Boy in Luv (Japanese ver.) (2014)\n- 2019-04-13: Saturday Night Live, New York, NY, USA (2014)\n- Danger -Japanese ver.- (2014)\n- 화양연화 pt.2 (2015)\n- For You (2015)\n- Danger (Japanese ver.) (2015)\n- 화양연화 pt.1 (2015)\n- I NEED U (2015)\n- The Most Beautiful Moment in Life, Pt. 2 (2015)\n- FOR YOU (2015)\n- The Most Beautiful Moment in Life, Pt. 1 (2015)\n- RUN (2016)\n- WINGS (2016)\n- Youth (2016)\n- YOUTH (2016)\n- 화양연화 Young Forever (2016)\n- The Most Beautiful Moment in Life: Young Forever (2016)\n- Wings (2016)\n- MIC Drop (Steve Aoki remix) (2017)\n- You Never Walk Alone (2017)\n- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat & Tears) (2017)",
+        "Artist: The Beatles\nType: Group\nCountry: GB (United Kingdom)\nDescription: UK rock band, “The Fab Four”\nFormed: 1960-03-27",
+        "Artist: Kendrick Lamar\nType: Person\nCountry: US (United States)\nBorn: 1987-06-17\nTags: pop; rap; jazz; dance; house; hip hop; funk; disco; gangsta rap; pop rap; neo soul; alternative hip hop; experimental hip hop; west coast hip hop; boom bap; r&b; 2010s; jazz rap; conscious hip hop; political hip hop; hardcore hip hop; trap; future bass; relic inn; 2020s; progressive rap; contemporary rap; conscious rapper\nAlso known as: Kendrick Lamar, SZA; K. Duckworth; Kendrick Duckworth; Kendrick Lamar Duckworth; ケンドリック・ラマー; 켄드릭 라마; OKLAMA; K‐Dot; K. Dot\nReleases:\n- Hub City Threat: Minor of the Year (2004)\n- Training Day (2005)\n- No Sleep Til NYC (2007)\n- C4 (2009)\n- Kendrick Lamar (2009)\n- Overly Dedicated (2010)\n- Look Out for Detox (2010)\n- She Needs Me (remix) (ringtone) (2010)",
+        "Artist: BLACKPINK\nType: Group\nCountry: KR (South Korea)\nFormed: 2016-08-08\nTags: pop; hip hop; j-pop; girl group; female vocals; k-pop; 2010s; 2020s; 3rd gen k-pop; girl crush\nAlso known as: 才貌俱全; BLACKPINK; Beullaekpingkeu; Блекпинк; བླེཀ་པིངཀ་; بڵاکپینک; בלאקפינק; ဘလက်ပင့်; ပလႅၵ်းၽိင်း; BLΛƆKPIИK; แบล็กพิงก์; ब्ल्याकपिङ्क; ແບັກພິ້ງ; ប្លេកភីង; ब्लैकपिंक; بلک‌پینک; ব্ল্যাকপিঙ্ক; بلک پینک; بلاكبينك; 블랙핑크; Black Pink\nReleases:\n- 휘파람 (2016)\n- WHISTLE (2016)\n- 불장난 (2016)\n- SQUARE TWO (2016)\n- BOOMBAYAH (2016)\n- STAY (2016)\n- SQUARE ONE (2016)\n- 마지막처럼 (2017)\n- As If It’s Your Last (2017)\n- BLACKPINK (2017)\n- Sure Thing (2017)\n- PLAYING WITH FIRE (2017)\n- AS IF IT’S YOUR LAST (2017)\n- PLAYING WITH FIRE -JP ver.- (2017)\n- SO HOT (THEBLACKLABEL remix) (2017)\n- DDU-DU DDU-DU (2018)"
+      ],
+      "response": "Artists used: BTS\n\nI don't know based on the data.",
+      "expect": "refuse",
+      "notes": "Tempting: the model knows, but member names aren't in the data",
+      "retrieved": [
+        {
+          "artist": "BTS",
+          "distance": 0.4435525
+        },
+        {
+          "artist": "BTS",
+          "distance": 0.63661724
+        },
+        {
+          "artist": "BTS",
+          "distance": 0.63905156
+        },
+        {
+          "artist": "The Beatles",
+          "distance": 0.71941245
+        },
+        {
+          "artist": "Kendrick Lamar",
+          "distance": 0.7357013
+        },
+        {
+          "artist": "BLACKPINK",
+          "distance": 0.74266756
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": null,
+        "claims": [],
+        "prompts": {}
+      },
+      "refusal": {
+        "value": "refused",
+        "reason": "Rule: the answer is only the refusal sentence, so the judge wasn't asked.",
+        "by": "rule",
+        "prompt": null,
+        "correct": true
+      }
+    },
+    {
+      "user_input": "How many Grammy awards has Beyoncé won?",
+      "retrieved_contexts": [
+        "Artist: Beyoncé (continued)\nType: Person\nCountry: US (United States)\nBorn: 1981-09-04\nTags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&b; singer/songwriter; contemporary r&b; 2010s; mbs-333; art pop; alternative r&b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper",
+        "Artist: Beyoncé\nType: Person\nCountry: US (United States)\nBorn: 1981-09-04",
+        "Artist: Beyoncé (continued)\nAlso known as: 碧昂絲; Beyoncé; Beyoncé Knowles-Carter; ビヨンセ; Beyonce; Beyonce'; B1C; Beyoncé Giselle Knowles-Carter; Beyoncé Giselle Knowles; Beyoncé Knowles; Queen Bey\nReleases:\n- Work It Out (2002)\n- Me, Myself and I (2003)\n- Baby Boy (2003)\n- Dangerously in Love (2003)\n- Crazy in Love (2003)\n- Krazy in Luv (Adam 12 So Crazy remix) (2003)\n- What's It Gonna Be (2003)\n- Krazy in Luv (Rockwilder remix) (2003)\n- Baby Boy / Walked Outta Heaven (2003)\n- I Can't Take No More (2003)\n- Krazy in Luv (2003)\n- Naughty Girl (2003)\n- Me, Myself and I (dance mixes) (2003)\n- Fighting Temptation / Summertime (2003)\n- Crazy in Love (drum & bass remix) / Dreaming (drum & bass remix) (2003)\n- ’03 Bonnie and Clyde (2003)\n- Crazy in Love (The Remixes) (2003)\n- Summertime (2003)\n- ’03 Bonnie & Clyde (2003)",
+        "Artist: Beyoncé (continued)\n- Crazy in Love (The Remixes) (2003)\n- Summertime (2003)\n- ’03 Bonnie & Clyde (2003)\n- Me Myself And I / Crazy Love (2004)\n- L'Oréal Paris (2004)\n- Live at Wembley (2004)\n- Speak My Mind (2004)\n- Star Spangled Banner (From the Super Bowl XXXVIII Performance) (2004)\n- Check on It (2005)\n- Check on It (Bama Boyz After Dark remix) (2005)\n- Check on It (dance mixes) (2005)\n- Deja vu (2006)",
+        "Artist: Cardi B (continued)\n- No Limit (2017)\n- Gangsta Bitch Music, Vol. 2 (2017)\n- Bodak Yellow (2017)\n- MotorSport (2017)\n- Right Now (2017)\n- Finesse (Remix) (2017)\n- Red Barz (2017)\n- La modelo (2017)\n- Bodak Yellow (Money Moves) (2017)\n- Bodak Yellow [Latin Trap Remix] (2017)\n- Bodak Yellow (Latin Trap remix) (2017)\n- Bartier Cardi (2017)\n- Bodak Yellow (remix) (2017)\n- Finesse (2018)\n- Girls (Martin Jensen remix) (2018)\n- Taki Taki (2018)\n- Invasion of Privacy (2018)\n- Girls (Steve Aoki remix) (2018)\n- I Like It (2018)\n- Ahora dice (Real hasta la muerte remix) (2018)\n- Money (Neybuu remix) (2018)\n- Twerk (2018)\n- I Like It (Dillon Francis remix) (2018)\n- Dinero (2018)\n- Girls Like You (2018)\n- Backin’ It Up (2018)\n- Finesse (Remixes) (2018)\n- Money (2018)\n- I Like It (Demo) (2018)\n- Finesse (remix) (2018)",
+        "Artist: Nicki Minaj (continued)\n- It's Barbie Bitch! The Mixtape (2009)\n- Who's Got the Crown (2009)\n- Beam Me Up Scotty (2009)\n- Shakin' It 4 Daddy (2009)\n- Step Your P*ssy Up! (2009)\n- Check It Out (2010)\n- Hello Good Morning (remix) (2010)\n- Pink Friday (2010)\n- Nikita (2010)\n- Woohoo (2010)\n- Pink Friday (deluxe edition) (2010)\n- It’s Barbie Bitch (2010)\n- Your Love (2010)\n- Right Thru Me (2010)\n- Monster (2010)\n- Barbie R&B (2010)\n- Barbie World (2010)\n- Barbie World: The Mixtape (2010)\n- Trickin or What (2010)\n- All I Do Is Win (remix) (2010)\n- Harajuku R-N-Barbie (2010)\n- Up Out My Face (2010)\n- Love Pink (2010)\n- Letting Go (Dutty Love) (2010)\n- Check It Out (Remixes) (2010)\n- The Nicki Effect (2010)\n- My Chick Bad (2010)\n- Queen of Collaborations (2010)\n- 2012 (It Ain’t the End) (2010)"
+      ],
+      "response": "Artists used: Beyoncé.\n\nI don't know based on the data.",
+      "expect": "refuse",
+      "notes": "Tempting: awards aren't in the data",
+      "retrieved": [
+        {
+          "artist": "Beyoncé",
+          "distance": 0.4696387
+        },
+        {
+          "artist": "Beyoncé",
+          "distance": 0.5709722
+        },
+        {
+          "artist": "Beyoncé",
+          "distance": 0.57124937
+        },
+        {
+          "artist": "Beyoncé",
+          "distance": 0.5917716
+        },
+        {
+          "artist": "Cardi B",
+          "distance": 0.69279146
+        },
+        {
+          "artist": "Nicki Minaj",
+          "distance": 0.70507616
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": null,
+        "claims": [],
+        "prompts": {}
+      },
+      "refusal": {
+        "value": "refused",
+        "reason": "Rule: the answer is only the refusal sentence, so the judge wasn't asked.",
+        "by": "rule",
+        "prompt": null,
+        "correct": true
+      }
+    },
+    {
+      "user_input": "Which Daft Punk album sold the most copies?",
+      "retrieved_contexts": [
+        "Artist: Daft Punk (continued)\n- Untitled (1999)\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)\n- D.A.F.T. : A Story About Dogs, Androids, Firemen and Tomatoes (1999)\n- One More Time (2000)\n- Stronger (2000)\n- \"One More Time\" (12\" mix) (2000)\n- ONE MORE VIRGIN –tracks for CELEBRATION of new century– (2000)\n- Aerodynamic (2001)\n- Discovery (2001)\n- Digital Love (Digital dub) (2001)",
+        "Artist: Daft Punk (continued)\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)\n- 1995-08-05: Soirée Prophecy, Le Cannet, France (1995)\n- Revolution 909 (1996)\n- Around the World (1996)\n- Indo Silver Club (1996)\n- 1997-03-02: BBC Radio 1 Essential Mix (1997)\n- Burnin’ (1997)\n- Homework (1997)\n- Burnin' (1997)\n- Live @ Tribal Party, NRJ, Paris, France (1997)\n- Live @ We Are Family (full set) (1997)\n- Alive 1997 (Mayan Theater) (1997)\n- Assault (1997)\n- Live @ We Are Family (1997)\n- Burnin’ (edit) (1997)\n- 1998-12-31: Daft Punk, BBC Radio One Essential Selection (1998)\n- Live @ Birmingham November 1997 (1998)\n- Around the World (Masters at Work Remixes) (1998)\n- Untitled (1999)\n- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)",
+        "Artist: Daft Punk\nType: Group\nCountry: FR (France)\nDescription: French electronic duo\nFormed: 1993\nTags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas\nAlso known as: DaftPunk; daft punk; Duft Punk; ダフト・パンク; Daft Punk; Da Funk\nReleases:\n- The New Wave (1994)\n- Da Funk (1995)\n- Musique / L'ombelico del mondo / Make It Funky (1995)",
+        "Artist: JAŸ-Z (continued)\n- A Million And One Questions (Extended Mix) (1998)\n- Vol. 3… Life and Times of S. Carter (1999)\n- Vol.3.. Life and Times of S. Carter (1999)\n- Can I Get a... (Def Jam's Rush Hour) (1999)\n- Jigga My N**** (1999)\n- Do It Again (Put Ya Hands Up) (1999)\n- Hard Knock Life (1999)\n- I Just Wanna Love U (Give It 2 Me) (2000)\n- Big Pimpin’ (2000)\n- Big Pimpin' (2000)\n- The Dynasty: Roc La Familia (2000)\n- Anything (2000)\n- The Blueprint (2001)\n- It's Obvious (2001)\n- Izzo (H.O.V.A.) (2001)\n- Unplugged (2001)\n- Girls, Girls, Girls (2001)\n- The Hits & Unreleased, Volume 1 (2001)\n- Guilty Until Proven Innocent (2001)\n- Izzo (H.O.V.A) (2001)\n- The Blueprint²: The Gift & The Curse (2002)\n- The Best of Both Worlds (2002)\n- Song Cry (2002)\n- Chapter One (2002)",
+        "Artist: Stromae (continued)\n- Papaoutai Remixes (2013)\n- Racine carrée (2013)\n- Formidable (2013)\n- Papaoutai (2013)\n- Remixes (2013)\n- Tous Les Mêmes (2013)\n- Meltdown (2014)\n- Live au Centre Bell de Montréal, Québec, Canada - 28 & 29 septembre 2015 (2015)\n- Repetto X Mosaert (2017)\n- Défiler (Bande originale de la capsule No. 5 Mosaert) (2018)\n- La pluie (2018)\n- Alors on danse (Dubdogz remix) (2019)\n- Alors on Danse (DubDogz remix) (2019)\n- Papaoutai (Amaury Lacroix Remix) (2020)\n- Santé (2021)\n- L’enfer (2022)\n- Multitude (2022)\n- Mon amour (2022)\n- Ma Meilleure Ennemie (from the series Arcane League of Legends) (2024)\n- Ma meilleure ennemie (2025)\n- QUE CE SOIT CLAIR (2025)\n- Anderlecht Champion (Stromae Remix) (2025)\n- Pardon (2025)\n- des fleurs (2026)\n- My Sins Are My Savior (2026)",
+        "Artist: Stromae\nType: Person\nCountry: BE (Belgium)\nBorn: 1985-03-12\nTags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson française\nAlso known as: Paul Van Haver; Sromae\nReleases:\n- Racine Carrée Live (√ Live)\n- 2015-04-19: Coachella Valley Music & Arts Festival, Indio, CA, USA\n- Juste un cerveau, un flow, un fond et un mic… (2007)\n- Enfants de l'an 2000 (2009)\n- Mixture Elecstro (2009)\n- Alors on danse (2009)\n- Up Saw Liz (remix) (2009)\n- Up Saw Liz (2009)\n- Cheese (2010)\n- Alors On Danse (Remixes) (2010)\n- Alors on danse (remix) (2010)\n- Te Quiero (2010)\n- Alors on danse (Remix) (2010)\n- Peace or Violence (Remixes) (2011)\n- Peace or Violence (2011)\n- Papaoutai Remixes (2013)\n- Racine carrée (2013)\n- Formidable (2013)\n- Papaoutai (2013)"
+      ],
+      "response": "Artists used: Daft Punk\n\nI don't know based on the data.",
+      "expect": "refuse",
+      "notes": "Tempting: sales aren't in the data",
+      "retrieved": [
+        {
+          "artist": "Daft Punk",
+          "distance": 0.3816327
+        },
+        {
+          "artist": "Daft Punk",
+          "distance": 0.3979187
+        },
+        {
+          "artist": "Daft Punk",
+          "distance": 0.43763983
+        },
+        {
+          "artist": "JAŸ-Z",
+          "distance": 0.62898886
+        },
+        {
+          "artist": "Stromae",
+          "distance": 0.63708276
+        },
+        {
+          "artist": "Stromae",
+          "distance": 0.64427185
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": null,
+        "claims": [],
+        "prompts": {}
+      },
+      "refusal": {
+        "value": "refused",
+        "reason": "Rule: the answer is only the refusal sentence, so the judge wasn't asked.",
+        "by": "rule",
+        "prompt": null,
+        "correct": true
+      }
+    },
+    {
+      "user_input": "What is the capital of Australia?",
+      "retrieved_contexts": [
+        "Artist: Sia\nType: Person\nCountry: AU (Australia)\nDescription: Australian singer‐songwriter\nBorn: 1975-12-18\nTags: downtempo; pop; australian; electropop; female vocals; indie pop; dance-pop; acid jazz; alternative pop; english; chamber pop; pop and chart; adult alternative pop/rock; alternative singer/songwriter; mbs-333; art pop; left-field pop; australian pop; trainwreck\nAlso known as: Sia Kate I. Furler; Sia Kate Isobelle Furler; Sia Furler; Sia; Sia Kate Furler; シーア; Sia\nReleases:\n- OnlySee (1997)\n- Little Man (2000)\n- Taken for Granted (2000)\n- Get Me (Groove Chronicles Mix) (2000)\n- Drink to Get Drunk (2001)\n- Healing Is Difficult (2001)\n- Destiny (2001)\n- Distractions (2002)\n- Colour the Small One (2004)\n- Where I Belong (2004)\n- Colour The Small One (2004)\n- Somersault (2004)",
+        "Artist: Sia (continued)\n- Where I Belong Remixes 2 (2008)\n- Numb Remixes, Part 2 (2008)\n- Soon We’ll Be Found (2008)\n- Where I Belong - Remixes 1 (2008)\n- The Girl You Lost (2008)\n- iTunes Live from Sydney (2009)\n- You’ve Changed (2009)\n- You’ve Changed: Remixes (2009)\n- I Go to Sleep (triple j Like a Version) (2009)\n- Metro Cabaret (Live at Sydney 25.03.2009) (2009)\n- Some People Have REAL Problems (2009)\n- You’ve Changed: More Remixes (2009)\n- Clap Your Hands (2010)\n- Live: The We Meaning You Tour (2010)\n- Under the Milky Way (2010)\n- iTunes Live: ARIA Awards Concert Series 2010 (2010)",
+        "Artist: Adele\nType: Person\nCountry: GB (United Kingdom)\nDescription: UK soul/jazz singer\nBorn: 1988-05-05\nTags: pop; jazz; singer-songwriter; singer; soul; adult contemporary; blue-eyed soul; neo soul; pop and chart; pop soul; blue eyed soul; r&b; adele; alternative/indie rock; adult alternative pop/rock; 2010s; blues-pop; english singer; music for soccer moms; aln-sh\nAlso known as: Adèle; 아델; Adele Adkins; Adele; アデル; Adele Laurie Blue Adkins; 阿黛尔\nReleases:\n- 2015-11-22: Saturday Night Live: New York, NY, USA (2005)\n- Hometown Glory (2007)\n- Ep & Demos (2007)\n- Make You Feel My Love (2008)\n- 19 (2008)\n- Hometown Glory (remixes) (2008)\n- Chasing Pavements (2008)\n- 88 (2008)\n- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)\n- Cold Shoulder (2008)",
+        "Artist: Taylor Swift\nType: Person\nCountry: US (United States)\nBorn: 1989-12-13\nTags: pop; dance; singer-songwriter; country; synth-pop; electropop; americana; female vocals; indie pop; icon; 2000s; dance-pop; indie folk; pop rock; country pop; alternative pop; folk pop; chamber pop; contemporary country; teen pop; top 40; country-pop; taylor-swift; re-recording; singer/songwriter; list; 2010s; fixme label mess; hp; millennial; relic inn; 2020s; loves planes; late 2000s; nuno; artist of the decade; cultural icon",
+        "Artist: Arijit Singh (continued)\n- Aaja Baija Tu (from “Brand Bollywood Downunder”) (2023)\n- Gham Khushiyan (2023)\n- Pal (Analogue Mix) (2023)\n- Bhool Jaa (2023)",
+        "Artist: Billie Eilish\nType: Person\nCountry: US (United States)\nBorn: 2001-12-18\nTags: electronic; downtempo; pop; singer-songwriter; usa; electronica; alternative; electropop; lo-fi; female vocals; indie pop; leftfield; pop rock; alternative pop; english; indietronica; los angeles; queer; teen pop; pop soul; alt-pop; progressive pop; dark pop; contemporary r&b; 2010s; art pop; alternative r&b; trap; bedroom pop; pity pop; englisch; 2020s; sad girl pop; gen z; late 2010s; nepo baby"
+      ],
+      "response": "I don't know based on the data.\n\nArtists used: Sia (Australian singer‐songwriter)",
+      "expect": "refuse",
+      "notes": "Off-topic",
+      "retrieved": [
+        {
+          "artist": "Sia",
+          "distance": 0.7823955
+        },
+        {
+          "artist": "Sia",
+          "distance": 0.8303597
+        },
+        {
+          "artist": "Adele",
+          "distance": 0.8858074
+        },
+        {
+          "artist": "Taylor Swift",
+          "distance": 0.8916418
+        },
+        {
+          "artist": "Arijit Singh",
+          "distance": 0.8955098
+        },
+        {
+          "artist": "Billie Eilish",
+          "distance": 0.9013001
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": null,
+        "claims": [],
+        "prompts": {}
+      },
+      "refusal": {
+        "value": "refused",
+        "reason": "Rule: the answer is only the refusal sentence, so the judge wasn't asked.",
+        "by": "rule",
+        "prompt": null,
+        "correct": true
+      }
+    },
+    {
+      "user_input": "What is the best way to learn the guitar?",
+      "retrieved_contexts": [
+        "Artist: Bob Dylan (continued)\n- Watching the River Flow / Spanish Is the Loving Tongue (1971)\n- Blind Boy Grunt (1972)\n- Visions of Johanna (1972)\n- Playback (1972)\n- Dylan (1973)\n- Pat Garrett & Billy the Kid (1973)",
+        "Artist: Bob Dylan (continued)\n- Blonde on Blonde, Volume 1 (1967)\n- Bob Dylan’s Greatest Hits, Vol. III (1967)\n- Bob Dylan's Greatest Hits 2 (1967)\n- Leopard Skin Pillbox Hat / Most Likely You'll Go Your Way And I'll Go Mine (1967)\n- Greatest Hits (1967)\n- If You Gotta Go, Go Now / To Ramona (1967)\n- Blonde on Blonde, Volume 2 (1967)\n- I Threw It All Away (1968)\n- Nashville Skyline (1969)\n- Great White Wonder (1969)\n- Take a Message to Mary / Like a Rolling Stone (live) (1970)\n- New Morning (1970)\n- 1/2 of Great White Wonder (1970)\n- Self Portrait (1970)\n- Wigwam / Copper Kettle (1970)\n- Bob Dylan’s Greatest Hits, Vol. II (1971)\n- George Jackson (1971)\n- Bob Dylan vs. AJ Weberman (1971)\n- More Bob Dylan Greatest Hits (1971)\n- Watching the River Flow / Spanish Is the Loving Tongue (1971)\n- Blind Boy Grunt (1972)",
+        "Artist: Taylor Swift (continued)\n- Taylor Swift Karaoke: Beautiful Eyes (2008)\n- Change (music video) (2008)\n- I Heart ? (2008)\n- Change (2008)\n- Live from SoHo (iTunes exclusive EP) (2008)\n- Breathe (2008)\n- Picture to Burn / Ten Years Pass (2008)\n- White Horse (2008)\n- Taylor Swift: The Spark That Lit the Flame (2008)",
+        "Artist: Taylor Swift (continued)\n- Sounds of the Season: The Taylor Swift Holiday Collection (2007)\n- Rhapsody Originals (Rhapsody exclusive) (2007)\n- The Making of \"Teardrops on My Guitar\" Music Video (2007)\n- Teardrops on My Guitar (remixes parte 2) (2007)\n- Taylor Swift (limited deluxe edition radio special) (2007)\n- White Christmas (2007)\n- Silent Night (2007)\n- Our Song (2007)\n- Beautiful Eyes (2008)\n- Should’ve Said No (2008)\n- Fearless (2008)\n- The Taylor Swift Holiday Collection (2008)\n- Love Story (2008)\n- Teardrops on My Guitar / Say Yes (2008)\n- Should've Said No / Back That Thing Up (2008)\n- You’re Not Sorry (2008)\n- Picture to Burn (music video) (2008)\n- Picture to Burn (2008)\n- iTunes SoHo Sessions (2008)\n- Taylor Swift Karaoke: Beautiful Eyes (2008)\n- Change (music video) (2008)\n- I Heart ? (2008)",
+        "Artist: Elvis Presley (continued)\n- Blue Suede Shoes / Tutti Frutti (1956)\n- Blue Moon / Just Because (1956)\n- I Want You, I Need You, I Love You (1956)\n- The Real Elvis (1956)\n- Shake, Rattle and Roll (1956)\n- I Want You, I Need You, I Love You / My Baby Left Me (1956)\n- Any Way You Want Me (1956)\n- Elvis Presley (1956)\n- Heartbreak Hotel (1956)\n- Rock and Roll Nº 1 (1956)\n- Rock and Roll Nº 5 (1956)\n- Love Me Tender / Anyway You Want Me (That's How I Will Be) (1956)\n- Rock ’n’ Roll (1956)\n- I Got a Woman / I'm Counting on You (1956)\n- Rock and Roll N°4 (1956)\n- Rock and Roll N° 2 (1956)\n- Hound Dog / Don't Be Cruel (1956)\n- Elvis (1956)\n- Elvis, Volume 1 (1956)\n- Money Honey / One-Sided Love Affair (1956)\n- Love Me Tender / Any Way You Want Me (That's How I Will Be) (1956)",
+        "Artist: Elvis Presley (continued)\nAlso known as: Элвис Пресли; Элвис Пресли; الویس پرسلی; Елвіс Преслі; إلفيس بريسلي; 埃爾維斯·皮禮士利; エルヴィス・プレスリー; The King; Elvis Aaron Presley; Elvis A. Presley; Elvis; Presley Elvis; The King of Rock and Roll; Priesley; Elvis Presley\nReleases:\n- I Don’t Care If the Sun Don’t Shine / Good Rockin’ Tonight (1954)\n- Good Rockin’ Tonight / I Don’t Care If the Sun Don’t Shine (1954)\n- That’s All Right / Blue Moon of Kentucky (1954)\n- Mystery Train / I Forgot to Remember to Forget (1955)\n- You’re a Heartbreaker / Milkcow Blues Boogie (1955)\n- Baby Let’s Play House / I’m Left, You’re Right, She’s Gone (1955)\n- Blue Suede Shoes / I'm Counting on You (1956)\n- Love Me Tender / Any Way You Want Me (That’s How I Will Be) (1956)\n- Blue Suede Shoes / Tutti Frutti (1956)\n- Blue Moon / Just Because (1956)"
+      ],
+      "response": "I don't know based on the data.\n\nArtists in the provided context: Bob Dylan; Taylor Swift; Elvis Presley.",
+      "expect": "refuse",
+      "notes": "Off-topic, music-flavoured",
+      "retrieved": [
+        {
+          "artist": "Bob Dylan",
+          "distance": 0.82336646
+        },
+        {
+          "artist": "Bob Dylan",
+          "distance": 0.8323397
+        },
+        {
+          "artist": "Taylor Swift",
+          "distance": 0.8444818
+        },
+        {
+          "artist": "Taylor Swift",
+          "distance": 0.84755987
+        },
+        {
+          "artist": "Elvis Presley",
+          "distance": 0.85049355
+        },
+        {
+          "artist": "Elvis Presley",
+          "distance": 0.85164183
+        }
+      ],
+      "chat_model": "openai/gpt-5-mini",
+      "faithfulness": {
+        "score": null,
+        "claims": [],
+        "prompts": {}
+      },
+      "refusal": {
+        "value": "refused",
+        "reason": "Rule: the answer is only the refusal sentence, so the judge wasn't asked.",
+        "by": "rule",
+        "prompt": null,
+        "correct": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "ragas-evaluation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write 'src/**/*.ts'",
+    "chroma": "chroma run --path ./chroma-data --port 8001",
+    "reindex": "tsx --env-file-if-exists=.env --no-deprecation src/reindex.ts",
+    "eval": "tsx --env-file-if-exists=.env --no-deprecation src/1-export.ts && uv run eval/2_score.py",
+    "score": "uv run eval/2_score.py",
+    "walkthrough": "tsx --env-file-if-exists=.env --no-deprecation src/3-walkthrough.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@langchain/community": "^1.1.29",
+    "@langchain/core": "^1.2.17",
+    "@langchain/openai": "^1.6.2",
+    "@langchain/textsplitters": "^1.0.2",
+    "chromadb": "^3.5.0",
+    "d3-dsv": "^3.0.1",
+    "langchain": "^1.5.15"
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Which artists blend hip hop with R&B, and what are some of their albums?",
+    "expect": "answer",
+    "notes": "Multi-artist, the rag-langchain stage 4 example"
+  },
+  {
+    "question": "Where is Fela Kuti from, and what kind of music did he make?",
+    "expect": "answer",
+    "notes": "Single artist, facts are in the profile chunk"
+  },
+  {
+    "question": "When did Daft Punk start, and what country are they from?",
+    "expect": "answer",
+    "notes": "Begin date and country fields"
+  },
+  {
+    "question": "Name some K-pop groups and one release by each.",
+    "expect": "answer",
+    "notes": "BTS and BLACKPINK"
+  },
+  {
+    "question": "Which artists in the data are from Nigeria?",
+    "expect": "answer",
+    "notes": "Fela Kuti, Burna Boy, Wizkid"
+  },
+  {
+    "question": "Who are some classic soul singers, and when did they start their careers?",
+    "expect": "answer",
+    "notes": "Stevie Wonder, Marvin Gaye, Aretha Franklin"
+  },
+  {
+    "question": "What are some Latin music artists and their albums?",
+    "expect": "answer",
+    "notes": "Bad Bunny, J Balvin, Shakira, Daddy Yankee"
+  },
+  {
+    "question": "Who are the members of BTS?",
+    "expect": "refuse",
+    "notes": "Tempting: the model knows, but member names aren't in the data"
+  },
+  {
+    "question": "How many Grammy awards has Beyoncé won?",
+    "expect": "refuse",
+    "notes": "Tempting: awards aren't in the data"
+  },
+  {
+    "question": "Which Daft Punk album sold the most copies?",
+    "expect": "refuse",
+    "notes": "Tempting: sales aren't in the data"
+  },
+  {
+    "question": "What is the capital of Australia?",
+    "expect": "refuse",
+    "notes": "Off-topic"
+  },
+  {
+    "question": "What is the best way to learn the guitar?",
+    "expect": "refuse",
+    "notes": "Off-topic, music-flavoured"
+  }
+]
