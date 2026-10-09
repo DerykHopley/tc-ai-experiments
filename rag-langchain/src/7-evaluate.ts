@@ -2,6 +2,7 @@
  * Stage 7: Evaluate the pipeline
  * npm run 7-evaluate                                run with top-k retrieval
  * npm run 7-evaluate -- --strategy one-per-artist   or another strategy
+ * npm run 7-evaluate -- --strategy long-context     no search: all profiles
  * npm run 7-evaluate -- --name top-k-b              save under another name
  * npm run 7-evaluate -- --render                    rebuild every run's page
  * ---
@@ -109,6 +110,8 @@ async function evaluate(test: TestQuestion): Promise<QuestionResult> {
   const answerMs = Math.round(performance.now() - start);
   const answer = response.text;
   const artists = docs.map((doc) => String(doc.metadata.artist_name));
+  // With every artist in the prompt, recall would be 1 by definition
+  const scoreRetrieval = strategy !== 'long-context' && test.expected_artists;
 
   // 2. Score it. The judge calls are independent, so run them together.
   const shouldRefuse = test.should_refuse ?? false;
@@ -133,18 +136,19 @@ async function evaluate(test: TestQuestion): Promise<QuestionResult> {
     retrieved: hits.map(([doc, distance], i) => ({
       rank: i + 1,
       artist: artists[i],
-      distance,
+      // JSON has no NaN; null means the chunk wasn't found by a search
+      distance: Number.isFinite(distance) ? distance : null,
       text: doc.pageContent,
     })),
     answer,
     answerMs,
     outputTokens: response.usage_metadata?.output_tokens,
     metrics: {
-      contextRecall: test.expected_artists
-        ? contextRecall(artists, test.expected_artists)
+      contextRecall: scoreRetrieval
+        ? contextRecall(artists, test.expected_artists!)
         : undefined,
-      contextPrecision: test.expected_artists
-        ? contextPrecision(artists, test.expected_artists)
+      contextPrecision: scoreRetrieval
+        ? contextPrecision(artists, test.expected_artists!)
         : undefined,
       faithfulness: faith,
       answerRelevancy: relevancy ?? undefined,

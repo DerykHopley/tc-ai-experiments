@@ -11,7 +11,13 @@ export type QuestionResult = {
   expectedArtists?: string[];
   reference?: string;
   shouldRefuse: boolean;
-  retrieved: { rank: number; artist: string; distance: number; text: string }[];
+  // distance is null when there was no search (long-context)
+  retrieved: {
+    rank: number;
+    artist: string;
+    distance: number | null;
+    text: string;
+  }[];
   answer: string;
   answerMs: number;
   outputTokens?: number;
@@ -133,7 +139,7 @@ function detail(r: QuestionResult, run: EvalRun): string {
   const chunks = r.retrieved
     .map(
       (c) => `<details class="chunk">
-  <summary><span class="rank">[${c.rank}]</span> ${esc(c.artist)}${r.expectedArtists ? (expected.has(c.artist) ? ' <span class="tag yes">expected</span>' : ' <span class="tag">not expected</span>') : ''}<span class="dist">distance ${c.distance.toFixed(3)}</span></summary>
+  <summary><span class="rank">[${c.rank}]</span> ${esc(c.artist)}${r.expectedArtists ? (expected.has(c.artist) ? ' <span class="tag yes">expected</span>' : ' <span class="tag">not expected</span>') : ''}${c.distance === null ? '' : `<span class="dist">distance ${c.distance.toFixed(3)}</span>`}</summary>
   <pre>${esc(c.text)}</pre>
 </details>`,
     )
@@ -173,8 +179,8 @@ function detail(r: QuestionResult, run: EvalRun): string {
       ${correctness}
     </div>
     <div>
-      <h4>Retrieved (top ${run.config.k})${m.contextRecall ? ` · recall ${m.contextRecall.score.toFixed(2)} · precision ${m.contextPrecision!.score.toFixed(2)}` : ''}</h4>
-      ${r.expectedArtists ? `<p class="muted">Expected: ${esc(r.expectedArtists.join(', '))}</p>` : '<p class="muted">No expected artists for this question, so retrieval isn’t scored.</p>'}
+      <h4>${run.config.strategy === 'long-context' ? `In the prompt: all ${r.retrieved.length} profiles, no search` : `Retrieved (top ${run.config.k})`}${m.contextRecall ? ` · recall ${m.contextRecall.score.toFixed(2)} · precision ${m.contextPrecision!.score.toFixed(2)}` : ''}</h4>
+      ${run.config.strategy === 'long-context' ? '<p class="muted">Retrieval isn’t scored: every artist is in the prompt.</p>' : r.expectedArtists ? `<p class="muted">Expected: ${esc(r.expectedArtists.join(', '))}</p>` : '<p class="muted">No expected artists for this question, so retrieval isn’t scored.</p>'}
       ${chunks}
     </div>
   </div>
@@ -300,7 +306,7 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
     <span class="chip">judge <b>${esc(config.judgeModel)}</b></span>
     <span class="chip">embeddings <b>${esc(config.embeddingModel)}</b></span>
     <span class="chip">run <b>${esc(run.name)}</b></span>
-    <span class="chip">retrieval <b>${esc(config.strategy)}</b>, top <b>${config.k}</b> chunks</span>
+    <span class="chip">${config.strategy === 'long-context' ? 'retrieval <b>none</b>: every profile in the prompt' : `retrieval <b>${esc(config.strategy)}</b>, top <b>${config.k}</b> chunks`}</span>
     <span class="chip">chunks <b>${config.chunkSize}</b> chars, <b>${config.chunkOverlap}</b> overlap</span>
     <span class="chip">run <b>${esc(run.date.slice(0, 16).replace('T', ' '))}</b> UTC · ${run.seconds} s</span>
   </div>

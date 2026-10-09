@@ -12,12 +12,32 @@ const esc = (s: string) =>
     .replace(/"/g, '&quot;');
 
 // Colour follows the strategy, never the run's position. Runs repeating a
-// strategy get the same colour with a hollow marker.
+// strategy get the same colour with a hollow marker. long-context is the
+// no-search baseline, not a fourth strategy: it's drawn as an ink diamond,
+// because a fourth hue can't be told apart from the others when every pair
+// can sit side by side (yellow vs orange fails the palette validator).
 const STRATEGY_COLOUR: Record<string, string> = {
   'top-k': 'var(--series-1)',
   'two-per-artist': 'var(--series-2)',
   'one-per-artist': 'var(--series-3)',
+  'long-context': 'var(--text-primary)',
 };
+const DIAMOND = new Set(['long-context']);
+
+// A run's marker for the legend and column heads: circle or diamond,
+// filled for a strategy's first run, hollow for repeats
+function marker(
+  m: { colour: string; hollow: boolean; diamond: boolean },
+  size: number,
+): string {
+  const c = size / 2;
+  const r = c - 2;
+  const paint = `fill="${m.hollow ? 'var(--surface-1)' : m.colour}" stroke="${m.colour}" stroke-width="2"`;
+  const shape = m.diamond
+    ? `<polygon points="${c},${c - r - 0.5} ${c + r + 0.5},${c} ${c},${c + r + 0.5} ${c - r - 0.5},${c}" ${paint}/>`
+    : `<circle cx="${c}" cy="${c}" r="${r}" ${paint}/>`;
+  return `<svg width="${size}" height="${size}" aria-hidden="true">${shape}</svg>`;
+}
 
 type Metric = {
   key: string;
@@ -74,6 +94,7 @@ export function renderComparisonHtml(runs: EvalRun[]): string {
       strategy: run.config.strategy,
       colour: STRATEGY_COLOUR[run.config.strategy] ?? 'var(--text-secondary)',
       hollow: n > 0,
+      diamond: DIAMOND.has(run.config.strategy),
     };
   });
 
@@ -105,6 +126,10 @@ export function renderComparisonHtml(runs: EvalRun[]): string {
       const cells = runs
         .map((run) => {
           const r = run.results.find((x) => x.id === q.id)!;
+          if (run.config.strategy === 'long-context') {
+            const verdict = r.metrics.answerCorrectness?.verdict;
+            return `<td class="muted">all ${r.retrieved.length} artists, no search${verdict ? `<div class="verdict">answer: ${verdict}</div>` : ''}</td>`;
+          }
           const counts = new Map<string, number>();
           for (const c of r.retrieved)
             counts.set(c.artist, (counts.get(c.artist) ?? 0) + 1);
@@ -125,10 +150,7 @@ export function renderComparisonHtml(runs: EvalRun[]): string {
     .join('');
 
   const legend = meta
-    .map(
-      (m) =>
-        `<span class="key"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="${m.hollow ? 'var(--surface-1)' : m.colour}" stroke="${m.colour}" stroke-width="2"/></svg>${esc(m.name)}</span>`,
-    )
+    .map((m) => `<span class="key">${marker(m, 14)}${esc(m.name)}</span>`)
     .join('');
 
   const tableRows = averages
@@ -200,11 +222,12 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
 <div class="viz-root">
 <main>
   <h1>Comparing retrieval strategies</h1>
-  <p>The same ${questions.length} test questions, run through the pipeline with different ways of picking the top ${first.config.k} chunks, and scored by the same judge (<code>${esc(first.config.judgeModel)}</code>).</p>
+  <p>The same ${questions.length} test questions, run through the pipeline with different ways of picking the top ${first.config.k} chunks (or none), and scored by the same judge (<code>${esc(first.config.judgeModel)}</code>).</p>
   <ul class="strategies">
     <li><b>top-k</b>: the ${first.config.k} nearest chunks. One artist can fill several slots.</li>
     <li><b>two-per-artist</b>: the nearest chunks, at most 2 from any artist.</li>
     <li><b>one-per-artist</b>: the nearest chunk from each of ${first.config.k} different artists.</li>
+    ${runs.some((r) => r.config.strategy === 'long-context') ? '<li><b>long-context</b> (the ◆ diamonds): no search at all. Every artist’s whole profile goes into the prompt, about 28k tokens. The baseline that shows what retrieval adds; its retrieval isn’t scored.</li>' : ''}
   </ul>
   <div class="legend" aria-label="Runs">${legend}</div>
   <p class="runlinks">Each run’s full results, with every claim and the judge’s verdict on it: ${meta.map((m) => `<a href="${esc(m.name)}.html">${esc(m.name)}</a>`).join(' · ')}</p>
@@ -232,7 +255,7 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
     <h2>What each strategy retrieved</h2>
     <p>The artists behind the ${first.config.k} retrieved chunks. <b>×n</b> means n chunks from the same artist, ✓ marks an expected artist, and the line below names expected artists that didn’t come back.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Question</th>${meta.map((m) => `<th><span class="colhead"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="${m.hollow ? 'var(--surface-1)' : m.colour}" stroke="${m.colour}" stroke-width="2"/></svg>${esc(m.name)}</span></th>`).join('')}</tr></thead>
+      <thead><tr><th>Question</th>${meta.map((m) => `<th><span class="colhead">${marker(m, 12)}${esc(m.name)}</span></th>`).join('')}</tr></thead>
       <tbody>${retrievedRows}</tbody>
     </table></div>
   </section>
@@ -297,7 +320,11 @@ ${THEME_CSS}  body { margin: 0; background: #f9f9f7; }
       if (v === null) return;
       // Small vertical offset per run, so runs with equal scores don't hide each other
       const dy = (i - (meta.length - 1) / 2) * 6;
-      const dot = el('circle', { cx: x(v), cy: cy + dy, r: 7, fill: m.hollow ? 'var(--surface-1)' : m.colour, stroke: m.hollow ? m.colour : 'var(--surface-1)', 'stroke-width': m.hollow ? 2.5 : 2 });
+      const paint = { fill: m.hollow ? 'var(--surface-1)' : m.colour, stroke: m.hollow ? m.colour : 'var(--surface-1)', 'stroke-width': m.hollow ? 2.5 : 2 };
+      const px = x(v), py = cy + dy;
+      const dot = m.diamond
+        ? el('polygon', { points: [px, py - 9, px + 9, py, px, py + 9, px - 9, py].join(' '), ...paint })
+        : el('circle', { cx: px, cy: py, r: 7, ...paint });
       dot.addEventListener('mousemove', (e) => {
         tooltip.textContent = m.name + ' · ' + a.label + ': ' + v.toFixed(2);
         placeTooltip(e);

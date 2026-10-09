@@ -193,13 +193,19 @@ export async function getVectorStore(): Promise<Chroma> {
 // - two-per-artist / one-per-artist: fetch more candidates, then keep the
 //   nearest ones while allowing at most 2 (or 1) chunks per artist. More
 //   artists fit in, but a question about one artist gets fewer of its chunks.
+// - long-context: no search at all. Every artist's whole profile goes into
+//   the prompt (51 profiles, about 28k tokens), in the CSV's order. The
+//   baseline that shows whether retrieval helps.
 export const STRATEGIES = [
   'top-k',
   'two-per-artist',
   'one-per-artist',
+  'long-context',
 ] as const;
 export type RetrievalStrategy = (typeof STRATEGIES)[number];
 const PER_ARTIST_CAP = { 'two-per-artist': 2, 'one-per-artist': 1 };
+// Loaded once, the first time long-context needs them
+let allProfiles: Promise<Document[]> | undefined;
 // Candidates fetched before capping, so there are enough to fill k slots
 const CANDIDATES = 30;
 
@@ -211,6 +217,11 @@ export async function retrieve(
 ): Promise<[Document, number][]> {
   if (strategy === 'top-k') {
     return vectorStore.similaritySearchWithScore(question, k);
+  }
+  if (strategy === 'long-context') {
+    // No search, so no distance: NaN marks "not searched"
+    allProfiles ??= loadArtistDocuments();
+    return (await allProfiles).map((doc) => [doc, NaN]);
   }
   const cap = PER_ARTIST_CAP[strategy];
   const candidates = await vectorStore.similaritySearchWithScore(

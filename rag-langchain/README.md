@@ -13,6 +13,7 @@ These pages come from the latest run. They're committed in `output/` and publish
   - [top-k-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/top-k-b.html) (same settings again, to measure noise)
   - [two-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/two-per-artist.html)
   - [one-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/one-per-artist.html)
+  - [long-context-a](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/long-context-a.html) and [long-context-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/long-context-b.html) (no retrieval: the baseline)
 
 ## Setup
 
@@ -33,7 +34,7 @@ Run the stages in order. Each one reuses the earlier stages from `src/lib/pipeli
 | `npm run 4-rag -- "question"` | RAG | Retrieve 6 chunks, fill a `ChatPromptTemplate`, then `gpt-5-mini` answers using only that context. |
 | `npm run 5-visualize` | Looking at embeddings | Writes `output/embedding-map.html`: every chunk on a 2D t-SNE map, with genre or artist highlights, each query's top 6 retrieved chunks, and a nearest-neighbour check on the full vectors. |
 | `npm run 6-walkthrough -- "question"` | The whole pipeline, one question | Writes `output/walkthrough.html`. It follows one real question through all 12 steps, with the data each step produced: CSV row, Document, chunks (overlap marked), the vector as a colour strip, the search with the cut-off, how the #1 score adds up, the filled prompt, token counts and the answer. |
-| `npm run 7-evaluate` | Evaluating the pipeline | Runs the 13 questions in `data/eval_questions.json` through the pipeline and scores retrieval (context recall and precision, no LLM) and answers (faithfulness, answer relevancy, correctness, refusal) with `gemini-2.5-flash` as judge. Choose how chunks are picked with `-- --strategy top-k`, `two-per-artist` or `one-per-artist`, and name the run with `-- --name`. Each run is saved as `output/eval-runs/<name>.json` with its own page. `-- --render` rebuilds the pages without API calls. |
+| `npm run 7-evaluate` | Evaluating the pipeline | Runs the 13 questions in `data/eval_questions.json` through the pipeline and scores retrieval (context recall and precision, no LLM) and answers (faithfulness, answer relevancy, correctness, refusal) with `gemini-2.5-flash` as judge. Choose how chunks are picked with `-- --strategy top-k`, `two-per-artist` or `one-per-artist`, or skip retrieval with `long-context`, and name the run with `-- --name`. Each run is saved as `output/eval-runs/<name>.json` with its own page. `-- --render` rebuilds the pages without API calls. |
 | `npm run 8-compare` | Comparing runs | Writes `output/eval-runs/comparison.html` from every saved run: average scores as a dot plot with a noise band, a question-by-question grid, and which artists each strategy retrieved. No API calls. |
 | `npm run reindex` | Rebuild the index | Drops the collection and embeds everything again. |
 
@@ -153,3 +154,24 @@ The first evaluation showed that every retrieval miss came from one artist filli
   - **Afrobeat:** the extra variety brought in Prince (tagged "afro house; african"). The model included him, and the judge marked the answer incorrect against our narrower reference.
 - **Breadth cost the open question.** With either cap, JAŸ-Z's album chunks were dropped. The hip hop + R&B answer then named only Beyoncé and said it didn't know her albums, which the refusal check flags.
 - **What the numbers point to next:** the cap decides how many chunks an artist gets, but not which ones. Always pairing the artist's profile chunk (the one with the tags) with the best-matching detail chunk, a form of parent-document retrieval, might keep both breadth and grounding.
+
+## Long context: no retrieval at all
+
+All 51 artist profiles come to about 111,000 characters (roughly 28k tokens), which fits easily in `gpt-5-mini`'s context. The `long-context` strategy skips the search and puts every profile in the prompt, in the CSV's order, with the same prompt, model and judge. It's the baseline: what does retrieval add? Two runs on 2026-10-09, next to the earlier four:
+
+| Run | Recall | Faithfulness | Relevancy | Correctness | Refusal right |
+| --- | --- | --- | --- | --- | --- |
+| top-k (a) | 0.90 | 0.97 | 0.63 | 0.83 | 13/13 |
+| top-k (b) | 0.90 | 1.00 | 0.66 | 0.83 | 13/13 |
+| two-per-artist | 0.96 | 1.00 | 0.69 | 0.89 | 12/13 |
+| one-per-artist | 1.00 | 0.90 | 0.66 | 0.83 | 12/13 |
+| long-context (a) | – | 1.00 | 0.58 | **1.00** | 12/13 |
+| long-context (b) | – | 1.00 | 0.78 | 0.89 | 13/13 |
+
+Retrieval isn't scored for long-context: with every artist in the prompt, recall is 1 by definition.
+
+- **On data this small, retrieval costs answers.** Every retrieval miss disappeared: Shakira, Stevie Wonder and all the Bollywood artists came back, and the soul and Latin answers became correct. The hip hop + R&B answer went from JAŸ-Z's albums alone to nine artists with albums.
+- **Its lower scores are the judge, not the answers.** Run b's two "partial" verdicts were for leaving out "all from Nigeria" (the question doesn't ask) and Diljit Dosanjh (a borderline artist in our reference). Run a's refusal failure was the hip hop answer: nine artists with albums, plus a caveat that the data doesn't say which releases are fusions, which the judge read as declining. The relevancy zeros are the "noncommittal" rule again.
+- **It stayed faithful.** With 28k tokens to draw on, every claim in both runs was backed by the profiles.
+- **The cost is input, not time.** Each question sends about 111k characters instead of about 4k, roughly 28 times the input tokens. Answers took about as long (5.7 s on average, against 5.0 s for top-k).
+- **When retrieval wins instead:** when the data doesn't fit in the context, when the cost per question matters, or when the answer is buried in the middle of a long prompt. At 28k tokens, none of these showed up in these 13 questions, though the position of a profile in the prompt wasn't tested directly. Retrieval here is worth learning for data that doesn't fit, not for this dataset.
