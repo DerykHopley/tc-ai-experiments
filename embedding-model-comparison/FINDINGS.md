@@ -13,6 +13,7 @@ Results so far, how we got here, and open ideas. Numbers are from the run on 202
 7. Every heatmap cell had the same colour: all pairs share 1.9–2.3 of 3 neighbours, which fell into one step of a 0–3 scale. The colour scale now spans the observed range instead, and cells show two decimals so cells with the same rounded value don't get different shades.
 8. Added a "What we found" card (findings computed from the data, interpretations marked as untested) and a "Limits" card to the page, for presenting to the class.
 9. Asked whether a 3D map would help. Measured it first, then built a separate experiment page (`npm run map3d`, `output/map-3d.html`). Results under "2D or 3D maps" below.
+10. The user pointed out that the Curie–Einstein gap on the map is mostly a dimensionality-reduction effect: the numbers say they're close, the 2D picture says far. Checked it against the data. The squeeze into 2D is part of it, but her weak, flat similarities explain why the map and the list disagree (under Marie Curie below). Added this as a finding on the page and a note on the map card: map distances are approximate, so trust the list for a pair.
 
 ## Method choices
 
@@ -47,6 +48,12 @@ People the models disagree on most: Marie Curie (33%), William Shakespeare (40%)
 - t-SNE puts 73% of her neighbour weight on a group of women and 14% on scientists, so the map places her with the women, far from Einstein.
 - Across models, Einstein is in her top 3 for four of five models; the other places go mostly to women (Mother Teresa, Nightingale, Simone Weil, Beauvoir, Chanel). Gemini alone gives her Tesla instead of Einstein.
 - **Perplexity (small model, seed 42):** raising it shifts her t-SNE weight from women to scientists (women 83% → 78% → 73% → 66%, scientists 17% → 20% → 22% → 24% at perplexity 10/15/20/30; here "women" is every woman in the tags file and "scientists" the Science & invention field, so the baseline differs from the 73%/14% above). She does not move towards the middle: her nearest people on the map stay Chanel, Nightingale and Beauvoir. Instead the whole scientist group moves next to the women's group, so Einstein goes from her 58th nearest on the map (of 67) at perplexity 10 to 38th–43rd at 15–30. These ranks are for seed 42 only; see "2D or 3D maps" for how much they change with the seed.
+- **Why the map and the list disagree.** Partly it's the projection: no 2D layout keeps every distance, t-SNE gives up long distances first, and Einstein's rank on the map changes with the seed. But three parts of it are in the full vectors:
+  - **0.38 isn't close in absolute terms.** Her closest similarity (0.40, small model) is below the median person's closest (0.48), and that holds in all 5 models. Einstein is near her only compared with everyone else.
+  - **The race for her top 3 is close.** Her 3 closest are within 0.02 of each other (Beauvoir 0.40, Chanel 0.40, Einstein 0.38), so Einstein only just makes the list.
+  - **The link is one-sided** (her 3rd, his 7th). No layout can draw an A→B distance that differs from B→A.
+
+  So the two views answer different questions. The neighbour list asks "who are her 3 most similar people?". t-SNE places her by her whole neighbourhood, weighted by similarity (perplexity sets roughly how many people). With flat similarities, the many women just behind Einstein add up to 73% of that weight. Read the numbers for a specific pair and the map for the overall shape.
 
 ### Shakespeare
 

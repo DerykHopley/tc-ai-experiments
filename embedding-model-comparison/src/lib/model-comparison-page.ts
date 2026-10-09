@@ -49,6 +49,8 @@ ${THEME_CSS}  body { margin: 0; }
   h2 { font-size: 1rem; font-weight: 600; margin: 0 0 0.25rem; }
   .subtitle, .explain { color: var(--text-secondary); font-size: 0.85rem; margin: 0; max-width: 50rem; line-height: 1.45; }
   .explain { margin-bottom: 0.9rem; }
+  .explain.note { border-left: 3px solid var(--series-1); padding-left: 0.7rem; }
+  .explain.note strong { color: var(--text-primary); }
   .meta { color: var(--text-muted); font-size: 0.78rem; margin: 0.6rem 0 0; }
   .findings { margin: 0.75rem 0 0; padding-left: 1.1rem; font-size: 0.88rem; line-height: 1.5; }
   .findings.story li, .findings.limits li { margin-bottom: 0.55rem; max-width: 52rem; }
@@ -196,6 +198,7 @@ ${THEME_CSS}  body { margin: 0; }
     <h2>Explore one model's map</h2>
     <p class="explain">t-SNE projection of one model's embeddings. Grey lines link each person to their 3 closest neighbours. Hover over a point for details; click it to compare that person above. Each map is laid out independently, so compare who is near whom, not where.</p>
     <p class="explain">Perplexity sets roughly how many neighbours each person's position takes into account. Low values keep small, tight groups; higher values also arrange whole groups relative to each other. Compare Marie Curie at 10 and 30.</p>
+    <p class="explain note"><strong>Distance on the map is an approximation.</strong> Squeezing hundreds or thousands of dimensions into two can’t keep every distance, and t-SNE gives up long distances first. The neighbour lists and similarity scores above are computed on the full vectors. When the map and a list disagree about a pair, trust the list.</p>
     <div class="controls">
       <div class="switcher" id="switcher" role="group" aria-label="Model"></div>
       <div class="switcher" id="perplexity-switcher" role="group" aria-label="Perplexity"></div>
@@ -336,6 +339,26 @@ ${THEME_CSS}  body { margin: 0; }
           'On the ' + short(models[0]) + ' map, her 3 nearest points are women at every perplexity (' + perplexities + '), ' +
             'although Einstein is her ' + ['', '1st', '2nd', '3rd'][einsteinRank] + ' closest in the full embeddings. ' +
             'How far away he lands changes with the random start of the layout, so read the map for groups, not exact distances.',
+        ]);
+
+        // Why: her similarities are weak and flat, so the list and the map disagree
+        const sims = (i, name) => neighbours[i].get(name).map((n) => n.similarity);
+        const medianClosest = (i) => {
+          const best = [...neighbours[i].values()].map((ns) => ns[0].similarity).sort((a, b) => a - b);
+          const mid = best.length >> 1;
+          return best.length % 2 ? best[mid] : (best[mid - 1] + best[mid]) / 2;
+        };
+        const weakIn = models.filter((_, i) => sims(i, curie)[0] < medianClosest(i)).length;
+        const own = sims(0, curie);
+        addFinding('The list and the map answer different questions.', [
+          'Einstein is close to her only compared with everyone else. In ' + short(models[0]) + ', her closest similarity (' +
+            own[0].toFixed(2) + ') is below the median person’s closest (' + medianClosest(0).toFixed(2) + '), and that holds in ' +
+            (weakIn === models.length ? 'all ' + models.length : weakIn + ' of ' + models.length) + ' models. ' +
+            'Her 3 closest are within ' + (own[0] - own[own.length - 1]).toFixed(2) + ' of each other, so Einstein (' +
+            own[einsteinRank - 1].toFixed(2) + ') wins a close race for a top-3 place. ' +
+            'The list asks who her 3 most similar people are. The map places her by her whole neighbourhood, weighted by similarity ' +
+            '(perplexity sets roughly how many people that is), and there the many women just behind him outweigh him. ' +
+            'Use the numbers for a specific pair, and the map for the overall shape.',
         ]);
       } else {
         addFinding('Her nearest points on the map:', [
