@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Re-ranking Experiment</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --hairline: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.1);
+    --wash: rgba(11, 11, 11, 0.06);
+    --muted-mark: #c3c2b7;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --div-neg: #2a78d6;
+    --div-pos: #e34948;
+    --div-mid: #f0efec;
+    --code-bg: rgba(11, 11, 11, 0.04);
+    --mark-bg: rgba(42, 120, 214, 0.16);
+    --mark-alt-bg: rgba(235, 104, 52, 0.16);
+    --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #0d366b;
+    --seq-ink-1: #0b0b0b; --seq-ink-2: #0b0b0b; --seq-ink-3: #ffffff; --seq-ink-4: #ffffff; --seq-ink-5: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --hairline: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.1);
+      --wash: rgba(255, 255, 255, 0.08);
+      --muted-mark: #4a4a46;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --div-neg: #3987e5;
+      --div-pos: #e66767;
+      --div-mid: #383835;
+      --code-bg: rgba(255, 255, 255, 0.05);
+      --mark-bg: rgba(57, 135, 229, 0.28);
+      --mark-alt-bg: rgba(217, 89, 38, 0.3);
+      --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+      --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --border: rgba(255, 255, 255, 0.1);
+    --wash: rgba(255, 255, 255, 0.08);
+    --muted-mark: #4a4a46;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --div-neg: #3987e5;
+    --div-pos: #e66767;
+    --div-mid: #383835;
+    --code-bg: rgba(255, 255, 255, 0.05);
+    --mark-bg: rgba(57, 135, 229, 0.28);
+    --mark-alt-bg: rgba(217, 89, 38, 0.3);
+    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+    --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+  }
+  body { margin: 0; background: #f9f9f7; }
+  @media (prefers-color-scheme: dark) { body { background: #0d0d0d; } }
+  .viz-root { min-height: 100vh; background: var(--page); color: var(--text-primary); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; padding: 2rem 16px; box-sizing: border-box; }
+  main { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.1rem; margin: 0 0 0.6rem; }
+  p, li { color: var(--text-secondary); line-height: 1.55; }
+  p { margin: 0 0 0.75rem; }
+  b, strong { color: var(--text-primary); }
+  a { color: inherit; }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+  .card.key { border-left: 4px solid var(--series-1); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+  th, td { text-align: left; padding: 0.4rem 0.55rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  th { color: var(--text-secondary); font-weight: 600; }
+  .tnum { font-variant-numeric: tabular-nums; text-align: right; }
+  .table-wrap { overflow-x: auto; }
+  tr.ref td { color: var(--text-muted); }
+  td.kept { background: var(--mark-bg); font-weight: 700; }
+  .miss { color: var(--text-primary); font-weight: 600; }
+  .ok { color: var(--text-muted); }
+  .small { font-size: 0.78rem; }
+  .muted { color: var(--text-muted); }
+  ul { padding-left: 1.2rem; }
+  li { margin: 0.4rem 0; }
+  code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 0.85em; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<main>
+  <p><a href="comparison.html">← All retrieval strategies</a></p>
+  <h1>Re-ranking: scale, cap, or noise?</h1>
+  <p>The first re-rank runs scored candidates 0–3 and missed Stevie Wonder for the soul question. The guess was that too many chunks tied at 3, so search order decided. This experiment tested that with four runs: a 0–3 or a 0–100 scale, each with and without a cap of 2 chunks per artist after re-ranking. Each run saved the re-ranker’s score for all 30 candidates, not just the 6 kept.</p>
+
+  <section class="card key">
+    <h2>What it showed</h2>
+    <ul>
+      <li><strong>It wasn’t ties.</strong> In the 0–3 run without a cap, only 2 candidates scored 3. Stevie Wonder’s chunks, including his profile with its soul and Motown tags, scored 1. The re-ranker judged them weak.</li>
+      <li><strong>The re-ranker’s scores are mostly noise.</strong> The same chunks got very different scores in different runs (table below): Stevie Wonder’s profile got 1, 0, 30 and 70, and Marvin Gaye’s first chunk got 2, 2, 70 and 0. The re-ranker runs at the model’s default temperature, so each call samples different scores.</li>
+      <li><strong>The best run was luck.</strong> 0–100 with a cap scored highest, but only because that call happened to rate Stevie Wonder 70. In the 0–3 run with a cap, the last slot went to Frank Sinatra on a tie at <em>0</em> with Stevie Wonder, decided by search order.</li>
+      <li><strong>A cap of 2 can’t fit a 5-artist answer into 6 slots</strong> when the top artists’ second chunks outscore the others’ first. Kishore Kumar and Diljit Dosanjh were missing for Bollywood in every run.</li>
+      <li><strong>Yes/no probabilities didn’t help either.</strong> Tried first, as a probability-style score: <code>gpt-4o-mini</code> answered “true” with near-certainty for every relevant chunk, so those scores tied too.</li>
+      <li><strong>Next:</strong> set the re-ranker’s temperature to 0, and check its consistency by scoring the same candidates several times, before comparing scales or caps again.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Averages</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Run</th><th>Variant</th><th class="tnum">Recall</th><th class="tnum">Faithfulness</th><th class="tnum">Correctness</th><th class="tnum">Refusal right</th></tr></thead>
+      <tbody><tr><td>rerank-c</td><td>0–3</td><td class="tnum">0.93</td><td class="tnum">1.00</td><td class="tnum">0.89</td><td class="tnum">13/13</td></tr><tr><td>rerank-cap</td><td>0–3 + cap</td><td class="tnum">0.93</td><td class="tnum">1.00</td><td class="tnum">0.89</td><td class="tnum">12/13</td></tr><tr><td>rerank-100</td><td>0–100</td><td class="tnum">0.93</td><td class="tnum">0.97</td><td class="tnum">0.89</td><td class="tnum">13/13</td></tr><tr><td>rerank-100-cap</td><td>0–100 + cap</td><td class="tnum">0.96</td><td class="tnum">0.97</td><td class="tnum">0.94</td><td class="tnum">12/13</td></tr><tr class="ref"><td>top-k-a</td><td>reference</td><td class="tnum">0.90</td><td class="tnum">0.97</td><td class="tnum">0.83</td><td class="tnum">13/13</td></tr><tr class="ref"><td>two-per-artist</td><td>reference</td><td class="tnum">0.96</td><td class="tnum">1.00</td><td class="tnum">0.89</td><td class="tnum">12/13</td></tr><tr class="ref"><td>long-context-a</td><td>reference</td><td class="tnum">–</td><td class="tnum">1.00</td><td class="tnum">1.00</td><td class="tnum">12/13</td></tr></tbody>
+    </table></div>
+    <p class="small muted" style="margin-top:0.6rem">With 13 questions and a noisy re-ranker, these averages can’t rank the variants. The two tables below show why.</p>
+  </section>
+
+  <section class="card">
+    <h2>The same chunks, scored four times</h2>
+    <p>“Which classic soul or Motown singers are in the data?” Each row is one candidate chunk (its position in the search results), with the score each run’s re-ranker gave it. ✓ and blue: the chunk was kept.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Artist</th><th class="tnum">Search</th><th class="tnum">0–3</th><th class="tnum">0–3 + cap</th><th class="tnum">0–100</th><th class="tnum">0–100 + cap</th></tr></thead>
+      <tbody><tr><td>Marvin Gaye</td><td class="tnum">#1</td><td class="tnum kept">2 ✓</td><td class="tnum kept">2 ✓</td><td class="tnum kept">70 ✓</td><td class="tnum kept">0 ✓</td></tr><tr><td>Marvin Gaye</td><td class="tnum">#2</td><td class="tnum kept">3 ✓</td><td class="tnum kept">3 ✓</td><td class="tnum kept">100 ✓</td><td class="tnum kept">70 ✓</td></tr><tr><td>Marvin Gaye</td><td class="tnum">#3</td><td class="tnum kept">2 ✓</td><td class="tnum">2</td><td class="tnum kept">30 ✓</td><td class="tnum">0</td></tr><tr><td>Aretha Franklin</td><td class="tnum">#4</td><td class="tnum kept">2 ✓</td><td class="tnum kept">2 ✓</td><td class="tnum kept">70 ✓</td><td class="tnum kept">70 ✓</td></tr><tr><td>Aretha Franklin</td><td class="tnum">#5</td><td class="tnum kept">3 ✓</td><td class="tnum kept">3 ✓</td><td class="tnum kept">100 ✓</td><td class="tnum kept">70 ✓</td></tr><tr><td>Aretha Franklin</td><td class="tnum">#6</td><td class="tnum kept">2 ✓</td><td class="tnum">2</td><td class="tnum kept">30 ✓</td><td class="tnum">0</td></tr><tr><td>Marvin Gaye</td><td class="tnum">#7</td><td class="tnum">2</td><td class="tnum">2</td><td class="tnum">30</td><td class="tnum">0</td></tr><tr><td>Aretha Franklin</td><td class="tnum">#8</td><td class="tnum">2</td><td class="tnum">2</td><td class="tnum">30</td><td class="tnum">0</td></tr><tr><td>Aretha Franklin</td><td class="tnum">#9</td><td class="tnum">1</td><td class="tnum">1</td><td class="tnum">30</td><td class="tnum">0</td></tr><tr><td>Stevie Wonder</td><td class="tnum">#11</td><td class="tnum">1</td><td class="tnum">0</td><td class="tnum">30</td><td class="tnum kept">70 ✓</td></tr><tr><td>Stevie Wonder</td><td class="tnum">#12</td><td class="tnum">1</td><td class="tnum">0</td><td class="tnum">30</td><td class="tnum">0</td></tr><tr><td>Stevie Wonder</td><td class="tnum">#18</td><td class="tnum">1</td><td class="tnum">0</td><td class="tnum">30</td><td class="tnum kept">70 ✓</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>Which expected artists were missing</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Question</th><th>0–3</th><th>0–3 + cap</th><th>0–100</th><th>0–100 + cap</th></tr></thead>
+      <tbody><tr><td>Which artists in the data make Afrobeat or other African music?</td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td></tr><tr><td>Which K-pop groups are in the data?</td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td></tr><tr><td>Which Latin music artists are in the data?</td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td></tr><tr><td>Which artists are known for Indian film music or Bollywood?</td><td><span class="miss">✗ missing Kishore Kumar, Diljit Dosanjh</span><div class="small muted">answer: partial</div></td><td><span class="miss">✗ missing Kishore Kumar, Diljit Dosanjh</span><div class="small muted">answer: partial</div></td><td><span class="miss">✗ missing Kishore Kumar, Diljit Dosanjh</span><div class="small muted">answer: partial</div></td><td><span class="miss">✗ missing Kishore Kumar, Diljit Dosanjh</span><div class="small muted">answer: partial</div></td></tr><tr><td>Which classic soul or Motown singers are in the data?</td><td><span class="miss">✗ missing Stevie Wonder</span><div class="small muted">answer: partial</div></td><td><span class="miss">✗ missing Stevie Wonder</span><div class="small muted">answer: partial</div></td><td><span class="miss">✗ missing Stevie Wonder</span><div class="small muted">answer: partial</div></td><td><span class="ok">✓ all found</span><div class="small muted">answer: correct</div></td></tr></tbody>
+    </table></div>
+  </section>
+</main>
+</div>
+</body>
+</html>

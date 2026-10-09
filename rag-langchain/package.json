@@ -15,7 +15,8 @@
     "6-walkthrough": "tsx --env-file-if-exists=.env --no-deprecation src/6-walkthrough.ts",
     "7-evaluate": "tsx --env-file-if-exists=.env --no-deprecation src/7-evaluate.ts",
     "8-compare": "tsx --env-file-if-exists=.env --no-deprecation src/8-compare.ts",
-    "file": "tsx --env-file-if-exists=.env --no-deprecation"
+    "file": "tsx --env-file-if-exists=.env --no-deprecation",
+    "9-rerank-report": "tsx --env-file-if-exists=.env --no-deprecation src/9-rerank-report.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",

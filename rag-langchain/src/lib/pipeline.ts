@@ -196,7 +196,8 @@ export async function getVectorStore(): Promise<Chroma> {
 //   artists fit in, but a question about one artist gets fewer of its chunks.
 // - rerank: fetch more candidates, have an LLM score how useful each one is
 //   for the question, and keep the best. The search finds chunks that look
-//   like the question; the re-ranker reads them.
+//   like the question; the re-ranker reads them. rerank-cap, rerank-100 and
+//   rerank-100-cap vary the score scale and add a per-artist cap (RERANK).
 // - long-context: no search at all. Every artist's whole profile goes into
 //   the prompt (51 profiles, about 28k tokens), in the CSV's order. The
 //   baseline that shows whether retrieval helps.
@@ -205,6 +206,9 @@ export const STRATEGIES = [
   'two-per-artist',
   'one-per-artist',
   'rerank',
+  'rerank-cap',
+  'rerank-100',
+  'rerank-100-cap',
   'long-context',
 ] as const;
 export type RetrievalStrategy = (typeof STRATEGIES)[number];
@@ -219,12 +223,46 @@ const CANDIDATES = 30;
 export const RERANK_MODEL = 'openai/gpt-4o-mini';
 let reranker: ReturnType<typeof initChatModel> | undefined;
 
-// One call scores every candidate 0-3. Sorted by score, ties keep their
-// search order. The score is kept in metadata.rerank_score for the pages.
+// The re-rank variants: the score scale, and an optional per-artist cap
+// applied after re-ranking. On 0-3, several chunks often share the top
+// score and the search order breaks the tie; 0-100 makes ties rare.
+// (Yes/no token probabilities were tried first, but gpt-4o-mini is so
+// sure of itself that they tie too.)
+const RERANK: Record<string, { scale: 3 | 100; cap?: number }> = {
+  rerank: { scale: 3 },
+  'rerank-cap': { scale: 3, cap: 2 },
+  'rerank-100': { scale: 100 },
+  'rerank-100-cap': { scale: 100, cap: 2 },
+};
+
+const RUBRIC = {
+  3: `3 = it directly answers the question or names an artist the question asks for, with the facts needed
+2 = relevant, but only part of the answer
+1 = loosely related
+0 = not useful`,
+  100: `100 = it directly answers the question or names an artist the question asks for, with the facts needed
+around 70 = relevant, but only part of the answer
+around 30 = loosely related
+0 = not useful
+Use any whole number from 0 to 100. When two chunks aren't equally useful, give them different scores.`,
+};
+
+// Every candidate the re-ranker scored, for the pages
+export type Candidate = {
+  searchRank: number;
+  artist: string;
+  score: number;
+  kept: boolean;
+};
+export type Retrieved = [Document, number][] & { candidates?: Candidate[] };
+
+// One call scores every candidate. Sorted by score, ties keep their search
+// order. The score is kept in metadata.rerank_score for the pages.
 async function rerank(
   question: string,
   candidates: [Document, number][],
-): Promise<[Document, number][]> {
+  scale: 3 | 100,
+): Promise<{ hit: [Document, number]; score: number; searchRank: number }[]> {
   reranker ??= initChatModel(RERANK_MODEL, {
     modelProvider: 'openai',
     ...openRouterConfig,
@@ -233,7 +271,7 @@ async function rerank(
     scores: z.array(
       z.object({
         chunk: z.number().describe('The chunk number'),
-        score: z.number().int().min(0).max(3),
+        score: z.number().int().min(0).max(scale),
       }),
     ),
   });
@@ -241,10 +279,7 @@ async function rerank(
     await reranker
   ).withStructuredOutput(schema, { name: 'score_chunks' })
     .invoke(`Score how useful each chunk is for answering the question.
-3 = it directly answers the question or names an artist the question asks for, with the facts needed
-2 = relevant, but only part of the answer
-1 = loosely related
-0 = not useful
+${RUBRIC[scale]}
 Score every chunk, by its number.
 
 Question: ${question}
@@ -253,59 +288,88 @@ ${candidates.map(([doc], i) => `[${i + 1}] ${doc.pageContent}`).join('\n\n')}`);
   const { scores } = schema.parse(raw);
   const scoreOf = new Map(scores.map((s) => [s.chunk, s.score]));
   return candidates
-    .map(([doc, distance], i) => ({
-      hit: [
-        new Document({
-          ...doc,
-          // A chunk the re-ranker skipped counts as not useful
-          metadata: { ...doc.metadata, rerank_score: scoreOf.get(i + 1) ?? 0 },
-        }),
-        distance,
-      ] as [Document, number],
-      score: scoreOf.get(i + 1) ?? 0,
-      i,
-    }))
-    .sort((a, b) => b.score - a.score || a.i - b.i)
-    .map((x) => x.hit);
+    .map(([doc, distance], i) => {
+      // A chunk the re-ranker skipped counts as not useful
+      const score = scoreOf.get(i + 1) ?? 0;
+      const scored = new Document({
+        ...doc,
+        metadata: { ...doc.metadata, rerank_score: score },
+      });
+      return {
+        hit: [scored, distance] as [Document, number],
+        score,
+        searchRank: i + 1,
+      };
+    })
+    .sort((a, b) => b.score - a.score || a.searchRank - b.searchRank);
 }
+
+// Keep hits in order, allowing at most `cap` chunks per artist
+function capPerArtist<T>(
+  items: T[],
+  artistOf: (item: T) => string,
+  cap: number,
+  k: number,
+): T[] {
+  const perArtist = new Map<string, number>();
+  const kept: T[] = [];
+  for (const item of items) {
+    const artist = artistOf(item);
+    const count = perArtist.get(artist) ?? 0;
+    if (count >= cap) continue;
+    perArtist.set(artist, count + 1);
+    kept.push(item);
+    if (kept.length === k) break;
+  }
+  return kept;
+}
+
+const artistOfHit = (hit: [Document, number]) =>
+  String(hit[0].metadata.artist_name);
 
 export async function retrieve(
   vectorStore: Chroma,
   question: string,
   strategy: RetrievalStrategy = 'top-k',
   k = RAG_K,
-): Promise<[Document, number][]> {
+): Promise<Retrieved> {
   if (strategy === 'top-k') {
     return vectorStore.similaritySearchWithScore(question, k);
-  }
-  if (strategy === 'rerank') {
-    const candidates = await vectorStore.similaritySearchWithScore(
-      question,
-      CANDIDATES,
-    );
-    return (await rerank(question, candidates)).slice(0, k);
   }
   if (strategy === 'long-context') {
     // No search, so no distance: NaN marks "not searched"
     allProfiles ??= loadArtistDocuments();
     return (await allProfiles).map((doc) => [doc, NaN]);
   }
-  const cap = PER_ARTIST_CAP[strategy];
   const candidates = await vectorStore.similaritySearchWithScore(
     question,
     CANDIDATES,
   );
-  const perArtist = new Map<string, number>();
-  const kept: [Document, number][] = [];
-  for (const hit of candidates) {
-    const artist = String(hit[0].metadata.artist_name);
-    const count = perArtist.get(artist) ?? 0;
-    if (count >= cap) continue;
-    perArtist.set(artist, count + 1);
-    kept.push(hit);
-    if (kept.length === k) break;
+  const variant = RERANK[strategy];
+  if (variant) {
+    const ranked = await rerank(question, candidates, variant.scale);
+    const kept = variant.cap
+      ? capPerArtist(ranked, (r) => artistOfHit(r.hit), variant.cap, k)
+      : ranked.slice(0, k);
+    const keptSet = new Set(kept);
+    return Object.assign(
+      kept.map((r) => r.hit),
+      {
+        candidates: ranked.map((r) => ({
+          searchRank: r.searchRank,
+          artist: artistOfHit(r.hit),
+          score: r.score,
+          kept: keptSet.has(r),
+        })),
+      },
+    );
   }
-  return kept;
+  return capPerArtist(
+    candidates,
+    artistOfHit,
+    PER_ARTIST_CAP[strategy as keyof typeof PER_ARTIST_CAP],
+    k,
+  );
 }
 
 // ---------------------------------------------------------------------------

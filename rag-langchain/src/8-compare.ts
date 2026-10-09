@@ -22,10 +22,15 @@ import { STRATEGIES, type RetrievalStrategy } from './lib/pipeline.ts';
 const RUNS_DIR = 'output/eval-runs';
 const PAGE = `${RUNS_DIR}/comparison.html`;
 
+// The re-rank variants have their own report (stage 9), so they don't
+// crowd this page
+const VARIANTS = new Set(['rerank-cap', 'rerank-100', 'rerank-100-cap']);
+
 const runs: EvalRun[] = fs
   .readdirSync(RUNS_DIR)
   .filter((file) => file.endsWith('.json'))
   .map((file) => JSON.parse(fs.readFileSync(`${RUNS_DIR}/${file}`, 'utf8')))
+  .filter((run: EvalRun) => !VARIANTS.has(run.config.strategy))
   // Grouped by strategy (in pipeline order), oldest first within each, so
   // the first run of each strategy is the one drawn filled
   .sort(

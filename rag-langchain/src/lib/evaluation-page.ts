@@ -11,6 +11,13 @@ export type QuestionResult = {
   expectedArtists?: string[];
   reference?: string;
   shouldRefuse: boolean;
+  // Re-rank strategies: every candidate the re-ranker scored, best first
+  candidates?: {
+    searchRank: number;
+    artist: string;
+    score: number;
+    kept: boolean;
+  }[];
   // distance is null when there was no search (long-context)
   retrieved: {
     rank: number;
