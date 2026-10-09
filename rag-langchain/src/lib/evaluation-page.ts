@@ -63,6 +63,8 @@ export type EvalRun = {
     k: number;
     chunkSize: number;
     chunkOverlap: number;
+    // Re-rank runs from the temperature experiment on; earlier ones used 1
+    rerankTemperature?: number;
   };
   seconds: number;
   results: QuestionResult[];

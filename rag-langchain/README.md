@@ -14,7 +14,7 @@ These pages come from the latest run. They're committed in `output/` and publish
   - [two-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/two-per-artist.html)
   - [one-per-artist](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/one-per-artist.html)
   - [rerank-a](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-a.html), [rerank-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-b.html) and [rerank-c](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-c.html) (30 candidates, an LLM keeps the best 6)
-  - [The re-ranking experiment](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-experiment.html): score scale × per-artist cap, and why the answer turned out to be noise
+  - [The re-ranking experiment](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-experiment.html): score scale × per-artist cap × temperature, and why scoring 30 chunks in one call is the real problem
   - [long-context-a](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/long-context-a.html) and [long-context-b](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/long-context-b.html) (no retrieval: the baseline)
 
 ## Setup
@@ -38,7 +38,8 @@ Run the stages in order. Each one reuses the earlier stages from `src/lib/pipeli
 | `npm run 6-walkthrough -- "question"` | The whole pipeline, one question | Writes `output/walkthrough.html`. It follows one real question through all 12 steps, with the data each step produced: CSV row, Document, chunks (overlap marked), the vector as a colour strip, the search with the cut-off, how the #1 score adds up, the filled prompt, token counts and the answer. |
 | `npm run 7-evaluate` | Evaluating the pipeline | Runs the 13 questions in `data/eval_questions.json` through the pipeline and scores retrieval (context recall and precision, no LLM) and answers (faithfulness, answer relevancy, correctness, refusal) with `gemini-2.5-flash` as judge. Choose how chunks are picked with `-- --strategy top-k`, `two-per-artist` or `one-per-artist`, re-rank with `rerank`, or skip retrieval with `long-context`, and name the run with `-- --name`. Each run is saved as `output/eval-runs/<name>.json` with its own page. `-- --render` rebuilds the pages without API calls. |
 | `npm run 8-compare` | Comparing runs | Writes `output/eval-runs/comparison.html` from every saved run: average scores as a dot plot with a noise band, a question-by-question grid, and which artists each strategy retrieved. No API calls. |
-| `npm run 9-rerank-report` | The re-ranking experiment | Writes `output/eval-runs/rerank-experiment.html` from the four re-rank variant runs: averages, the scores the same candidates got in each run, and which expected artists were missing. No API calls. |
+| `npm run 9-rerank-consistency` | Re-ranker repeatability | Scores the same 30 candidates 3 times per scale and temperature, and the expected artists' profile chunks on their own. Writes `output/rerank-consistency.json`. About 60 re-ranker calls. |
+| `npm run 9-rerank-report` | The re-ranking experiment | Writes `output/eval-runs/rerank-experiment.html` from the eight re-rank variant runs and the repeatability check: chunks scored alone and in the batch, repeatability, averages, the soul candidates' scores in each run, and which expected artists were missing. No API calls. |
 | `npm run reindex` | Rebuild the index | Drops the collection and embeds everything again. |
 
 ## How it flows
@@ -170,29 +171,30 @@ The `rerank` strategy fetches the 30 nearest chunks, the same pool the per-artis
 | rerank (b) | 0.93 | 1.00 | 0.63 | 0.89 | 11/13 |
 
 - **It fixed crowding where the re-ranker could read the evidence.** For "Latin artists", Shakira was in the 30 candidates but too far down for top-k. The re-ranker read her tags and kept her in both runs, and the answer became correct.
-- **Stevie Wonder was missing for soul.** The first explanation here was ties: too many chunks scoring 3, with search order breaking the tie. [The follow-up experiment](#re-ranking-scale-cap-or-noise) showed that was wrong: the re-ranker scored his chunks low.
+- **Stevie Wonder was missing for soul.** The first explanation here was ties: too many chunks scoring 3, with search order breaking the tie. [The follow-up experiment](#re-ranking-scale-cap-temperature-or-the-batch) showed that was wrong: the re-ranker scored his chunks low.
 - **It can drop what a question needs.** In both runs no JAŸ-Z chunk was kept for the hip hop + R&B question, although top-k had three of his chunks in its 6. The kept chunks went to Kendrick Lamar, Rihanna, Beyoncé and Drake. The answers stayed reasonable, but they named different artists.
 - **The re-ranker adds its own noise.** The same question got different scores and different chunks between runs: for afrobeat, run a kept 3 Fela Kuti chunks, all scored 3, and run b kept 2 each of Fela Kuti, Burna Boy and Wizkid, scored 3, 3, 3, 1, 1, 1. rerank-b's refusal failures are the judge reading "I don't know about any others" caveats as declining.
 - **Still below long context.** At 0.89 it ties the best per-artist cap, while putting every profile in the prompt reached 1.00 and 0.89. It costs one extra call per question with about 24,000 characters of candidates, a quarter of long context's input.
 
-## Re-ranking: scale, cap, or noise?
+## Re-ranking: scale, cap, temperature, or the batch?
 
 **[Open the experiment report](https://derykhopley.github.io/tc-ai-experiments/rag-langchain/output/eval-runs/rerank-experiment.html)**
 
-To test the ties explanation, four runs on 2026-10-09 crossed two score scales (0–3 and 0–100) with and without a cap of 2 chunks per artist after re-ranking. Each run saved the re-ranker's score for all 30 candidates. First, yes/no token probabilities were tried as a continuous score, in the spirit of probability-based re-rankers, but `gpt-4o-mini` answered "true" with near-certainty for every relevant chunk, so they tied too.
+To test the ties explanation, runs on 2026-10-09 crossed two score scales (0–3 and 0–100) with and without a cap of 2 chunks per artist after re-ranking, first at the re-ranker's default temperature (1), then at 0. Every run saved the re-ranker's score for all 30 candidates. `npm run 9-rerank-consistency` then scored the same candidates 3 times per setting, and scored the expected artists' profile chunks on their own. Before all this, yes/no token probabilities were tried as a continuous score, in the spirit of probability-based re-rankers, but `gpt-4o-mini` answered "true" with near-certainty for every relevant chunk, so they tied too.
 
-| Run | Variant | Recall | Faithfulness | Correctness | Refusal right |
-| --- | --- | --- | --- | --- | --- |
-| rerank-c | 0–3 | 0.93 | 1.00 | 0.89 | 13/13 |
-| rerank-cap | 0–3, cap 2 | 0.93 | 1.00 | 0.89 | 12/13 |
-| rerank-100 | 0–100 | 0.93 | 0.97 | 0.89 | 13/13 |
-| rerank-100-cap | 0–100, cap 2 | 0.96 | 0.97 | 0.94 | 12/13 |
+| Variant | Recall (temp 1 / 0) | Correctness (temp 1 / 0) | Stevie Wonder kept (temp 1 / 0) |
+| --- | --- | --- | --- |
+| 0–3 | 0.93 / 0.90 | 0.89 / 0.83 | no / no |
+| 0–3, cap 2 | 0.93 / 0.96 | 0.89 / 0.89 | no / yes |
+| 0–100 | 0.93 / 0.93 | 0.89 / 0.89 | no / no |
+| 0–100, cap 2 | 0.96 / 0.96 | 0.94 / 0.89 | yes / yes |
+| two-per-artist (no re-ranking) | 0.96 | 0.89 | yes |
 
-- **It wasn't ties.** In the 0–3 run without a cap, only 2 candidates scored 3. All three of Stevie Wonder's chunks scored 1, including his profile, whose tags include soul and motown.
-- **The re-ranker's scores are mostly noise.** The same chunks got very different scores in each run: Stevie Wonder's profile got 1, 0, 30 and 70; Marvin Gaye's first chunk got 2, 2, 70 and 0. The re-ranker ran at the model's default temperature, so every call samples different scores.
-- **The best run was luck.** 0–100 with a cap found Stevie Wonder only because that call happened to score him 70. In the 0–3 run with a cap, the last slot went to Frank Sinatra on a tie at 0 with Stevie Wonder, decided by search order.
-- **A cap of 2 can't fit a 5-artist answer into 6 slots** when the top artists' second chunks outscore the others' first. Kishore Kumar and Diljit Dosanjh were missing for Bollywood in every run.
-- **So the scale-versus-cap question is still open.** The next step is to set the re-ranker's temperature to 0, and score the same candidates several times to measure its consistency, before comparing scales or caps again.
+- **The batch is the problem.** Scored on its own, Stevie Wonder's profile chunk (tags: soul, motown) scores 3/3 and 100/100 every time. Scored as candidate 18 in a batch of 30, it gets 0 or 1. Chunks near the top of the search results score the same both ways; Kishore Kumar's profile (candidate 11) also drops, from 3 to 2 and from 100 to 70. Scoring 30 chunks in one call is too much for this model: it underrates what's further down the list.
+- **It wasn't ties, and temperature 1 made it noisy.** At temperature 1 the same chunks got very different scores in each run (Stevie Wonder's profile: 1, 0, 30 and 70), and the best run (0–100 with a cap, correctness 0.94) won by luck. Temperature 0 isn't a full fix: on 0–100 the scores were identical in every repeat, but on 0–3 the soul candidates were *less* repeatable than at temperature 1. Stable isn't the same as good either: at temperature 0, plain 0–3 lost Shakira for the Latin question.
+- **At temperature 0, the scale doesn't matter and the cap does all the work.** Both capped variants match two-per-artist exactly. The re-ranker still scored Stevie Wonder 0 or 1; the cap only let his chunks in because it pushed out Marvin Gaye's and Aretha Franklin's extra chunks. In this setup the re-ranker adds nothing over a plain cap.
+- **A cap of 2 can't fit a 5-artist answer into 6 slots.** Kishore Kumar and Diljit Dosanjh were missing for Bollywood in every run. Diljit Dosanjh scores low even on his own (his tags are punjabi and bhangra), which is a fair call.
+- **Next:** score each candidate in its own call (pointwise), the way cross-encoders and probability-based re-rankers work: 30 small calls per question instead of one large one.
 
 ## Long context: no retrieval at all
 

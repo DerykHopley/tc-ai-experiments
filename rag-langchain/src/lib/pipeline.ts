@@ -221,14 +221,18 @@ const CANDIDATES = 30;
 // The re-ranker: a different model from the answering one and the judge,
 // so the judge isn't also choosing what the answer is based on
 export const RERANK_MODEL = 'openai/gpt-4o-mini';
-let reranker: ReturnType<typeof initChatModel> | undefined;
+// Temperature 0 makes the scores (nearly) repeatable. The first re-rank runs
+// used the default (1), and the same chunk's score swung from 0 to 70
+// between calls. Older runs without rerankTemperature in their config used 1.
+export const RERANK_TEMPERATURE = 0;
+const rerankers = new Map<number, ReturnType<typeof initChatModel>>();
 
 // The re-rank variants: the score scale, and an optional per-artist cap
 // applied after re-ranking. On 0-3, several chunks often share the top
 // score and the search order breaks the tie; 0-100 makes ties rare.
 // (Yes/no token probabilities were tried first, but gpt-4o-mini is so
 // sure of itself that they tie too.)
-const RERANK: Record<string, { scale: 3 | 100; cap?: number }> = {
+export const RERANK: Record<string, { scale: 3 | 100; cap?: number }> = {
   rerank: { scale: 3 },
   'rerank-cap': { scale: 3, cap: 2 },
   'rerank-100': { scale: 100 },
@@ -258,15 +262,23 @@ export type Retrieved = [Document, number][] & { candidates?: Candidate[] };
 
 // One call scores every candidate. Sorted by score, ties keep their search
 // order. The score is kept in metadata.rerank_score for the pages.
-async function rerank(
+export async function rerank(
   question: string,
   candidates: [Document, number][],
   scale: 3 | 100,
+  temperature = RERANK_TEMPERATURE,
 ): Promise<{ hit: [Document, number]; score: number; searchRank: number }[]> {
-  reranker ??= initChatModel(RERANK_MODEL, {
-    modelProvider: 'openai',
-    ...openRouterConfig,
-  });
+  if (!rerankers.has(temperature)) {
+    rerankers.set(
+      temperature,
+      initChatModel(RERANK_MODEL, {
+        modelProvider: 'openai',
+        temperature,
+        ...openRouterConfig,
+      }),
+    );
+  }
+  const reranker = rerankers.get(temperature)!;
   const schema = z.object({
     scores: z.array(
       z.object({

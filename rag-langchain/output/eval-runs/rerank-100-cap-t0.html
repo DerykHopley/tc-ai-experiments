@@ -1,0 +1,2374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RAG Evaluation</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --hairline: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.1);
+    --wash: rgba(11, 11, 11, 0.06);
+    --muted-mark: #c3c2b7;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --div-neg: #2a78d6;
+    --div-pos: #e34948;
+    --div-mid: #f0efec;
+    --code-bg: rgba(11, 11, 11, 0.04);
+    --mark-bg: rgba(42, 120, 214, 0.16);
+    --mark-alt-bg: rgba(235, 104, 52, 0.16);
+    --seq-1: #86b6ef; --seq-2: #5598e7; --seq-3: #2a78d6; --seq-4: #1c5cab; --seq-5: #0d366b;
+    --seq-ink-1: #0b0b0b; --seq-ink-2: #0b0b0b; --seq-ink-3: #ffffff; --seq-ink-4: #ffffff; --seq-ink-5: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --hairline: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.1);
+      --wash: rgba(255, 255, 255, 0.08);
+      --muted-mark: #4a4a46;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --div-neg: #3987e5;
+      --div-pos: #e66767;
+      --div-mid: #383835;
+      --code-bg: rgba(255, 255, 255, 0.05);
+      --mark-bg: rgba(57, 135, 229, 0.28);
+      --mark-alt-bg: rgba(217, 89, 38, 0.3);
+      --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+      --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --hairline: #2c2c2a;
+    --border: rgba(255, 255, 255, 0.1);
+    --wash: rgba(255, 255, 255, 0.08);
+    --muted-mark: #4a4a46;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --div-neg: #3987e5;
+    --div-pos: #e66767;
+    --div-mid: #383835;
+    --code-bg: rgba(255, 255, 255, 0.05);
+    --mark-bg: rgba(57, 135, 229, 0.28);
+    --mark-alt-bg: rgba(217, 89, 38, 0.3);
+    --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #9ec5f4;
+    --seq-ink-1: #ffffff; --seq-ink-2: #ffffff; --seq-ink-3: #0b0b0b; --seq-ink-4: #0b0b0b; --seq-ink-5: #0b0b0b;
+  }
+  body { margin: 0; background: #f9f9f7; }
+  @media (prefers-color-scheme: dark) { body { background: #0d0d0d; } }
+  .viz-root { min-height: 100vh; background: var(--page); color: var(--text-primary); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; padding: 2rem 16px; box-sizing: border-box; }
+  main { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  .back { margin: 0 0 0.5rem; font-size: 0.85rem; }
+  .back a { color: var(--text-secondary); }
+  h2 { font-size: 1.1rem; margin: 0 0 0.5rem; }
+  h3 { font-size: 1.1rem; margin: 0.1rem 0 0.5rem; }
+  h4 { font-size: 0.9rem; margin: 1rem 0 0.4rem; }
+  p { color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.6rem; }
+  .muted { color: var(--text-secondary); }
+  .small { font-size: 0.8rem; font-weight: 400; }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0; }
+  .chip { font-size: 0.8rem; color: var(--text-secondary); border: 1px solid var(--hairline); border-radius: 999px; padding: 0.15rem 0.6rem; }
+  .chip b { color: var(--text-primary); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+  .tile { border: 1px solid var(--hairline); border-radius: 10px; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.15rem; }
+  .tile b { font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+  .tile .name { font-weight: 600; font-size: 0.9rem; }
+  .tile .kind { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .tile small { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; }
+  .tile .n { color: var(--text-muted); white-space: nowrap; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  thead th { color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; }
+  .matrix { border-collapse: separate; border-spacing: 2px; }
+  .matrix td, .matrix th { border-bottom: none; }
+  .matrix thead th { vertical-align: bottom; }
+  .matrix .cell { text-align: center; vertical-align: middle; font-variant-numeric: tabular-nums; border-radius: 4px; min-width: 76px; font-size: 0.8rem; }
+  .matrix .na { color: var(--text-muted); background: var(--wash); }
+  .matrix th.q { font-weight: 400; max-width: 340px; }
+  .group-row th { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding-top: 0.8rem; }
+  .qrow { cursor: pointer; }
+  .qrow:hover th.q, .qrow:focus th.q { text-decoration: underline; }
+  .qrow.selected th.q { font-weight: 700; }
+  .qrow:focus { outline: 2px solid var(--series-1); outline-offset: 1px; }
+  .ramp { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.6rem; flex-wrap: wrap; }
+  .ramp span.sw { width: 26px; height: 12px; border-radius: 3px; display: inline-block; }
+  .group { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  pre { white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, Menlo, monospace; font-size: 0.78rem; background: var(--code-bg); border-radius: 8px; padding: 0.6rem; margin: 0.3rem 0; }
+  pre.answer { font-family: inherit; font-size: 0.9rem; }
+  details.chunk { border: 1px solid var(--hairline); border-radius: 6px; padding: 0.3rem 0.5rem; margin-top: 0.3rem; font-size: 0.85rem; }
+  details.chunk summary { cursor: pointer; }
+  .rank { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .dist { float: right; color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+  .tag { font-size: 0.7rem; border: 1px solid var(--hairline); border-radius: 999px; padding: 0 0.4rem; color: var(--text-muted); }
+  .tag.yes { border-color: var(--series-1); color: var(--text-primary); }
+  td.ok { white-space: nowrap; }
+  td.bad { white-space: nowrap; font-weight: 700; }
+  .tnum { font-variant-numeric: tabular-nums; }
+  .label { font-weight: 600; color: var(--text-primary); }
+  ul.plain { list-style: none; padding: 0; margin: 0; font-size: 0.85rem; }
+  ul.plain li { padding: 0.2rem 0; }
+  ul.plain .tnum { display: inline-block; width: 3rem; color: var(--text-secondary); }
+  .notes li { color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<main>
+  <p class="back"><a href="comparison.html">← Compare all runs</a></p>
+  <h1>Evaluating the RAG pipeline</h1>
+  <p>13 test questions, each run through the real pipeline and scored. Retrieval is scored with plain arithmetic. The answers are scored by a second LLM acting as judge, using metrics modelled on <a href="https://docs.ragas.io">Ragas</a>.</p>
+  <div class="chips">
+    <span class="chip">answers <b>openai/gpt-5-mini</b></span>
+    <span class="chip">judge <b>google/gemini-2.5-flash</b></span>
+    <span class="chip">embeddings <b>openai/text-embedding-3-small</b></span>
+    <span class="chip">run <b>rerank-100-cap-t0</b></span>
+    <span class="chip">retrieval <b>rerank-100-cap</b>, top <b>6</b> chunks</span>
+    <span class="chip">chunks <b>800</b> chars, <b>100</b> overlap</span>
+    <span class="chip">run <b>2026-10-09 14:34</b> UTC · 87 s</span>
+  </div>
+
+  <section class="card">
+    <h2>Averages</h2>
+    <div class="tiles"><div class="tile">
+  <span class="kind">retrieval</span>
+  <b>0.96</b>
+  <span class="name">Context recall</span>
+  <small>Share of the expected artists that appear in the retrieved chunks. No LLM. <span class="n">n = 10</span></small>
+</div><div class="tile">
+  <span class="kind">retrieval</span>
+  <b>1.00</b>
+  <span class="name">Context precision</span>
+  <small>Are the chunks from expected artists ranked near the top? Rank-weighted. No LLM. <span class="n">n = 10</span></small>
+</div><div class="tile">
+  <span class="kind">generation</span>
+  <b>1.00</b>
+  <span class="name">Faithfulness</span>
+  <small>Share of the answer’s claims that the retrieved chunks back up. Judge splits the answer into claims, then checks each. <span class="n">n = 10</span></small>
+</div><div class="tile">
+  <span class="kind">generation</span>
+  <b>0.63</b>
+  <span class="name">Answer relevancy</span>
+  <small>Judge writes 3 questions the answer would fit; their embedding similarity to the real question. 0 if evasive. <span class="n">n = 10</span></small>
+</div><div class="tile">
+  <span class="kind">generation</span>
+  <b>0.89</b>
+  <span class="name">Correctness</span>
+  <small>Judge compares the answer with our reference answer: correct 1, partial 0.5, incorrect 0. <span class="n">n = 9</span></small>
+</div><div class="tile">
+  <span class="kind">generation</span>
+  <b>12/13</b>
+  <span class="name">Refusal</span>
+  <small>Did it refuse exactly when it should? Out-of-scope questions should be refused; answerable ones not. <span class="n">n = 13</span></small>
+</div></div>
+  </section>
+
+  <section class="card">
+    <h2>Every question, every metric</h2>
+    <p>Darker is better. “–” means the metric doesn’t apply: no expected artists, no reference answer, or a question that should be refused. Select a question to see what the judge saw and decided.</p>
+    <div class="table-wrap"><table class="matrix">
+      <thead><tr><th>Question</th><th>Context recall</th><th>Context precision</th><th>Faithfulness</th><th>Answer relevancy</th><th>Correctness</th><th>Refusal</th></tr></thead>
+      <tbody><tr class="group-row"><th colspan="7">genre</th></tr><tr class="qrow" data-id="afrobeat" tabindex="0"><th class="q">Which artists in the data make Afrobeat or other African music?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-3);color:var(--seq-ink-3)">0.48</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="kpop" tabindex="0"><th class="q">Which K-pop groups are in the data?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-3);color:var(--seq-ink-3)">0.58</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="latin" tabindex="0"><th class="q">Which Latin music artists are in the data?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">0.87</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="bollywood" tabindex="0"><th class="q">Which artists are known for Indian film music or Bollywood?</th><td class="cell" style="background:var(--seq-4);color:var(--seq-ink-4)">0.60</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-4);color:var(--seq-ink-4)">0.79</td><td class="cell" style="background:var(--seq-3);color:var(--seq-ink-3)">0.50</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="soul" tabindex="0"><th class="q">Which classic soul or Motown singers are in the data?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">0.97</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">0.83</td><td class="cell" style="background:var(--seq-3);color:var(--seq-ink-3)">0.50</td><td class="cell" style="background:var(--seq-1);color:var(--seq-ink-1)">fail · refused</td></tr><tr class="group-row"><th colspan="7">open</th></tr><tr class="qrow" data-id="hiphop-rnb" tabindex="0"><th class="q">Which artists blend hip hop with R&amp;B, and what are some of their albums?</th><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-2);color:var(--seq-ink-2)">0.37</td><td class="cell na" title="Not applicable">–</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="group-row"><th colspan="7">fact</th></tr><tr class="qrow" data-id="zombie" tabindex="0"><th class="q">In what year did Fela Kuti release Zombie?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">0.83</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="stromae" tabindex="0"><th class="q">Which country is Stromae from?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-2);color:var(--seq-ink-2)">0.21</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="adele-21" tabindex="0"><th class="q">When did Adele release 21?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-4);color:var(--seq-ink-4)">0.74</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="qrow" data-id="daft-punk" tabindex="0"><th class="q">Where are Daft Punk from, and since when have they been active?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-3);color:var(--seq-ink-3)">0.60</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · answered</td></tr><tr class="group-row"><th colspan="7">trap</th></tr><tr class="qrow" data-id="grammys" tabindex="0"><th class="q">How many Grammy awards has Beyoncé won?</th><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">1.00</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · refused</td></tr><tr class="group-row"><th colspan="7">out-of-scope</th></tr><tr class="qrow" data-id="australia" tabindex="0"><th class="q">What is the capital of Australia?</th><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · refused</td></tr><tr class="qrow" data-id="world-cup" tabindex="0"><th class="q">Who won the 2018 FIFA World Cup?</th><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell na" title="Not applicable">–</td><td class="cell" style="background:var(--seq-5);color:var(--seq-ink-5)">pass · refused</td></tr></tbody>
+    </table></div>
+    <div class="ramp">score <span class="sw" style="background:var(--seq-1)"></span>0–0.2 <span class="sw" style="background:var(--seq-2)"></span>0.2–0.4 <span class="sw" style="background:var(--seq-3)"></span>0.4–0.6 <span class="sw" style="background:var(--seq-4)"></span>0.6–0.8 <span class="sw" style="background:var(--seq-5)"></span>0.8–1</div>
+  </section>
+
+  <section class="card detail" id="detail-afrobeat" hidden>
+  <p class="group">genre</p>
+  <h3>Which artists in the data make Afrobeat or other African music?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">7.4 s · 886 output tokens</span></h4>
+      <pre class="answer">Artists used: Fela Kuti; Burna Boy; Wizkid
+
+- Fela Kuti — tags include &quot;afrobeat&quot;, &quot;afro-beat&quot;, &quot;nigerian&quot;, &quot;african&quot; (also &quot;jazz&quot;, &quot;world&quot;, &quot;jazz-funk&quot;, &quot;jùjú&quot;).
+- Burna Boy — tags include &quot;afrobeat&quot;, &quot;afrobeats&quot;, &quot;afro fusion&quot; (also &quot;reggae&quot;, &quot;dancehall&quot;); description: &quot;Nigerian...&quot;
+- Wizkid — tags include &quot;afrobeat&quot;, &quot;afropop&quot;, &quot;afrobeats&quot;; description: &quot;Nigerian singer and songwriter.&quot;</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides the names of artists who make Afrobeat or other African music, along with supporting tags and descriptions.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> Fela Kuti, Burna Boy and Wizkid, all from Nigeria.</p>
+<p class="muted">The answer identifies the correct artists and provides additional supporting details that align with the reference.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Fela Kuti, Burna Boy, Wizkid</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Fela Kuti <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.478</span></summary>
+  <pre>Artist: Fela Kuti
+Type: Person
+Country: NG (Nigeria)
+Active since: 1938-10-15
+Tags: jazz; world; jazz-funk; afrobeat; nigerian; african; afro-beat; jùjú
+Also known as: フェラ・クティ; Fela Ransome Kuti; Fela Anikulapo-kuti; Fela Anikulapo Kuti; Olufela Olusegun Oludotun Ransome-Kuti; Fela &amp; Egypt 80; Fela and Africa 70; Fela Anikulapo Kuti &amp; Africa '70; Fela
+Releases:
+- Fela Ransome Kuti and His Koola Lobitos (1965)
+- Fela Fela Fela (1969)
+- Afro Beat Live (1969)
+- Black man's cry (1970)
+- Live! (1971)
+- Open &amp; Close (1971)
+- Na Poi (1971)
+- Na Fight - O ! Part I &amp; II (1971)
+- Fela’s London Scene (1971)
+- Why Black Man Dey Suffer (1971)
+- Shakara (1972)
+- Roforofo Fight (1972)
+- Beggar's Song (Orin Alagbe) 1 &amp; 2 (1972)
+- Afrodisiac (1973)
+- Gentleman (1973)
+- Alagbon Close (1974)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Burna Boy <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.555</span></summary>
+  <pre>Artist: Burna Boy
+Type: Person
+Country: NG (Nigeria)
+Description: Nigerian rapper, singer-songwriter, and record producer
+Active since: 1991-07-02
+Tags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion
+Also known as: Damini Ogulu; Damini Ebunoluwa Ogulu
+Releases:
+- Best of Burn Series, Vol. 1 (2011)
+- Like to Party (2012)
+- Tonight (2012)
+- L.I.F.E: Leaving an Impact for Eternity (2013)
+- Always Love You (2013)
+- L.I.F.E - Leaving an Impact for Eternity (2013)
+- Run My Race (2013)
+- Don Gorgon (2014)
+- Check &amp; Balance (2014)
+- Soke (2015)
+- Follow Me (2015)
+- Check and Balance (2015)
+- Baddest (2015)
+- On a Spaceship (2015)
+- Jealousy (2015)
+- No! (2015)
+- Pree Me (2016)
+- Redemption (2016)
+- Rock Your Body (2017)
+- Hallelujah (2017)
+- All My Life (2018)
+- Outside (2018)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Wizkid <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.588</span></summary>
+  <pre>Artist: Wizkid
+Type: Person
+Country: NG (Nigeria)
+Description: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.
+Active since: 1990-07-16
+Tags: pop; afrobeat; afropop; afrobeats; tryt
+Also known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid
+Releases:
+- Superstar (2011)
+- Beat of Life (2012)
+- Zombie (2012)
+- Love You (2013)
+- Mr 1 Take Jake Vol.1 (2013)
+- Jaiye Jaiye (2013)
+- The Matter (2013)
+- New Bounce (2013)
+- Ayo (2014)
+- Feel Me (2014)
+- Don’t Tell ’Em (2014)
+- One Life (2015)
+- Mamacita (2016)
+- U Don't Know (2016)
+- One Dance (US’s &quot;No Sex in the Champagne Room&quot; edit) (2016)
+- Don't dull (Freestyle) remix (2016)
+- Like This (2016)
+- Daddy Yo (2016)
+- One Dance (2016)
+- Sounds From the Other Side (2017)
+- Sounds From The Other Side (2017)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Fela Kuti <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.522</span></summary>
+  <pre>Artist: Fela Kuti (continued)
+- Shuffering and Shmiling / Perambulator (1978)
+- Shuffering and Shmiling (1978)
+- International Thief Thief (I.T.T.) (1979)
+- Unknown Soldier (1979)
+- V.I.P. (Vagabonds in Power) (1979)
+- Music of Many Colours (1980)
+- Authority Stealing (1980)
+- Coffin for Head of State (1981)
+- Original Sufferhead (1981)
+- Black President (1981)
+- Unnecessary Begging (1982)
+- Perambulator (1983)
+- Army Arrangement (1984)
+- Live in Amsterdam (1984)
+- Teacher Don’t Teach Me Nonsense (1986)
+- Mr. Follow Follow (1986)
+- I Go Shout Plenty!!! (1986)
+- 2000 Blacks (1987)
+- Beasts of No Nation (1989)
+- ODOO: Overtake Don Overtake Overtake (1989)
+- Confusion Break Bones (1990)
+- O.D.O.O. (Overtake Don Overtake Overtake) (1990)
+- ODOO (Overtake Don Overtake Overtake) (1990)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Burna Boy <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.610</span></summary>
+  <pre>Artist: Burna Boy (continued)
+- Rock Your Body (2017)
+- Hallelujah (2017)
+- All My Life (2018)
+- Outside (2018)
+- Gbona (2018)
+- On the low (2018)
+- Heaven's Gate (2018)
+- Dangote (2019)
+- Money Play (2019)
+- Own It (Joel Corry remix) (2019)
+- Stormzy - Own It (Sonny Fodera edit) (2019)
+- Be Honest (2019)
+- Steel &amp; Copper (2019)
+- Own It (2019)
+- Killin Dem (2019)
+- African Giant (2019)
+- Anybody (2019)
+- Twice as Tall (2020)
+- Jerusalema (remix) (2020)
+- My Oasis (2020)
+- 20 10 20 (2020)
+- Winter (2020)
+- Wonderful (2020)
+- Odogwu (2020)
+- Lenu (Remix) (2020)
+- Hey Boy (2021)
+- Rotate (2021)
+- B. D’OR (2021)
+- Question (2021)
+- Kilometre (2021)
+- B. D'OR (2021)
+- Want It All (2021)
+- Love, Damini (2022)
+- Last Last (2022)
+- I Told Them… (2023)
+- Mera Na (2023)
+- Big 7 (2023)
+- Apple Music Live: Burna Boy (2023)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Wizkid <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.640</span></summary>
+  <pre>Artist: Wizkid (continued)
+- One Dance (2016)
+- Sounds From the Other Side (2017)
+- Sounds From The Other Side (2017)
+- Naughty Ride (2017)
+- Can’t Believe (2017)
+- Come Closer (2017)
+- Like This (The Remixes) (2017)
+- Can't Believe (feat. Ty Dolla $ign &amp; WizKid) (2017)
+- U Don’t Know (Remixes) (2017)
+- Drogba (Joanna) (2018)
+- KANA (2018)
+- Bella (2018)
+- Energy (Stay Far Away) (2018)
+- Fever (2018)
+- For You (2018)
+- Nowo (2018)
+- Soco (2018)
+- Joro (2019)
+- SoundMan Vol. 1 (2019)
+- Ghetto Love (2019)
+- Totori (2019)
+- Essence (2020)
+- Made in Lagos (2020)
+- Cool Me Down (2020)
+- BROWN SKIN GIRL (2020)
+- Smile (2020)
+- Eve Bounce (Remix) (2020)
+- Escape (2020)
+- Made In Lagos: Deluxe Edition (2021)
+- System (2021)
+- Essence (Jagr bootleg) (2021)
+- Apple Music Live: Wizkid (2022)
+- Call Me Every Day (2022)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>Fela Kuti makes Afrobeat music.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The tags for Fela Kuti include 'afrobeat'.</td></tr><tr><td>Fela Kuti makes Nigerian music.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The tags for Fela Kuti include 'nigerian'.</td></tr><tr><td>Fela Kuti makes African music.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The tags for Fela Kuti include 'african'.</td></tr><tr><td>Burna Boy makes Afrobeat music.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">The tags for Burna Boy include 'afrobeat'.</td></tr><tr><td>Burna Boy makes Afro fusion music.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">The tags for Burna Boy include 'afro fusion'.</td></tr><tr><td>Burna Boy is Nigerian.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">Burna Boy's description states 'Nigerian rapper, singer-songwriter, and record producer'.</td></tr><tr><td>Wizkid makes Afrobeat music.</td><td class="ok">✓ yes</td><td class="tnum">3</td><td class="muted">The tags for Wizkid include 'afrobeat'.</td></tr><tr><td>Wizkid makes Afropop music.</td><td class="ok">✓ yes</td><td class="tnum">3</td><td class="muted">The tags for Wizkid include 'afropop'.</td></tr><tr><td>Wizkid is a Nigerian singer and songwriter.</td><td class="ok">✓ yes</td><td class="tnum">3</td><td class="muted">Wizkid's description states he is a 'Nigerian singer and songwriter'.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.48</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.49</span> Which artists are mentioned in this list?</li><li><span class="tnum">0.48</span> Can you tell me more about the artists on this list?</li><li><span class="tnum">0.45</span> What information is available about the listed artists?</li></ul>
+</section>
+<section class="card detail" id="detail-kpop" hidden>
+  <p class="group">genre</p>
+  <h3>Which K-pop groups are in the data?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">2.6 s · 232 output tokens</span></h4>
+      <pre class="answer">Artists used from the data:
+- BLACKPINK
+- BTS</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides the requested information by listing the K-pop groups from the data.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> BTS and BLACKPINK.</p>
+<p class="muted">All listed groups are present in the reference answer. The answer doesn't contradict the reference and doesn't add new information.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: BTS, BLACKPINK</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> BLACKPINK <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.549</span></summary>
+  <pre>Artist: BLACKPINK
+Type: Group
+Country: KR (South Korea)
+Active since: 2016-08-08
+Tags: pop; hip hop; j-pop; girl group; female vocals; k-pop; 2010s; 2020s; 3rd gen k-pop; girl crush
+Also known as: 才貌俱全; BLACKPINK; Beullaekpingkeu; Блекпинк; བླེཀ་པིངཀ་; بڵاکپینک; בלאקפינק; ဘလက်ပင့်; ပလႅၵ်းၽိင်း; BLΛƆKPIИK; แบล็กพิงก์; ब्ल्याकपिङ्क; ແບັກພິ້ງ; ប្លេកភីង; ब्लैकपिंक; بلک‌پینک; ব্ল্যাকপিঙ্ক; بلک پینک; بلاكبينك; 블랙핑크; Black Pink
+Releases:
+- 휘파람 (2016)
+- WHISTLE (2016)
+- 불장난 (2016)
+- SQUARE TWO (2016)
+- BOOMBAYAH (2016)
+- STAY (2016)
+- SQUARE ONE (2016)
+- 마지막처럼 (2017)
+- As If It’s Your Last (2017)
+- BLACKPINK (2017)
+- Sure Thing (2017)
+- PLAYING WITH FIRE (2017)
+- AS IF IT’S YOUR LAST (2017)
+- PLAYING WITH FIRE -JP ver.- (2017)
+- SO HOT (THEBLACKLABEL remix) (2017)
+- DDU-DU DDU-DU (2018)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> BTS <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.563</span></summary>
+  <pre>Artist: BTS
+Type: Group
+Country: KR (South Korea)
+Description: South Korean boy group
+Active since: 2013-06-13
+Tags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop
+Also known as: 방탄; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; Bōdan Shōnendan; Bulletproof Boy Scouts; Beyond the Scene; 방탄소년단; 防弾少年団; Bangtan Boys; BTS
+Releases:
+- O!RUL8,2? (2013)
+- 2 COOL 4 SKOOL (2013)
+- 2 Cool 4 Skool (2013)
+- DARK&amp;WILD (2014)
+- NO MORE DREAM (2014)
+- BOY IN LUV (2014)
+- No More Dream (Japanese ver.) (2014)
+- Wake Up (2014)
+- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)
+- WAKE UP (2014)
+- NO MORE DREAM -Japanese ver.- (2014)
+- BOY IN LUV -Japanese ver.- (2014)
+- Skool Luv Affair (2014)
+- Danger (2014)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> BTS <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.688</span></summary>
+  <pre>Artist: BTS (continued)
+- You Never Walk Alone (2017)
+- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat &amp; Tears) (2017)
+- LOVE YOURSELF 承 ‘Her’ (2017)
+- Come Back Home (2017)
+- MIC Drop / DNA / Crystal Snow (2017)
+- 血、汗、涙 (2017)
+- With Seoul (2017)
+- THE BEST OF 防彈少年團 -KOREA EDITION- (2017)
+- Blood Sweat &amp; Tears (2017)
+- THE BEST OF 防彈少年團 -JAPAN EDITION- (2017)
+- YOU NEVER WALK ALONE (2017)
+- FACE YOURSELF (2018)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> BLACKPINK <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.694</span></summary>
+  <pre>Artist: BLACKPINK (continued)
+- PLAYING WITH FIRE -JP ver.- (2017)
+- SO HOT (THEBLACKLABEL remix) (2017)
+- DDU-DU DDU-DU (2018)
+- BLACKPINK IN YOUR AREA (2018)
+- SQUARE UP (2018)
+- DDU‐DU DDU‐DU (2018)
+- Re: BLACKPINK (2018)
+- Kiss and Make Up (2018)
+- 뚜두뚜두 (DDU-DU DDU-DU) (2018)
+- BLACKPINK ARENA TOUR 2018 “SPECIAL FINAL IN KYOCERA DOME OSAKA” (2019)
+- KILL THIS LOVE (2019)
+- As If It’s Your Last (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)
+- Kill This Love (2019)
+- KILL THIS LOVE -JP ver.- (2019)
+- STAY (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)
+- BLACKPINK 2018 TOUR ‘IN YOUR AREA’ SEOUL (2019)
+- DDU-DU DDU-DU (remix) -JP ver.- (2019)
+- DDU‐DU DDU‐DU (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Kanye West Tribute Band <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.718</span></summary>
+  <pre>Artist: Kanye West Tribute Band
+Type: Group
+Country: unknown (unknown area)
+Active since: unknown
+Tags: 
+Also known as: 
+Releases:
+- Smooth Sax Tribute to Kanye West (2006)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Kendrick Lamar <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.721</span></summary>
+  <pre>Artist: Kendrick Lamar
+Type: Person
+Country: US (United States)
+Active since: 1987-06-17
+Tags: pop; rap; jazz; dance; house; hip hop; funk; disco; gangsta rap; pop rap; neo soul; alternative hip hop; experimental hip hop; west coast hip hop; boom bap; r&amp;b; 2010s; jazz rap; conscious hip hop; political hip hop; hardcore hip hop; trap; future bass; relic inn; 2020s; progressive rap; contemporary rap; conscious rapper
+Also known as: Kendrick Lamar, SZA; K. Duckworth; Kendrick Duckworth; Kendrick Lamar Duckworth; ケンドリック・ラマー; 켄드릭 라마; OKLAMA; K‐Dot; K. Dot
+Releases:
+- Hub City Threat: Minor of the Year (2004)
+- Training Day (2005)
+- No Sleep Til NYC (2007)
+- C4 (2009)
+- Kendrick Lamar (2009)
+- Overly Dedicated (2010)
+- Look Out for Detox (2010)
+- She Needs Me (remix) (ringtone) (2010)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>BLACKPINK is a K-pop group.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The tags for BLACKPINK include 'k-pop'.</td></tr><tr><td>BTS is a K-pop group.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">The tags for BTS include 'k-pop'.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.58</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.85</span> What K-pop groups were included in the dataset?</li><li><span class="tnum">0.50</span> Could you list the artists whose data was utilized?</li><li><span class="tnum">0.40</span> Which musical artists' information was processed?</li></ul>
+</section>
+<section class="card detail" id="detail-latin" hidden>
+  <p class="group">genre</p>
+  <h3>Which Latin music artists are in the data?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">6.1 s · 482 output tokens</span></h4>
+      <pre class="answer">The Latin music artists in the data are:
+- J Balvin (CO)
+- Bad Bunny (PR)
+- Daddy Yankee (PR)
+- Shakira (CO)</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides a list of Latin music artists, which is exactly what the question asks for.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> Bad Bunny, J Balvin, Shakira and Daddy Yankee.</p>
+<p class="muted">The answer lists all the Latin music artists mentioned in the reference answer and provides additional true information (their countries of origin) without contradicting the reference.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Bad Bunny, J Balvin, Shakira, Daddy Yankee</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> J Balvin <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.555</span></summary>
+  <pre>Artist: J Balvin
+Type: Person
+Country: CO (Colombia)
+Active since: 1985-05-07
+Tags: kolumbien; spanish; columbia; pop; spanisch; latin urban; hip hop; latin pop; rnb; reggaeton; latin
+Also known as: J.Balvin; José Álvaro Osorio Balvín; J. Balvin
+Releases:
+- Real (2009)
+- El negocio (2011)
+- El negocio: Unreleased Edition (2011)
+- Llegó Navidad (2011)
+- Sin compromiso (remix) (2011)
+- Donde estés llegaré (remix) (2012)
+- Con flow mátalo (2012)
+- Mix Tape (2012)
+- Yo te lo dije (2012)
+- Tranquila (2013)
+- Sola (2013)
+- 6 AM (2013)
+- La familia (2013)
+- Blurred Lines (2013)
+- Orgullo (remix) (2014)
+- Cola Song (2014)
+- Ay vamos (2014)
+- Sólo tú (remix) (2014)
+- Cola Song (remixes) (2014)
+- La hoja se volteó (2014)
+- La familia: B Sides (2014)
+- Maps (Rumba Whoa remix) (2014)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Bad Bunny <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.598</span></summary>
+  <pre>Artist: Bad Bunny
+Type: Person
+Country: PR (Puerto Rico)
+Active since: 1994-03-10
+Tags: pop; hip hop; spanish; latin; english; reggaeton; latin urban; latin trap; trap latino
+Also known as: Benito Antonio Martínez Ocasio
+Releases:
+- 1 polvo (2016)
+- Diles (2016)
+- Soy peor (2016)
+- Coronamos (remix) (2016)
+- Tú no vive así (2016)
+- Caile (2016)
+- Me llamas (2016)
+- Pa ti (2016)
+- Amigos y Enemigos (Remix) (2017)
+- Sensualidad (2017)
+- Chambea (2017)
+- Blockia (2017)
+- Mala y peligrosa (2017)
+- Tócate tú misma (2017)
+- Tú no metes cabra (remix) (2017)
+- El amante (remix) (2017)
+- Netflixxx (2017)
+- La última vez (2017)
+- Andan por ahí (2017)
+- Me llueven (2017)
+- Tranquilo (2017)
+- Báilame (remix) (2017)
+- Panamera (remix) (2017)
+- Mayores (2017)
+- Puerta abierta (2017)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Daddy Yankee <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.606</span></summary>
+  <pre>Artist: Daddy Yankee
+Type: Person
+Country: PR (Puerto Rico)
+Active since: 1977-02-03
+Tags: electronic; rap; dance; hip hop; reggae; latin pop; latin; english; reggaeton; hip hop rnb and dance hall; puerto rico; latin urban; englisch
+Also known as: DY; Raymond Ayala; Winchestra Yankee; Winchester 30-30; Ramón Luis Ayala Rodríguez; Winchester Yankee
+Releases:
+- No Mercy (1995)
+- El Cartel (1998)
+- El Cartel II: Los Cangris (2001)
+- El Cangri.com (2002)
+- Los Homerun-es Vol. 1 (2003)
+- Barrio fino (2004)
+- Los hits y unreleased (2004)
+- Oye mi canto (2004)
+- Ahora le toca al cangri live (2005)
+- Gasolina (2005)
+- Barrio fino en directo (2005)
+- Tempted to Touch (Reggaeton Bubbling Remix 2005) (2005)
+- Rompe (2005)
+- Los Homerun-es (2005)
+- Get Down / Gasolina (2005)
+- Lo que pasó, pasó (2005)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Shakira <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.625</span></summary>
+  <pre>Artist: Shakira
+Type: Person
+Country: CO (Colombia)
+Description: Colombian singer-songwriter
+Active since: 1977-02-02
+Tags: rock; pop; spanish; alternative; electropop; dance-pop; pop rock; latin pop; latin; colombian; merengue; classic pop and rock; colombia; barranquilla; atlantico; nuno
+Also known as: 夏奇拉; Shaki; Shakira Isabel Mebarak Ripoll
+Releases:
+- Magia (1991)
+- Peligro (1993)
+- Eres (1993)
+- Pies descalzos (1995)
+- Un poco de amor (1995)
+- Pies descalzos, sueños blancos (1996)
+- Quiero (1996)
+- The Remixes (1997)
+- Dónde están los ladrones? (1998)
+- ¿Dónde están los ladrones? (1998)
+- Ciega Sordomuda (1998)
+- Inevitable (1998)
+- Tú (the remixes) (1999)
+- Si te vas (1999)
+- Ojos así (1999)
+- Moscas en la casa (1999)
+- MTV Unplugged (2000)
+- No creo (2000)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Shakira <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.711</span></summary>
+  <pre>Artist: Shakira (continued)
+- Ojos así (1999)
+- Moscas en la casa (1999)
+- MTV Unplugged (2000)
+- No creo (2000)
+- No Creo (Remixes Por Pablo Flores E André Werneck) (2000)
+- Laundry Service (2001)
+- Whenever Wherever (2001)
+- Ojos Así (The Remixes) (2001)
+- Servicio de lavandería (2001)
+- Underneath Your Clothes (2002)
+- Whenever, Wherever (2002)
+- Grandes éxitos (2002)
+- Knock on My Door / Pídeme el sol (2002)
+- Objection (Tango) (2002)
+- Laundry Service: Washed and Dried (2002)
+- Que me quedes tú (Remixes) (2002)
+- Te dejo Madrid (Pablo Flores remixes) (2002)
+- Te dejo Madrid (2002)
+- The One (2003)
+- Ojos así / The One (2003)
+- Shakira (2003)
+- Pide Mas (2003)
+- Live &amp; Off the Record (2004)
+- En vivo y en privado (2004)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> J Balvin <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.599</span></summary>
+  <pre>Artist: J Balvin (continued)
+- Love Is the Name (2016)
+- Otra vez (2016)
+- Ginza (The remixes) (2016)
+- DM (remix) (2016)
+- 35 pa las 12 (2016)
+- Turn Out the Light (2016)
+- Energía Lado B (2017)
+- Sigo extrañándote (Solano remix) (2017)
+- Mi gente (4B remix) (2017)
+- Mi gente (Sunnery James &amp; Ryan Marciano remix) (2017)
+- El cartel (2017)
+- Mi gente (Steve Aoki remix) (2017)
+- Mi gente (2017)
+- Mi gente (F4st, Velza &amp; Loudness remix) (2017)
+- Mi gente (Dillon Francis remix) (2017)
+- Bonita (2017)
+- Ahora dice (2017)
+- Hey Ma (2017)
+- Mi gente (Cedric Gervais remix) (2017)
+- Energía lado B (2017)
+- Unforgettable (latin remix) (2017)
+- Mi gente (Alesso remix) (2017)
+- Ayer 2 (2017)
+- Quisiera (remix) (2017)
+- Mi gente (Hardwell &amp; Quintino remix) (2017)
+- La ocasión (remix) (2017)
+- Mi gente (Aazar remix) (2017)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>J Balvin is a Latin music artist.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">J Balvin's tags include 'latin urban', 'latin pop', and 'latin'.</td></tr><tr><td>J Balvin is from Colombia.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">J Balvin's country is listed as 'CO (Colombia)'.</td></tr><tr><td>Bad Bunny is a Latin music artist.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">Bad Bunny's tags include 'latin', 'reggaeton', 'latin urban', and 'latin trap'.</td></tr><tr><td>Bad Bunny is from Puerto Rico.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">Bad Bunny's country is listed as 'PR (Puerto Rico)'.</td></tr><tr><td>Daddy Yankee is a Latin music artist.</td><td class="ok">✓ yes</td><td class="tnum">3</td><td class="muted">Daddy Yankee's tags include 'latin pop', 'latin', and 'latin urban'.</td></tr><tr><td>Daddy Yankee is from Puerto Rico.</td><td class="ok">✓ yes</td><td class="tnum">3</td><td class="muted">Daddy Yankee's country is listed as 'PR (Puerto Rico)'.</td></tr><tr><td>Shakira is a Latin music artist.</td><td class="ok">✓ yes</td><td class="tnum">4</td><td class="muted">Shakira's tags include 'latin pop' and 'latin'.</td></tr><tr><td>Shakira is from Colombia.</td><td class="ok">✓ yes</td><td class="tnum">4</td><td class="muted">Shakira's country is listed as 'CO (Colombia)'.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.87</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.91</span> Which Latin music artists are included in the dataset?</li><li><span class="tnum">0.83</span> Can you list the Latin music artists and their countries of origin from the data?</li><li><span class="tnum">0.88</span> Please provide a list of the Latin music artists present in the data.</li></ul>
+</section>
+<section class="card detail" id="detail-bollywood" hidden>
+  <p class="group">genre</p>
+  <h3>Which artists are known for Indian film music or Bollywood?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">7.3 s · 677 output tokens</span></h4>
+      <pre class="answer">Artists from the provided data known for Indian film music or Bollywood:
+
+- A. R. Rahman — tags include &quot;bollywood&quot;, &quot;soundtrack&quot;, &quot;film score&quot;, &quot;filmi&quot;.  
+- Arijit Singh — tags include &quot;bollywood&quot;, &quot;filmi&quot;.  
+- Lata Mangeshkar — appears on releases titled &quot;The Rough Guide to Bollywood Legends: Lata Mangeshkar&quot; and &quot;The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India&quot;.</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides artists known for Indian film music or Bollywood, directly addressing the question.</p>
+      <h4>Correctness: partial</h4>
+<p><span class="label">Reference:</span> A. R. Rahman, Arijit Singh, Lata Mangeshkar and Kishore Kumar. Diljit Dosanjh is a Punjabi singer who also works in film.</p>
+<p class="muted">The answer provides A. R. Rahman, Arijit Singh, and Lata Mangeshkar but misses Kishore Kumar and Diljit Dosanjh from the reference answer.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 0.60 · precision 1.00</h4>
+      <p class="muted">Expected: A. R. Rahman, Arijit Singh, Lata Mangeshkar, Kishore Kumar, Diljit Dosanjh</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> A. R. Rahman <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.565</span></summary>
+  <pre>Artist: A. R. Rahman
+Type: Person
+Country: IN (India)
+Active since: 1967-01-06
+Tags: soundtrack; classical; bollywood; world fusion; indian; theatre; film score; asian; easy listening soundtracks and musicals; filmi; ar-rahman; cham cham; academy award winner
+Also known as: A.S. Dileep Kumar; Allahrakka Rahman; A.R. Rahman, Melody King; A.R RAHMAN; A. R. Rehman; AR. Rehman; A.R.Rahman; A R Rahman; அல்லா ரக்கா ரஹ்மான்; એ. આર. રહેમાન; अल्लाह रक्खा रहमान; এ আর রহমান; എ.ആർ. റഹ്‌മാൻ; AR Rahman; Allah Rakha Rahman; Allah-Rakha Rahman; A. S. Dileepkumar; A.R. Rahman; A.R. Rehman; ஏ.ஆர்.ரஹ்மான்
+Releases:
+- Beauty Palace / Aranmanai Vaasal (1990)
+- Set Me Free (1991)
+- Roja (1992)
+- Ashokan (1992)
+- Dharam Yoddha (1992)
+- Yoddha (1992)
+- Yoddha (Original Motion Picture Soundtrack) (1992)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Arijit Singh <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.583</span></summary>
+  <pre>Artist: Arijit Singh
+Type: Person
+Country: IN (India)
+Active since: 1987-04-25
+Tags: bollywood; filmi; indian pop; gaana
+Also known as: Arjit Singh
+Releases:
+- Egaro The Eleven (2010)
+- Beparwah (2012)
+- Best Of Arijit Singh (2013)
+- Jackpot (2013)
+- MTV Unplugged - Arijit Singh (2013)
+- Soulful Voice (2014)
+- Shaayraana (From &quot;Holiday&quot;) (2014)
+- Love Stories Sung by Arijit Singh (2014)
+- Tum Hi Ho (2014)
+- Khamoshiyan (2014)
+- Hungama Ho Gaya - Single (2014)
+- Mary Kom (2014)
+- The Epic Collection (2015)
+- Meri Kahani - Best of Arijit Singh (2015)
+- Musical Bond: Jeet Gannguli &amp; Arijit Singh (2015)
+- My Favourites: Arijit Singh (2015)
+- Gerua (From &quot;Dilwale&quot;) (2015)
+- Arijit Singh - Party Songs (2015)
+- Wrong Side Raju (2016)
+- Ae Dil Hai Mushkil (club mix by DJ Kiran Kamath) (2016)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> A. R. Rahman <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.523</span></summary>
+  <pre>Artist: A. R. Rahman (continued)
+- Hrudayaanjali (1994)
+- Rangeela (1995)
+- Tu Hi Mera Dil (1995)
+- Bombay (1995)
+- Love Birds (1995)
+- Muthu (1995)
+- Indira (1995)
+- Rangeli (1995)
+- Priyanka (1995)
+- Rangeela &amp; The Hits of A.R. Rahman (1995)
+- Muthu Maharaja (1995)
+- Anthimanthaarai (1996)
+- Minsara Kanavu (1996)
+- Hindustani (1996)
+- Mr. Romeo (1996)
+- Duniya Dilwalon Ki (1996)
+- Kadhal Desam (1996)
+- Indian (1996)
+- Prema Desam (1996)
+- Fire (1996)
+- Bharateeyudu (1996)
+- Andhimantharai (1996)
+- Vande Mātaram (1997)
+- Minsara Kanavu (Original Motion Picture Soundtrack) (1997)
+- Sapnay (1997)
+- Daud: Original Motion Picture Soundtrack (1997)
+- Kabhi Na Kabhi (1997)
+- Iruvar (1997)
+- Vishwa Vidhaata (1997)
+- Ratchagan (1997)
+- Vande Mataram (1997)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Arijit Singh <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.569</span></summary>
+  <pre>Artist: Arijit Singh (continued)
+- What Jhumka? (From “Rocky Aur Rani Kii Prem Kahaani”) (2023)
+- Dil Haareya (2023)
+- Le Aaunga (From “Satyaprem Ki Katha”) (2023)
+- Bairiya (2023)
+- O Bedardeya (From “Tu Jhoothi Main Makkaar”) (2023)
+- Kesariya (Lost Frequencies remix) (2023)
+- Tumhe Kitna Pyaar Karte (From &quot;Bawaal&quot;) (2023)
+- Leke Prabhu Ka Naam (From “Tiger 3”) (2023)
+- Rooh Jaga Doon (2023)
+- Barkha (2023)
+- Galtiyan (2023)
+- Pyaar Hota Kayi Baar Hai (From “Tu Jhoothi Main Makkaar”) (2023)
+- Bollywood Nonstop Dandiya 2023 (2023)
+- Tere Pyaar Mein (From &quot;Tu Jhoothi Main Makkaar&quot;) (2023)
+- Heeriye (lofi remix) (2023)
+- Pasoori Nu (From “Satyaprem Ki Katha”) (2023)
+- Phir Aur Kya Chahiye (From “Zara Hatke Zara Bachke”) (2023)
+- Aaja Baija Tu (from “Brand Bollywood Downunder”) (2023)
+- Gham Khushiyan (2023)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Lata Mangeshkar <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.573</span></summary>
+  <pre>Artist: Lata Mangeshkar (continued)
+- The Golden Collection - Lata Mangeshkar, Vol. 3 (2006)
+- The Legend (disc 2) (2006)
+- Maestros - Masters of Melody Disc 1 (2007)
+- The Golden Voices Of Bollywood - Volume 1 - The Nightingale Of India (2007)
+- Utha Rashtraveer Ho Deshbhaktigeete (2007)
+- Sadabahar Sangeetkar - Vasant Prabhu (2008)
+- Timeless (2010)
+- Alaoukik Gaani (2010)
+- Bhajan Masterpieces - II (2011)
+- 101 Lata Mangeshkar Hits (2011)
+- Flash Back - Kishore Kumar with Tabassum (2012)
+- Flash Back - Lata Mangeshkar with Tabassum (2013)
+- Magic in Movies Rajesh Khanna (2013)
+- Geet Shilp Marathi Geete (2013)
+- Tribute to Salil Da : Mone Pore Pa Ma Ga Re Sa - CD 1 (2015)
+- Tribute to Salil Da : Mone Pore Pa Ma Ga Re Sa - CD 2 (2015)
+- Melody Queens (2016)
+- MasterWorks (2016)
+- Sumadhur Geete (2017)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Lata Mangeshkar <span class="tag yes">expected</span><span class="dist">re-ranked 70/3 · distance 0.585</span></summary>
+  <pre>Artist: Lata Mangeshkar (continued)
+- The Best of Shraddhanjali - A Tribute to the Immortals (1999)
+- The Finest Moments (1999)
+- Keno Kichchu Katha Balo Na (2000)
+- Babul Pyare... (disc 2) (2000)
+- Babul Pyare... (2000)
+- Lifestory (Disc 1 of 2) (2001)
+- Lifestory (Disc 2 of 2) (2001)
+- Madhughat (2001)
+- The Greatest Film Songs Of Lata Mangeshkar (2001)
+- Soft Instrumentals (2001)
+- 'Chala Vahi Des' &amp; Meera Bhajans (2002)
+- Ki Likhi Tomay Priyotamo (2003)
+- Lata Mangeshkar Digital Collection 1 (2004)
+- The Rough Guide to Bollywood Legends: Lata Mangeshkar (2004)
+- Maitra Jivache (2005)
+- Shiv Kalyan Raja (2005)
+- Kavi Gaurav (2005)
+- Marathi Songs (2006)
+- The Legend (disc 1) (2006)
+- Retro Chill Out (2006)
+- The Golden Collection - Lata Mangeshkar, Vol. 3 (2006)
+- The Legend (disc 2) (2006)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>A. R. Rahman is known for Indian film music or Bollywood.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The tags for A. R. Rahman include 'soundtrack', 'bollywood', and 'film score'.</td></tr><tr><td>Arijit Singh is known for Indian film music or Bollywood.</td><td class="ok">✓ yes</td><td class="tnum">2</td><td class="muted">The tags for Arijit Singh include 'bollywood' and 'filmi'.</td></tr><tr><td>Lata Mangeshkar is known for Indian film music or Bollywood.</td><td class="ok">✓ yes</td><td class="tnum">6</td><td class="muted">One of the releases for Lata Mangeshkar is titled 'The Greatest Film Songs Of Lata Mangeshkar'.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.79</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.84</span> Which artists in the data are associated with Indian film music or Bollywood?</li><li><span class="tnum">0.70</span> Can you list musicians known for their work in Bollywood from the provided dataset?</li><li><span class="tnum">0.82</span> Based on the data, who are the prominent artists in Indian film music, specifically Bollywood?</li></ul>
+</section>
+<section class="card detail" id="detail-soul" hidden>
+  <p class="group">genre</p>
+  <h3>Which classic soul or Motown singers are in the data?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">8.5 s · 758 output tokens</span></h4>
+      <pre class="answer">Artists in the data that match &quot;classic soul&quot; or &quot;Motown&quot; (per the context):
+
+- Marvin Gaye — tags include: motown; soul  
+- Aretha Franklin — tags include: soul
+
+I don't know based on the data whether Stevie Wonder is labeled as Motown or classic soul in these context excerpts.</pre>
+      <h4>Refusal: fail</h4>
+      <p class="muted">Should answer. Judge: it refused. The answer states that it doesn't know whether Stevie Wonder is labeled as Motown or classic soul in the given context.</p>
+      <h4>Correctness: partial</h4>
+<p><span class="label">Reference:</span> Stevie Wonder, Marvin Gaye and Aretha Franklin.</p>
+<p class="muted">The answer misses Stevie Wonder, who is explicitly mentioned in the reference answer as a classic soul/Motown singer, and incorrectly states that it's unknown whether he fits these categories based on the data.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 0.97</h4>
+      <p class="muted">Expected: Stevie Wonder, Marvin Gaye, Aretha Franklin</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Marvin Gaye <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.550</span></summary>
+  <pre>Artist: Marvin Gaye
+Type: Person
+Country: US (United States)
+Active since: 1939-04-02
+Tags: pop; american; funk; soul; rnb; sexual; motown; soul and reggae; pop soul; smooth soul; the very best of; death by murder; death by gun; multiple ipi; r&amp;b; contemporary r&amp;b; rhythm &amp; blues; progressive soul
+Also known as: Marvin Pentz Gay, Jr.; Marvin Gay; Marvine Gaye; Marving Gaye; Marvin P. Gaye
+Releases:
+- The Soulful Moods of Marvin Gaye (1961)
+- Let Your Conscience Be Your Guide (1961)
+- Hello There Angel / Hitch Hike (1962)
+- Marvin Gaye Recorded Live on Stage (1963)
+- Can I Get a Witness / I’m Crazy ’Bout My Baby (1963)
+- That Stubborn Kinda’ Fellow (1963)
+- Pride and Joy / One of These Days (1963)
+- How Sweet It Is (to Be Loved by You) / Forever (1964)
+- Greatest Hits (1964)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Aretha Franklin <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.559</span></summary>
+  <pre>Artist: Aretha Franklin (continued)
+- Aretha Arrives (1967)
+- Take It Like You Give It (1967)
+- Baby I Love You / Going Down Slow (1967)
+- Presenting Aretha Franklin (1967)
+- Take a Look (1967)
+- Chain of Fools / Prove It (1967)
+- Aretha in Paris (1968)
+- The House That Jack Built / I Say a Little Prayer (1968)
+- Lady Soul (1968)
+- Queen of Soul (1968)
+- I Say a Little Prayer / See-Saw (1968)
+- Think (1968)
+- Soul, Soul, Soul (1968)
+- Aretha Now (1968)
+- See Saw / My Song (1968)
+- Ain’t No Way / Do Right Woman – Do Right Man (1968)
+- (Sweet Sweet Baby) Since You’ve Been Gone (1968)
+- Aretha’s Gold (1969)
+- Soft and Beautiful (1969)
+- Once in a Lifetime (1969)
+- Eleanor Rigby / It Ain’t Fair (1969)
+- The Weight / Tracks of My Tears (1969)
+- Today I Sing the Blues (1969)
+- I Can’t See Myself Leaving You (1969)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Aretha Franklin <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.566</span></summary>
+  <pre>Artist: Aretha Franklin
+Type: Person
+Country: US (United States)
+Active since: 1942-03-25
+Tags: rock; pop; jazz; american; soul; rnb; gospel; quiet storm; southern soul; deep soul; soul and reggae; pop soul; smooth soul; r&amp;b; rhythm &amp; blues; the queen of soul; server name; 2008 universal fire victim; aln-sh
+Also known as: アレサ・フランクリン; Aretha Louise Franklin; Aretha Fanklin; Aretha Franklyn; Franklin, Aretha; Arthaa Franklin; Aretja Franklin
+Releases:
+- Never Grow Old / You Grow Closer (1956)
+- Are You Sure / Maybe I'm A Fool (1961)
+- Aretha (1961)
+- The Big Hits (1961)
+- Rock-A-Bye Your Baby With A Dixie Melody / Operation Heartbreak (1961)
+- The Electrifying Aretha Franklin (1962)
+- The Tender, the Moving, the Swinging (1962)
+- Laughing on the Outside (1963)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Marvin Gaye <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.542</span></summary>
+  <pre>Artist: Marvin Gaye (continued)
+- Live at the London Palladium (1977)
+- Got to Give It Up (1977)
+- Here, My Dear (1978)
+- A Funky Space Reincarnation, Parts 1 &amp; 2 (1979)
+- Love Man (1979)
+- Motown Superstar Series, Volume 15 (1980)
+- In Our Lifetime (1981)
+- Midnight Love (1982)
+- My Love Is Waiting (1982)
+- Night Life (1982)
+- Sexual Healing (1982)
+- (Sexual) Healing (Club Mix) (1982)
+- (Sexual) Healing (1982)
+- Compact Command Performances: 15 Greatest Hits (1983)
+- The History of Rock, Volume Twenty Four (1984)
+- What's Going On (1984)
+- Marvin Gaye &amp; His Women: 21 Classic Duets (1985)
+- Dream of a Lifetime (1985)
+- Sanctified Lady (1985)
+- Romantically Yours (1985)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Frank Sinatra <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.631</span></summary>
+  <pre>Artist: Frank Sinatra (continued)
+- Ol' Man River / Stormy Weather (1945)
+- I Fall in Love Too Easily / The Charm of You (1945)
+- When Your Lover Has Gone / Falling in Love With Love / Baby Won’t You Please Come Home (1945)
+- There’s No You / Someone to Watch Over Me / Carry Me Back to Old Virginia (1945)
+- You'll Never Walk Alone / If I Loved You (1945)
+- None but the Lonely Heart / There’ll Be a Jubilee (1945)
+- Nancy (With the Laughing Face) / The Cradle Song (1945)
+- Ol’ Man River / Jimmy’s Blues / Take Me Back Baby (1945)
+- When Your Lover Has Gone / She's Funny That Way (1945)
+- Let Me Love You Tonight / Just Close Your Eyes / My Blue Heaven / When I Marry I’ll Marry for Love (1945)
+- Sometimes I Feel Like a Motherless Child / Lamplighter’s Serenade / The Sunshine of Your Smile (1945)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Stevie Wonder <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.633</span></summary>
+  <pre>Artist: Stevie Wonder (continued)
+- Heaven Help us All (1970)
+- Live (1970)
+- Signed, Sealed &amp; Delivered (1970)
+- Where I'm Coming From (1971)
+- Talking Book (1972)
+- Superstition (1972)
+- Music of My Mind (1972)
+- Superstition / You've Got It Bad Girl (1972)
+- Innervisions (1973)
+- You Are the Sunshine of My Life \ Tuesday Heartbreak (1973)
+- Boogie On Reggae Woman (1974)
+- Anthology (1974)
+- Fulfillingness’ First Finale (1974)
+- His Twenty Greatest Hits (1974)
+- Don’t You Worry ’Bout a Thing (1974)
+- 1962-1974 Wonderland (1974)
+- Wonderland: 1963–1974 (1974)
+- Stevie Wonder 12 Year Old Genius (1974)
+- Songs in the Key of Life (1976)
+- I Wish (1976)
+- Sir Duke / He's Misstra Know It All (1976)
+- Sir Duke / He’s Misstra Know It All (1976)
+- Songs In The Key Of Life (1976)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>Marvin Gaye's tags include Motown.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">Marvin Gaye's tags explicitly list &quot;motown&quot;.</td></tr><tr><td>Marvin Gaye's tags include soul.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">Marvin Gaye's tags explicitly list &quot;soul&quot;.</td></tr><tr><td>Aretha Franklin's tags include soul.</td><td class="ok">✓ yes</td><td class="tnum">3</td><td class="muted">Aretha Franklin's tags explicitly list &quot;soul&quot;.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.83</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.86</span> Which artists are categorized as &quot;classic soul&quot; or &quot;Motown&quot; based on the provided data?</li><li><span class="tnum">0.78</span> Based on the provided data, can you list the artists associated with &quot;classic soul&quot; or &quot;Motown&quot; and their respective tags?</li><li><span class="tnum">0.85</span> Given the data, who are the artists identified with &quot;classic soul&quot; or &quot;Motown&quot;?</li></ul>
+</section>
+<section class="card detail" id="detail-hiphop-rnb" hidden>
+  <p class="group">open</p>
+  <h3>Which artists blend hip hop with R&amp;B, and what are some of their albums?</h3>
+  <p class="muted">Open question with no single right list, so only the judge-based metrics apply.</p>
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">12.0 s · 1694 output tokens</span></h4>
+      <pre class="answer">Artists used: JAŸ-Z; Beyoncé; Drake
+
+- JAŸ-Z — tags include &quot;hip hop rnb and dance hall.&quot; Some releases listed in the data: In My Lifetime / I Can’t Get Wid Dat (1994); In My Lifetime (1995); Can’t Knock the Hustle (1996); Ain’t No Nigga (1996).
+
+- Beyoncé — tags include &quot;hip hop rnb and dance hall&quot; and &quot;hip hop soul; contemporary r&amp;b.&quot; I don't know based on the data which albums/releases of Beyoncé are listed.
+
+- Drake — tags include &quot;r&amp;b; contemporary r&amp;b&quot; alongside hip hop. Some releases listed in the data: Room for Improvement (2006); So Far Gone (2009); Forever (2009); Take Care (2011).</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer identifies some artists who blend hip hop and R&amp;B, and provides albums for two out of the three artists mentioned.</p>
+      
+    </div>
+    <div>
+      <h4>Retrieved (top 6)</h4>
+      <p class="muted">No expected artists for this question, so retrieval isn’t scored.</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> JAŸ-Z<span class="dist">re-ranked 70/3 · distance 0.619</span></summary>
+  <pre>Artist: JAŸ-Z
+Type: Person
+Country: US (United States)
+Description: US rapper
+Active since: 1969-12-04
+Tags: pop; rap; hip-hop; hip hop; hiphop; pop rap; rapper; us; mashup; hip hop rnb and dance hall; united states; grammy winner; boom bap; east coast hip hop; hardcore hip hop; new york hip hop; luxury rap; relic inn; chipmunk soul
+Also known as: JAŸ‐Z; JAY‐Z; jay z; Jay‐Z; Jaÿ‐Z; JAY:Z; JAY Z; Shawn C Carter; Shawn Carter; S. Carter; Shawn Corey Carter; Jayz; Hova; Jay-Hova; Jigga; Jay Z; Jay - Z; Hova da God
+Releases:
+- In My Lifetime / I Can’t Get Wid Dat (1994)
+- In My Lifetime (1995)
+- Can’t Knock the Hustle (Fool's Paradise remix) (1996)
+- Can’t Knock the Hustle (1996)
+- Feelin’ It (1996)
+- I’ll Be (1996)
+- Can't Knock the Hustle (1996)
+- Ain’t No Nigga (1996)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Kendrick Lamar<span class="dist">re-ranked 70/3 · distance 0.639</span></summary>
+  <pre>Artist: Kendrick Lamar (continued)
+- Overly Dedicated (2010)
+- Look Out for Detox (2010)
+- She Needs Me (remix) (ringtone) (2010)
+- 6’7’ Freestyle (2010)
+- The Heart, Part 1 (2010)
+- Ronald Reagan Era (2011)
+- Section.80 (2011)
+- My People (2011)
+- Hood Gone Love It (2011)
+- Compton State of Mind (2011)
+- Rapper Shit (2011)
+- Vanity Slave, Pt. 2 (2011)
+- Sex With Society (2011)
+- HiiiPoWeR (2011)
+- Moscato (2011)
+- Hol’ Up (2011)
+- Swimming Pools (Drank) (2012)
+- ILLuminate (2012)
+- Westside, Right on Time (2012)
+- The Recipe (2012)
+- good kid, m.A.A.d city (2012)
+- Poetic Justice (2012)
+- Swimming Pools (Drank) (Remixes) (2012)
+- Cartoon &amp; Cereal (2012)
+- Let Us Move On (prod. Jeff Bhasker and Plain Pat) (2012)
+- Let Us Move On (2012)
+- Fuckin’ Problems (2012)
+- Push Thru (2012)
+- Ever Heard of Section 80 (2012)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Rihanna<span class="dist">re-ranked 70/3 · distance 0.651</span></summary>
+  <pre>Artist: Rihanna (continued)
+- Pon de Replay (Dance Remixes) (2005)
+- Bring It Back (2005)
+- Music Of The Sun (2005)
+- The One (2005)
+- Pon De Replay (Dance Remixes) (2005)
+- Pon De Replay (2005)
+- We Ride (Club Mixes) (2006)
+- A Girl Like Me (2006)
+- We Ride (2006)
+- Unfaithful (2006)
+- S.O.S. (2006)
+- Break It Off (2006)
+- SOS (2006)
+- Unfaithful (Remix EP) (2006)
+- SOS (Remixes) (2006)
+- Unfaithful (Remixes) (2006)
+- S.O.S. (Mixes) (2006)
+- Roll It (2007)
+- Umbrella (2007)
+- Good Girl Gone Bad (2007)
+- Don’t Stop the Music: Remixes (2007)
+- Umbrella (Remixes) (2007)
+- Shut Up and Drive (2007)
+- Don't Stop the Music (2007)
+- Umbrella (Travis Barker Remix) (2007)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Beyoncé<span class="dist">re-ranked 70/3 · distance 0.652</span></summary>
+  <pre>Artist: Beyoncé (continued)
+Country: US (United States)
+Active since: 1981-09-04
+Tags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&amp;b; singer/songwriter; contemporary r&amp;b; 2010s; mbs-333; art pop; alternative r&amp;b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Drake<span class="dist">re-ranked 70/3 · distance 0.658</span></summary>
+  <pre>Artist: Drake (continued)
+- What's My Name? (2010)
+- Right Above It (2010)
+- Un-Thinkable (I’m Ready) (remix) (2010)
+- No More Thank Yous (2010)
+- Loving You No More (2010)
+- Un-Thinkable (I'm Ready) (remix) (2010)
+- Born Successful 2 (Re-Loaded Edition) (2010)
+- Young &amp; Successful (2010)
+- Octobers Very Cold (2010)
+- 9AM in Dallas (2010)
+- Moment 4 Life (2010)
+- Take Care (2011)
+- So Good (2011)
+- I’m Still Fly (2011)
+- Round of Applause (2011)
+- Make Me Proud (2011)
+- Tony Montana (2011)
+- Trust Issues (2011)
+- She Will (2011)
+- Club Paradise (2011)
+- Wildfire (2011)
+- Forever (Tyler Blue drumstep remix) (2011)
+- Marvins Room (2011)
+- Headlines (2011)
+- I’m on One (2011)
+- Free Spirit (2011)
+- The Motto (2012)
+- Stay Schemin (2012)
+- HYFR (Hell Ya Fucking Right) (2012)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Drake<span class="dist">re-ranked 70/3 · distance 0.658</span></summary>
+  <pre>Artist: Drake
+Type: Person
+Country: CA (Canada)
+Description: Canadian rapper
+Active since: 1986-10-24
+Tags: pop; rap; hip-hop; hip hop; southern hip hop; pop rap; rapper; lesbian; sxsw; top 100; r&amp;b; contemporary r&amp;b; 2010s; hardcore hip hop; alternative r&amp;b; trap; canadian hip hop; trap rap; rap us; top 10; hardcore hip; cotm candidate; luxury rap; relic inn; 2020s; pedophilia; top 5
+Also known as: ドレイク; Champagne Papi; Aubrey Drake Graham; C. Papi
+Releases:
+- Room for Improvement (2006)
+- Comeback Season (2007)
+- I Can Take Your Girl (2008)
+- Heartbreak Drake (2008)
+- Forever (2009)
+- Throw It in the Bag (remix) (2009)
+- Born Successful (2009)
+- Fear (2009)
+- Young Money All Stars, Part 2 (2009)
+- I’m Goin In (2009)
+- Best I Ever Had (2009)
+- So Far Gone (2009)
+- The Drizzy Effect (2009)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>JAY-Z's music includes tags like &quot;hip hop rnb and dance hall.&quot;</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly lists &quot;hip hop rnb and dance hall&quot; as a tag for JAŸ-Z.</td></tr><tr><td>JAY-Z released &quot;In My Lifetime / I Can’t Get Wid Dat&quot; in 1994.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly states that JAŸ-Z released &quot;In My Lifetime / I Can’t Get Wid Dat&quot; in 1994.</td></tr><tr><td>JAY-Z released &quot;In My Lifetime&quot; in 1995.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly states that JAŸ-Z released &quot;In My Lifetime&quot; in 1995.</td></tr><tr><td>JAY-Z released &quot;Can’t Knock the Hustle&quot; in 1996.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly lists &quot;Can’t Knock the Hustle&quot; as a 1996 release by JAŸ-Z.</td></tr><tr><td>JAY-Z released &quot;Ain’t No Nigga&quot; in 1996.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly lists &quot;Ain’t No Nigga&quot; as a 1996 release by JAŸ-Z.</td></tr><tr><td>Beyoncé's music includes tags like &quot;hip hop rnb and dance hall.&quot;</td><td class="ok">✓ yes</td><td class="tnum">4</td><td class="muted">The context explicitly lists &quot;hip hop rnb and dance hall&quot; as a tag for Beyoncé.</td></tr><tr><td>Beyoncé's music includes tags like &quot;hip hop soul&quot; and &quot;contemporary r&amp;b.&quot;</td><td class="ok">✓ yes</td><td class="tnum">4</td><td class="muted">The context explicitly lists &quot;hip hop soul&quot; and &quot;contemporary r&amp;b&quot; as tags for Beyoncé.</td></tr><tr><td>Drake's music includes tags like &quot;r&amp;b&quot; and &quot;contemporary r&amp;b&quot; alongside hip hop.</td><td class="ok">✓ yes</td><td class="tnum">6</td><td class="muted">The context explicitly lists &quot;r&amp;b&quot; and &quot;contemporary r&amp;b&quot; among Drake's tags, which also include &quot;hip-hop&quot; and &quot;hip hop&quot;.</td></tr><tr><td>Drake released &quot;Room for Improvement&quot; in 2006.</td><td class="ok">✓ yes</td><td class="tnum">6</td><td class="muted">The context explicitly states that Drake released &quot;Room for Improvement&quot; in 2006.</td></tr><tr><td>Drake released &quot;So Far Gone&quot; in 2009.</td><td class="ok">✓ yes</td><td class="tnum">6</td><td class="muted">The context explicitly states that Drake released &quot;So Far Gone&quot; in 2009.</td></tr><tr><td>Drake released &quot;Forever&quot; in 2009.</td><td class="ok">✓ yes</td><td class="tnum">6</td><td class="muted">The context explicitly states that Drake released &quot;Forever&quot; in 2009.</td></tr><tr><td>Drake released &quot;Take Care&quot; in 2011.</td><td class="ok">✓ yes</td><td class="tnum">5</td><td class="muted">The context explicitly states that Drake released &quot;Take Care&quot; in 2011.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.37</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.43</span> Which artists are listed in the data, and what are their tags and some of their releases?</li><li><span class="tnum">0.35</span> Can you tell me about the artists in the dataset?</li><li><span class="tnum">0.34</span> What information is available for JAŸ-Z, Beyoncé, and Drake in the provided data?</li></ul>
+</section>
+<section class="card detail" id="detail-zombie" hidden>
+  <p class="group">fact</p>
+  <h3>In what year did Fela Kuti release Zombie?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">4.4 s · 259 output tokens</span></h4>
+      <pre class="answer">Artist used: Fela Kuti. &quot;Zombie&quot; was released in 1976.</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides the requested information directly.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> 1976.</p>
+<p class="muted">The answer provides the correct year for the release of 'Zombie' and includes the artist's name, which is consistent with the question and reference.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Fela Kuti</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Fela Kuti <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.303</span></summary>
+  <pre>Artist: Fela Kuti (continued)
+- Afrodisiac (1973)
+- Gentleman (1973)
+- Alagbon Close (1974)
+- Confusion (1974)
+- Going In And Coming Out (Part 1 &amp; 2) (1974)
+- Before I Jump Like Monkey Give Me Banana (1975)
+- Expensive Shit (1975)
+- Music of Fela Volume 2: Question Jam Answer (1975)
+- He Miss Road (1975)
+- Everything Scatter (1975)
+- Noise for Vendor Mouth (1975)
+- Ikoyi Blindness (1976)
+- Zombie (1976)
+- Up Side Down (1976)
+- Yellow Fever (1976)
+- Excuse O (1976)
+- No Bread (1976)
+- Kalakuta Show (1976)
+- No Agreement (1977)
+- J.J.D. (Johnny Just Drop!!) - Live!! At Kalakuta Republik (1977)
+- Vol. 1 &amp; 2 (1977)
+- Sorrow Tears and Blood (1977)
+- Stalemate (1977)
+- Fear Not for Man (1977)
+- Opposite People (1977)
+- Shuffering and Shmiling / Perambulator (1978)
+- Shuffering and Shmiling (1978)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Fela Kuti <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.369</span></summary>
+  <pre>Artist: Fela Kuti (continued)
+- Shuffering and Shmiling / Perambulator (1978)
+- Shuffering and Shmiling (1978)
+- International Thief Thief (I.T.T.) (1979)
+- Unknown Soldier (1979)
+- V.I.P. (Vagabonds in Power) (1979)
+- Music of Many Colours (1980)
+- Authority Stealing (1980)
+- Coffin for Head of State (1981)
+- Original Sufferhead (1981)
+- Black President (1981)
+- Unnecessary Begging (1982)
+- Perambulator (1983)
+- Army Arrangement (1984)
+- Live in Amsterdam (1984)
+- Teacher Don’t Teach Me Nonsense (1986)
+- Mr. Follow Follow (1986)
+- I Go Shout Plenty!!! (1986)
+- 2000 Blacks (1987)
+- Beasts of No Nation (1989)
+- ODOO: Overtake Don Overtake Overtake (1989)
+- Confusion Break Bones (1990)
+- O.D.O.O. (Overtake Don Overtake Overtake) (1990)
+- ODOO (Overtake Don Overtake Overtake) (1990)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Burna Boy <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.576</span></summary>
+  <pre>Artist: Burna Boy
+Type: Person
+Country: NG (Nigeria)
+Description: Nigerian rapper, singer-songwriter, and record producer
+Active since: 1991-07-02
+Tags: reggae; afrobeat; english; dancehall; afrobeats; afro fusion
+Also known as: Damini Ogulu; Damini Ebunoluwa Ogulu
+Releases:
+- Best of Burn Series, Vol. 1 (2011)
+- Like to Party (2012)
+- Tonight (2012)
+- L.I.F.E: Leaving an Impact for Eternity (2013)
+- Always Love You (2013)
+- L.I.F.E - Leaving an Impact for Eternity (2013)
+- Run My Race (2013)
+- Don Gorgon (2014)
+- Check &amp; Balance (2014)
+- Soke (2015)
+- Follow Me (2015)
+- Check and Balance (2015)
+- Baddest (2015)
+- On a Spaceship (2015)
+- Jealousy (2015)
+- No! (2015)
+- Pree Me (2016)
+- Redemption (2016)
+- Rock Your Body (2017)
+- Hallelujah (2017)
+- All My Life (2018)
+- Outside (2018)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Burna Boy <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.592</span></summary>
+  <pre>Artist: Burna Boy (continued)
+- Rock Your Body (2017)
+- Hallelujah (2017)
+- All My Life (2018)
+- Outside (2018)
+- Gbona (2018)
+- On the low (2018)
+- Heaven's Gate (2018)
+- Dangote (2019)
+- Money Play (2019)
+- Own It (Joel Corry remix) (2019)
+- Stormzy - Own It (Sonny Fodera edit) (2019)
+- Be Honest (2019)
+- Steel &amp; Copper (2019)
+- Own It (2019)
+- Killin Dem (2019)
+- African Giant (2019)
+- Anybody (2019)
+- Twice as Tall (2020)
+- Jerusalema (remix) (2020)
+- My Oasis (2020)
+- 20 10 20 (2020)
+- Winter (2020)
+- Wonderful (2020)
+- Odogwu (2020)
+- Lenu (Remix) (2020)
+- Hey Boy (2021)
+- Rotate (2021)
+- B. D’OR (2021)
+- Question (2021)
+- Kilometre (2021)
+- B. D'OR (2021)
+- Want It All (2021)
+- Love, Damini (2022)
+- Last Last (2022)
+- I Told Them… (2023)
+- Mera Na (2023)
+- Big 7 (2023)
+- Apple Music Live: Burna Boy (2023)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Wizkid <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.604</span></summary>
+  <pre>Artist: Wizkid
+Type: Person
+Country: NG (Nigeria)
+Description: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.
+Active since: 1990-07-16
+Tags: pop; afrobeat; afropop; afrobeats; tryt
+Also known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid
+Releases:
+- Superstar (2011)
+- Beat of Life (2012)
+- Zombie (2012)
+- Love You (2013)
+- Mr 1 Take Jake Vol.1 (2013)
+- Jaiye Jaiye (2013)
+- The Matter (2013)
+- New Bounce (2013)
+- Ayo (2014)
+- Feel Me (2014)
+- Don’t Tell ’Em (2014)
+- One Life (2015)
+- Mamacita (2016)
+- U Don't Know (2016)
+- One Dance (US’s &quot;No Sex in the Champagne Room&quot; edit) (2016)
+- Don't dull (Freestyle) remix (2016)
+- Like This (2016)
+- Daddy Yo (2016)
+- One Dance (2016)
+- Sounds From the Other Side (2017)
+- Sounds From The Other Side (2017)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Wizkid <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.618</span></summary>
+  <pre>Artist: Wizkid (continued)
+- Essence (Jagr bootleg) (2021)
+- Apple Music Live: Wizkid (2022)
+- Call Me Every Day (2022)
+- Bad to Me (2022)
+- Money &amp; Love (2022)
+- More Love, Less Ego (2022)
+- S2 (2023)
+- Blessings (2023)
+- All For Love (2023)
+- Morayo (2024)
+- Piece of My Heart (2024)
+- Kese (Dance) (2024)
+- Lighter (Wizkid Extended) (2025)
+- Lighter (2025)
+- DYNAMITE (2025)
+- Gimme Dat (2025)
+- One Condition (2025)
+- COCA BODY (2026)
+- REAL, Vol. 1 (2026)
+- Jogodo (2026)
+- Alive (2026)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>Fela Kuti released &quot;Zombie&quot; in 1976.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly lists &quot;Zombie (1976)&quot; under Fela Kuti's releases.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.83</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.60</span> Which artist created the song &quot;Zombie&quot; and when was it released?</li><li><span class="tnum">0.95</span> When did Fela Kuti release the song &quot;Zombie&quot;?</li><li><span class="tnum">0.94</span> What year was the song &quot;Zombie&quot; by Fela Kuti released?</li></ul>
+</section>
+<section class="card detail" id="detail-stromae" hidden>
+  <p class="group">fact</p>
+  <h3>Which country is Stromae from?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">2.1 s · 207 output tokens</span></h4>
+      <pre class="answer">Artist used: Stromae.
+Country: BE (Belgium).</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides the requested information directly.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> Belgium.</p>
+<p class="muted">The answer correctly identifies Belgium as Stromae's country of origin.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Stromae</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Stromae <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.301</span></summary>
+  <pre>Artist: Stromae
+Type: Person
+Country: BE (Belgium)
+Active since: 1985-03-12
+Tags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson française
+Also known as: Paul Van Haver; Sromae
+Releases:
+- Racine Carrée Live (√ Live)
+- 2015-04-19: Coachella Valley Music &amp; Arts Festival, Indio, CA, USA
+- Juste un cerveau, un flow, un fond et un mic… (2007)
+- Enfants de l'an 2000 (2009)
+- Mixture Elecstro (2009)
+- Alors on danse (2009)
+- Up Saw Liz (remix) (2009)
+- Up Saw Liz (2009)
+- Cheese (2010)
+- Alors On Danse (Remixes) (2010)
+- Alors on danse (remix) (2010)
+- Te Quiero (2010)
+- Alors on danse (Remix) (2010)
+- Peace or Violence (Remixes) (2011)
+- Peace or Violence (2011)
+- Papaoutai Remixes (2013)
+- Racine carrée (2013)
+- Formidable (2013)
+- Papaoutai (2013)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Stromae <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.431</span></summary>
+  <pre>Artist: Stromae (continued)
+- Papaoutai Remixes (2013)
+- Racine carrée (2013)
+- Formidable (2013)
+- Papaoutai (2013)
+- Remixes (2013)
+- Tous Les Mêmes (2013)
+- Meltdown (2014)
+- Live au Centre Bell de Montréal, Québec, Canada - 28 &amp; 29 septembre 2015 (2015)
+- Repetto X Mosaert (2017)
+- Défiler (Bande originale de la capsule No. 5 Mosaert) (2018)
+- La pluie (2018)
+- Alors on danse (Dubdogz remix) (2019)
+- Alors on Danse (DubDogz remix) (2019)
+- Papaoutai (Amaury Lacroix Remix) (2020)
+- Santé (2021)
+- L’enfer (2022)
+- Multitude (2022)
+- Mon amour (2022)
+- Ma Meilleure Ennemie (from the series Arcane League of Legends) (2024)
+- Ma meilleure ennemie (2025)
+- QUE CE SOIT CLAIR (2025)
+- Anderlecht Champion (Stromae Remix) (2025)
+- Pardon (2025)
+- des fleurs (2026)
+- My Sins Are My Savior (2026)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Bruno Mars <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.644</span></summary>
+  <pre>Artist: Bruno Mars
+Type: Person
+Country: US (United States)
+Description: US singer
+Active since: 1985-10-08
+Tags: rock; pop; new wave; hip hop; reggae; funk; soul; pop rock; new jack swing; pop soul; r&amp;b; contemporary pop/rock; contemporary r&amp;b; 2010s; synth funk; a filk artist; relic inn; music for soccer moms
+Also known as: Bruno Mars; 브루노 마스; Bruno Mars; Peter Gene Hernandez; ブルーノ・マーズ
+Releases:
+- Tomorrow's King (1990)
+- Nothin' on You (2009)
+- It's Better If You Don't Understand (2010)
+- Billionaire (2010)
+- Grenade (2010)
+- Doo-Wops &amp; Hooligans (2010)
+- Grenade (Remixes) (2010)
+- Just The Way You Are (2010)
+- The Lost Planet (2010)
+- Just the Way You Are (2010)
+- Nothin’ on You (2010)
+- It’s Better If You Don’t Understand (2010)
+- Just the Way You Are (Remix) (2010)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Daft Punk <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.704</span></summary>
+  <pre>Artist: Daft Punk
+Type: Group
+Country: FR (France)
+Description: French electronic duo
+Active since: 1993
+Tags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&amp;b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas
+Also known as: DaftPunk; daft punk; Duft Punk; ダフト・パンク; Daft Punk; Da Funk
+Releases:
+- The New Wave (1994)
+- Da Funk (1995)
+- Musique / L'ombelico del mondo / Make It Funky (1995)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Stevie Wonder <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.736</span></summary>
+  <pre>Artist: Stevie Wonder
+Type: Person
+Country: US (United States)
+Active since: 1950-05-13
+Tags: rock; pop; singer-songwriter; funk; vegan; soul; motown; film soundtrack; rock and indie; pop soul; grammy winner; contemporary r&amp;b; rhythm &amp; blues
+Also known as: Steveland Hardaway Judkins; Стиви Уандер; Little Stevie Wonder; Steve Wonder; Strvie Wonder; Steevie Wonder; Wonder; Stevland Hardaway Judkins; Stevland Hardaway Morris; Stevie Wonder; スティーヴィー・ワンダー
+Releases:
+- The Jazz Soul of Little Stevie (1962)
+- Fingertips (1963)
+- Little Stevie Wonder 12 Year Old Genius (1963)
+- Tribute to Uncle Ray (1963)
+- With a Song in My Heart (1963)
+- Fingerstips (1963)
+- Recorded Live: The 12 Year Old Genius (1963)
+- Hey Harmonica Man (1964)
+- Stevie at the Beach (1964)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> The Weeknd <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.736</span></summary>
+  <pre>Artist: The Weeknd
+Type: Person
+Country: CA (Canada)
+Description: Canadian R&amp;B singer
+Active since: 1990-02-16
+Tags: electronic; pop; dubstep; hip hop; soul; synth-pop; rnb; dance-pop; hypnagogic pop; r&amp;b; contemporary r&amp;b; 2010s; alternative r&amp;b; pbr&amp;b; 2020s
+Also known as: The Weeknd feat. Playboi Carti; The Weeknd; Abel Makkonen Tesfaye; አቤል መኮንን ተስፋዬ; Abel Tesfaye; ザ・ウィークエンド; The Weekend
+Releases:
+- House of Balloons (2011)
+- Thursday (Chopped &amp; Screwed) (2011)
+- Live at the Mod Club (2011)
+- Echoes of Silence (2011)
+- MOTMXO (2011)
+- The Weeknd Prequel: The Noise (2011)
+- Thursday (Chopped Not Slopped by OG Ron C) (2011)
+- House Of Balloon (Chopped Not Slopped by OG Ron C) (2011)
+- Thursdays Screwed (2011)
+- The Remix (2011)
+- Heaven or Las Vegas (2011)
+- Til’ We Overdose (2011)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>Stromae is from Belgium.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context states that Stromae is from Belgium.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.21</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.23</span> Which artist created this song?</li><li><span class="tnum">0.23</span> Can you tell me which artist is featured here?</li><li><span class="tnum">0.19</span> Who is the artist mentioned in the description?</li></ul>
+</section>
+<section class="card detail" id="detail-adele-21" hidden>
+  <p class="group">fact</p>
+  <h3>When did Adele release 21?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">3.1 s · 213 output tokens</span></h4>
+      <pre class="answer">Artist used: Adele — 21 was released in 2011.</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides the requested information.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> 2011.</p>
+<p class="muted">The answer provides the correct release year, matching the reference answer exactly.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Adele</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Adele <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.469</span></summary>
+  <pre>Artist: Adele (continued)
+- 88 (2008)
+- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)
+- Cold Shoulder (2008)
+- 2008-06-03: The Current Studios, St. Paul, MN, USA (2008)
+- Right as Rain (2008)
+- Hometown Glory (High Contrast Remixes) (2008)
+- Chasing Pavements (Various Production edit) (2009)
+- Water and a Flame (2009)
+- 1988 (2009)
+- iTunes Live From SoHo (2009)
+- Rolling in the Deep (Remixes) (2010)
+- 2010-10-21: The Current Studios, St. Paul, MN, USA (2010)
+- Rolling in the Deep (2010)
+- 21 (2011)
+- Set Fire to the Rain (remixes) (2011)
+- iTunes Festival: London 2011 (2011)
+- Rolling in the Deep (Jamie xx shuffle) (2011)
+- Set Fire to the Rain (Moonlight Matters remix) (2011)
+- Rumour Has It (2011)
+- 2011-04-08: Paradiso FM, Amsterdam, Netherlands (2011)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Adele <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.477</span></summary>
+  <pre>Artist: Adele
+Type: Person
+Country: GB (United Kingdom)
+Description: UK soul/jazz singer
+Active since: 1988-05-05
+Tags: pop; jazz; singer-songwriter; singer; soul; adult contemporary; blue-eyed soul; neo soul; pop and chart; pop soul; blue eyed soul; r&amp;b; adele; alternative/indie rock; adult alternative pop/rock; 2010s; blues-pop; english singer; music for soccer moms; aln-sh
+Also known as: Adèle; 아델; Adele Adkins; Adele; アデル; Adele Laurie Blue Adkins; 阿黛尔
+Releases:
+- 2015-11-22: Saturday Night Live: New York, NY, USA (2005)
+- Hometown Glory (2007)
+- Ep &amp; Demos (2007)
+- Make You Feel My Love (2008)
+- 19 (2008)
+- Hometown Glory (remixes) (2008)
+- Chasing Pavements (2008)
+- 88 (2008)
+- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)
+- Cold Shoulder (2008)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Ed Sheeran <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.619</span></summary>
+  <pre>Artist: Ed Sheeran (continued)
+- + (2011)
+- The A Team (2011)
+- Live At the Bedford (2011)
+- Thank You EP (2011)
+- No.5 Collaborations Project (2011)
+- You Need Me, I Don't Need You (2011)
+- Small Bump (2011)
+- You Need Me, I Don’t Need You (remixes) (2011)
+- Lego House (2011)
+- The A Team (Remixes) (2011)
+- One Take (2011)
+- Spotify Session (2011)
+- Little Lady (2011)
+- You Need Me EP (2011)
+- iTunes Festival: London 2011 (2011)
+- Hush Little Baby (2012)
+- iTunes Festival: London 2012 (2012)
+- Drunk (remixes) (2012)
+- Drunk (2012)
+- The Slumdon Bridge (2012)
+- Watchtower (2012)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Billie Eilish <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.634</span></summary>
+  <pre>Artist: Billie Eilish (continued)
+- hotline bling (2018)
+- WHEN WE ALL FALL ASLEEP, WHERE DO WE GO? (2019)
+- bury a friend (the remixes) (2019)
+- WHEN I WAS OLDER (2019)
+- wish you were gay (2019)
+- bury a friend (2019)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Olivia Rodrigo <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.638</span></summary>
+  <pre>Artist: Olivia Rodrigo (continued)
+- Pretender (2021)
+- Granted (2021)
+- ダイナミックヘッドトラッキング機能を備えた空間オーディオの紹介 (2021)
+- The Best Part (2021)
+- Unreleased (2021)
+- Olivia Rodrigo: driving home 2 u (a SOUR film) (2022)
+- singles 4 you (2022)
+- Olivia Rodrigo: driving home 2 u (2022)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Sia <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.646</span></summary>
+  <pre>Artist: Sia (continued)
+- Colour the Small One (2004)
+- Where I Belong (2004)
+- Colour The Small One (2004)
+- Somersault (2004)
+- Breathe Me (2004)
+- Breathe Me (Ulrich Schnauss Remix) / Numb (Leila Remix) (2004)
+- Rewrite (Remixes) (2004)
+- Don’t Bring Me Down E.P (2004)
+- Numb (2005)
+- Colour the Small One (Bonus Track Version) (2005)
+- Throw It All Away (2006)
+- Lady Croissant (2007)
+- Day Too Soon: Remixes (2007)
+- Day Too Soon (2007)
+- The Girl You Lost (The Mark Picchiotti Mixes) (2007)
+- Some People Have Real Problems (2008)
+- Remixes 2 (2008)
+- Remixes 1 (2008)
+- Buttons (The Remixes) (2008)
+- Numb: Remixes 1 (2008)
+- Rhapsody Originals (2008)
+- The Girl You Lost to Cocaine (2008)
+- The Girl You Lost (remixes) (2008)
+- Where I Belong Remixes 2 (2008)
+- Numb Remixes, Part 2 (2008)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>Adele released 21 in 2011.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context shows '21 (2011)' listed under Adele's releases.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.74</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.74</span> Who was the artist of the album '21' and when was it released?</li><li><span class="tnum">0.74</span> Can you tell me the artist and release year for the album '21'?</li><li><span class="tnum">0.75</span> Which artist released the album '21' and in what year did it come out?</li></ul>
+</section>
+<section class="card detail" id="detail-daft-punk" hidden>
+  <p class="group">fact</p>
+  <h3>Where are Daft Punk from, and since when have they been active?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">1.8 s · 194 output tokens</span></h4>
+      <pre class="answer">Artist used: Daft Punk
+
+They are from France and have been active since 1993.</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should answer. Judge: it answered. The answer provides the requested information.</p>
+      <h4>Correctness: correct</h4>
+<p><span class="label">Reference:</span> France, active since 1993.</p>
+<p class="muted">The answer provides all the facts mentioned in the reference answer without any contradictions.</p>
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Daft Punk</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Daft Punk <span class="tag yes">expected</span><span class="dist">re-ranked 100/3 · distance 0.289</span></summary>
+  <pre>Artist: Daft Punk
+Type: Group
+Country: FR (France)
+Description: French electronic duo
+Active since: 1993
+Tags: electronic; synthpop; pop; french; dance; house; electro; vocoder; funk; techno; electronica; synth-pop; disco; favourite; tech house; indie dance; film score; wp musicians; electroclash; european; club; electro house; french touch; french house; edm; dance and electronica; electronic rock; dance music; nu disco; thomas bangalter; nu-disco; left-field house; r&amp;b; house music; trap; future bass; organic house; french electro; leftfield house; jackin house; dj tools / acapellas
+Also known as: DaftPunk; daft punk; Duft Punk; ダフト・パンク; Daft Punk; Da Funk
+Releases:
+- The New Wave (1994)
+- Da Funk (1995)
+- Musique / L'ombelico del mondo / Make It Funky (1995)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Daft Punk <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.427</span></summary>
+  <pre>Artist: Daft Punk (continued)
+- The New Wave (1994)
+- Da Funk (1995)
+- Musique / L'ombelico del mondo / Make It Funky (1995)
+- 1995-08-05: Soirée Prophecy, Le Cannet, France (1995)
+- Revolution 909 (1996)
+- Around the World (1996)
+- Indo Silver Club (1996)
+- 1997-03-02: BBC Radio 1 Essential Mix (1997)
+- Burnin’ (1997)
+- Homework (1997)
+- Burnin' (1997)
+- Live @ Tribal Party, NRJ, Paris, France (1997)
+- Live @ We Are Family (full set) (1997)
+- Alive 1997 (Mayan Theater) (1997)
+- Assault (1997)
+- Live @ We Are Family (1997)
+- Burnin’ (edit) (1997)
+- 1998-12-31: Daft Punk, BBC Radio One Essential Selection (1998)
+- Live @ Birmingham November 1997 (1998)
+- Around the World (Masters at Work Remixes) (1998)
+- Untitled (1999)
+- D.A..F. T.: A Story About Dogs, Androids, Firemen and Tomatoes (1999)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Stromae <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.625</span></summary>
+  <pre>Artist: Stromae
+Type: Person
+Country: BE (Belgium)
+Active since: 1985-03-12
+Tags: electropop; dance-pop; french pop; hip house; electro house; art pop; nouvelle chanson française
+Also known as: Paul Van Haver; Sromae
+Releases:
+- Racine Carrée Live (√ Live)
+- 2015-04-19: Coachella Valley Music &amp; Arts Festival, Indio, CA, USA
+- Juste un cerveau, un flow, un fond et un mic… (2007)
+- Enfants de l'an 2000 (2009)
+- Mixture Elecstro (2009)
+- Alors on danse (2009)
+- Up Saw Liz (remix) (2009)
+- Up Saw Liz (2009)
+- Cheese (2010)
+- Alors On Danse (Remixes) (2010)
+- Alors on danse (remix) (2010)
+- Te Quiero (2010)
+- Alors on danse (Remix) (2010)
+- Peace or Violence (Remixes) (2011)
+- Peace or Violence (2011)
+- Papaoutai Remixes (2013)
+- Racine carrée (2013)
+- Formidable (2013)
+- Papaoutai (2013)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Prince <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.655</span></summary>
+  <pre>Artist: Prince
+Type: Person
+Country: US (United States)
+Description: “The Artist Formerly Known as…”
+Active since: 1958-06-07
+Tags: rock; pop; 70s; 80s; 90s; jazz; dance; house; punk; american; usa; funk; deep house; funk rock; soul; disco; américain; dance-pop; psychedelic pop; pop rock; neo-psychedelia; rock music; club; african; composers; 00s; robin; film soundtrack; pop and chart; pop soul; singers; caribbean; psychedelic soul; minneapolis sound; r&amp;b; pop/rock; contemporary pop/rock; contemporary r&amp;b; dance-rock; adult contemporary r&amp;b; synth funk; afro house; trap; prince revolution; pretzelbodylogic; james scutt; popular music; future bass; anniversary; organic house; server name; sound recording executives and producers; instrumentalists; rhythm and blues music</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Kendrick Lamar <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.662</span></summary>
+  <pre>Artist: Kendrick Lamar
+Type: Person
+Country: US (United States)
+Active since: 1987-06-17
+Tags: pop; rap; jazz; dance; house; hip hop; funk; disco; gangsta rap; pop rap; neo soul; alternative hip hop; experimental hip hop; west coast hip hop; boom bap; r&amp;b; 2010s; jazz rap; conscious hip hop; political hip hop; hardcore hip hop; trap; future bass; relic inn; 2020s; progressive rap; contemporary rap; conscious rapper
+Also known as: Kendrick Lamar, SZA; K. Duckworth; Kendrick Duckworth; Kendrick Lamar Duckworth; ケンドリック・ラマー; 켄드릭 라마; OKLAMA; K‐Dot; K. Dot
+Releases:
+- Hub City Threat: Minor of the Year (2004)
+- Training Day (2005)
+- No Sleep Til NYC (2007)
+- C4 (2009)
+- Kendrick Lamar (2009)
+- Overly Dedicated (2010)
+- Look Out for Detox (2010)
+- She Needs Me (remix) (ringtone) (2010)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> BTS <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.668</span></summary>
+  <pre>Artist: BTS
+Type: Group
+Country: KR (South Korea)
+Description: South Korean boy group
+Active since: 2013-06-13
+Tags: pop; dance; korean; hip hop; k-pop; english; boy band; boy group; teen pop; 2010s; bots; fixme label mess; bot; corean; 2020s; 3rd gen k-pop; ai slop
+Also known as: 방탄; BTS; The Bangtan Boys; BTS; Bangtan Sonyeondan; Bōdan Shōnendan; Bulletproof Boy Scouts; Beyond the Scene; 방탄소년단; 防弾少年団; Bangtan Boys; BTS
+Releases:
+- O!RUL8,2? (2013)
+- 2 COOL 4 SKOOL (2013)
+- 2 Cool 4 Skool (2013)
+- DARK&amp;WILD (2014)
+- NO MORE DREAM (2014)
+- BOY IN LUV (2014)
+- No More Dream (Japanese ver.) (2014)
+- Wake Up (2014)
+- SKOOL LUV AFFAIR SPECIAL ADDITION (2014)
+- WAKE UP (2014)
+- NO MORE DREAM -Japanese ver.- (2014)
+- BOY IN LUV -Japanese ver.- (2014)
+- Skool Luv Affair (2014)
+- Danger (2014)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: 1.00</h4>
+  <table><thead><tr><th>Claim</th><th>Backed?</th><th>Block</th><th>Judge’s reason</th></tr></thead><tbody><tr><td>Daft Punk is from France.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context states Daft Punk's country as 'FR (France)'.</td></tr><tr><td>Daft Punk has been active since 1993.</td><td class="ok">✓ yes</td><td class="tnum">1</td><td class="muted">The context explicitly states 'Active since: 1993' for Daft Punk.</td></tr></tbody></table>
+  <h4>Answer relevancy: 0.60</h4>
+<p class="muted">Questions the judge thinks this answer fits, and their similarity to the real question:</p>
+<ul class="plain"><li><span class="tnum">0.23</span> Which artist is being referred to?</li><li><span class="tnum">0.71</span> Tell me about the artist Daft Punk.</li><li><span class="tnum">0.86</span> What is the nationality of the artists Daft Punk and since when have they been active?</li></ul>
+</section>
+<section class="card detail" id="detail-grammys" hidden>
+  <p class="group">trap</p>
+  <h3>How many Grammy awards has Beyoncé won?</h3>
+  <p class="muted">The data tags Beyoncé as a 'grammy winner' but has no count, so a faithful answer says it doesn't know the number.</p>
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">1.9 s · 184 output tokens</span></h4>
+      <pre class="answer">I don't know based on the data.
+
+Artist used: Beyoncé</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should refuse. Judge: it refused. The answer explicitly states that it does not know the information.</p>
+      
+    </div>
+    <div>
+      <h4>Retrieved (top 6) · recall 1.00 · precision 1.00</h4>
+      <p class="muted">Expected: Beyoncé</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Beyoncé <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.473</span></summary>
+  <pre>Artist: Beyoncé (continued)
+Country: US (United States)
+Active since: 1981-09-04
+Tags: pop; rap; dance; house; american; vocalist; singer-songwriter; hip hop; hard rock; funk; country; bass; actress; soul; electropop; disco; rnb; pianist; americana; director; southern hip hop; icon; 2000s; dance-pop; adult contemporary; pop rock; pop rap; neo soul; progressive house; club; dancer; hip hop rnb and dance hall; hip hop soul; contemporary country; teen pop; pop soul; sxsw; top 100; grammy winner; r&amp;b; singer/songwriter; contemporary r&amp;b; 2010s; mbs-333; art pop; alternative r&amp;b; moombahton; trap; slim thug; contemporary pop; future bass; top 10; texas rapper; 2020s; texas music; nuno; cultural icon; businesswoman; philanthropist; houston texas music; best female artist; top 5; best female emcee; best female rapper</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Beyoncé <span class="tag yes">expected</span><span class="dist">re-ranked 0/3 · distance 0.551</span></summary>
+  <pre>Artist: Beyoncé
+Type: Person
+Country: US (United States)
+Active since: 1981-09-04</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Cardi B <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.693</span></summary>
+  <pre>Artist: Cardi B (continued)
+- No Limit (2017)
+- Gangsta Bitch Music, Vol. 2 (2017)
+- Bodak Yellow (2017)
+- MotorSport (2017)
+- Right Now (2017)
+- Finesse (Remix) (2017)
+- Red Barz (2017)
+- La modelo (2017)
+- Bodak Yellow (Money Moves) (2017)
+- Bodak Yellow [Latin Trap Remix] (2017)
+- Bodak Yellow (Latin Trap remix) (2017)
+- Bartier Cardi (2017)
+- Bodak Yellow (remix) (2017)
+- Finesse (2018)
+- Girls (Martin Jensen remix) (2018)
+- Taki Taki (2018)
+- Invasion of Privacy (2018)
+- Girls (Steve Aoki remix) (2018)
+- I Like It (2018)
+- Ahora dice (Real hasta la muerte remix) (2018)
+- Money (Neybuu remix) (2018)
+- Twerk (2018)
+- I Like It (Dillon Francis remix) (2018)
+- Dinero (2018)
+- Girls Like You (2018)
+- Backin’ It Up (2018)
+- Finesse (Remixes) (2018)
+- Money (2018)
+- I Like It (Demo) (2018)
+- Finesse (remix) (2018)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Nicki Minaj <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.705</span></summary>
+  <pre>Artist: Nicki Minaj (continued)
+- It's Barbie Bitch! The Mixtape (2009)
+- Who's Got the Crown (2009)
+- Beam Me Up Scotty (2009)
+- Shakin' It 4 Daddy (2009)
+- Step Your P*ssy Up! (2009)
+- Check It Out (2010)
+- Hello Good Morning (remix) (2010)
+- Pink Friday (2010)
+- Nikita (2010)
+- Woohoo (2010)
+- Pink Friday (deluxe edition) (2010)
+- It’s Barbie Bitch (2010)
+- Your Love (2010)
+- Right Thru Me (2010)
+- Monster (2010)
+- Barbie R&amp;B (2010)
+- Barbie World (2010)
+- Barbie World: The Mixtape (2010)
+- Trickin or What (2010)
+- All I Do Is Win (remix) (2010)
+- Harajuku R-N-Barbie (2010)
+- Up Out My Face (2010)
+- Love Pink (2010)
+- Letting Go (Dutty Love) (2010)
+- Check It Out (Remixes) (2010)
+- The Nicki Effect (2010)
+- My Chick Bad (2010)
+- Queen of Collaborations (2010)
+- 2012 (It Ain’t the End) (2010)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Cardi B <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.706</span></summary>
+  <pre>Artist: Cardi B
+Type: Person
+Country: US (United States)
+Description: American rapper
+Active since: 1992-10-11
+Tags: pop; rap; hip hop; pop rap; alternative pop; english; queer; east coast hip hop; hardcore hip hop; trap; trap soul; lick; englisch; relic inn; awful; late 2010s
+Also known as: カーディ・B; Belcalis Almanzar; Belcalis Marlenis Almánzar
+Releases:
+- Washpoppin (2015)
+- Cheap Ass Weave (2015)
+- Fuck Me Up (2016)
+- Fuck Me Up (Jayceeoh Remix) (2016)
+- Bronx Season (2016)
+- What a Girl Likes (2016)
+- Stripper Hoe (2016)
+- Underestimated: The Album (2016)
+- Gangsta Bitch Music Vol 1 (2016)
+- Gangsta Bitch Music, Vol. 1 (2016)
+- What A Girl Likes (2016)
+- She a Bad One (BBA) (remix) (2016)
+- No Limit (2017)
+- Gangsta Bitch Music, Vol. 2 (2017)
+- Bodak Yellow (2017)
+- MotorSport (2017)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Rihanna <span class="tag">not expected</span><span class="dist">re-ranked 0/3 · distance 0.706</span></summary>
+  <pre>Artist: Rihanna (continued)
+- Pon de Replay (Dance Remixes) (2005)
+- Bring It Back (2005)
+- Music Of The Sun (2005)
+- The One (2005)
+- Pon De Replay (Dance Remixes) (2005)
+- Pon De Replay (2005)
+- We Ride (Club Mixes) (2006)
+- A Girl Like Me (2006)
+- We Ride (2006)
+- Unfaithful (2006)
+- S.O.S. (2006)
+- Break It Off (2006)
+- SOS (2006)
+- Unfaithful (Remix EP) (2006)
+- SOS (Remixes) (2006)
+- Unfaithful (Remixes) (2006)
+- S.O.S. (Mixes) (2006)
+- Roll It (2007)
+- Umbrella (2007)
+- Good Girl Gone Bad (2007)
+- Don’t Stop the Music: Remixes (2007)
+- Umbrella (Remixes) (2007)
+- Shut Up and Drive (2007)
+- Don't Stop the Music (2007)
+- Umbrella (Travis Barker Remix) (2007)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: n/a</h4>
+  <p class="muted">No factual claims in the answer, so faithfulness doesn’t apply.</p>
+  
+</section>
+<section class="card detail" id="detail-australia" hidden>
+  <p class="group">out-of-scope</p>
+  <h3>What is the capital of Australia?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">2.5 s · 311 output tokens</span></h4>
+      <pre class="answer">I don't know based on the data.
+
+Artists used from the provided context: Sia; Adele; Taylor Swift; Billie Eilish; Arijit Singh.</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should refuse. Judge: it refused. The answer states it doesn't know the capital of Australia.</p>
+      
+    </div>
+    <div>
+      <h4>Retrieved (top 6)</h4>
+      <p class="muted">No expected artists for this question, so retrieval isn’t scored.</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Sia<span class="dist">re-ranked 0/3 · distance 0.791</span></summary>
+  <pre>Artist: Sia
+Type: Person
+Country: AU (Australia)
+Description: Australian singer‐songwriter
+Active since: 1975-12-18
+Tags: downtempo; pop; australian; electropop; female vocals; indie pop; dance-pop; acid jazz; alternative pop; english; chamber pop; pop and chart; adult alternative pop/rock; alternative singer/songwriter; mbs-333; art pop; left-field pop; australian pop; trainwreck
+Also known as: Sia Kate I. Furler; Sia Kate Isobelle Furler; Sia Furler; Sia; Sia Kate Furler; シーア; Sia
+Releases:
+- OnlySee (1997)
+- Little Man (2000)
+- Taken for Granted (2000)
+- Get Me (Groove Chronicles Mix) (2000)
+- Drink to Get Drunk (2001)
+- Healing Is Difficult (2001)
+- Destiny (2001)
+- Distractions (2002)
+- Colour the Small One (2004)
+- Where I Belong (2004)
+- Colour The Small One (2004)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Sia<span class="dist">re-ranked 0/3 · distance 0.826</span></summary>
+  <pre>Artist: Sia (continued)
+- Where I Belong Remixes 2 (2008)
+- Numb Remixes, Part 2 (2008)
+- Soon We’ll Be Found (2008)
+- Where I Belong - Remixes 1 (2008)
+- The Girl You Lost (2008)
+- iTunes Live from Sydney (2009)
+- You’ve Changed (2009)
+- You’ve Changed: Remixes (2009)
+- I Go to Sleep (triple j Like a Version) (2009)
+- Metro Cabaret (Live at Sydney 25.03.2009) (2009)
+- Some People Have REAL Problems (2009)
+- You’ve Changed: More Remixes (2009)
+- Clap Your Hands (2010)
+- Live: The We Meaning You Tour (2010)
+- Under the Milky Way (2010)
+- iTunes Live: ARIA Awards Concert Series 2010 (2010)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Adele<span class="dist">re-ranked 0/3 · distance 0.884</span></summary>
+  <pre>Artist: Adele
+Type: Person
+Country: GB (United Kingdom)
+Description: UK soul/jazz singer
+Active since: 1988-05-05
+Tags: pop; jazz; singer-songwriter; singer; soul; adult contemporary; blue-eyed soul; neo soul; pop and chart; pop soul; blue eyed soul; r&amp;b; adele; alternative/indie rock; adult alternative pop/rock; 2010s; blues-pop; english singer; music for soccer moms; aln-sh
+Also known as: Adèle; 아델; Adele Adkins; Adele; アデル; Adele Laurie Blue Adkins; 阿黛尔
+Releases:
+- 2015-11-22: Saturday Night Live: New York, NY, USA (2005)
+- Hometown Glory (2007)
+- Ep &amp; Demos (2007)
+- Make You Feel My Love (2008)
+- 19 (2008)
+- Hometown Glory (remixes) (2008)
+- Chasing Pavements (2008)
+- 88 (2008)
+- 2008-09-22: BBC Radio 1's Live Lounge: London, UK (2008)
+- Cold Shoulder (2008)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> Taylor Swift<span class="dist">re-ranked 0/3 · distance 0.890</span></summary>
+  <pre>Artist: Taylor Swift
+Type: Person
+Country: US (United States)
+Active since: 1989-12-13
+Tags: pop; dance; singer-songwriter; country; synth-pop; electropop; americana; female vocals; indie pop; icon; 2000s; dance-pop; indie folk; pop rock; country pop; alternative pop; folk pop; chamber pop; contemporary country; teen pop; top 40; country-pop; taylor-swift; re-recording; singer/songwriter; list; 2010s; fixme label mess; hp; millennial; relic inn; 2020s; loves planes; late 2000s; nuno; artist of the decade; cultural icon</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> Billie Eilish<span class="dist">re-ranked 0/3 · distance 0.895</span></summary>
+  <pre>Artist: Billie Eilish
+Type: Person
+Country: US (United States)
+Active since: 2001-12-18
+Tags: electronic; downtempo; pop; singer-songwriter; usa; electronica; alternative; electropop; lo-fi; female vocals; indie pop; leftfield; pop rock; alternative pop; english; indietronica; los angeles; queer; teen pop; pop soul; alt-pop; progressive pop; dark pop; contemporary r&amp;b; 2010s; art pop; alternative r&amp;b; trap; bedroom pop; pity pop; englisch; 2020s; sad girl pop; gen z; late 2010s; nepo baby</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Arijit Singh<span class="dist">re-ranked 0/3 · distance 0.896</span></summary>
+  <pre>Artist: Arijit Singh (continued)
+- Aaja Baija Tu (from “Brand Bollywood Downunder”) (2023)
+- Gham Khushiyan (2023)
+- Pal (Analogue Mix) (2023)
+- Bhool Jaa (2023)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: n/a</h4>
+  <p class="muted">No factual claims in the answer, so faithfulness doesn’t apply.</p>
+  
+</section>
+<section class="card detail" id="detail-world-cup" hidden>
+  <p class="group">out-of-scope</p>
+  <h3>Who won the 2018 FIFA World Cup?</h3>
+  
+  <div class="cols">
+    <div>
+      <h4>Answer <span class="muted small">3.4 s · 398 output tokens</span></h4>
+      <pre class="answer">I don't know based on the data.
+
+Artists checked: Cardi B; Wizkid; Burna Boy; BLACKPINK; BTS; Bad Bunny.</pre>
+      <h4>Refusal: pass</h4>
+      <p class="muted">Should refuse. Judge: it refused. The answer states it does not know based on the data.</p>
+      
+    </div>
+    <div>
+      <h4>Retrieved (top 6)</h4>
+      <p class="muted">No expected artists for this question, so retrieval isn’t scored.</p>
+      <details class="chunk">
+  <summary><span class="rank">[1]</span> Cardi B<span class="dist">re-ranked 0/3 · distance 0.778</span></summary>
+  <pre>Artist: Cardi B (continued)
+- Finesse (Remixes) (2018)
+- Money (2018)
+- I Like It (Demo) (2018)
+- Finesse (remix) (2018)
+- Dinero (CADE remix) (2018)
+- Girls Like You (CRAY remix) (2018)
+- Be Careful (2018)
+- Girls (2018)
+- Drip (2018)
+- Thotiana (remix) (2019)
+- South of the Border (2019)
+- South of the Border (Sam Feldt remix) (2019)
+- Press (2019)
+- Writing on the Wall (2019)
+- Please Me (2019)
+- YES (2019)
+- Clout (2019)
+- South of the Border (Cheat Codes remix) (2019)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[2]</span> Wizkid<span class="dist">re-ranked 0/3 · distance 0.802</span></summary>
+  <pre>Artist: Wizkid
+Type: Person
+Country: NG (Nigeria)
+Description: alias for Ayodeji Ibrahim Balogun. Nigerian singer and songwriter.
+Active since: 1990-07-16
+Tags: pop; afrobeat; afropop; afrobeats; tryt
+Also known as: StarBoy; Ayodeji Ibrahim Balogun; Wizkid; DJ WizKid; Wizzy; Wiz Kid
+Releases:
+- Superstar (2011)
+- Beat of Life (2012)
+- Zombie (2012)
+- Love You (2013)
+- Mr 1 Take Jake Vol.1 (2013)
+- Jaiye Jaiye (2013)
+- The Matter (2013)
+- New Bounce (2013)
+- Ayo (2014)
+- Feel Me (2014)
+- Don’t Tell ’Em (2014)
+- One Life (2015)
+- Mamacita (2016)
+- U Don't Know (2016)
+- One Dance (US’s &quot;No Sex in the Champagne Room&quot; edit) (2016)
+- Don't dull (Freestyle) remix (2016)
+- Like This (2016)
+- Daddy Yo (2016)
+- One Dance (2016)
+- Sounds From the Other Side (2017)
+- Sounds From The Other Side (2017)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[3]</span> Burna Boy<span class="dist">re-ranked 0/3 · distance 0.805</span></summary>
+  <pre>Artist: Burna Boy (continued)
+- Rock Your Body (2017)
+- Hallelujah (2017)
+- All My Life (2018)
+- Outside (2018)
+- Gbona (2018)
+- On the low (2018)
+- Heaven's Gate (2018)
+- Dangote (2019)
+- Money Play (2019)
+- Own It (Joel Corry remix) (2019)
+- Stormzy - Own It (Sonny Fodera edit) (2019)
+- Be Honest (2019)
+- Steel &amp; Copper (2019)
+- Own It (2019)
+- Killin Dem (2019)
+- African Giant (2019)
+- Anybody (2019)
+- Twice as Tall (2020)
+- Jerusalema (remix) (2020)
+- My Oasis (2020)
+- 20 10 20 (2020)
+- Winter (2020)
+- Wonderful (2020)
+- Odogwu (2020)
+- Lenu (Remix) (2020)
+- Hey Boy (2021)
+- Rotate (2021)
+- B. D’OR (2021)
+- Question (2021)
+- Kilometre (2021)
+- B. D'OR (2021)
+- Want It All (2021)
+- Love, Damini (2022)
+- Last Last (2022)
+- I Told Them… (2023)
+- Mera Na (2023)
+- Big 7 (2023)
+- Apple Music Live: Burna Boy (2023)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[4]</span> BLACKPINK<span class="dist">re-ranked 0/3 · distance 0.809</span></summary>
+  <pre>Artist: BLACKPINK (continued)
+- PLAYING WITH FIRE -JP ver.- (2017)
+- SO HOT (THEBLACKLABEL remix) (2017)
+- DDU-DU DDU-DU (2018)
+- BLACKPINK IN YOUR AREA (2018)
+- SQUARE UP (2018)
+- DDU‐DU DDU‐DU (2018)
+- Re: BLACKPINK (2018)
+- Kiss and Make Up (2018)
+- 뚜두뚜두 (DDU-DU DDU-DU) (2018)
+- BLACKPINK ARENA TOUR 2018 “SPECIAL FINAL IN KYOCERA DOME OSAKA” (2019)
+- KILL THIS LOVE (2019)
+- As If It’s Your Last (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)
+- Kill This Love (2019)
+- KILL THIS LOVE -JP ver.- (2019)
+- STAY (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)
+- BLACKPINK 2018 TOUR ‘IN YOUR AREA’ SEOUL (2019)
+- DDU-DU DDU-DU (remix) -JP ver.- (2019)
+- DDU‐DU DDU‐DU (live at Olympic Gymnastics Arena, Seoul / 2018) (2019)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[5]</span> BTS<span class="dist">re-ranked 0/3 · distance 0.809</span></summary>
+  <pre>Artist: BTS (continued)
+- You Never Walk Alone (2017)
+- 血, 汗, 淚 / Chi, Ase, Namida (피, 땀, 눈물) (Blood Sweat &amp; Tears) (2017)
+- LOVE YOURSELF 承 ‘Her’ (2017)
+- Come Back Home (2017)
+- MIC Drop / DNA / Crystal Snow (2017)
+- 血、汗、涙 (2017)
+- With Seoul (2017)
+- THE BEST OF 防彈少年團 -KOREA EDITION- (2017)
+- Blood Sweat &amp; Tears (2017)
+- THE BEST OF 防彈少年團 -JAPAN EDITION- (2017)
+- YOU NEVER WALK ALONE (2017)
+- FACE YOURSELF (2018)</pre>
+</details><details class="chunk">
+  <summary><span class="rank">[6]</span> Bad Bunny<span class="dist">re-ranked 0/3 · distance 0.810</span></summary>
+  <pre>Artist: Bad Bunny (continued)
+- Amorfoda (2018)
+- Salimos a Buscarte (2018)
+- El combo me llamas 2 (2018)
+- Thinkin (2018)
+- El baño (2018)</pre>
+</details>
+    </div>
+  </div>
+  <h4>Faithfulness: n/a</h4>
+  <p class="muted">No factual claims in the answer, so faithfulness doesn’t apply.</p>
+  
+</section>
+
+  <section class="card">
+    <h2>Reading these numbers</h2>
+    <ul class="notes">
+      <li><b>The judge is an LLM too, and can be wrong.</b> Before trusting a score, read a few claim verdicts and see if you agree. Checking the judge against your own labels is the next step.</li>
+      <li><b>Faithfulness isn’t correctness.</b> An answer can stick perfectly to the retrieved chunks and still be incomplete, if retrieval missed something.</li>
+      <li><b>Small numbers.</b> 13 questions is enough to spot problems, not to compare two setups that differ by a few points.</li>
+      <li><b>Answers vary between runs.</b> The same question can get a slightly different answer, and different scores, next time.</li>
+    </ul>
+  </section>
+</main>
+</div>
+<script>
+(() => {
+  let current = null;
+  function show(id) {
+    if (current) document.getElementById('detail-' + current).hidden = true;
+    document.querySelectorAll('.qrow').forEach((row) => row.classList.toggle('selected', row.dataset.id === id));
+    const panel = document.getElementById('detail-' + id);
+    panel.hidden = false;
+    current = id;
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.querySelectorAll('.qrow').forEach((row) => {
+    row.addEventListener('click', () => show(row.dataset.id));
+    row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(row.dataset.id); } });
+  });
+})();
+</script>
+</body>
+</html>

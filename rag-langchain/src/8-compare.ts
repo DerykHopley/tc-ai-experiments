@@ -30,7 +30,12 @@ const runs: EvalRun[] = fs
   .readdirSync(RUNS_DIR)
   .filter((file) => file.endsWith('.json'))
   .map((file) => JSON.parse(fs.readFileSync(`${RUNS_DIR}/${file}`, 'utf8')))
-  .filter((run: EvalRun) => !VARIANTS.has(run.config.strategy))
+  .filter(
+    (run: EvalRun) =>
+      !VARIANTS.has(run.config.strategy) &&
+      // Temperature-0 re-rank runs are part of the experiment too
+      run.config.rerankTemperature === undefined,
+  )
   // Grouped by strategy (in pipeline order), oldest first within each, so
   // the first run of each strategy is the one drawn filled
   .sort(
