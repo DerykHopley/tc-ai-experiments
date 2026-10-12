@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Tool Flow</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6a64; --line: #d9d7cf;
+    --accent: #c96442; --accent-soft: #f6e3da;
+    --local: #3b7d6e; --local-soft: #dcefe9;
+    --mcp: #5a5fc4; --mcp-soft: #e2e3f8;
+    --warn: #8a6100; --warn-soft: #fbefd0;
+    --code-bg: #f1efe8; --on-accent: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1b19; --panel: #252522; --ink: #ecebe5; --muted: #a09e95; --line: #3d3c37;
+      --accent: #e08a68; --accent-soft: #4a2f24;
+      --local: #6cc2ae; --local-soft: #1f3b35;
+      --mcp: #9da1f0; --mcp-soft: #2c2e52;
+      --warn: #e8c063; --warn-soft: #3d3218;
+      --code-bg: #1e1e1c; --on-accent: #1b1b19;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1b19; --panel: #252522; --ink: #ecebe5; --muted: #a09e95; --line: #3d3c37;
+    --accent: #e08a68; --accent-soft: #4a2f24;
+    --local: #6cc2ae; --local-soft: #1f3b35;
+    --mcp: #9da1f0; --mcp-soft: #2c2e52;
+    --warn: #e8c063; --warn-soft: #3d3218;
+    --code-bg: #1e1e1c; --on-accent: #1b1b19;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  header { padding-top: 24px; }
+  h1 { margin: 0; font-size: 24px; }
+  .sub { color: var(--muted); margin: 4px 0 0; max-width: 820px; }
+  .scenarios { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin: 18px 0 12px; }
+  .scenario { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+              padding: 9px 12px; color: var(--ink); font: inherit; cursor: pointer; }
+  .scenario:hover { border-color: var(--accent); }
+  .scenario[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .scenario b { display: block; font-size: 14px; }
+  .scenario span { font-size: 12px; color: var(--muted); }
+  .question { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
+  .question .q { font-size: 16px; }
+  .question .note { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 16px; align-items: start; padding-bottom: 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .panel + .panel { margin-top: 16px; }
+  .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+  .sticky { position: sticky; top: 12px; }
+  svg { width: 100%; height: auto; display: block; }
+  .node rect { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; transition: fill .25s, stroke .25s; }
+  .node text { fill: var(--ink); font-size: 13px; }
+  .node .small { fill: var(--muted); font-size: 11px; }
+  .node .tool-name.on { fill: var(--ink); font-weight: 700; }
+  .node.active rect { stroke: var(--accent); stroke-width: 3; fill: var(--accent-soft); }
+  .node.local.active rect { stroke: var(--local); fill: var(--local-soft); }
+  .node.mcp.active rect { stroke: var(--mcp); fill: var(--mcp-soft); }
+  .node.visited:not(.active) rect { stroke: var(--muted); }
+  .edge { fill: none; stroke: var(--line); stroke-width: 2; transition: stroke .25s; }
+  .edge.visited { stroke: var(--muted); }
+  .edge.active { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 8 6; animation: flow .6s linear infinite; }
+  .edge-label { fill: var(--muted); font-size: 11px; }
+  @keyframes flow { to { stroke-dashoffset: -14; } }
+  @media (prefers-reduced-motion: reduce) { .edge.active { animation: none; stroke-dasharray: none; } }
+  .now { min-height: 48px; margin-top: 10px; padding: 9px 12px; border-radius: 8px; background: var(--bg); font-size: 14px; }
+  .now .tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-right: 6px; }
+  .controls { display: flex; gap: 6px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+  .controls button, .controls select { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line);
+         background: var(--panel); color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
+  .controls button.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; min-width: 86px; }
+  .controls button:disabled { opacity: .4; cursor: default; }
+  .controls .count { margin-left: auto; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+  .msgs { display: flex; flex-direction: column; gap: 5px; }
+  .msg { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px; font-size: 13px; padding: 5px 8px;
+         border-radius: 6px; border: 1px solid transparent; }
+  .msg .role { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--muted); padding-top: 2px; }
+  .msg .body { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .msg.new { background: var(--accent-soft); }
+  .msg.sent { border-color: var(--accent); }
+  .msgs-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .steps-panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; }
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .step { border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; }
+  .step.fresh { animation: appear .25s ease-out; }
+  @keyframes appear { from { opacity: 0; transform: translateY(4px); } }
+  .step.kind-llm { border-left-color: var(--accent); }
+  .step.kind-local { border-left-color: var(--local); }
+  .step.kind-mcp { border-left-color: var(--mcp); }
+  .step.kind-final { border-left-color: var(--ink); }
+  .step.current { background: var(--bg); box-shadow: 0 0 0 1px var(--line); }
+  .step-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .step-title { font-weight: 600; }
+  .meta { color: var(--muted); font-size: 12px; }
+  .badge { font-size: 11px; padding: 1px 7px; border-radius: 999px; margin-left: 6px; font-weight: 500; white-space: nowrap; }
+  .badge.local { background: var(--local-soft); color: var(--local); }
+  .badge.mcp { background: var(--mcp-soft); color: var(--mcp); }
+  .badge.illus { background: var(--warn-soft); color: var(--warn); }
+  .pending { color: var(--muted); font-style: italic; font-size: 14px; }
+  pre { background: var(--code-bg); border-radius: 6px; padding: 8px 10px; margin: 6px 0 0; font-size: 12px;
+        white-space: pre-wrap; word-break: break-word; max-height: 200px; overflow: auto; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+  .label { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .thinking { font-size: 13px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 8px; margin-top: 4px; }
+  .answer { font-size: 15px; margin-top: 4px; }
+  .md ul, .md ol { margin: 4px 0; padding-left: 22px; }
+  .md code { background: var(--code-bg); padding: 1px 4px; border-radius: 4px; }
+  .toolrow { display: flex; gap: 6px; align-items: baseline; margin: 6px 0 0; flex-wrap: wrap; }
+  .toolrow code { font-weight: 600; }
+  .callout { font-size: 13px; background: var(--warn-soft); color: var(--ink); border-radius: 8px; padding: 8px 12px; margin-top: 10px; }
+  .empty { color: var(--muted); }
+  details { font-size: 14px; }
+  details + details { margin-top: 8px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details ul { padding-left: 20px; margin: 8px 0 0; }
+  details li { margin-bottom: 4px; }
+  details p { margin: 8px 0 0; }
+  footer { color: var(--muted); font-size: 13px; padding: 16px 0 32px; }
+  a { color: var(--accent); }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .sticky, .steps-panel { position: static; }
+    .steps-panel { max-height: none; overflow: visible; }
+  }
+  @media (max-width: 600px) {
+    .wrap { padding: 0 16px; }
+    .msg { grid-template-columns: 86px minmax(0, 1fr); }
+    .diagram { overflow-x: auto; margin: 0 -8px; }
+    .diagram svg { min-width: 500px; }
+    .controls .count { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>How an agent uses tools and MCP</h1>
+    <p class="sub">Recorded runs of a LangChain agent with two local Python tools and two MCP servers. Pick a question and step through it: each LLM call, each tool call, and the messages the agent keeps in its state.</p>
+  </header>
+
+  <div class="scenarios" id="scenarios" role="group" aria-label="Example questions"></div>
+  <div class="question"><div class="q" id="q"></div><div class="note" id="note"></div></div>
+
+  <div class="grid">
+    <div class="sticky">
+      <div class="panel">
+        <h2>Flow</h2>
+        <div class="diagram"><svg viewBox="0 104 560 366" role="img" aria-label="Agent flow diagram: question, model node, tools node, three tool groups, answer">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+            </marker>
+          </defs>
+          <path class="edge" id="e-you-model" d="M160,140 L198,140" marker-end="url(#arrow)"/>
+          <path class="edge" id="e-model-answer" d="M360,140 L398,140" marker-end="url(#arrow)"/>
+          <path class="edge" id="e-model-tools" d="M260,170 L260,228" marker-end="url(#arrow)"/>
+          <path class="edge" id="e-tools-model" d="M300,228 L300,172" marker-end="url(#arrow)"/>
+          <text class="edge-label" x="200" y="204">tool calls</text>
+          <text class="edge-label" x="306" y="204">results</text>
+          <path class="edge" id="e-tools-local" d="M240,282 C200,315 120,315 92,348" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+          <path class="edge" id="e-tools-weather" d="M280,282 L280,348" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+          <path class="edge" id="e-tools-handbook" d="M320,282 C360,315 440,315 468,348" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+
+          <g class="node" id="n-you"><rect x="10" y="116" width="150" height="48" rx="10"/>
+            <text x="85" y="145" text-anchor="middle">🙋 Question</text></g>
+          <g class="node" id="n-model"><rect x="200" y="110" width="160" height="60" rx="10"/>
+            <text x="280" y="135" text-anchor="middle">🧠 Model</text>
+            <text class="small" x="280" y="154" text-anchor="middle">model node · LLM call</text></g>
+          <g class="node" id="n-answer"><rect x="400" y="116" width="150" height="48" rx="10"/>
+            <text x="475" y="145" text-anchor="middle">✅ Answer</text></g>
+          <g class="node" id="n-tools"><rect x="200" y="230" width="160" height="52" rx="10"/>
+            <text x="280" y="252" text-anchor="middle">🔧 Tools</text>
+            <text class="small" x="280" y="270" text-anchor="middle">tools node · runs calls</text></g>
+
+          <g class="node local" id="n-local"><rect x="10" y="350" width="165" height="112" rx="10"/>
+            <text x="22" y="372">Local Python tools</text><g id="list-local"></g></g>
+          <g class="node mcp" id="n-weather"><rect x="197" y="350" width="165" height="112" rx="10"/>
+            <text x="209" y="372">MCP · weather</text><g id="list-weather"></g></g>
+          <g class="node mcp" id="n-handbook"><rect x="385" y="350" width="165" height="112" rx="10"/>
+            <text x="397" y="372">MCP · handbook</text><g id="list-handbook"></g></g>
+        </svg></div>
+        <div class="now" id="now" aria-live="polite"></div>
+        <div class="controls">
+          <button id="restart" title="Restart (Home)" aria-label="Restart">⏮</button>
+          <button id="back" title="Previous step (←)" aria-label="Previous step">◀</button>
+          <button id="play" class="primary" title="Play / pause (space)">▶ Play</button>
+          <button id="next" title="Next step (→)" aria-label="Next step">▶|</button>
+          <select id="speed" aria-label="Playback speed">
+            <option value="2200">Slow</option><option value="1300" selected>Normal</option><option value="600">Fast</option>
+          </select>
+          <span class="count" id="count"></span>
+        </div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--accent)"></span>LLM call</span>
+          <span><span class="dot" style="background:var(--local)"></span>Local tool, same process</span>
+          <span><span class="dot" style="background:var(--mcp)"></span>MCP tool, separate process over stdio</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Agent state: messages</h2>
+        <div class="msgs" id="msgs"></div>
+        <div class="msgs-note" id="msgs-note"></div>
+      </div>
+    </div>
+
+    <div class="panel steps-panel">
+      <h2>Steps</h2>
+      <div class="steps" id="steps"></div>
+      <div class="callout" id="illus-callout" hidden>The steps marked <span class="badge illus" style="margin:0">illustrative</span> were added to show a local tool in this flow. In the recorded run, the model did these two subtractions itself, without calling the calculator.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <details open>
+      <summary>How this maps to LangChain</summary>
+      <ul>
+        <li><code>create_agent()</code> builds a LangGraph graph with two nodes. The <b>model</b> node sends the messages so far, plus a schema for every tool, to the LLM.</li>
+        <li>If the LLM replies with tool calls, the graph goes to the <b>tools</b> node. It runs every call, adds each result as a <code>ToolMessage</code>, and goes back to the model. When the LLM replies without tool calls, the graph ends.</li>
+        <li>The LLM never runs a tool itself. It only asks for one by name, with arguments. Your code runs it and sends the result back.</li>
+        <li>MCP tools come from <code>MultiServerMCPClient.get_tools()</code>, which asks each MCP server for its tools and wraps them as ordinary LangChain tools. The LLM can't tell them apart from local ones. The difference is where they run: calling one sends a JSON-RPC <code>tools/call</code> request to another process.</li>
+        <li>Each LLM call resends the whole message list, so the context grows with every tool round trip. You can watch that in the state panel.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>About this page</summary>
+      <p id="about"></p>
+    </details>
+  </div>
+
+  <footer>Code and setup: <a href="https://github.com/DerykHopley/tc-ai-experiments/tree/main/agent-tools-mcp">agent-tools-mcp on GitHub</a>. Use ← → and space to step through.</footer>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
+const groupOf = (source) => source === "local" ? "local" : source.replace("mcp:", "");
+const shortArgs = (a) => Object.values(a || {}).map((v) => JSON.stringify(v)).join(", ");
+const oneLine = (s, n = 90) => { s = String(s ?? "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
+const sourceLabel = (s) => s === "local" ? "local" : "MCP · " + groupOf(s);
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+// Minimal Markdown for model text: escape first, then add a few safe tags.
+function md(text) {
+  const inline = (t) => t
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<em>$2</em>");
+  const out = [];
+  let list = null;
+  for (const raw of esc(text).split("\n")) {
+    const item = raw.match(/^\s*(?:[-*]|(\d+)\.)\s+(.*)$/);
+    if (item) {
+      const tag = item[1] ? "ol" : "ul";
+      if (list !== tag) { if (list) out.push(`</${list}>`); out.push(`<${tag}>`); list = tag; }
+      out.push(`<li>${inline(item[2])}</li>`);
+      continue;
+    }
+    if (list) { out.push(`</${list}>`); list = null; }
+    const h = raw.match(/^#{1,6}\s+(.*)$/);
+    out.push(h ? `<strong>${inline(h[1])}</strong><br>` : raw.trim() ? inline(raw) + "<br>" : "<br>");
+  }
+  if (list) out.push(`</${list}>`);
+  return out.join("").replace(/(<br>)+$/, "");
+}
+
+let scenario = null, idx = -1, timer = null, shownKeys = new Set();
+
+// ---------- setup ----------
+for (const s of DATA.scenarios) {
+  const b = document.createElement("button");
+  b.className = "scenario"; b.type = "button";
+  b.innerHTML = `<b>${esc(s.title)}</b><span>${esc(oneLine(s.question, 60))}</span>`;
+  b.onclick = () => load(s.id, true);
+  b.dataset.id = s.id;
+  $("scenarios").appendChild(b);
+}
+{
+  const rows = { local: 0, weather: 0, handbook: 0 }, x = { local: 22, weather: 209, handbook: 397 };
+  for (const t of DATA.tools) {
+    const g = groupOf(t.source);
+    if (!(g in rows)) continue;
+    const el = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    el.setAttribute("class", "small tool-name"); el.setAttribute("x", x[g]); el.setAttribute("y", 394 + rows[g]++ * 17);
+    el.dataset.tool = t.name;
+    el.textContent = "• " + t.name;
+    const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+    title.textContent = t.description; el.appendChild(title);
+    $("list-" + g).appendChild(el);
+  }
+}
+$("about").innerHTML = `These are real runs of the agent in this project, recorded on ${esc(DATA.recorded)} with <code>${esc(DATA.model)}</code> through OpenRouter. ` +
+  `The page replays them, so nothing is sent to a model when you use it. The weather and handbook data are made up. ` +
+  `Timings and token counts come from the recording. In the “Leave across two years” example, the calculator steps are illustrative: in the real run the model did those sums itself.`;
+
+$("restart").onclick = () => { stop(); go(-1); };
+$("back").onclick = () => { stop(); go(idx - 1); };
+$("next").onclick = () => { stop(); go(idx + 1); };
+$("play").onclick = () => timer ? stop() : play();
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("select, input, button")) { if (e.key === " ") return; }
+  if (e.key === "ArrowRight") { stop(); go(idx + 1); }
+  else if (e.key === "ArrowLeft") { stop(); go(idx - 1); }
+  else if (e.key === "Home") { stop(); go(-1); }
+  else if (e.key === " ") { e.preventDefault(); timer ? stop() : play(); }
+});
+
+function load(id, autoplay) {
+  stop();
+  scenario = DATA.scenarios.find((s) => s.id === id);
+  document.querySelectorAll(".scenario").forEach((b) => b.setAttribute("aria-pressed", b.dataset.id === id));
+  $("q").textContent = scenario.question;
+  $("note").textContent = scenario.note;
+  $("illus-callout").hidden = !scenario.events.some((e) => e.illustrative);
+  try { history.replaceState(null, "", "#" + id); } catch {}
+  shownKeys = new Set();
+  go(-1);
+  if (autoplay) play();
+}
+
+// ---------- playback ----------
+function play() {
+  if (idx >= scenario.events.length - 1) go(-1);
+  $("play").textContent = "❚❚ Pause";
+  const tick = () => {
+    if (idx >= scenario.events.length - 1) return stop();
+    go(idx + 1);
+    timer = setTimeout(tick, +$("speed").value);
+  };
+  timer = setTimeout(tick, idx < 0 ? 200 : +$("speed").value);
+}
+function stop() {
+  clearTimeout(timer); timer = null;
+  $("play").textContent = "▶ Play";
+}
+
+function go(i) {
+  const n = scenario.events.length;
+  idx = Math.max(-1, Math.min(n - 1, i));
+  $("back").disabled = idx < 0;
+  $("next").disabled = idx >= n - 1;
+  $("count").textContent = idx < 0 ? `${n} steps` : `Step ${idx + 1} of ${n}`;
+  const ev = scenario.events[idx];
+  highlight(idx);
+  renderSteps(idx);
+  renderMessages(idx);
+  $("now").innerHTML = ev ? narrate(ev) : `<span class="tag">Ready</span>Press play, or use the arrow keys to go one step at a time.`;
+}
+
+// ---------- diagram ----------
+function highlight(i) {
+  document.querySelectorAll(".active, .visited").forEach((el) => el.classList.remove("active", "visited"));
+  document.querySelectorAll(".tool-name.on").forEach((el) => el.classList.remove("on"));
+  for (let k = 0; k <= i; k++) {
+    for (const id of idsFor(scenario.events[k])) $(id)?.classList.add(k === i ? "active" : "visited");
+  }
+  for (const name of toolsFor(scenario.events[i])) {
+    document.querySelector(`.tool-name[data-tool="${name}"]`)?.classList.add("on");
+  }
+  // "visited" must not hide "active" on elements used again at this step
+  document.querySelectorAll(".active.visited").forEach((el) => el.classList.remove("visited"));
+}
+function idsFor(ev) {
+  if (!ev) return [];
+  switch (ev.type) {
+    case "question": return ["n-you"];
+    case "llm_start": return ["n-model", ev.turn === 1 ? "e-you-model" : "e-tools-model"];
+    case "llm_end": return ["n-model", ev.tool_calls.length ? "e-model-tools" : "e-model-answer"];
+    case "tool_start": case "tool_end": { const g = groupOf(ev.source); return ["n-tools", "n-" + g, "e-tools-" + g]; }
+    case "final": return ["n-answer"];
+  }
+  return [];
+}
+function toolsFor(ev) {
+  if (ev?.type === "llm_end") return ev.tool_calls.map((c) => c.name);
+  if (ev?.type === "tool_start" || ev?.type === "tool_end") return [ev.name];
+  return [];
+}
+
+function narrate(ev) {
+  const illus = ev.illustrative ? ` <span class="badge illus">illustrative</span>` : "";
+  const toolCount = scenario.events.filter((e) => e.type === "tool_start").length;
+  switch (ev.type) {
+    case "question":
+      return `<span class="tag">Start</span>The question is added to the agent's state as a <code>HumanMessage</code>, after the system prompt.`;
+    case "llm_start":
+      return `<span class="tag">Model</span>The model node sends ${plural(ev.message_count, "message")}, plus a schema for each of the ${DATA.tools.length} tools, to the LLM.${illus}`;
+    case "llm_end":
+      return ev.tool_calls.length
+        ? `<span class="tag">Model</span>The LLM doesn't answer yet. It asks for ${ev.tool_calls.length > 1 ? `${ev.tool_calls.length} tool calls at once` : "a tool call"}: ${ev.tool_calls.map((c) => `<code>${esc(c.name)}</code>`).join(", ")}. The graph goes to the tools node.${illus}`
+        : `<span class="tag">Model</span>The LLM replies with no tool calls, so the graph ends. This reply is the answer.`;
+    case "tool_start":
+      return ev.source === "local"
+        ? `<span class="tag">Tools</span>The tools node calls <code>${esc(ev.name)}</code>, a Python function in the same process.${illus}`
+        : `<span class="tag">Tools</span>The tools node sends a <code>tools/call</code> request for <code>${esc(ev.name)}</code> to the ${esc(groupOf(ev.source))} MCP server, a separate process, over stdio.`;
+    case "tool_end":
+      return `<span class="tag">Tools</span><code>${esc(ev.name)}</code> returned. Its result is added to the state as a <code>ToolMessage</code>, ready for the next LLM call.${illus}`;
+    case "final":
+      return `<span class="tag">Done</span>${plural(ev.llm_calls, "LLM call")} and ${plural(toolCount, "tool call")}.`;
+  }
+  return "";
+}
+
+// ---------- state panel ----------
+function renderMessages(i) {
+  const msgs = [];
+  for (let k = 0; k <= i; k++) {
+    const ev = scenario.events[k];
+    if (ev.type === "question") {
+      msgs.push({ role: "System", body: "You are a helpful assistant… use the available tools…", k });
+      msgs.push({ role: "Human", body: ev.text, k });
+    } else if (ev.type === "llm_end") {
+      msgs.push({ role: "AI", k, body: ev.tool_calls.length
+        ? "tool_calls: " + ev.tool_calls.map((c) => `${c.name}(${shortArgs(c.args)})`).join(", ")
+        : ev.text });
+    } else if (ev.type === "tool_end") {
+      msgs.push({ role: "Tool", k, body: `${ev.name} → ${oneLine(ev.output, 140)}` });
+    }
+  }
+  const sending = scenario.events[i]?.type === "llm_start";
+  if (!msgs.length) {
+    $("msgs").innerHTML = `<p class="empty" style="margin:0">Empty until the question arrives.</p>`;
+    $("msgs-note").textContent = "";
+    return;
+  }
+  $("msgs").innerHTML = msgs.map((m) => `<div class="msg${m.k === i ? " new" : ""}${sending ? " sent" : ""}" title="${esc(m.body)}">
+      <span class="role">${m.role}Message</span><span class="body">${esc(oneLine(m.body, 160))}</span></div>`).join("");
+  $("msgs-note").textContent = sending
+    ? `All ${msgs.length} messages are sent to the LLM.`
+    : `${plural(msgs.length, "message")} in state. New ones are highlighted.`;
+}
+
+// ---------- step cards ----------
+function renderSteps(i) {
+  const cards = new Map();   // key -> {kind, html, last, start}
+  for (let k = 0; k <= i; k++) {
+    const ev = scenario.events[k];
+    const key = ev.id ?? ev.type;
+    const prev = cards.get(key);
+    const start = ev.type === "tool_start" ? ev : prev?.start;
+    const card = cardFor(ev, start);
+    if (card) cards.set(key, { ...card, start, last: k });
+  }
+  const current = scenario.events[i]?.id ?? scenario.events[i]?.type;
+  $("steps").innerHTML = cards.size ? "" : `<p class="empty" style="margin:0">Steps appear here as the run plays.</p>`;
+  const nextShown = new Set();
+  for (const [key, c] of cards) {
+    const el = document.createElement("div");
+    el.className = `step kind-${c.kind}${key === current ? " current" : ""}${shownKeys.has(key) ? "" : " fresh"}`;
+    el.innerHTML = c.html;
+    el.onclick = () => { stop(); go(c.last); };
+    $("steps").appendChild(el);
+    nextShown.add(key);
+    if (key === current) requestAnimationFrame(scrollStepIntoView);
+  }
+  shownKeys = nextShown;
+}
+
+// Scroll only the steps panel, never the page, so the diagram stays where it is.
+function scrollStepIntoView() {
+  const panel = document.querySelector(".steps-panel"), el = panel.querySelector(".step.current");
+  if (!el || panel.scrollHeight <= panel.clientHeight) return;
+  const top = el.offsetTop - panel.offsetTop, bottom = top + el.offsetHeight;
+  if (bottom > panel.scrollTop + panel.clientHeight) panel.scrollTo({ top: bottom - panel.clientHeight + 12, behavior: "smooth" });
+  else if (top < panel.scrollTop) panel.scrollTo({ top: top - 12, behavior: "smooth" });
+}
+
+function cardFor(ev, start) {
+  const illus = ev.illustrative ? `<span class="badge illus">illustrative</span>` : "";
+  switch (ev.type) {
+    case "question":
+      return { kind: "question", html: `<div class="step-head"><span class="step-title">🙋 Question</span></div><div>${esc(ev.text)}</div>` };
+    case "llm_start":
+      return { kind: "llm", html: `<div class="step-head"><span class="step-title">🧠 LLM call ${ev.turn}${illus}</span><span class="meta">waiting…</span></div>
+        <div class="pending">Sending ${plural(ev.message_count, "message")} and the tool schemas</div>` };
+    case "llm_end": {
+      const meta = ev.illustrative ? "" : `${(ev.ms / 1000).toFixed(1)} s · ${ev.tokens.in ?? "?"} tokens in, ${ev.tokens.out ?? "?"} out`;
+      const calls = ev.tool_calls.map((tc) =>
+        `<div class="toolrow">➡️ <code>${esc(tc.name)}</code><span class="badge ${tc.source === "local" ? "local" : "mcp"}">${esc(sourceLabel(tc.source))}</span></div>
+         <pre>${esc(fmt(tc.args))}</pre>`).join("");
+      const decision = ev.tool_calls.length
+        ? `<div class="label">Asks for ${ev.tool_calls.length > 1 ? `${ev.tool_calls.length} tool calls at once` : "a tool call"}:</div>${calls}`
+        : `<div class="label">No tool calls: this is the answer.</div>`;
+      return { kind: "llm", html: `<div class="step-head"><span class="step-title">🧠 LLM call ${ev.turn}${illus}</span><span class="meta">${meta}</span></div>
+        ${ev.thinking ? `<div class="label">Reasoning summary</div><div class="thinking md">${md(ev.thinking)}</div>` : ""}
+        ${ev.text && ev.tool_calls.length ? `<div class="label">Text</div><div class="md">${md(ev.text)}</div>` : ""}
+        ${decision}` };
+    }
+    case "tool_start":
+    case "tool_end": {
+      const isMcp = ev.source !== "local";
+      const args = (start ?? ev).args;
+      return { kind: isMcp ? "mcp" : "local", html: `<div class="step-head">
+          <span class="step-title">🔧 ${esc(ev.name)}<span class="badge ${isMcp ? "mcp" : "local"}">${esc(sourceLabel(ev.source))}</span>${illus}</span>
+          <span class="meta">${ev.type === "tool_end" ? (ev.illustrative ? "" : ev.ms + " ms") : "running…"}</span></div>
+        <div class="label">${isMcp ? "JSON-RPC <code>tools/call</code> to the MCP server over stdio" : "Python function call in the same process"}</div>
+        <div class="label">Input</div><pre>${esc(fmt(args))}</pre>
+        ${ev.type === "tool_end" ? `<div class="label">Output</div><pre>${esc(ev.output)}</pre>` : ""}` };
+    }
+    case "final":
+      return { kind: "final", html: `<div class="step-head"><span class="step-title">✅ Answer</span>
+        <span class="meta">${plural(ev.llm_calls, "LLM call")}</span></div>
+        <div class="answer md">${md(ev.text)}</div>` };
+  }
+  return null;
+}
+
+const fromHash = location.hash.slice(1);
+load(DATA.scenarios.some((s) => s.id === fromHash) ? fromHash : "holiday-bridge", false);
+</script>
+</body>
+</html>

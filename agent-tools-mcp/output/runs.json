@@ -1,0 +1,658 @@
+{
+  "model": "anthropic/claude-sonnet-5.5",
+  "recorded": "2026-10-12",
+  "tools": [
+    {
+      "name": "calculator",
+      "source": "local",
+      "description": "Evaluate an arithmetic expression, e.g. '0.17 * 2340' or '(22 - 14) * 9 / 5'."
+    },
+    {
+      "name": "current_time",
+      "source": "local",
+      "description": "Get the current date and time in an IANA timezone, e.g. 'Europe/Berlin'."
+    },
+    {
+      "name": "get_current_weather",
+      "source": "mcp:weather",
+      "description": "Get the current weather for a city. Temperatures are in Celsius."
+    },
+    {
+      "name": "get_forecast",
+      "source": "mcp:weather",
+      "description": "Get a daily forecast for a city for the next 1-7 days. Temperatures are in Celsius."
+    },
+    {
+      "name": "list_policies",
+      "source": "mcp:handbook",
+      "description": "List the names of all policies in the team handbook."
+    },
+    {
+      "name": "get_policy",
+      "source": "mcp:handbook",
+      "description": "Get the full text of a handbook policy by its name (see list_policies)."
+    },
+    {
+      "name": "search_handbook",
+      "source": "mcp:handbook",
+      "description": "Keyword search across all handbook policies. Returns matching policies."
+    },
+    {
+      "name": "calculate_leave",
+      "source": "mcp:handbook",
+      "description": "Count the leave days needed for a holiday, split by calendar year.\n\nDates are inclusive, in YYYY-MM-DD format. Weekends and public holidays don't\nuse leave. `country` is an ISO code like \"DE\" or \"GB\"; `subdivision` is an\noptional state/region code (e.g. \"BE\" for Berlin, \"BY\" for Bavaria), since\nsome public holidays only apply regionally.\n"
+    }
+  ],
+  "runs": [
+    {
+      "scenario": "no-tools",
+      "events": [
+        {
+          "type": "question",
+          "text": "What is the capital of France?"
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff3-eea9-7c01-96a3-4fb74428b57e",
+          "turn": 1,
+          "node": "model",
+          "message_count": 2
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff3-eea9-7c01-96a3-4fb74428b57e",
+          "turn": 1,
+          "ms": 1735,
+          "thinking": "",
+          "text": "The capital of France is Paris.",
+          "tool_calls": [],
+          "stop_reason": "stop",
+          "tokens": {
+            "in": 1396,
+            "out": 12
+          }
+        },
+        {
+          "type": "final",
+          "text": "The capital of France is Paris.",
+          "ms": 1741,
+          "llm_calls": 1
+        }
+      ]
+    },
+    {
+      "scenario": "local-tool",
+      "events": [
+        {
+          "type": "question",
+          "text": "What's 17.5% of 2,340?"
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff3-f572-7651-aa24-54bf1083f2e9",
+          "turn": 1,
+          "node": "model",
+          "message_count": 2
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff3-f572-7651-aa24-54bf1083f2e9",
+          "turn": 1,
+          "ms": 1490,
+          "thinking": "",
+          "text": "",
+          "tool_calls": [
+            {
+              "id": "toolu_01WGeYexhYFV5We93ryUytFt",
+              "name": "calculator",
+              "args": {
+                "expression": "0.175 * 2340"
+              },
+              "source": "local"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1401,
+            "out": 55
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff3-fb45-75b1-9fda-aaa84621af01",
+          "name": "calculator",
+          "source": "local",
+          "args": {
+            "expression": "0.175 * 2340"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff3-fb45-75b1-9fda-aaa84621af01",
+          "name": "calculator",
+          "source": "local",
+          "ms": 0,
+          "output": "409.5",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff3-fb47-72c0-ae13-2d844c3e7daf",
+          "turn": 2,
+          "node": "model",
+          "message_count": 4
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff3-fb47-72c0-ae13-2d844c3e7daf",
+          "turn": 2,
+          "ms": 993,
+          "thinking": "",
+          "text": "17.5% of 2,340 is **409.5**.",
+          "tool_calls": [],
+          "stop_reason": "stop",
+          "tokens": {
+            "in": 1464,
+            "out": 19
+          }
+        },
+        {
+          "type": "final",
+          "text": "17.5% of 2,340 is **409.5**.",
+          "ms": 2487,
+          "llm_calls": 2
+        }
+      ]
+    },
+    {
+      "scenario": "mcp-tool",
+      "events": [
+        {
+          "type": "question",
+          "text": "What's the weather in Tokyo?"
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff3-ff29-7c53-8c89-f81fdc2fffc0",
+          "turn": 1,
+          "node": "model",
+          "message_count": 2
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff3-ff29-7c53-8c89-f81fdc2fffc0",
+          "turn": 1,
+          "ms": 1555,
+          "thinking": "",
+          "text": "",
+          "tool_calls": [
+            {
+              "id": "toolu_015auPy1TnBqE4spR9uEtMLM",
+              "name": "get_current_weather",
+              "args": {
+                "city": "Tokyo"
+              },
+              "source": "mcp:weather"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1400,
+            "out": 54
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-053d-7a31-a8c0-224912ed442e",
+          "name": "get_current_weather",
+          "source": "mcp:weather",
+          "args": {
+            "city": "Tokyo"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-053d-7a31-a8c0-224912ed442e",
+          "name": "get_current_weather",
+          "source": "mcp:weather",
+          "ms": 315,
+          "output": "{\n  \"city\": \"Tokyo\",\n  \"temp_c\": 22,\n  \"condition\": \"sunny\",\n  \"humidity\": 58\n}",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-0679-7e52-8747-838a8a776d6f",
+          "turn": 2,
+          "node": "model",
+          "message_count": 4
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-0679-7e52-8747-838a8a776d6f",
+          "turn": 2,
+          "ms": 1100,
+          "thinking": "",
+          "text": "It's sunny in Tokyo right now. The temperature is 22 °C and humidity is 58%.",
+          "tool_calls": [],
+          "stop_reason": "stop",
+          "tokens": {
+            "in": 1505,
+            "out": 35
+          }
+        },
+        {
+          "type": "final",
+          "text": "It's sunny in Tokyo right now. The temperature is 22 °C and humidity is 58%.",
+          "ms": 2974,
+          "llm_calls": 2
+        }
+      ]
+    },
+    {
+      "scenario": "parallel-mixed",
+      "events": [
+        {
+          "type": "question",
+          "text": "Is it warmer in Berlin or Tokyo right now, and by how many degrees Fahrenheit?"
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-0ac7-7ae1-8cbe-578a4586f126",
+          "turn": 1,
+          "node": "model",
+          "message_count": 2
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-0ac7-7ae1-8cbe-578a4586f126",
+          "turn": 1,
+          "ms": 1623,
+          "thinking": "",
+          "text": "",
+          "tool_calls": [
+            {
+              "id": "toolu_01TRF8bCHXN5QjkhSzNLaN2o",
+              "name": "get_current_weather",
+              "args": {
+                "city": "Berlin"
+              },
+              "source": "mcp:weather"
+            },
+            {
+              "id": "toolu_01M87vSG5HiWdDwRvqaKNU2E",
+              "name": "get_current_weather",
+              "args": {
+                "city": "Tokyo"
+              },
+              "source": "mcp:weather"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1423,
+            "out": 104
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-1120-7423-91c0-11098d38aede",
+          "name": "get_current_weather",
+          "source": "mcp:weather",
+          "args": {
+            "city": "Berlin"
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-1120-7423-91c0-111cdad7ef54",
+          "name": "get_current_weather",
+          "source": "mcp:weather",
+          "args": {
+            "city": "Tokyo"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-1120-7423-91c0-11098d38aede",
+          "name": "get_current_weather",
+          "source": "mcp:weather",
+          "ms": 312,
+          "output": "{\n  \"city\": \"Berlin\",\n  \"temp_c\": 14,\n  \"condition\": \"overcast\",\n  \"humidity\": 71\n}",
+          "is_error": false
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-1120-7423-91c0-111cdad7ef54",
+          "name": "get_current_weather",
+          "source": "mcp:weather",
+          "ms": 321,
+          "output": "{\n  \"city\": \"Tokyo\",\n  \"temp_c\": 22,\n  \"condition\": \"sunny\",\n  \"humidity\": 58\n}",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-1262-7540-a74d-804c96884953",
+          "turn": 2,
+          "node": "model",
+          "message_count": 5
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-1262-7540-a74d-804c96884953",
+          "turn": 2,
+          "ms": 1911,
+          "thinking": "",
+          "text": "Difference is 8°C → in Fahrenheit: 8 * 9/5.",
+          "tool_calls": [
+            {
+              "id": "toolu_01NEpUucuQErFuRUxw7cn9bN",
+              "name": "calculator",
+              "args": {
+                "expression": "(22 - 14) * 9 / 5"
+              },
+              "source": "local"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1680,
+            "out": 89
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-19d9-7833-a442-1c54ec11d4f1",
+          "name": "calculator",
+          "source": "local",
+          "args": {
+            "expression": "(22 - 14) * 9 / 5"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-19d9-7833-a442-1c54ec11d4f1",
+          "name": "calculator",
+          "source": "local",
+          "ms": 0,
+          "output": "14.4",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-19da-75e3-bc26-4325ac7faffe",
+          "turn": 3,
+          "node": "model",
+          "message_count": 7
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-19da-75e3-bc26-4325ac7faffe",
+          "turn": 3,
+          "ms": 1487,
+          "thinking": "",
+          "text": "Tokyo is warmer. It's 22°C (71.6°F) and sunny there. Berlin is 14°C (57.2°F) and overcast. That makes Tokyo 14.4°F warmer.",
+          "tool_calls": [],
+          "stop_reason": "stop",
+          "tokens": {
+            "in": 1777,
+            "out": 70
+          }
+        },
+        {
+          "type": "final",
+          "text": "Tokyo is warmer. It's 22°C (71.6°F) and sunny there. Berlin is 14°C (57.2°F) and overcast. That makes Tokyo 14.4°F warmer.",
+          "ms": 5348,
+          "llm_calls": 3
+        }
+      ]
+    },
+    {
+      "scenario": "handbook",
+      "events": [
+        {
+          "type": "question",
+          "text": "If I do 3 on-call weeks this year, how many holiday days will I have in total?"
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-1fab-7be1-ae03-8a543f347b2e",
+          "turn": 1,
+          "node": "model",
+          "message_count": 2
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-1fab-7be1-ae03-8a543f347b2e",
+          "turn": 1,
+          "ms": 1768,
+          "thinking": "",
+          "text": "",
+          "tool_calls": [
+            {
+              "id": "toolu_01TPZeuiaY6KSqgCXpA71eB7",
+              "name": "search_handbook",
+              "args": {
+                "query": "on-call"
+              },
+              "source": "mcp:handbook"
+            },
+            {
+              "id": "toolu_01YPAFHerdi7xVDuXL1USZmH",
+              "name": "search_handbook",
+              "args": {
+                "query": "holiday days"
+              },
+              "source": "mcp:handbook"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1415,
+            "out": 100
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-2694-76e3-91ee-c1115e9f3943",
+          "name": "search_handbook",
+          "source": "mcp:handbook",
+          "args": {
+            "query": "on-call"
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-2694-76e3-91ee-c1206ae21ced",
+          "name": "search_handbook",
+          "source": "mcp:handbook",
+          "args": {
+            "query": "holiday days"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-2694-76e3-91ee-c1206ae21ced",
+          "name": "search_handbook",
+          "source": "mcp:handbook",
+          "ms": 325,
+          "output": "{\n  \"policy\": \"holiday\",\n  \"text\": \"Full-time staff get 28 days of paid holiday per year, plus public holidays. Up to 5 unused days can be carried over to the next year.\"\n}\n{\n  \"policy\": \"remote-work\",\n  \"text\": \"Staff may work remotely up to 3 days a week. Core hours are 10:00-15:00 local time.\"\n}\n{\n  \"policy\": \"expenses\",\n  \"text\": \"Expenses under 50 EUR need no pre-approval. Anything above needs manager sign-off before purchase. Submit receipts within 30 days.\"\n}\n{\n  \"policy\": \"on-call\",\n  \"text\": \"On-call rotations are one week long. Each on-call week earns 1 extra day of holiday.\"\n}",
+          "is_error": false
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-2694-76e3-91ee-c1115e9f3943",
+          "name": "search_handbook",
+          "source": "mcp:handbook",
+          "ms": 327,
+          "output": "{\n  \"policy\": \"on-call\",\n  \"text\": \"On-call rotations are one week long. Each on-call week earns 1 extra day of holiday.\"\n}",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-27dd-7ef2-9e05-079805ecb74d",
+          "turn": 2,
+          "node": "model",
+          "message_count": 5
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-27dd-7ef2-9e05-079805ecb74d",
+          "turn": 2,
+          "ms": 1728,
+          "thinking": "",
+          "text": "",
+          "tool_calls": [
+            {
+              "id": "toolu_01VBZhQ6yJoUVDjzYAj91AFp",
+              "name": "calculator",
+              "args": {
+                "expression": "28 + 3"
+              },
+              "source": "local"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1864,
+            "out": 52
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-2e9d-7d42-acd4-42746f8555c0",
+          "name": "calculator",
+          "source": "local",
+          "args": {
+            "expression": "28 + 3"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-2e9d-7d42-acd4-42746f8555c0",
+          "name": "calculator",
+          "source": "local",
+          "ms": 0,
+          "output": "31",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-2e9e-7023-a48a-0aaeb32c7089",
+          "turn": 3,
+          "node": "model",
+          "message_count": 7
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-2e9e-7023-a48a-0aaeb32c7089",
+          "turn": 3,
+          "ms": 2955,
+          "thinking": "",
+          "text": "You'd have **31 holiday days** this year. That's the 28 days full-time staff get, plus 3 extra days for the 3 on-call weeks (1 day per week). Public holidays are on top of that.\n\nUp to 5 unused days can be carried over to next year.",
+          "tool_calls": [],
+          "stop_reason": "stop",
+          "tokens": {
+            "in": 1922,
+            "out": 87
+          }
+        },
+        {
+          "type": "final",
+          "text": "You'd have **31 holiday days** this year. That's the 28 days full-time staff get, plus 3 extra days for the 3 on-call weeks (1 day per week). Public holidays are on top of that.\n\nUp to 5 unused days can be carried over to next year.",
+          "ms": 6784,
+          "llm_calls": 3
+        }
+      ]
+    },
+    {
+      "scenario": "holiday-bridge",
+      "events": [
+        {
+          "type": "question",
+          "text": "I'm based in Berlin, Germany. I have 5 days of holiday left for 2026 and my full 28 days for 2027. I'd like to be off from Saturday 19 December 2026 to Sunday 10 January 2027. How many leave days does that use from each year, and does it work with my balances?"
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-3a2b-7e93-9a9e-99d83379cb17",
+          "turn": 1,
+          "node": "model",
+          "message_count": 2
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-3a2b-7e93-9a9e-99d83379cb17",
+          "turn": 1,
+          "ms": 1761,
+          "thinking": "",
+          "text": "",
+          "tool_calls": [
+            {
+              "id": "toolu_01VsoXjRej41Xxrb593mLuGR",
+              "name": "calculate_leave",
+              "args": {
+                "start_date": "2026-12-19",
+                "end_date": "2027-01-10",
+                "country": "DE",
+                "subdivision": "BE"
+              },
+              "source": "mcp:handbook"
+            }
+          ],
+          "stop_reason": "tool_calls",
+          "tokens": {
+            "in": 1484,
+            "out": 132
+          }
+        },
+        {
+          "type": "tool_start",
+          "id": "01a12ff4-410d-74e2-8cd5-518870d3c0f5",
+          "name": "calculate_leave",
+          "source": "mcp:handbook",
+          "args": {
+            "start_date": "2026-12-19",
+            "end_date": "2027-01-10",
+            "country": "DE",
+            "subdivision": "BE"
+          }
+        },
+        {
+          "type": "tool_end",
+          "id": "01a12ff4-410d-74e2-8cd5-518870d3c0f5",
+          "name": "calculate_leave",
+          "source": "mcp:handbook",
+          "ms": 603,
+          "output": "{\n  \"start\": \"2026-12-19 (Sat)\",\n  \"end\": \"2027-01-10 (Sun)\",\n  \"region\": \"DE-BE\",\n  \"by_year\": {\n    \"2026\": {\n      \"leave_days\": 8,\n      \"leave_dates\": [\n        \"2026-12-21 (Mon)\",\n        \"2026-12-22 (Tue)\",\n        \"2026-12-23 (Wed)\",\n        \"2026-12-24 (Thu)\",\n        \"2026-12-28 (Mon)\",\n        \"2026-12-29 (Tue)\",\n        \"2026-12-30 (Wed)\",\n        \"2026-12-31 (Thu)\"\n      ],\n      \"public_holidays\": [\n        \"2026-12-25 (Fri) Erster Weihnachtstag\",\n        \"2026-12-26 (Sat) Zweiter Weihnachtstag\"\n      ],\n      \"weekend_days\": 3\n    },\n    \"2027\": {\n      \"leave_days\": 5,\n      \"leave_dates\": [\n        \"2027-01-04 (Mon)\",\n        \"2027-01-05 (Tue)\",\n        \"2027-01-06 (Wed)\",\n        \"2027-01-07 (Thu)\",\n        \"2027-01-08 (Fri)\"\n      ],\n      \"public_holidays\": [\n        \"2027-01-01 (Fri) Neujahr\"\n      ],\n      \"weekend_days\": 4\n    }\n  },\n  \"total_leave_days\": 13\n}",
+          "is_error": false
+        },
+        {
+          "type": "llm_start",
+          "id": "01a12ff4-436a-76a1-8143-19031f116b66",
+          "turn": 2,
+          "node": "model",
+          "message_count": 4
+        },
+        {
+          "type": "llm_end",
+          "id": "01a12ff4-436a-76a1-8143-19031f116b66",
+          "turn": 2,
+          "ms": 3690,
+          "thinking": "2026 falls short by 3 days against the requirement of 8, while only 5 remain available, whereas 2027 easily fits using just 5 of its 28 days. I could offer to check for an alternative arrangement that stays within the 5-day limit in 2026, but I'll keep this brief and just offer to verify if asked.",
+          "text": "It doesn't work with your balances as they stand.\n\n- **2026:** you'd need 8 leave days (21–24 and 28–31 Dec), but you only have 5. That's 3 days short.\n- **2027:** you'd need 5 leave days (4–8 Jan), and you have 28, so that's fine. Neujahr (1 Jan) is a public holiday and uses no leave.\n\nThe total is 13 leave days. Christmas Day (Fri 25 Dec) is a public holiday and 26 Dec falls on a Saturday, so neither uses leave.\n\nI can check alternative dates that fit within your 5 remaining 2026 days if you'd like.",
+          "tool_calls": [],
+          "stop_reason": "stop",
+          "tokens": {
+            "in": 2102,
+            "out": 320
+          }
+        },
+        {
+          "type": "final",
+          "text": "It doesn't work with your balances as they stand.\n\n- **2026:** you'd need 8 leave days (21–24 and 28–31 Dec), but you only have 5. That's 3 days short.\n- **2027:** you'd need 5 leave days (4–8 Jan), and you have 28, so that's fine. Neujahr (1 Jan) is a public holiday and uses no leave.\n\nThe total is 13 leave days. Christmas Day (Fri 25 Dec) is a public holiday and 26 Dec falls on a Saturday, so neither uses leave.\n\nI can check alternative dates that fit within your 5 remaining 2026 days if you'd like.",
+          "ms": 6058,
+          "llm_calls": 2
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Flow Explorer</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6a64; --line: #d9d7cf;
+    --accent: #c96442; --accent-soft: #f6e3da;
+    --local: #3b7d6e; --local-soft: #dcefe9;
+    --mcp: #5a5fc4; --mcp-soft: #e2e3f8;
+    --error: #b3261e; --error-soft: #fbe2df;
+    --code-bg: #f1efe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1b19; --panel: #252522; --ink: #ecebe5; --muted: #a09e95; --line: #3d3c37;
+      --accent: #e08a68; --accent-soft: #4a2f24;
+      --local: #6cc2ae; --local-soft: #1f3b35;
+      --mcp: #9da1f0; --mcp-soft: #2c2e52;
+      --error: #f2867d; --error-soft: #4a2321;
+      --code-bg: #1e1e1c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 20px 24px 8px; max-width: 1280px; margin: 0 auto; }
+  h1 { margin: 0; font-size: 22px; }
+  .sub { color: var(--muted); margin: 2px 0 0; }
+  main { max-width: 1280px; margin: 0 auto; padding: 8px 24px 40px; }
+  form { display: flex; gap: 8px; margin: 12px 0 10px; }
+  input[type=text] { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line);
+                     background: var(--panel); color: var(--ink); font: inherit; }
+  button { padding: 10px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent);
+           color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--accent); }
+  button:disabled { opacity: .5; cursor: default; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .chip { background: var(--panel); border: 1px solid var(--line); color: var(--ink); font-weight: 400;
+          padding: 5px 10px; border-radius: 999px; font-size: 13px; }
+  .chip:hover { border-color: var(--accent); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } header, main { padding-left: 16px; padding-right: 16px; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 8px; }
+  .sticky { position: sticky; top: 12px; }
+  svg { width: 100%; height: auto; display: block; }
+  .node rect { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; transition: all .25s; }
+  .node text { fill: var(--ink); font-size: 13px; }
+  .node .small { fill: var(--muted); font-size: 11px; }
+  .node.active rect { stroke: var(--accent); stroke-width: 3; fill: var(--accent-soft); }
+  .node.local.active rect { stroke: var(--local); fill: var(--local-soft); }
+  .node.mcp.active rect { stroke: var(--mcp); fill: var(--mcp-soft); }
+  .node.visited:not(.active) rect { stroke: var(--muted); }
+  .edge { fill: none; stroke: var(--line); stroke-width: 2; transition: stroke .25s; }
+  .edge.visited { stroke: var(--muted); }
+  .edge.active { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 8 6; animation: flow .6s linear infinite; }
+  .edge-label { fill: var(--muted); font-size: 11px; }
+  @keyframes flow { to { stroke-dashoffset: -14; } }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .step { border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 8px; padding: 10px 12px;
+          cursor: pointer; transition: background .2s; }
+  .step.kind-llm { border-left-color: var(--accent); }
+  .step.kind-local { border-left-color: var(--local); }
+  .step.kind-mcp { border-left-color: var(--mcp); }
+  .step.kind-error { border-left-color: var(--error); background: var(--error-soft); }
+  .step.kind-final { border-left-color: var(--ink); }
+  .step.current { background: var(--bg); }
+  .step-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .step-title { font-weight: 600; }
+  .meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .badge { font-size: 11px; padding: 1px 7px; border-radius: 999px; margin-left: 6px; font-weight: 500; }
+  .badge.local { background: var(--local-soft); color: var(--local); }
+  .badge.mcp { background: var(--mcp-soft); color: var(--mcp); }
+  .pending { color: var(--muted); font-style: italic; }
+  pre { background: var(--code-bg); border-radius: 6px; padding: 8px 10px; margin: 6px 0 0; font-size: 12px;
+        white-space: pre-wrap; word-break: break-word; max-height: 220px; overflow: auto; }
+  .label { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .thinking { font-size: 13px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 8px; margin-top: 6px; }
+  .answer { font-size: 16px; margin-top: 4px; }
+  .md ul, .md ol { margin: 4px 0; padding-left: 22px; }
+  .md code { background: var(--code-bg); padding: 1px 4px; border-radius: 4px; font-size: .9em; }
+  .empty { color: var(--muted); }
+  details { margin-top: 12px; font-size: 13px; }
+  summary { cursor: pointer; color: var(--muted); }
+  .toolrow { display: flex; gap: 6px; align-items: baseline; margin: 4px 0; }
+  .toolrow code { font-weight: 600; }
+  .controls { display: flex; gap: 8px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+  .controls .meta { margin-left: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Agent Flow Explorer</h1>
+  <p class="sub">A LangChain agent with local tools and two MCP servers. Ask a question and watch each step. Model: <span id="model">…</span></p>
+</header>
+<main>
+  <form id="ask">
+    <input type="text" id="q" placeholder="Ask something…" autocomplete="off">
+    <button id="go" type="submit">Run</button>
+  </form>
+  <div class="chips" id="chips"></div>
+
+  <div class="grid">
+    <div class="panel sticky">
+      <h2>Flow</h2>
+      <svg viewBox="0 0 560 470" role="img" aria-label="Agent flow diagram">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+          </marker>
+        </defs>
+        <path class="edge" id="e-you-model" d="M160,140 L198,140" marker-end="url(#arrow)"/>
+        <path class="edge" id="e-model-answer" d="M360,140 L398,140" marker-end="url(#arrow)"/>
+        <path class="edge" id="e-model-tools" d="M260,170 L260,228" marker-end="url(#arrow)"/>
+        <path class="edge" id="e-tools-model" d="M300,228 L300,172" marker-end="url(#arrow)"/>
+        <text class="edge-label" x="200" y="204">tool calls</text>
+        <text class="edge-label" x="306" y="204">results</text>
+        <path class="edge" id="e-tools-local" d="M240,282 C200,315 120,315 92,348" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+        <path class="edge" id="e-tools-weather" d="M280,282 L280,348" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+        <path class="edge" id="e-tools-handbook" d="M320,282 C360,315 440,315 468,348" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+
+        <g class="node" id="n-you"><rect x="10" y="116" width="150" height="48" rx="10"/>
+          <text x="85" y="145" text-anchor="middle">🙋 You</text></g>
+        <g class="node" id="n-model"><rect x="200" y="110" width="160" height="60" rx="10"/>
+          <text x="280" y="135" text-anchor="middle">🧠 model node</text>
+          <text class="small" x="280" y="154" text-anchor="middle" id="model-label">Claude</text></g>
+        <g class="node" id="n-answer"><rect x="400" y="116" width="150" height="48" rx="10"/>
+          <text x="475" y="145" text-anchor="middle">✅ Answer</text></g>
+        <g class="node" id="n-tools"><rect x="200" y="230" width="160" height="52" rx="10"/>
+          <text x="280" y="252" text-anchor="middle">🔧 tools node</text>
+          <text class="small" x="280" y="270" text-anchor="middle">LangGraph ToolNode</text></g>
+
+        <g class="node local" id="n-local"><rect x="10" y="350" width="165" height="110" rx="10"/>
+          <text x="22" y="372">Local Python tools</text><g id="list-local"></g></g>
+        <g class="node mcp" id="n-weather"><rect x="197" y="350" width="165" height="110" rx="10"/>
+          <text x="209" y="372">MCP · weather</text><g id="list-weather"></g></g>
+        <g class="node mcp" id="n-handbook"><rect x="385" y="350" width="165" height="110" rx="10"/>
+          <text x="397" y="372">MCP · handbook</text><g id="list-handbook"></g></g>
+      </svg>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--accent)"></span>LLM call</span>
+        <span><span class="dot" style="background:var(--local)"></span>Local tool (in-process)</span>
+        <span><span class="dot" style="background:var(--mcp)"></span>MCP tool (separate process, stdio)</span>
+      </div>
+      <div class="controls">
+        <button class="ghost" id="replay" disabled>▶ Replay</button>
+        <span class="meta" id="status"></span>
+      </div>
+      <details>
+        <summary>How this maps to LangChain</summary>
+        <p><code>create_agent()</code> builds a LangGraph state graph with two nodes. The <b>model</b> node calls Claude with the
+          conversation so far and the tool schemas. If Claude replies with tool calls, the graph routes to the <b>tools</b> node,
+          which runs them and appends the results as <code>ToolMessage</code>s, then loops back to the model. When Claude replies
+          without tool calls, the graph ends.</p>
+        <p>MCP tools come from <code>MultiServerMCPClient.get_tools()</code>, which asks each MCP server for its tool list and wraps
+          each one as a normal LangChain tool. To the model they look identical to local tools; the difference is that calling one
+          sends a JSON-RPC request to another process.</p>
+        <pre id="mermaid"></pre>
+      </details>
+    </div>
+
+    <div class="panel">
+      <h2>Steps</h2>
+      <div class="steps" id="steps"><p class="empty">Pick a sample question or type your own.</p></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const SAMPLES = [
+  "What's 17.5% of 2,340?",
+  "What's the weather in Tokyo?",
+  "Is it warmer in Berlin or Tokyo right now, and by how many degrees Fahrenheit?",
+  "How many holiday days do I get, and what's the rule on carrying them over?",
+  "If I do 3 on-call weeks this year, how many holiday days will I have in total?",
+  "What time is it in Sydney, and what's the weather like there?",
+  "I'm based in Berlin, Germany. I have 5 days of holiday left for 2026 and my full 28 days for 2027. I'd like to be off from Saturday 19 December 2026 to Sunday 10 January 2027. How many leave days does that use from each year, and does it work with my balances?",
+  "What is the capital of France?",
+];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+// Minimal Markdown for model text: escape first, then add a few safe tags.
+function md(text) {
+  const inline = (t) => t
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g, "$1<em>$2</em>");
+  const out = [];
+  let list = null;
+  for (const raw of esc(text).split("\n")) {
+    const item = raw.match(/^\s*(?:[-*]|(\d+)\.)\s+(.*)$/);
+    if (item) {
+      const tag = item[1] ? "ol" : "ul";
+      if (list !== tag) { if (list) out.push(`</${list}>`); out.push(`<${tag}>`); list = tag; }
+      out.push(`<li>${inline(item[2])}</li>`);
+      continue;
+    }
+    if (list) { out.push(`</${list}>`); list = null; }
+    const h = raw.match(/^#{1,6}\s+(.*)$/);
+    out.push(h ? `<strong>${inline(h[1])}</strong><br>` : raw.trim() ? inline(raw) + "<br>" : "<br>");
+  }
+  if (list) out.push(`</${list}>`);
+  return out.join("").replace(/(<br>)+$/, "");
+}
+const fmt = (v) => typeof v === "string" ? v : JSON.stringify(v, null, 2);
+const groupOf = (source) => source === "local" ? "local" : source.replace("mcp:", "");
+
+let events = [];        // every event of the current run, for replay
+let cards = {};         // run id -> card element
+let running = false;
+
+// ---------- setup ----------
+for (const s of SAMPLES) {
+  const b = document.createElement("button");
+  b.className = "chip"; b.type = "button"; b.textContent = s;
+  b.onclick = () => { $("q").value = s; run(s); };
+  $("chips").appendChild(b);
+}
+
+fetch("/api/info").then((r) => r.json()).then((info) => {
+  $("model").textContent = info.model;
+  $("model-label").textContent = info.model;
+  $("mermaid").textContent = "LangGraph structure (mermaid):\n\n" + info.graph;
+  const rows = { local: 0, weather: 0, handbook: 0 };
+  const x = { local: 22, weather: 209, handbook: 397 };
+  for (const t of info.tools) {
+    const g = groupOf(t.source);
+    if (!(g in rows)) continue;
+    const el = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    el.setAttribute("class", "small"); el.setAttribute("x", x[g]); el.setAttribute("y", 394 + rows[g]++ * 18);
+    el.setAttribute("id", "tool-" + t.name);
+    el.textContent = "• " + t.name;
+    el.appendChild(Object.assign(document.createElementNS("http://www.w3.org/2000/svg", "title"), { textContent: t.description }));
+    $("list-" + g).appendChild(el);
+  }
+});
+
+$("ask").onsubmit = (e) => { e.preventDefault(); const q = $("q").value.trim(); if (q) run(q); };
+$("replay").onclick = replay;
+
+// ---------- diagram highlighting ----------
+function clearActive() {
+  document.querySelectorAll(".active").forEach((el) => { el.classList.remove("active"); el.classList.add("visited"); });
+  document.querySelectorAll("text.small[id^=tool-]").forEach((el) => el.style.fontWeight = "");
+}
+function resetDiagram() {
+  document.querySelectorAll(".active, .visited").forEach((el) => el.classList.remove("active", "visited"));
+  document.querySelectorAll(".step.current").forEach((el) => el.classList.remove("current"));
+}
+function on(...ids) { for (const id of ids) $(id)?.classList.add("active"); }
+
+function highlight(ev) {
+  clearActive();
+  switch (ev.type) {
+    case "question": on("n-you"); break;
+    case "llm_start": on("n-model", ev.turn === 1 ? "e-you-model" : "e-tools-model"); break;
+    case "llm_end": on("n-model", ev.tool_calls.length ? "e-model-tools" : "e-model-answer"); break;
+    case "tool_start":
+    case "tool_end": {
+      const g = groupOf(ev.source);
+      on("n-tools", "n-" + g, "e-tools-" + g);
+      const t = $("tool-" + ev.name); if (t) t.style.fontWeight = "700";
+      break;
+    }
+    case "final": on("n-answer"); break;
+  }
+  document.querySelectorAll(".step.current").forEach((el) => el.classList.remove("current"));
+  const card = cards[ev.id ?? ev.type];
+  if (card) { card.classList.add("current"); card.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+}
+
+// ---------- step cards ----------
+function card(key, kind, html, ev) {
+  let el = cards[key];
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "step kind-" + kind;
+    el.onclick = () => highlight(el._ev);
+    $("steps").appendChild(el);
+    cards[key] = el;
+  }
+  el._ev = ev;
+  el.innerHTML = html;
+  return el;
+}
+
+function render(ev) {
+  const n = Object.keys(cards).length + 1;
+  switch (ev.type) {
+    case "question":
+      card("question", "question", `<div class="step-head"><span class="step-title">🙋 Question</span></div><div>${esc(ev.text)}</div>`, ev);
+      break;
+    case "llm_start":
+      card(ev.id, "llm", `<div class="step-head"><span class="step-title">🧠 LLM call #${ev.turn}</span><span class="meta">running…</span></div>
+        <div class="pending">Sending ${ev.message_count} message(s) + tool schemas to Claude</div>`, ev);
+      break;
+    case "llm_end": {
+      const calls = ev.tool_calls.map((tc) =>
+        `<div class="toolrow">➡️ <code>${esc(tc.name)}</code><span class="badge ${tc.source === "local" ? "local" : "mcp"}">${esc(tc.source)}</span></div>
+         <pre>${esc(fmt(tc.args))}</pre>`).join("");
+      const decision = ev.tool_calls.length
+        ? `<div class="label">Decided to call ${ev.tool_calls.length} tool(s)${ev.tool_calls.length > 1 ? " in parallel" : ""}:</div>${calls}`
+        : `<div class="label">No tool calls, so this is the final answer.</div>`;
+      card(ev.id, "llm", `<div class="step-head"><span class="step-title">🧠 LLM call #${ev.turn}</span>
+          <span class="meta">${ev.ms} ms · ${ev.tokens.in ?? "?"} in / ${ev.tokens.out ?? "?"} out · ${esc(ev.stop_reason)}</span></div>
+        ${ev.thinking ? `<div class="label">Reasoning summary</div><div class="thinking md">${md(ev.thinking)}</div>` : ""}
+        ${ev.text ? `<div class="label">Text</div><div class="md">${md(ev.text)}</div>` : ""}
+        ${decision}`, ev);
+      break;
+    }
+    case "tool_start":
+    case "tool_end": {
+      const isMcp = ev.source !== "local";
+      const prev = cards[ev.id]?._start ?? ev;
+      const el = card(ev.id, ev.is_error ? "error" : isMcp ? "mcp" : "local", `<div class="step-head">
+          <span class="step-title">🔧 ${esc(ev.name)}<span class="badge ${isMcp ? "mcp" : "local"}">${esc(ev.source)}</span></span>
+          <span class="meta">${ev.type === "tool_end" ? ev.ms + " ms" : "running…"}</span></div>
+        <div class="label">${isMcp ? "JSON-RPC <code>tools/call</code> to the MCP server over stdio" : "Plain Python function call"}</div>
+        <div class="label">Input</div><pre>${esc(fmt(prev.args))}</pre>
+        ${ev.type === "tool_end" ? `<div class="label">Output</div><pre>${esc(ev.output)}</pre>` : ""}`, ev);
+      if (ev.type === "tool_start") el._start = ev;
+      break;
+    }
+    case "final":
+      card("final", "final", `<div class="step-head"><span class="step-title">✅ Answer</span>
+        <span class="meta">${ev.llm_calls} LLM call(s) · ${(ev.ms / 1000).toFixed(1)} s total</span></div>
+        <div class="answer md">${md(ev.text)}</div>`, ev);
+      break;
+    case "error":
+      card("error", "error", `<div class="step-head"><span class="step-title">⚠️ Error</span></div><pre>${esc(ev.text)}</pre>`, ev);
+      break;
+  }
+}
+
+// ---------- running ----------
+function run(q) {
+  if (running) return;
+  running = true; events = []; cards = {};
+  $("steps").innerHTML = ""; resetDiagram();
+  $("go").disabled = true; $("replay").disabled = true; $("status").textContent = "Running…";
+
+  const es = new EventSource("/api/run?q=" + encodeURIComponent(q));
+  es.onmessage = (m) => {
+    const ev = JSON.parse(m.data);
+    if (ev.type === "done") { es.close(); finish(); return; }
+    events.push(ev); render(ev); highlight(ev);
+  };
+  es.onerror = () => { es.close(); render({ type: "error", text: "Lost connection to the server." }); finish(); };
+}
+
+function finish() {
+  running = false;
+  $("go").disabled = false; $("replay").disabled = events.length === 0;
+  $("status").textContent = events.length ? `${events.length} events` : "";
+}
+
+async function replay() {
+  if (running) return;
+  running = true; $("replay").disabled = true; $("go").disabled = true;
+  resetDiagram();
+  for (let i = 0; i < events.length; i++) {
+    $("status").textContent = `Step ${i + 1} / ${events.length}`;
+    highlight(events[i]);
+    await new Promise((r) => setTimeout(r, 900));
+  }
+  finish();
+}
+</script>
+</body>
+</html>

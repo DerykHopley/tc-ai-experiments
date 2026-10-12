@@ -1,0 +1,20 @@
+[project]
+name = "agent-tools-mcp"
+version = "0.1.0"
+description = "Prototype: visualise a LangChain agent using local tools and MCP servers"
+authors = [
+    { name = "Deryk Hopley", email = "derykhopley@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.143.0",
+    "holidays>=0.106",
+    "langchain>=1.4.4",
+    "langchain-anthropic>=1.7.5",
+    "langchain-mcp-adapters>=0.3.2",
+    "langchain-openrouter>=0.2.9",
+    "mcp>=1.30.0",
+    "python-dotenv>=1.2.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
