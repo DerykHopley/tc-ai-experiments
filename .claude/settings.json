@@ -1,1 +1,1 @@
-"allow": ["Bash(*)"]
+{ "permissions": { "allow": ["Bash(*)"] } }
